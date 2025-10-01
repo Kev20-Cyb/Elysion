@@ -23,7 +23,7 @@ client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
 # Security
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+import hashlib
 security = HTTPBearer()
 SECRET_KEY = "elysion-secret-key-2024"
 ALGORITHM = "HS256"

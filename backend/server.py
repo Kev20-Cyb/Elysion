@@ -86,15 +86,13 @@ class DashboardData(BaseModel):
     recent_documents: List[dict] = []
 
 # Utility Functions
-def verify_password(plain_password: str, hashed_password: str) -> bool:
-    # Truncate password to 72 bytes for bcrypt compatibility
-    password_bytes = plain_password.encode('utf-8')[:72].decode('utf-8')
-    return pwd_context.verify(password_bytes, hashed_password)
-
 def get_password_hash(password: str) -> str:
-    # Truncate password to 72 bytes for bcrypt compatibility
-    password_bytes = password.encode('utf-8')[:72].decode('utf-8')
-    return pwd_context.hash(password_bytes)
+    # Simple SHA-256 hash for MVP (in production, use bcrypt or argon2)
+    return hashlib.sha256((password + "elysion_salt").encode()).hexdigest()
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    # Verify against SHA-256 hash
+    return get_password_hash(plain_password) == hashed_password
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     to_encode = data.copy()

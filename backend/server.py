@@ -246,6 +246,79 @@ async def login(user_data: UserLogin):
     
     return Token(access_token=access_token, user=user)
 
+@api_router.post("/auth/forgot-password")
+async def forgot_password(request: ForgotPasswordRequest):
+    # Check if user exists
+    user = await db.users.find_one({"email": request.email})
+    
+    if not user:
+        # For security, don't reveal if email exists or not
+        return {"message": "Si cette adresse email est enregistrée, vous recevrez un lien de réinitialisation"}
+    
+    # Generate reset token
+    reset_token = create_reset_token(request.email)
+    
+    # In production, send email here. For MVP, we'll return the reset link
+    reset_link = f"https://future-ready-9.preview.emergentagent.com/reset-password?token={reset_token}"
+    
+    # Store reset token in database (optional for tracking)
+    await db.password_resets.insert_one({
+        "email": request.email,
+        "token": reset_token,
+        "created_at": datetime.utcnow(),
+        "used": False
+    })
+    
+    return {
+        "message": "Si cette adresse email est enregistrée, vous recevrez un lien de réinitialisation",
+        "reset_link": reset_link  # Remove this in production
+    }
+
+@api_router.post("/auth/reset-password")
+async def reset_password(request: ResetPasswordRequest):
+    # Verify reset token
+    email = verify_reset_token(request.token)
+    
+    if not email:
+        raise HTTPException(
+            status_code=400,
+            detail="Token de réinitialisation invalide ou expiré"
+        )
+    
+    # Check if token was already used
+    reset_record = await db.password_resets.find_one({
+        "token": request.token,
+        "used": False
+    })
+    
+    if not reset_record:
+        raise HTTPException(
+            status_code=400,
+            detail="Token de réinitialisation invalide ou déjà utilisé"
+        )
+    
+    # Update password
+    hashed_password = get_password_hash(request.new_password)
+    
+    result = await db.users.update_one(
+        {"email": email},
+        {"$set": {"hashed_password": hashed_password}}
+    )
+    
+    if result.modified_count == 0:
+        raise HTTPException(
+            status_code=400,
+            detail="Erreur lors de la mise à jour du mot de passe"
+        )
+    
+    # Mark token as used
+    await db.password_resets.update_one(
+        {"token": request.token},
+        {"$set": {"used": True, "used_at": datetime.utcnow()}}
+    )
+    
+    return {"message": "Mot de passe réinitialisé avec succès"}
+
 # Dashboard Routes
 @api_router.get("/dashboard", response_model=DashboardData)
 async def get_dashboard(current_user: User = Depends(get_current_user)):

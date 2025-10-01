@@ -1,15 +1,18 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, HTTPException, Depends, status
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import logging
 from pathlib import Path
-from pydantic import BaseModel, Field
-from typing import List
+from pydantic import BaseModel, Field, EmailStr
+from typing import List, Optional
 import uuid
-from datetime import datetime
-
+from datetime import datetime, timedelta
+from passlib.context import CryptContext
+import jwt
+from enum import Enum
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -19,38 +22,228 @@ mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
+# Security
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+security = HTTPBearer()
+SECRET_KEY = "elysion-secret-key-2024"
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
+
 # Create the main app without a prefix
-app = FastAPI()
+app = FastAPI(title="Elysion Retirement Platform API")
 
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
 
+# User Profile Types
+class UserType(str, Enum):
+    EMPLOYEE = "employee"
+    FREELANCER = "freelancer"
+    BUSINESS_OWNER = "business_owner"
 
-# Define Models
-class StatusCheck(BaseModel):
+# Models
+class User(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    client_name: str
-    timestamp: datetime = Field(default_factory=datetime.utcnow)
+    email: EmailStr
+    full_name: str
+    user_type: UserType
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    is_active: bool = True
 
-class StatusCheckCreate(BaseModel):
-    client_name: str
+class UserCreate(BaseModel):
+    email: EmailStr
+    password: str
+    full_name: str
+    user_type: UserType
 
-# Add your routes to the router instead of directly to app
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+    user: User
+
+class RetirementProfile(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str
+    current_age: int
+    target_retirement_age: int = 65
+    monthly_income: float
+    current_savings: float = 0
+    monthly_contributions: float = 0
+    estimated_pension: float = 0
+    last_updated: datetime = Field(default_factory=datetime.utcnow)
+
+class DashboardData(BaseModel):
+    user: User
+    retirement_profile: Optional[RetirementProfile] = None
+    projected_retirement_age: int = 65
+    estimated_monthly_pension: float = 0
+    savings_progress: float = 0
+    recommendations: List[str] = []
+    recent_documents: List[dict] = []
+
+# Utility Functions
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    return pwd_context.verify(plain_password, hashed_password)
+
+def get_password_hash(password: str) -> str:
+    return pwd_context.hash(password)
+
+def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
+    to_encode = data.copy()
+    if expires_delta:
+        expire = datetime.utcnow() + expires_delta
+    else:
+        expire = datetime.utcnow() + timedelta(minutes=15)
+    to_encode.update({"exp": expire})
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return encoded_jwt
+
+async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    try:
+        payload = jwt.decode(credentials.credentials, SECRET_KEY, algorithms=[ALGORITHM])
+        user_id: str = payload.get("sub")
+        if user_id is None:
+            raise credentials_exception
+    except jwt.PyJWTError:
+        raise credentials_exception
+    
+    user = await db.users.find_one({"id": user_id})
+    if user is None:
+        raise credentials_exception
+    return User(**user)
+
+# Generate mock retirement data based on user profile
+def generate_mock_retirement_data(user: User, profile: Optional[RetirementProfile] = None):
+    recommendations = []
+    projected_age = 65
+    estimated_pension = 0
+    savings_progress = 0
+    
+    if user.user_type == UserType.EMPLOYEE:
+        projected_age = 62
+        estimated_pension = 1800
+        savings_progress = 65
+        recommendations = [
+            "Maximize your employer's 401(k) matching",
+            "Consider increasing contributions by 2% annually",
+            "Review your portfolio allocation quarterly"
+        ]
+    elif user.user_type == UserType.FREELANCER:
+        projected_age = 67
+        estimated_pension = 1200
+        savings_progress = 45
+        recommendations = [
+            "Set up a SEP-IRA for tax-advantaged savings",
+            "Build an emergency fund of 6-12 months expenses",
+            "Consider diversifying income streams"
+        ]
+    elif user.user_type == UserType.BUSINESS_OWNER:
+        projected_age = 60
+        estimated_pension = 2500
+        savings_progress = 80
+        recommendations = [
+            "Explore business succession planning options",
+            "Maximize tax-deferred retirement accounts",
+            "Consider establishing a defined benefit plan"
+        ]
+    
+    return {
+        "projected_retirement_age": projected_age,
+        "estimated_monthly_pension": estimated_pension,
+        "savings_progress": savings_progress,
+        "recommendations": recommendations,
+        "recent_documents": [
+            {"name": "Tax Return 2023", "type": "tax", "date": "2024-03-15"},
+            {"name": "401k Statement", "type": "retirement", "date": "2024-09-01"},
+            {"name": "Pay Stub", "type": "income", "date": "2024-09-15"}
+        ]
+    }
+
+# Authentication Routes
+@api_router.post("/auth/register", response_model=Token)
+async def register(user_data: UserCreate):
+    # Check if user already exists
+    existing_user = await db.users.find_one({"email": user_data.email})
+    if existing_user:
+        raise HTTPException(
+            status_code=400,
+            detail="Email already registered"
+        )
+    
+    # Hash password and create user
+    hashed_password = get_password_hash(user_data.password)
+    user = User(
+        email=user_data.email,
+        full_name=user_data.full_name,
+        user_type=user_data.user_type
+    )
+    
+    # Store user with hashed password
+    user_dict = user.dict()
+    user_dict["hashed_password"] = hashed_password
+    await db.users.insert_one(user_dict)
+    
+    # Create access token
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(
+        data={"sub": user.id}, expires_delta=access_token_expires
+    )
+    
+    return Token(access_token=access_token, user=user)
+
+@api_router.post("/auth/login", response_model=Token)
+async def login(user_data: UserLogin):
+    # Find user
+    user_doc = await db.users.find_one({"email": user_data.email})
+    if not user_doc or not verify_password(user_data.password, user_doc["hashed_password"]):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect email or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+    user = User(**user_doc)
+    
+    # Create access token
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(
+        data={"sub": user.id}, expires_delta=access_token_expires
+    )
+    
+    return Token(access_token=access_token, user=user)
+
+# Dashboard Routes
+@api_router.get("/dashboard", response_model=DashboardData)
+async def get_dashboard(current_user: User = Depends(get_current_user)):
+    # Get or create retirement profile
+    retirement_profile = await db.retirement_profiles.find_one({"user_id": current_user.id})
+    
+    # Generate mock data based on user type
+    mock_data = generate_mock_retirement_data(current_user, retirement_profile)
+    
+    return DashboardData(
+        user=current_user,
+        retirement_profile=RetirementProfile(**retirement_profile) if retirement_profile else None,
+        **mock_data
+    )
+
+@api_router.get("/user/profile")
+async def get_user_profile(current_user: User = Depends(get_current_user)):
+    return current_user
+
+# Basic Routes
 @api_router.get("/")
 async def root():
-    return {"message": "Hello World"}
-
-@api_router.post("/status", response_model=StatusCheck)
-async def create_status_check(input: StatusCheckCreate):
-    status_dict = input.dict()
-    status_obj = StatusCheck(**status_dict)
-    _ = await db.status_checks.insert_one(status_obj.dict())
-    return status_obj
-
-@api_router.get("/status", response_model=List[StatusCheck])
-async def get_status_checks():
-    status_checks = await db.status_checks.find().to_list(1000)
-    return [StatusCheck(**status_check) for status_check in status_checks]
+    return {"message": "Elysion Retirement Platform API"}
 
 # Include the router in the main app
 app.include_router(api_router)

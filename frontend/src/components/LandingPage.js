@@ -14,6 +14,14 @@ const LandingPage = () => {
     }
   };
 
+  const handleStartSimulation = () => {
+    if (isAuthenticated) {
+      navigate('/onboarding');
+    } else {
+      navigate('/auth');
+    }
+  };
+
   const features = [
     {
       title: "Smart Retirement Planning",

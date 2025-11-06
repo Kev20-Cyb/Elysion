@@ -330,6 +330,28 @@ const LandingPage = () => {
         </div>
       </section>
 
+      {/* Team Section */}
+      <section id="about" className="py-20 bg-elysion-bg">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-elysion-primary mb-6">Rencontrez l'équipe Elysion</h2>
+            <p className="text-xl text-elysion-text-light max-w-3xl mx-auto">
+              Des experts passionnés dédiés à votre réussite financière
+            </p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-8">
+            {team.map((member, index) => (
+              <div key={member.name} className="card-elysion text-center slide-up" style={{animationDelay: `${index * 0.2}s`}}>
+                <div className="text-5xl mb-4">{member.avatar}</div>
+                <h3 className="text-xl font-semibold text-elysion-primary mb-2">{member.name}</h3>
+                <p className="text-elysion-accent font-medium mb-3">{member.role}</p>
+                <p className="text-elysion-text-light text-sm">{member.bio}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Testimonials Section */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4">

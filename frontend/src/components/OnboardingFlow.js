@@ -18,27 +18,35 @@ const OnboardingFlow = () => {
   const professionalStatus = location.state?.professionalStatus || 'employee';
 
   const [profileData, setProfileData] = useState({
-    // Personal Info
+    // Personal Info (Step 2)
     date_of_birth: '',
     gender: '',
-    family_situation: '',
+    marital_status: '',
+    number_of_children: 0,
     
-    // Professional Info (varies by user type)
+    // Professional Info (Step 3) - varies by user type
     career_start: '',
-    salary: '',
-    retirement_plans: '',
+    annual_salary: '',
+    pension_schemes: [],
     validated_quarters: '',
     
     // Freelancer specific
     activity_type: '',
     legal_status: '',
     average_income: '',
-    pension_scheme: '',
+    retirement_regimes: [],
     
     // Business owner specific
-    legal_form: '',
-    gross_remuneration: '',
-    pension_regime: ''
+    company_legal_form: '',
+    remuneration: '',
+    regime_type: '',
+    retirement_plans: [],
+    
+    // Account Setup (Step 5)
+    email: '',
+    password: '',
+    confirm_password: '',
+    agree_terms: false
   });
 
   const handleInputChange = (field, value) => {

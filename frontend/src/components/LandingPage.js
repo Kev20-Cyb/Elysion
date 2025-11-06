@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../App';
 
 const LandingPage = () => {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
+  const [currentTestimonial, setCurrentTestimonial] = useState(0);
 
-  const handleGetStarted = () => {
+  const handleTestSimulator = () => {
     if (isAuthenticated) {
       navigate('/dashboard');
     } else {
@@ -14,12 +15,12 @@ const LandingPage = () => {
     }
   };
 
-  const handleStartSimulation = () => {
-    if (isAuthenticated) {
-      navigate('/onboarding');
-    } else {
-      navigate('/auth');
-    }
+  const handleCreateAccount = () => {
+    navigate('/auth');
+  };
+
+  const handleLogin = () => {
+    navigate('/auth');
   };
 
   const userPaths = [

@@ -109,23 +109,32 @@ const OnboardingFlow = () => {
     return types[professionalStatus] || types.employee;
   };
 
+  // Step 1: Welcome & Context
   const renderStep1 = () => (
     <div className="text-center">
-      <h2 className="text-3xl font-bold text-elysion-primary mb-4">Bienvenue sur Elysion</h2>
-      <div className="flex items-center justify-center mb-6">
-        <span className="text-3xl mr-3">{getUserTypeInfo().icon}</span>
-        <p className="text-xl text-elysion-text-light">
-          Vous êtes enregistré comme <strong>{getUserTypeInfo().label}</strong>
+      <div className="text-5xl mb-6">📊</div>
+      <h2 className="text-3xl font-bold text-elysion-primary mb-4 font-montserrat">
+        Complétez votre profil pour une estimation retraite précise
+      </h2>
+      <p className="text-xl text-elysion-text-light mb-8 max-w-2xl mx-auto">
+        En fonction de votre situation — que vous soyez salarié, freelance ou dirigeant — Elysion adapte vos prévisions pour vous donner les résultats les plus précis.
+      </p>
+      
+      <div className="bg-elysion-bg p-6 rounded-xl mb-8 border-l-4 border-elysion-accent">
+        <div className="flex items-center justify-center mb-3">
+          <span className="text-3xl mr-3">{getUserTypeInfo().icon}</span>
+          <p className="text-lg text-elysion-text-dark">
+            Profil sélectionné: <strong>{getUserTypeInfo().label}</strong>
+          </p>
+        </div>
+        <p className="text-elysion-text-light text-sm">
+          Nous adapterons les questions selon votre statut professionnel
         </p>
       </div>
-      <div className="bg-elysion-bg p-6 rounded-lg mb-8">
-        <p className="text-elysion-text-dark">
-          Complétez votre profil pour obtenir une estimation retraite plus précise et personnalisée.
-        </p>
-      </div>
+      
       <button 
         onClick={nextStep}
-        className="btn-elysion-accent px-8 py-3"
+        className="bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-8 py-4 rounded-xl text-lg transition-all hover:scale-105"
         data-testid="onboarding-continue-btn"
       >
         Continuer

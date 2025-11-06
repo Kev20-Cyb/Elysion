@@ -171,33 +171,41 @@ const LandingPage = () => {
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <section className="hero-gradient py-24 px-4">
+      {/* Hero Section - Problem & Solution */}
+      <section className="bg-gradient-to-br from-elysion-bg to-elysion-secondary/30 py-24 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="text-left">
-              <h1 className="text-5xl md:text-6xl font-bold text-elysion-primary mb-6 slide-up">
-                Préparez votre retraite
+              <div className="inline-flex items-center bg-white/80 rounded-full px-4 py-2 mb-6 slide-up">
+                <span className="text-elysion-accent font-medium text-sm">🆓 Outil gratuit — Sans engagement</span>
+              </div>
+              
+              <h1 className="text-5xl md:text-6xl font-bold text-elysion-primary mb-6 slide-up font-montserrat">
+                Planifier sa retraite
                 <br />
-                <span className="text-elysion-accent">en toute sérénité</span>
+                <span className="text-elysion-text-dark">ne devrait pas être</span>
+                <br />
+                <span className="text-elysion-accent">compliqué.</span>
               </h1>
-              <p className="text-xl md:text-2xl text-elysion-text-light mb-8 fade-in">
-                Elysion vous aide à simuler, planifier et sécuriser votre retraite — quel que soit votre parcours professionnel.
+              
+              <p className="text-xl text-elysion-text-light mb-8 fade-in leading-relaxed">
+                Elysion vous aide à comprendre vos perspectives de retraite, simuler des scénarios et prendre des décisions éclairées — le tout sur une plateforme sécurisée.
               </p>
+              
               <div className="flex flex-col sm:flex-row gap-4 fade-in">
                 <button 
-                  onClick={handleStartSimulation}
-                  className="btn-elysion-accent text-lg px-8 py-4"
-                  data-testid="hero-start-simulation-btn"
+                  onClick={handleTestSimulator}
+                  className="bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-8 py-4 rounded-xl text-lg transition-all hover:scale-105 hover:shadow-xl"
+                  data-testid="hero-test-simulator-btn"
                 >
-                  Lancer la simulation
+                  Tester notre simulateur
                 </button>
                 <button 
-                  onClick={() => document.getElementById('choose-path').scrollIntoView({ behavior: 'smooth' })}
-                  className="btn-outline-elysion text-lg px-8 py-4"
-                  data-testid="hero-learn-more-btn"
+                  onClick={handleCreateAccount}
+                  className="border-2 border-elysion-primary text-elysion-primary hover:bg-elysion-primary hover:text-white font-semibold px-8 py-4 rounded-xl text-lg transition-all"
+                  data-testid="hero-create-account-btn"
                 >
-                  En savoir plus
+                  Créer mon compte
                 </button>
               </div>
             </div>
@@ -205,14 +213,23 @@ const LandingPage = () => {
             {/* Hero Illustration */}
             <div className="flex justify-center lg:justify-end">
               <div className="relative">
-                <div className="w-96 h-96 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
-                  <div className="text-8xl">📊</div>
+                <div className="w-80 h-80 bg-white/30 rounded-3xl flex items-center justify-center backdrop-blur-sm border border-white/20">
+                  <div className="text-center">
+                    <div className="text-6xl mb-4">📊</div>
+                    <div className="text-elysion-primary font-semibold text-lg">Tableau de bord</div>
+                    <div className="text-elysion-text-light text-sm">Projections personnalisées</div>
+                  </div>
                 </div>
-                <div className="absolute -top-4 -right-4 w-20 h-20 bg-elysion-accent/20 rounded-full flex items-center justify-center">
+                
+                {/* Floating elements */}
+                <div className="absolute -top-4 -right-4 w-16 h-16 bg-elysion-accent/20 rounded-2xl flex items-center justify-center animate-bounce">
                   <span className="text-2xl">📈</span>
                 </div>
-                <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-elysion-primary/20 rounded-full flex items-center justify-center">
-                  <span className="text-xl">💰</span>
+                <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-elysion-primary/20 rounded-xl flex items-center justify-center animate-pulse">
+                  <span className="text-lg">💰</span>
+                </div>
+                <div className="absolute top-1/2 -left-8 w-14 h-14 bg-white/40 rounded-full flex items-center justify-center backdrop-blur-sm">
+                  <span className="text-xl">⚡</span>
                 </div>
               </div>
             </div>

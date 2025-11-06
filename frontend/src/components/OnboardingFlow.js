@@ -749,6 +749,8 @@ const OnboardingFlow = () => {
         return renderStep3();
       case 4:
         return renderStep4();
+      case 5:
+        return renderStep5();
       default:
         return renderStep1();
     }

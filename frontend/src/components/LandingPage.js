@@ -324,33 +324,70 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Key Features Section */}
-      <section id="features" className="py-20 bg-white">
+      {/* Registration / Login Section */}
+      <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-elysion-primary mb-6">Fonctionnalités clés</h2>
-            <p className="text-xl text-elysion-text-light max-w-3xl mx-auto">
-              Une suite complète d'outils pour maîtriser votre planification retraite
-            </p>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {features.map((feature, index) => (
-              <div key={index} className="card-elysion text-center slide-up hover:shadow-xl transition-all" style={{animationDelay: `${index * 0.15}s`}}>
-                <div className="text-4xl mb-4">{feature.icon}</div>
-                <h3 className="text-lg font-semibold text-elysion-primary mb-3">{feature.title}</h3>
-                <p className="text-elysion-text-light text-sm">{feature.description}</p>
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Left Side - Content */}
+            <div>
+              <h2 className="text-4xl font-bold text-elysion-primary mb-6 font-montserrat">
+                Prêt à prendre le contrôle de votre retraite ?
+              </h2>
+              <p className="text-xl text-elysion-text-light mb-8 leading-relaxed">
+                Rejoignez Elysion et commencez votre simulation personnalisée en quelques clics.
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-4 mb-8">
+                <button 
+                  onClick={handleCreateAccount}
+                  className="bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-8 py-4 rounded-xl text-lg transition-all hover:scale-105 hover:shadow-xl"
+                  data-testid="final-create-account-btn"
+                >
+                  Créer un compte
+                </button>
+                <button 
+                  onClick={handleLogin}
+                  className="border-2 border-elysion-primary text-elysion-primary hover:bg-elysion-primary hover:text-white font-semibold px-8 py-4 rounded-xl text-lg transition-all"
+                  data-testid="final-login-btn"
+                >
+                  Se connecter
+                </button>
               </div>
-            ))}
-          </div>
-          
-          <div className="text-center mt-12">
-            <button 
-              onClick={handleGetStarted}
-              className="btn-elysion-accent text-lg px-8 py-4"
-              data-testid="features-create-account-btn"
-            >
-              Créer mon compte
-            </button>
+              
+              {/* Trust Indicators */}
+              <div className="grid grid-cols-3 gap-4 text-center">
+                <div>
+                  <div className="text-2xl mb-2">🔒</div>
+                  <div className="text-sm text-elysion-text-light">Données sécurisées</div>
+                </div>
+                <div>
+                  <div className="text-2xl mb-2">🆓</div>
+                  <div className="text-sm text-elysion-text-light">Gratuit</div>
+                </div>
+                <div>
+                  <div className="text-2xl mb-2">⚡</div>
+                  <div className="text-sm text-elysion-text-light">Résultats instantanés</div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Right Side - Illustration */}
+            <div className="flex justify-center">
+              <div className="relative">
+                <div className="w-80 h-80 bg-gradient-to-br from-elysion-primary/10 to-elysion-secondary/20 rounded-3xl flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="text-6xl mb-4">🚀</div>
+                    <div className="text-elysion-primary font-bold text-xl mb-2">Commencez maintenant</div>
+                    <div className="text-elysion-text-light">Votre simulation en 5 minutes</div>
+                  </div>
+                </div>
+                
+                {/* Floating badge */}
+                <div className="absolute -top-4 -right-4 bg-elysion-accent text-white px-4 py-2 rounded-full text-sm font-medium animate-pulse">
+                  100% Gratuit
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>

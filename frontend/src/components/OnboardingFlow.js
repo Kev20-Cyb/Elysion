@@ -142,10 +142,12 @@ const OnboardingFlow = () => {
     </div>
   );
 
+  // Step 2: Personal Information (Universal)
   const renderStep2 = () => (
     <div>
-      <h2 className="text-3xl font-bold text-elysion-primary mb-6 text-center">Informations personnelles</h2>
-      <div className="space-y-6">
+      <h2 className="text-3xl font-bold text-elysion-primary mb-6 text-center font-montserrat">Informations personnelles</h2>
+      
+      <div className="grid md:grid-cols-2 gap-6">
         <div>
           <label className="block text-sm font-medium text-elysion-text-dark mb-2">
             Date de naissance
@@ -155,81 +157,79 @@ const OnboardingFlow = () => {
             value={profileData.date_of_birth}
             onChange={(e) => handleInputChange('date_of_birth', e.target.value)}
             className="input-elysion"
+            required
             data-testid="onboarding-birth-date"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-elysion-text-dark mb-3">
+          <label className="block text-sm font-medium text-elysion-text-dark mb-2">
             Genre
           </label>
-          <div className="grid grid-cols-2 gap-4">
-            {['Homme', 'Femme'].map((gender) => (
-              <label key={gender} className="cursor-pointer">
-                <input
-                  type="radio"
-                  name="gender"
-                  value={gender}
-                  checked={profileData.gender === gender}
-                  onChange={(e) => handleInputChange('gender', e.target.value)}
-                  className="sr-only"
-                  data-testid={`onboarding-gender-${gender.toLowerCase()}`}
-                />
-                <div className={`p-4 rounded-lg border-2 transition-all ${
-                  profileData.gender === gender
-                    ? 'border-elysion-primary bg-elysion-primary/5'
-                    : 'border-gray-200 hover:border-elysion-secondary'
-                }`}>
-                  <span className="font-medium text-elysion-text-dark">{gender}</span>
-                </div>
-              </label>
-            ))}
-          </div>
+          <select
+            value={profileData.gender}
+            onChange={(e) => handleInputChange('gender', e.target.value)}
+            className="input-elysion"
+            required
+            data-testid="onboarding-gender"
+          >
+            <option value="">Sélectionner</option>
+            <option value="male">Homme</option>
+            <option value="female">Femme</option>
+            <option value="prefer_not_say">Préfère ne pas dire</option>
+          </select>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-elysion-text-dark mb-3">
-            Situation familiale
+          <label className="block text-sm font-medium text-elysion-text-dark mb-2">
+            Situation matrimoniale
           </label>
-          <div className="grid grid-cols-2 gap-4">
-            {['Célibataire', 'En couple', 'Marié(e)', 'Divorcé(e)'].map((situation) => (
-              <label key={situation} className="cursor-pointer">
-                <input
-                  type="radio"
-                  name="family_situation"
-                  value={situation}
-                  checked={profileData.family_situation === situation}
-                  onChange={(e) => handleInputChange('family_situation', e.target.value)}
-                  className="sr-only"
-                  data-testid={`onboarding-family-${situation.toLowerCase()}`}
-                />
-                <div className={`p-3 rounded-lg border-2 transition-all text-center ${
-                  profileData.family_situation === situation
-                    ? 'border-elysion-primary bg-elysion-primary/5'
-                    : 'border-gray-200 hover:border-elysion-secondary'
-                }`}>
-                  <span className="text-sm font-medium text-elysion-text-dark">{situation}</span>
-                </div>
-              </label>
-            ))}
-          </div>
+          <select
+            value={profileData.marital_status}
+            onChange={(e) => handleInputChange('marital_status', e.target.value)}
+            className="input-elysion"
+            required
+            data-testid="onboarding-marital-status"
+          >
+            <option value="">Sélectionner</option>
+            <option value="single">Célibataire</option>
+            <option value="married">Marié(e)</option>
+            <option value="divorced">Divorcé(e)</option>
+            <option value="widowed">Veuf(ve)</option>
+          </select>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-elysion-text-dark mb-2">
+            Nombre d'enfants
+          </label>
+          <input
+            type="number"
+            min="0"
+            max="10"
+            value={profileData.number_of_children}
+            onChange={(e) => handleInputChange('number_of_children', parseInt(e.target.value) || 0)}
+            className="input-elysion"
+            data-testid="onboarding-children"
+          />
         </div>
       </div>
 
       <div className="flex justify-between mt-8">
         <button 
           onClick={prevStep}
-          className="btn-outline-elysion"
-          data-testid="onboarding-prev-btn"
+          className="text-elysion-primary hover:text-elysion-accent transition-colors"
+          data-testid="onboarding-back-btn"
         >
-          Précédent
+          ← Retour
         </button>
         <button 
           onClick={nextStep}
-          className="btn-elysion-accent"
+          disabled={!profileData.date_of_birth || !profileData.gender || !profileData.marital_status}
+          className="bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-6 py-3 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           data-testid="onboarding-next-btn"
         >
-          Suivant
+          Suivant →
         </button>
       </div>
     </div>

@@ -66,6 +66,30 @@ class ResetPasswordRequest(BaseModel):
     token: str
     new_password: str
 
+class ProfileCompletion(BaseModel):
+    user_id: str
+    # Personal Info
+    date_of_birth: Optional[str] = None
+    gender: Optional[str] = None
+    family_situation: Optional[str] = None
+    
+    # Professional Info
+    career_start: Optional[str] = None
+    salary: Optional[str] = None
+    retirement_plans: Optional[str] = None
+    validated_quarters: Optional[str] = None
+    
+    # Freelancer specific
+    activity_type: Optional[str] = None
+    legal_status: Optional[str] = None
+    average_income: Optional[str] = None
+    pension_scheme: Optional[str] = None
+    
+    # Business owner specific
+    legal_form: Optional[str] = None
+    gross_remuneration: Optional[str] = None
+    pension_regime: Optional[str] = None
+
 class Token(BaseModel):
     access_token: str
     token_type: str = "bearer"

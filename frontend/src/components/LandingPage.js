@@ -304,13 +304,19 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-16 bg-white">
+      {/* Key Numbers Section */}
+      <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            {stats.map((stat, index) => (
-              <div key={index} className="slide-up" style={{animationDelay: `${index * 0.1}s`}}>
-                <div className="text-4xl font-bold text-elysion-primary mb-2">{stat.number}</div>
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-elysion-primary mb-6 font-montserrat">La confiance de milliers de professionnels</h2>
+          </div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {keyStats.map((stat, index) => (
+              <div key={index} className="text-center slide-up group" style={{animationDelay: `${index * 0.1}s`}}>
+                <div className="text-5xl font-bold text-elysion-accent mb-3 group-hover:scale-110 transition-transform font-montserrat">
+                  {stat.number}
+                </div>
                 <div className="text-elysion-text-light font-medium">{stat.label}</div>
               </div>
             ))}

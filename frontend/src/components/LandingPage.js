@@ -22,21 +22,89 @@ const LandingPage = () => {
     }
   };
 
+  const userPaths = [
+    {
+      type: "employee",
+      title: "Salarié",
+      description: "Vous êtes employé dans une entreprise avec des cotisations retraite automatiques.",
+      icon: "👔",
+      details: "Plans 401(k), cotisations patronales, régime général"
+    },
+    {
+      type: "freelancer", 
+      title: "Freelance",
+      description: "Vous travaillez en indépendant et gérez vos propres cotisations retraite.",
+      icon: "💻",
+      details: "Auto-entrepreneur, professions libérales, régimes spéciaux"
+    },
+    {
+      type: "business_owner",
+      title: "Chef d'entreprise",
+      description: "Vous dirigez une entreprise et optimisez votre stratégie retraite d'entreprise.",
+      icon: "🏢", 
+      details: "Dirigeant, société, plans retraite d'entreprise"
+    }
+  ];
+
+  const values = [
+    {
+      title: "Clarté",
+      description: "Visualisez votre avenir financier avec des projections claires et précises.",
+      icon: "👁️"
+    },
+    {
+      title: "Sécurité",
+      description: "Vos documents et données sont protégés avec le plus haut niveau de sécurité.",
+      icon: "🛡️"
+    },
+    {
+      title: "Guidance",
+      description: "Recevez des conseils personnalisés basés sur votre profil professionnel.",
+      icon: "🧭"
+    }
+  ];
+
   const features = [
     {
-      title: "Smart Retirement Planning",
-      description: "Get personalized retirement projections based on your profile and financial situation.",
+      title: "Simulateur de Retraite",
+      description: "Projections personnalisées selon votre profil professionnel et vos objectifs financiers.",
+      icon: "🔮"
+    },
+    {
+      title: "Stockage Sécurisé",
+      description: "Centralisez tous vos documents importants dans un espace sécurisé et organisé.",
+      icon: "📁"
+    },
+    {
+      title: "Tableau de Bord Personnalisé",
+      description: "Suivez vos progrès et visualisez vos métriques clés en temps réel.",
       icon: "📊"
     },
     {
-      title: "Secure Document Storage", 
-      description: "Store and organize all your important financial documents in one secure place.",
-      icon: "🔒"
+      title: "Recommandations d'Expert",
+      description: "Conseils personnalisés et stratégies optimisées pour votre situation unique.",
+      icon: "💡"
+    }
+  ];
+
+  const team = [
+    {
+      name: "Marie Laurent",
+      role: "Experte en Planification Retraite",
+      bio: "15 ans d'expérience en conseil financier et gestion de patrimoine.",
+      avatar: "👩‍💼"
     },
     {
-      title: "Tailored Recommendations",
-      description: "Receive customized advice based on whether you're an employee, freelancer, or business owner.",
-      icon: "💡"
+      name: "Jean Dubois",  
+      role: "Directeur Technique",
+      bio: "Ancien développeur chez une grande banque française, spécialiste fintech.",
+      avatar: "👨‍💻"
+    },
+    {
+      name: "Sophie Martin",
+      role: "Responsable Produit",
+      bio: "Experte UX avec une passion pour simplifier la planification financière.",
+      avatar: "👩‍🎨"
     }
   ];
 

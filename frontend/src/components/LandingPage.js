@@ -23,91 +23,95 @@ const LandingPage = () => {
     navigate('/auth');
   };
 
-  const userPaths = [
+  // Target user types
+  const targetUsers = [
     {
-      type: "employee",
-      title: "Salarié",
-      description: "Vous êtes employé dans une entreprise avec des cotisations retraite automatiques.",
-      icon: "👔",
-      details: "Plans 401(k), cotisations patronales, régime général"
+      title: "Salariés",
+      description: "Estimez votre future retraite en fonction de votre salaire et trimestres validés.",
+      icon: "👔"
     },
     {
-      type: "freelancer", 
-      title: "Freelance",
-      description: "Vous travaillez en indépendant et gérez vos propres cotisations retraite.",
-      icon: "💻",
-      details: "Auto-entrepreneur, professions libérales, régimes spéciaux"
+      title: "Freelances",
+      description: "Simulez votre pension à travers les régimes indépendants.",
+      icon: "💻"
     },
     {
-      type: "business_owner",
-      title: "Chef d'entreprise",
-      description: "Vous dirigez une entreprise et optimisez votre stratégie retraite d'entreprise.",
-      icon: "🏢", 
-      details: "Dirigeant, société, plans retraite d'entreprise"
+      title: "Chefs d'entreprise",
+      description: "Visualisez l'impact de votre rémunération et dividendes sur votre retraite.",
+      icon: "🏢"
     }
   ];
 
-  const values = [
+  // How it works steps
+  const processSteps = [
     {
-      title: "Clarté",
-      description: "Visualisez votre avenir financier avec des projections claires et précises.",
-      icon: "👁️"
+      step: "01",
+      title: "Créez votre profil",
+      description: "Formulaire simple pour définir votre statut professionnel."
     },
     {
-      title: "Sécurité",
-      description: "Vos documents et données sont protégés avec le plus haut niveau de sécurité.",
-      icon: "🛡️"
+      step: "02", 
+      title: "Complétez votre onboarding",
+      description: "Renseignez vos détails personnels et professionnels pour une estimation précise."
     },
     {
-      title: "Guidance",
-      description: "Recevez des conseils personnalisés basés sur votre profil professionnel.",
-      icon: "🧭"
+      step: "03",
+      title: "Accédez à votre tableau de bord",
+      description: "Découvrez vos projections et recommandations personnalisées."
     }
   ];
 
-  const features = [
+  // Key statistics
+  const keyStats = [
+    { number: "+10 000", label: "Profils analysés" },
+    { number: "98%", label: "Satisfaction utilisateur" },
+    { number: "+20%", label: "Valeur retraite optimisée en moyenne" },
+    { number: "100%", label: "Données sécurisées" }
+  ];
+
+  // Testimonials
+  const testimonials = [
     {
-      title: "Simulateur de Retraite",
-      description: "Projections personnalisées selon votre profil professionnel et vos objectifs financiers.",
-      icon: "🔮"
+      name: "Marie Dubois",
+      profession: "Salariée",
+      status: "Employée",
+      text: "Elysion m'a aidée à comprendre exactement quand je pourrais prendre ma retraite. Les projections sont très claires !",
+      avatar: "👩‍💼",
+      rating: 5
     },
     {
-      title: "Stockage Sécurisé",
-      description: "Centralisez tous vos documents importants dans un espace sécurisé et organisé.",
-      icon: "📁"
+      name: "Thomas Bernard",
+      profession: "Freelance",
+      status: "Indépendant",
+      text: "En tant qu'indépendant, c'était compliqué de s'y retrouver. Maintenant j'ai une vision claire de mon avenir.",
+      avatar: "👨‍💻",
+      rating: 5
     },
     {
-      title: "Tableau de Bord Personnalisé",
-      description: "Suivez vos progrès et visualisez vos métriques clés en temps réel.",
-      icon: "📊"
+      name: "Sophie Laurent",
+      profession: "Dirigeante",
+      status: "Chef d'entreprise",
+      text: "Les simulations m'ont permis d'optimiser ma stratégie retraite. Un outil indispensable pour tout dirigeant.",
+      avatar: "👩‍🏭",
+      rating: 5
     },
     {
-      title: "Recommandations d'Expert",
-      description: "Conseils personnalisés et stratégies optimisées pour votre situation unique.",
-      icon: "💡"
+      name: "Pierre Moreau",
+      profession: "Consultant",
+      status: "Freelance",
+      text: "Interface intuitive et conseils pertinents. Elysion a transformé ma façon de voir la planification retraite.",
+      avatar: "👨‍💼",
+      rating: 4
     }
   ];
 
-  const team = [
-    {
-      name: "Marie Laurent",
-      role: "Experte en Planification Retraite",
-      bio: "15 ans d'expérience en conseil financier et gestion de patrimoine.",
-      avatar: "👩‍💼"
-    },
-    {
-      name: "Jean Dubois",  
-      role: "Directeur Technique",
-      bio: "Ancien développeur chez une grande banque française, spécialiste fintech.",
-      avatar: "👨‍💻"
-    },
-    {
-      name: "Sophie Martin",
-      role: "Responsable Produit",
-      bio: "Experte UX avec une passion pour simplifier la planification financière.",
-      avatar: "👩‍🎨"
-    }
-  ];
+  // Auto-rotate testimonials
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [testimonials.length]);
 
   const stats = [
     { number: "65+", label: "Average Retirement Age" },

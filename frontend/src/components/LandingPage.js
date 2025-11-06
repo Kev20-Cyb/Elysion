@@ -355,46 +355,69 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Team Section */}
-      <section id="about" className="py-20 bg-elysion-bg">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-elysion-primary mb-6">Rencontrez l'équipe Elysion</h2>
-            <p className="text-xl text-elysion-text-light max-w-3xl mx-auto">
-              Des experts passionnés dédiés à votre réussite financière
-            </p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            {team.map((member, index) => (
-              <div key={member.name} className="card-elysion text-center slide-up" style={{animationDelay: `${index * 0.2}s`}}>
-                <div className="text-5xl mb-4">{member.avatar}</div>
-                <h3 className="text-xl font-semibold text-elysion-primary mb-2">{member.name}</h3>
-                <p className="text-elysion-accent font-medium mb-3">{member.role}</p>
-                <p className="text-elysion-text-light text-sm">{member.bio}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Testimonials Section */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-elysion-bg">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-elysion-primary mb-6">Témoignages</h2>
-            <p className="text-xl text-elysion-text-light">Ce que nos utilisateurs disent d'Elysion</p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <div key={index} className="card-elysion slide-up" style={{animationDelay: `${index * 0.2}s`}}>
-                <div className="text-3xl mb-4">{testimonial.avatar}</div>
-                <p className="text-elysion-text-light mb-6 italic">"{testimonial.quote}"</p>
-                <div>
-                  <div className="font-semibold text-elysion-primary">{testimonial.name}</div>
-                  <div className="text-sm text-elysion-text-light">{testimonial.role}</div>
-                </div>
+            <h2 className="text-4xl font-bold text-elysion-primary mb-6 font-montserrat">Ce que disent nos utilisateurs</h2>
+            
+            {/* Rating Display */}
+            <div className="flex items-center justify-center mb-8">
+              <div className="flex items-center space-x-1 mr-4">
+                {[...Array(5)].map((_, i) => (
+                  <span key={i} className="text-elysion-accent text-xl">⭐</span>
+                ))}
               </div>
-            ))}
+              <span className="text-elysion-text-light font-medium">4.8/5 sur 1,247 avis</span>
+            </div>
+          </div>
+          
+          {/* Testimonial Carousel */}
+          <div className="max-w-4xl mx-auto">
+            <div className="relative overflow-hidden">
+              <div 
+                className="flex transition-transform duration-500 ease-in-out"
+                style={{transform: `translateX(-${currentTestimonial * 100}%)`}}
+              >
+                {testimonials.map((testimonial, index) => (
+                  <div key={index} className="w-full flex-shrink-0">
+                    <div className="bg-white rounded-2xl p-8 shadow-lg mx-4 text-center">
+                      <div className="text-4xl mb-4">{testimonial.avatar}</div>
+                      
+                      {/* Stars */}
+                      <div className="flex justify-center mb-4">
+                        {[...Array(testimonial.rating)].map((_, i) => (
+                          <span key={i} className="text-elysion-accent text-lg">⭐</span>
+                        ))}
+                      </div>
+                      
+                      <p className="text-elysion-text-light text-lg italic mb-6 leading-relaxed">
+                        "{testimonial.text}"
+                      </p>
+                      
+                      <div>
+                        <div className="font-bold text-elysion-primary text-lg">{testimonial.name}</div>
+                        <div className="text-elysion-text-light">{testimonial.profession} • {testimonial.status}</div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            {/* Carousel Indicators */}
+            <div className="flex justify-center mt-8 space-x-2">
+              {testimonials.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentTestimonial(index)}
+                  className={`w-3 h-3 rounded-full transition-all ${
+                    index === currentTestimonial ? 'bg-elysion-primary' : 'bg-elysion-secondary'
+                  }`}
+                  data-testid={`testimonial-indicator-${index}`}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </section>

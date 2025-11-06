@@ -234,6 +234,57 @@ const LandingPage = () => {
         </div>
       </section>
 
+      {/* Choose Your Path Section */}
+      <section id="choose-path" className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-elysion-primary mb-6">Choisissez votre parcours</h2>
+            <p className="text-xl text-elysion-text-light max-w-3xl mx-auto">
+              Elysion s'adapte à votre situation professionnelle pour vous offrir des conseils personnalisés
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            {userPaths.map((path, index) => (
+              <div 
+                key={path.type} 
+                className="card-elysion text-center hover:border-elysion-accent border-2 border-transparent transition-all cursor-pointer slide-up group" 
+                style={{animationDelay: `${index * 0.2}s`}}
+              >
+                <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">{path.icon}</div>
+                <h3 className="text-xl font-semibold text-elysion-primary mb-3">{path.title}</h3>
+                <p className="text-elysion-text-light mb-4">{path.description}</p>
+                <div className="text-sm text-elysion-text-light bg-elysion-bg p-3 rounded-lg">
+                  <strong>Inclus:</strong> {path.details}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Our Values Section */}
+      <section className="py-20 bg-elysion-bg">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-elysion-primary mb-6">Votre tranquillité d'esprit, notre mission</h2>
+            <p className="text-xl text-elysion-text-light max-w-3xl mx-auto">
+              Chez Elysion, nous nous engageons à vous accompagner avec transparence et expertise
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            {values.map((value, index) => (
+              <div key={value.title} className="card-elysion text-center slide-up" style={{animationDelay: `${index * 0.2}s`}}>
+                <div className="text-4xl mb-4">{value.icon}</div>
+                <h3 className="text-xl font-semibold text-elysion-primary mb-4">{value.title}</h3>
+                <p className="text-elysion-text-light">{value.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Stats Section */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4">

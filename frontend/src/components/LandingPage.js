@@ -237,53 +237,69 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Choose Your Path Section */}
-      <section id="choose-path" className="py-20 bg-white">
+      {/* Who is it for? Section */}
+      <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-elysion-primary mb-6">Choisissez votre parcours</h2>
-            <p className="text-xl text-elysion-text-light max-w-3xl mx-auto">
-              Elysion s'adapte à votre situation professionnelle pour vous offrir des conseils personnalisés
-            </p>
+            <h2 className="text-4xl font-bold text-elysion-primary mb-6 font-montserrat">Conçu pour chaque parcours professionnel</h2>
           </div>
           
           <div className="grid md:grid-cols-3 gap-8">
-            {userPaths.map((path, index) => (
+            {targetUsers.map((user, index) => (
               <div 
-                key={path.type} 
-                className="card-elysion text-center hover:border-elysion-accent border-2 border-transparent transition-all cursor-pointer slide-up group" 
+                key={user.title} 
+                className="bg-white rounded-2xl p-8 text-center shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border border-gray-100 slide-up group" 
                 style={{animationDelay: `${index * 0.2}s`}}
               >
-                <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">{path.icon}</div>
-                <h3 className="text-xl font-semibold text-elysion-primary mb-3">{path.title}</h3>
-                <p className="text-elysion-text-light mb-4">{path.description}</p>
-                <div className="text-sm text-elysion-text-light bg-elysion-bg p-3 rounded-lg">
-                  <strong>Inclus:</strong> {path.details}
-                </div>
+                <div className="text-5xl mb-6 group-hover:scale-110 transition-transform">{user.icon}</div>
+                <h3 className="text-xl font-bold text-elysion-primary mb-4 font-montserrat">{user.title}</h3>
+                <p className="text-elysion-text-light leading-relaxed">{user.description}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Our Values Section */}
+      {/* How it Works Section */}
       <section className="py-20 bg-elysion-bg">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-elysion-primary mb-6">Votre tranquillité d'esprit, notre mission</h2>
-            <p className="text-xl text-elysion-text-light max-w-3xl mx-auto">
-              Chez Elysion, nous nous engageons à vous accompagner avec transparence et expertise
+            <h2 className="text-4xl font-bold text-elysion-primary mb-4 font-montserrat">Comment fonctionne Elysion ?</h2>
+            <p className="text-xl text-elysion-text-light max-w-2xl mx-auto">
+              Un processus simple pour prendre le contrôle de votre avenir.
             </p>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-8">
-            {values.map((value, index) => (
-              <div key={value.title} className="card-elysion text-center slide-up" style={{animationDelay: `${index * 0.2}s`}}>
-                <div className="text-4xl mb-4">{value.icon}</div>
-                <h3 className="text-xl font-semibold text-elysion-primary mb-4">{value.title}</h3>
-                <p className="text-elysion-text-light">{value.description}</p>
+          <div className="grid md:grid-cols-3 gap-12 mb-12">
+            {processSteps.map((step, index) => (
+              <div key={step.step} className="text-center slide-up" style={{animationDelay: `${index * 0.2}s`}}>
+                <div className="relative mb-8">
+                  <div className="w-20 h-20 bg-elysion-primary text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
+                    {step.step}
+                  </div>
+                  {index < processSteps.length - 1 && (
+                    <div className="hidden md:block absolute top-10 left-1/2 w-32 h-0.5 bg-elysion-secondary transform translate-x-full"></div>
+                  )}
+                </div>
+                <h3 className="text-xl font-bold text-elysion-primary mb-4 font-montserrat">{step.title}</h3>
+                <p className="text-elysion-text-light">{step.description}</p>
               </div>
             ))}
+          </div>
+          
+          <div className="text-center">
+            <button 
+              onClick={handleTestSimulator}
+              className="bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-8 py-4 rounded-xl text-lg transition-all hover:scale-105 hover:shadow-xl mb-4"
+              data-testid="process-test-simulator-btn"
+            >
+              Tester notre simulateur
+            </button>
+            <div>
+              <a href="#" className="text-elysion-primary hover:text-elysion-accent text-sm underline transition-colors">
+                En savoir plus sur notre technologie
+              </a>
+            </div>
           </div>
         </div>
       </section>

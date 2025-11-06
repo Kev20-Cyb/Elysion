@@ -782,10 +782,10 @@ const OnboardingFlow = () => {
         <div className="max-w-2xl w-full">
           {/* Progress Indicator */}
           <div className="flex justify-center mb-8">
-            <div className="flex space-x-4">
-              {[1, 2, 3, 4].map((step) => (
+            <div className="flex space-x-2">
+              {[1, 2, 3, 4, 5].map((step) => (
                 <div key={step} className="flex items-center">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold ${
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm ${
                     step === currentStep 
                       ? 'bg-elysion-primary text-white' 
                       : step < currentStep 
@@ -794,8 +794,8 @@ const OnboardingFlow = () => {
                   }`}>
                     {step < currentStep ? '✓' : step}
                   </div>
-                  {step < 4 && (
-                    <div className={`w-12 h-0.5 mx-2 ${
+                  {step < 5 && (
+                    <div className={`w-8 h-0.5 mx-1 ${
                       step < currentStep ? 'bg-elysion-accent' : 'bg-gray-200'
                     }`}></div>
                   )}

@@ -299,23 +299,33 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section id="features" className="py-20 bg-elysion-bg">
+      {/* Key Features Section */}
+      <section id="features" className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-elysion-primary mb-6">Fonctionnalités principales</h2>
+            <h2 className="text-4xl font-bold text-elysion-primary mb-6">Fonctionnalités clés</h2>
             <p className="text-xl text-elysion-text-light max-w-3xl mx-auto">
-              Découvrez comment Elysion vous aide à prendre le contrôle de votre avenir financier
+              Une suite complète d'outils pour maîtriser votre planification retraite
             </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, index) => (
-              <div key={index} className="card-elysion text-center slide-up" style={{animationDelay: `${index * 0.2}s`}}>
+              <div key={index} className="card-elysion text-center slide-up hover:shadow-xl transition-all" style={{animationDelay: `${index * 0.15}s`}}>
                 <div className="text-4xl mb-4">{feature.icon}</div>
-                <h3 className="text-xl font-semibold text-elysion-primary mb-4">{feature.title}</h3>
-                <p className="text-elysion-text-light">{feature.description}</p>
+                <h3 className="text-lg font-semibold text-elysion-primary mb-3">{feature.title}</h3>
+                <p className="text-elysion-text-light text-sm">{feature.description}</p>
               </div>
             ))}
+          </div>
+          
+          <div className="text-center mt-12">
+            <button 
+              onClick={handleGetStarted}
+              className="btn-elysion-accent text-lg px-8 py-4"
+              data-testid="features-create-account-btn"
+            >
+              Créer mon compte
+            </button>
           </div>
         </div>
       </section>

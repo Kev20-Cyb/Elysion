@@ -8,11 +8,7 @@ const LandingPage = () => {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
 
   const handleTestSimulator = () => {
-    if (isAuthenticated) {
-      navigate('/dashboard');
-    } else {
-      navigate('/auth');
-    }
+    navigate('/simulator');
   };
 
   const handleCreateAccount = () => {

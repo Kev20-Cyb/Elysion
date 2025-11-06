@@ -235,100 +235,145 @@ const OnboardingFlow = () => {
     </div>
   );
 
+  // Step 3: Professional Information (Conditional)
   const renderStep3 = () => {
     const userTypeInfo = getUserTypeInfo();
     
     return (
       <div>
-        <h2 className="text-3xl font-bold text-elysion-primary mb-2 text-center">Informations professionnelles</h2>
+        <h2 className="text-3xl font-bold text-elysion-primary mb-2 text-center font-montserrat">Informations professionnelles</h2>
         <p className="text-center text-elysion-text-light mb-6 flex items-center justify-center">
           <span className="mr-2">{userTypeInfo.icon}</span>
           Profil {userTypeInfo.label}
         </p>
 
         <div className="space-y-6">
-          {user?.user_type === 'employee' && (
+          {/* Employee Fields */}
+          {professionalStatus === 'employee' && (
             <>
-              <div>
-                <label className="block text-sm font-medium text-elysion-text-dark mb-2">
-                  Début de carrière (année)
-                </label>
-                <input
-                  type="number"
-                  placeholder="2010"
-                  value={profileData.career_start}
-                  onChange={(e) => handleInputChange('career_start', e.target.value)}
-                  className="input-elysion"
-                  data-testid="onboarding-career-start"
-                />
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-elysion-text-dark mb-2">
+                    Début de carrière (année)
+                  </label>
+                  <input
+                    type="number"
+                    placeholder="2010"
+                    min="1970"
+                    max={new Date().getFullYear()}
+                    value={profileData.career_start}
+                    onChange={(e) => handleInputChange('career_start', e.target.value)}
+                    className="input-elysion"
+                    data-testid="onboarding-career-start"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-elysion-text-dark mb-2">
+                    Salaire annuel brut actuel (€)
+                  </label>
+                  <input
+                    type="number"
+                    placeholder="45000"
+                    step="1000"
+                    value={profileData.annual_salary}
+                    onChange={(e) => handleInputChange('annual_salary', e.target.value)}
+                    className="input-elysion"
+                    data-testid="onboarding-salary"
+                  />
+                </div>
               </div>
-              
+
               <div>
-                <label className="block text-sm font-medium text-elysion-text-dark mb-2">
-                  Salaire annuel brut (€)
+                <label className="block text-sm font-medium text-elysion-text-dark mb-3">
+                  Régimes de retraite (cochez tous les applicables)
                 </label>
-                <input
-                  type="number"
-                  placeholder="45000"
-                  value={profileData.salary}
-                  onChange={(e) => handleInputChange('salary', e.target.value)}
-                  className="input-elysion"
-                  data-testid="onboarding-salary"
-                />
+                <div className="grid grid-cols-2 gap-3">
+                  {['Régime général', 'Complémentaire AGIRC-ARRCO'].map((scheme) => (
+                    <label key={scheme} className="flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={profileData.pension_schemes.includes(scheme)}
+                        onChange={(e) => {
+                          const schemes = [...profileData.pension_schemes];
+                          if (e.target.checked) {
+                            schemes.push(scheme);
+                          } else {
+                            schemes.splice(schemes.indexOf(scheme), 1);
+                          }
+                          handleInputChange('pension_schemes', schemes);
+                        }}
+                        className="mr-2"
+                        data-testid={`pension-scheme-${scheme.toLowerCase().replace(/\s+/g, '-')}`}
+                      />
+                      <span className="text-sm">{scheme}</span>
+                    </label>
+                  ))}
+                </div>
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-elysion-text-dark mb-2">
-                  Plans retraite entreprise
+                  Trimestres validés (estimation)
                 </label>
-                <select
-                  value={profileData.retirement_plans}
-                  onChange={(e) => handleInputChange('retirement_plans', e.target.value)}
+                <input
+                  type="number"
+                  placeholder="120"
+                  min="0"
+                  max="200"
+                  value={profileData.validated_quarters}
+                  onChange={(e) => handleInputChange('validated_quarters', e.target.value)}
                   className="input-elysion"
-                  data-testid="onboarding-retirement-plans"
-                >
-                  <option value="">Sélectionner...</option>
-                  <option value="none">Aucun</option>
-                  <option value="perco">PERCO</option>
-                  <option value="per">PER Entreprise</option>
-                  <option value="article83">Article 83</option>
-                </select>
+                  data-testid="onboarding-validated-quarters"
+                />
+                <p className="text-sm text-elysion-text-light mt-1">
+                  Environ 4 trimestres par année travaillée
+                </p>
               </div>
             </>
           )}
 
-          {user?.user_type === 'freelancer' && (
+          {/* Freelancer/Self-employed Fields */}
+          {(professionalStatus === 'freelancer' || professionalStatus === 'self_employed') && (
             <>
-              <div>
-                <label className="block text-sm font-medium text-elysion-text-dark mb-2">
-                  Type d'activité
-                </label>
-                <input
-                  type="text"
-                  placeholder="Consultant informatique, Graphiste..."
-                  value={profileData.activity_type}
-                  onChange={(e) => handleInputChange('activity_type', e.target.value)}
-                  className="input-elysion"
-                  data-testid="onboarding-activity-type"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-elysion-text-dark mb-2">
-                  Statut juridique
-                </label>
-                <select
-                  value={profileData.legal_status}
-                  onChange={(e) => handleInputChange('legal_status', e.target.value)}
-                  className="input-elysion"
-                  data-testid="onboarding-legal-status"
-                >
-                  <option value="">Sélectionner...</option>
-                  <option value="auto-entrepreneur">Auto-entrepreneur</option>
-                  <option value="eirl">EIRL</option>
-                  <option value="eurl">EURL</option>
-                  <option value="profession-liberale">Profession libérale</option>
-                </select>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-elysion-text-dark mb-2">
+                    Type d'activité
+                  </label>
+                  <select
+                    value={profileData.activity_type}
+                    onChange={(e) => handleInputChange('activity_type', e.target.value)}
+                    className="input-elysion"
+                    data-testid="onboarding-activity-type"
+                  >
+                    <option value="">Sélectionner</option>
+                    <option value="consulting">Conseil / Consulting</option>
+                    <option value="it">Informatique / Développement</option>
+                    <option value="creative">Créatif / Design</option>
+                    <option value="trade">Commerce / Vente</option>
+                    <option value="service">Services</option>
+                    <option value="other">Autre</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-elysion-text-dark mb-2">
+                    Statut juridique
+                  </label>
+                  <select
+                    value={profileData.legal_status}
+                    onChange={(e) => handleInputChange('legal_status', e.target.value)}
+                    className="input-elysion"
+                    data-testid="onboarding-legal-status"
+                  >
+                    <option value="">Sélectionner</option>
+                    <option value="micro">Micro-entrepreneur</option>
+                    <option value="ei">Entrepreneur individuel</option>
+                    <option value="eurl">EURL</option>
+                    <option value="liberal">Profession libérale</option>
+                  </select>
+                </div>
               </div>
 
               <div>
@@ -338,66 +383,126 @@ const OnboardingFlow = () => {
                 <input
                   type="number"
                   placeholder="35000"
+                  step="1000"
                   value={profileData.average_income}
                   onChange={(e) => handleInputChange('average_income', e.target.value)}
                   className="input-elysion"
                   data-testid="onboarding-average-income"
                 />
               </div>
+
+              <div>
+                <label className="block text-sm font-medium text-elysion-text-dark mb-3">
+                  Régimes de retraite
+                </label>
+                <div className="grid grid-cols-2 gap-3">
+                  {['SSI', 'CIPAV', 'CNBF', 'Autre caisse'].map((regime) => (
+                    <label key={regime} className="flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={profileData.retirement_regimes.includes(regime)}
+                        onChange={(e) => {
+                          const regimes = [...profileData.retirement_regimes];
+                          if (e.target.checked) {
+                            regimes.push(regime);
+                          } else {
+                            regimes.splice(regimes.indexOf(regime), 1);
+                          }
+                          handleInputChange('retirement_regimes', regimes);
+                        }}
+                        className="mr-2"
+                        data-testid={`retirement-regime-${regime.toLowerCase()}`}
+                      />
+                      <span className="text-sm">{regime}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
             </>
           )}
 
-          {user?.user_type === 'business_owner' && (
+          {/* Business Owner Fields */}
+          {professionalStatus === 'business_owner' && (
             <>
-              <div>
-                <label className="block text-sm font-medium text-elysion-text-dark mb-2">
-                  Forme juridique de l'entreprise
-                </label>
-                <select
-                  value={profileData.legal_form}
-                  onChange={(e) => handleInputChange('legal_form', e.target.value)}
-                  className="input-elysion"
-                  data-testid="onboarding-legal-form"
-                >
-                  <option value="">Sélectionner...</option>
-                  <option value="sas">SAS</option>
-                  <option value="sarl">SARL</option>
-                  <option value="sa">SA</option>
-                  <option value="sasu">SASU</option>
-                  <option value="eurl">EURL</option>
-                </select>
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-elysion-text-dark mb-2">
-                  Rémunération brute totale annuelle (€)
-                </label>
-                <input
-                  type="number"
-                  placeholder="80000"
-                  value={profileData.gross_remuneration}
-                  onChange={(e) => handleInputChange('gross_remuneration', e.target.value)}
-                  className="input-elysion"
-                  data-testid="onboarding-gross-remuneration"
-                />
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-elysion-text-dark mb-2">
+                    Forme juridique
+                  </label>
+                  <select
+                    value={profileData.company_legal_form}
+                    onChange={(e) => handleInputChange('company_legal_form', e.target.value)}
+                    className="input-elysion"
+                    data-testid="onboarding-legal-form"
+                  >
+                    <option value="">Sélectionner</option>
+                    <option value="sas">SAS</option>
+                    <option value="sarl">SARL</option>
+                    <option value="sa">SA</option>
+                    <option value="sasu">SASU</option>
+                    <option value="eurl">EURL</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-elysion-text-dark mb-2">
+                    Rémunération annuelle (€)
+                  </label>
+                  <input
+                    type="number"
+                    placeholder="80000"
+                    step="5000"
+                    value={profileData.remuneration}
+                    onChange={(e) => handleInputChange('remuneration', e.target.value)}
+                    className="input-elysion"
+                    data-testid="onboarding-remuneration"
+                  />
+                </div>
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-elysion-text-dark mb-2">
-                  Régime de retraite applicable
+                  Type de rémunération
                 </label>
                 <select
-                  value={profileData.pension_regime}
-                  onChange={(e) => handleInputChange('pension_regime', e.target.value)}
+                  value={profileData.regime_type}
+                  onChange={(e) => handleInputChange('regime_type', e.target.value)}
                   className="input-elysion"
-                  data-testid="onboarding-pension-regime"
+                  data-testid="onboarding-regime-type"
                 >
-                  <option value="">Sélectionner...</option>
-                  <option value="rsi">RSI (ex-régime)</option>
-                  <option value="ssi">SSI (Sécurité Sociale Indépendants)</option>
-                  <option value="cipav">CIPAV</option>
-                  <option value="cnbf">CNBF</option>
+                  <option value="">Sélectionner</option>
+                  <option value="salary_only">Salaire uniquement</option>
+                  <option value="dividends_only">Dividendes uniquement</option>
+                  <option value="mixed">Salaire + Dividendes</option>
                 </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-elysion-text-dark mb-3">
+                  Plans de retraite associés
+                </label>
+                <div className="grid grid-cols-2 gap-3">
+                  {['Madelin', 'PER', 'Article 83', 'Retraite supplémentaire'].map((plan) => (
+                    <label key={plan} className="flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={profileData.retirement_plans.includes(plan)}
+                        onChange={(e) => {
+                          const plans = [...profileData.retirement_plans];
+                          if (e.target.checked) {
+                            plans.push(plan);
+                          } else {
+                            plans.splice(plans.indexOf(plan), 1);
+                          }
+                          handleInputChange('retirement_plans', plans);
+                        }}
+                        className="mr-2"
+                        data-testid={`retirement-plan-${plan.toLowerCase().replace(/\s+/g, '-')}`}
+                      />
+                      <span className="text-sm">{plan}</span>
+                    </label>
+                  ))}
+                </div>
               </div>
             </>
           )}
@@ -406,17 +511,17 @@ const OnboardingFlow = () => {
         <div className="flex justify-between mt-8">
           <button 
             onClick={prevStep}
-            className="btn-outline-elysion"
-            data-testid="onboarding-prev-btn"
+            className="text-elysion-primary hover:text-elysion-accent transition-colors"
+            data-testid="onboarding-back-btn"
           >
-            Précédent
+            ← Retour
           </button>
           <button 
             onClick={nextStep}
-            className="btn-elysion-accent"
-            data-testid="onboarding-next-btn"
+            className="bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-6 py-3 rounded-lg transition-all"
+            data-testid="onboarding-validate-btn"
           >
-            Suivant
+            Valider mes informations →
           </button>
         </div>
       </div>

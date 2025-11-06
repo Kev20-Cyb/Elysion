@@ -186,31 +186,50 @@ const LandingPage = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className="hero-gradient py-20 px-4">
-        <div className="max-w-7xl mx-auto text-center">
-          <h1 className="text-5xl md:text-6xl font-bold text-elysion-primary mb-6 slide-up">
-            Planifiez votre retraite
-            <br />
-            <span className="text-elysion-accent">en toute sérénité</span>
-          </h1>
-          <p className="text-xl md:text-2xl text-elysion-text-light mb-8 max-w-3xl mx-auto fade-in">
-            Une plateforme sécurisée et personnalisée pour simuler, optimiser et planifier votre retraite selon votre profil professionnel.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center fade-in">
-            <button 
-              onClick={handleGetStarted}
-              className="btn-elysion-primary text-lg px-8 py-4"
-              data-testid="hero-get-started-btn"
-            >
-              Commencer la simulation
-            </button>
-            <button 
-              onClick={() => document.getElementById('features').scrollIntoView({ behavior: 'smooth' })}
-              className="btn-outline-elysion text-lg px-8 py-4"
-              data-testid="hero-learn-more-btn"
-            >
-              En savoir plus
-            </button>
+      <section className="hero-gradient py-24 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="text-left">
+              <h1 className="text-5xl md:text-6xl font-bold text-elysion-primary mb-6 slide-up">
+                Préparez votre retraite
+                <br />
+                <span className="text-elysion-accent">en toute sérénité</span>
+              </h1>
+              <p className="text-xl md:text-2xl text-elysion-text-light mb-8 fade-in">
+                Elysion vous aide à simuler, planifier et sécuriser votre retraite — quel que soit votre parcours professionnel.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 fade-in">
+                <button 
+                  onClick={handleStartSimulation}
+                  className="btn-elysion-accent text-lg px-8 py-4"
+                  data-testid="hero-start-simulation-btn"
+                >
+                  Lancer la simulation
+                </button>
+                <button 
+                  onClick={() => document.getElementById('choose-path').scrollIntoView({ behavior: 'smooth' })}
+                  className="btn-outline-elysion text-lg px-8 py-4"
+                  data-testid="hero-learn-more-btn"
+                >
+                  En savoir plus
+                </button>
+              </div>
+            </div>
+            
+            {/* Hero Illustration */}
+            <div className="flex justify-center lg:justify-end">
+              <div className="relative">
+                <div className="w-96 h-96 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+                  <div className="text-8xl">📊</div>
+                </div>
+                <div className="absolute -top-4 -right-4 w-20 h-20 bg-elysion-accent/20 rounded-full flex items-center justify-center">
+                  <span className="text-2xl">📈</span>
+                </div>
+                <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-elysion-primary/20 rounded-full flex items-center justify-center">
+                  <span className="text-xl">💰</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>

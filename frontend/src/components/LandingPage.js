@@ -113,33 +113,7 @@ const LandingPage = () => {
     return () => clearInterval(interval);
   }, [testimonials.length]);
 
-  const stats = [
-    { number: "65+", label: "Average Retirement Age" },
-    { number: "€1,800", label: "Avg Monthly Pension" },
-    { number: "40%", label: "Income Replacement" },
-    { number: "100%", label: "Secure & Encrypted" }
-  ];
-
-  const testimonials = [
-    {
-      name: "Marie Dubois",
-      role: "Marketing Manager",
-      quote: "Elysion helped me understand exactly when I can retire and how much I need to save. The insights are invaluable!",
-      avatar: "👩‍💼"
-    },
-    {
-      name: "Jean-Pierre Martin",
-      role: "Freelance Developer", 
-      quote: "As a freelancer, retirement planning was confusing. Elysion made it simple and gave me a clear roadmap.",
-      avatar: "👨‍💻"
-    },
-    {
-      name: "Sophie Laurent",
-      role: "Business Owner",
-      quote: "The business owner features helped me optimize my retirement strategy while managing my company's needs.",
-      avatar: "👩‍💼"
-    }
-  ];
+  // This old data has been replaced by the new structure above
 
   return (
     <div className="min-h-screen bg-elysion-bg font-montserrat">

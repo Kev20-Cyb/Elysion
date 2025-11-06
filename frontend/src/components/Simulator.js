@@ -110,7 +110,13 @@ const Simulator = () => {
   };
 
   const handleCreateAccount = () => {
-    navigate('/auth');
+    // Pass professional status from simulator to onboarding
+    navigate('/onboarding', { 
+      state: { 
+        professionalStatus: formData.professionalStatus,
+        simulationData: formData 
+      }
+    });
   };
 
   const handleLogin = () => {

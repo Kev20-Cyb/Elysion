@@ -459,22 +459,18 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* CTA Footer Section */}
-      <section className="py-20 bg-elysion-primary">
-        <div className="max-w-4xl mx-auto text-center px-4">
-          <h2 className="text-4xl font-bold text-white mb-6">Prêt à prendre le contrôle de votre avenir ?</h2>
-          <p className="text-xl text-white/90 mb-8">
-            Rejoignez des milliers d'utilisateurs qui font déjà confiance à Elysion
-          </p>
-          <button 
-            onClick={handleGetStarted}
-            className="bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-10 py-4 rounded-full text-lg transition-all hover:scale-105 hover:shadow-xl"
-            data-testid="cta-get-started-btn"
-          >
-            Créer mon compte gratuit
-          </button>
+      {/* Simple Footer */}
+      <footer className="bg-elysion-primary text-white py-8">
+        <div className="max-w-7xl mx-auto px-4 text-center">
+          <div className="mb-4">
+            <h3 className="text-xl font-bold font-montserrat">Elysion</h3>
+            <p className="text-white/80">Planification retraite intelligente</p>
+          </div>
+          <div className="border-t border-white/20 pt-4">
+            <p className="text-white/60 text-sm">&copy; 2024 Elysion. Tous droits réservés.</p>
+          </div>
         </div>
-      </section>
+      </footer>
 
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-12">

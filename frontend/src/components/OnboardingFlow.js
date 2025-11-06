@@ -101,10 +101,12 @@ const OnboardingFlow = () => {
   const getUserTypeInfo = () => {
     const types = {
       employee: { label: 'Salarié', icon: '👔' },
-      freelancer: { label: 'Freelance', icon: '💻' },
+      freelancer: { label: 'Freelance', icon: '💻' }, 
+      self_employed: { label: 'Indépendant', icon: '💻' },
+      civil_servant: { label: 'Fonctionnaire', icon: '🏛️' },
       business_owner: { label: 'Chef d\'entreprise', icon: '🏢' }
     };
-    return types[user?.user_type] || types.employee;
+    return types[professionalStatus] || types.employee;
   };
 
   const renderStep1 = () => (

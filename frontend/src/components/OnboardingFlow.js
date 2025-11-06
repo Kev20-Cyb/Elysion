@@ -528,83 +528,212 @@ const OnboardingFlow = () => {
     );
   };
 
+  // Step 4: Summary & Confirmation
   const renderStep4 = () => (
     <div>
-      <h2 className="text-3xl font-bold text-elysion-primary mb-6 text-center">Récapitulatif de votre profil</h2>
+      <h2 className="text-3xl font-bold text-elysion-primary mb-4 text-center font-montserrat">Vérifiez vos informations</h2>
+      <p className="text-center text-elysion-text-light mb-8">
+        Voici un récapitulatif de vos données avant de continuer vers votre espace personnel.
+      </p>
       
-      <div className="bg-elysion-bg p-6 rounded-lg mb-6">
-        <h3 className="font-semibold text-elysion-primary mb-4">Informations personnelles:</h3>
-        <div className="space-y-2 text-sm">
-          <p><strong>Date de naissance:</strong> {profileData.date_of_birth || 'Non renseigné'}</p>
-          <p><strong>Genre:</strong> {profileData.gender || 'Non renseigné'}</p>
-          <p><strong>Situation familiale:</strong> {profileData.family_situation || 'Non renseigné'}</p>
+      <div className="grid md:grid-cols-2 gap-6 mb-8">
+        {/* Personal Data Card */}
+        <div className="bg-elysion-bg p-6 rounded-xl">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-semibold text-elysion-primary">Informations personnelles</h3>
+            <button 
+              onClick={() => setCurrentStep(2)}
+              className="text-elysion-accent hover:text-elysion-accent/70 text-sm"
+              data-testid="edit-personal-btn"
+            >
+              ✏️ Modifier
+            </button>
+          </div>
+          <div className="space-y-2 text-sm">
+            <p><strong>Date de naissance:</strong> {profileData.date_of_birth || 'Non renseigné'}</p>
+            <p><strong>Genre:</strong> {
+              profileData.gender === 'male' ? 'Homme' : 
+              profileData.gender === 'female' ? 'Femme' : 
+              profileData.gender === 'prefer_not_say' ? 'Préfère ne pas dire' :
+              'Non renseigné'
+            }</p>
+            <p><strong>Situation:</strong> {
+              profileData.marital_status === 'single' ? 'Célibataire' :
+              profileData.marital_status === 'married' ? 'Marié(e)' :
+              profileData.marital_status === 'divorced' ? 'Divorcé(e)' :
+              profileData.marital_status === 'widowed' ? 'Veuf(ve)' :
+              'Non renseigné'
+            }</p>
+            <p><strong>Enfants:</strong> {profileData.number_of_children}</p>
+          </div>
         </div>
-      </div>
 
-      <div className="bg-elysion-bg p-6 rounded-lg mb-8">
-        <h3 className="font-semibold text-elysion-primary mb-4">Informations professionnelles:</h3>
-        <div className="space-y-2 text-sm">
-          {user?.user_type === 'employee' && (
-            <>
-              <p><strong>Début de carrière:</strong> {profileData.career_start || 'Non renseigné'}</p>
-              <p><strong>Salaire:</strong> {profileData.salary ? `${parseInt(profileData.salary).toLocaleString()} €` : 'Non renseigné'}</p>
-              <p><strong>Plans retraite:</strong> {profileData.retirement_plans || 'Non renseigné'}</p>
-            </>
-          )}
-          {user?.user_type === 'freelancer' && (
-            <>
-              <p><strong>Activité:</strong> {profileData.activity_type || 'Non renseigné'}</p>
-              <p><strong>Statut:</strong> {profileData.legal_status || 'Non renseigné'}</p>
-              <p><strong>Revenus:</strong> {profileData.average_income ? `${parseInt(profileData.average_income).toLocaleString()} €` : 'Non renseigné'}</p>
-            </>
-          )}
-          {user?.user_type === 'business_owner' && (
-            <>
-              <p><strong>Forme juridique:</strong> {profileData.legal_form || 'Non renseigné'}</p>
-              <p><strong>Rémunération:</strong> {profileData.gross_remuneration ? `${parseInt(profileData.gross_remuneration).toLocaleString()} €` : 'Non renseigné'}</p>
-              <p><strong>Régime retraite:</strong> {profileData.pension_regime || 'Non renseigné'}</p>
-            </>
-          )}
-        </div>
-      </div>
-
-      {error && (
-        <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-6" data-testid="onboarding-error">
-          {error}
-        </div>
-      )}
-
-      <div className="text-center">
-        <button 
-          onClick={handleComplete}
-          disabled={loading}
-          className={`btn-elysion-accent px-8 py-3 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
-          data-testid="onboarding-complete-btn"
-        >
-          {loading ? (
-            <div className="flex items-center justify-center">
-              <div className="spinner mr-2"></div>
-              Sauvegarde...
-            </div>
-          ) : (
-            'Confirmer et sauvegarder mon profil'
-          )}
-        </button>
-        
-        <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
-          <p className="text-green-700 font-medium">
-            ✅ Votre profil est complet ! Bienvenue sur Elysion.
-          </p>
+        {/* Professional Data Card */}
+        <div className="bg-elysion-bg p-6 rounded-xl">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-semibold text-elysion-primary">Informations professionnelles</h3>
+            <button 
+              onClick={() => setCurrentStep(3)}
+              className="text-elysion-accent hover:text-elysion-accent/70 text-sm"
+              data-testid="edit-professional-btn"
+            >
+              ✏️ Modifier
+            </button>
+          </div>
+          <div className="space-y-2 text-sm">
+            <p><strong>Profil:</strong> {getUserTypeInfo().label}</p>
+            
+            {professionalStatus === 'employee' && (
+              <>
+                <p><strong>Début carrière:</strong> {profileData.career_start || 'Non renseigné'}</p>
+                <p><strong>Salaire:</strong> {profileData.annual_salary ? `${parseInt(profileData.annual_salary).toLocaleString()} €` : 'Non renseigné'}</p>
+                <p><strong>Trimestres:</strong> {profileData.validated_quarters || 'Non renseigné'}</p>
+              </>
+            )}
+            
+            {(professionalStatus === 'freelancer' || professionalStatus === 'self_employed') && (
+              <>
+                <p><strong>Activité:</strong> {profileData.activity_type || 'Non renseigné'}</p>
+                <p><strong>Statut:</strong> {profileData.legal_status || 'Non renseigné'}</p>
+                <p><strong>Revenus:</strong> {profileData.average_income ? `${parseInt(profileData.average_income).toLocaleString()} €` : 'Non renseigné'}</p>
+              </>
+            )}
+            
+            {professionalStatus === 'business_owner' && (
+              <>
+                <p><strong>Forme juridique:</strong> {profileData.company_legal_form || 'Non renseigné'}</p>
+                <p><strong>Rémunération:</strong> {profileData.remuneration ? `${parseInt(profileData.remuneration).toLocaleString()} €` : 'Non renseigné'}</p>
+                <p><strong>Type:</strong> {profileData.regime_type || 'Non renseigné'}</p>
+              </>
+            )}
+          </div>
         </div>
       </div>
 
       <div className="flex justify-between mt-8">
         <button 
           onClick={prevStep}
-          className="btn-outline-elysion"
-          data-testid="onboarding-prev-btn"
+          className="text-elysion-primary hover:text-elysion-accent transition-colors"
+          data-testid="onboarding-back-btn"
         >
-          Précédent
+          ← Retour
+        </button>
+        <button 
+          onClick={nextStep}
+          className="bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-6 py-3 rounded-lg transition-all"
+          data-testid="onboarding-confirm-btn"
+        >
+          Confirmer et continuer →
+        </button>
+      </div>
+    </div>
+  );
+
+  // Step 5: Account Setup
+  const renderStep5 = () => (
+    <div>
+      <h2 className="text-3xl font-bold text-elysion-primary mb-4 text-center font-montserrat">Créez votre compte</h2>
+      <p className="text-center text-elysion-text-light mb-8">
+        Finalisez votre inscription pour accéder à votre espace personnel Elysion.
+      </p>
+
+      {error && (
+        <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-6" data-testid="onboarding-error">
+          {error}
+        </div>
+      )}
+      
+      <div className="space-y-6">
+        <div>
+          <label className="block text-sm font-medium text-elysion-text-dark mb-2">
+            Adresse email
+          </label>
+          <input
+            type="email"
+            placeholder="votre@email.com"
+            value={profileData.email}
+            onChange={(e) => handleInputChange('email', e.target.value)}
+            className="input-elysion"
+            required
+            data-testid="onboarding-email"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-elysion-text-dark mb-2">
+            Mot de passe
+          </label>
+          <input
+            type="password"
+            placeholder="••••••••"
+            value={profileData.password}
+            onChange={(e) => handleInputChange('password', e.target.value)}
+            className="input-elysion"
+            required
+            data-testid="onboarding-password"
+          />
+          <p className="text-sm text-elysion-text-light mt-1">
+            Minimum 8 caractères recommandés
+          </p>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-elysion-text-dark mb-2">
+            Confirmer le mot de passe
+          </label>
+          <input
+            type="password"
+            placeholder="••••••••"
+            value={profileData.confirm_password}
+            onChange={(e) => handleInputChange('confirm_password', e.target.value)}
+            className="input-elysion"
+            required
+            data-testid="onboarding-confirm-password"
+          />
+          {profileData.password && profileData.confirm_password && profileData.password !== profileData.confirm_password && (
+            <p className="text-sm text-red-600 mt-1">Les mots de passe ne correspondent pas</p>
+          )}
+        </div>
+
+        <div className="bg-elysion-bg p-4 rounded-lg">
+          <label className="flex items-start cursor-pointer">
+            <input
+              type="checkbox"
+              checked={profileData.agree_terms}
+              onChange={(e) => handleInputChange('agree_terms', e.target.checked)}
+              className="mr-3 mt-1"
+              required
+              data-testid="onboarding-terms"
+            />
+            <span className="text-sm text-elysion-text-dark">
+              J'accepte les <a href="#" className="text-elysion-primary underline">conditions d'utilisation</a> et la <a href="#" className="text-elysion-primary underline">politique de confidentialité</a> d'Elysion.
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <div className="flex justify-between mt-8">
+        <button 
+          onClick={prevStep}
+          className="text-elysion-primary hover:text-elysion-accent transition-colors"
+          data-testid="onboarding-back-btn"
+        >
+          ← Retour
+        </button>
+        <button 
+          onClick={handleComplete}
+          disabled={loading || !profileData.email || !profileData.password || !profileData.confirm_password || profileData.password !== profileData.confirm_password || !profileData.agree_terms}
+          className="bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-6 py-3 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          data-testid="onboarding-create-account-btn"
+        >
+          {loading ? (
+            <div className="flex items-center justify-center">
+              <div className="spinner mr-2"></div>
+              Création du compte...
+            </div>
+          ) : (
+            'Créer mon compte'
+          )}
         </button>
       </div>
     </div>

@@ -139,14 +139,7 @@ function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/simulator" element={<Simulator />} />
-            <Route 
-              path="/onboarding" 
-              element={
-                <ProtectedRoute>
-                  <OnboardingFlow />
-                </ProtectedRoute>
-              } 
-            />
+            <Route path="/onboarding" element={<OnboardingFlow />} />
             <Route 
               path="/dashboard" 
               element={

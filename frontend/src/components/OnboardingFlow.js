@@ -756,10 +756,14 @@ const OnboardingFlow = () => {
     }
   };
 
-  if (!user) {
+  // Loading state for component initialization
+  if (loading && currentStep === 5) {
     return (
       <div className="min-h-screen bg-elysion-bg flex items-center justify-center">
-        <div className="spinner"></div>
+        <div className="text-center">
+          <div className="spinner mx-auto mb-4"></div>
+          <p className="text-elysion-primary">Création de votre compte...</p>
+        </div>
       </div>
     );
   }

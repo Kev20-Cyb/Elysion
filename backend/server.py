@@ -343,6 +343,54 @@ async def reset_password(request: ResetPasswordRequest):
     
     return {"message": "Mot de passe réinitialisé avec succès"}
 
+@api_router.post("/profile/complete")
+async def complete_profile(profile_data: ProfileCompletion, current_user: User = Depends(get_current_user)):
+    # Verify the user_id matches current user
+    if profile_data.user_id != current_user.id:
+        raise HTTPException(
+            status_code=403,
+            detail="Unauthorized to update this profile"
+        )
+    
+    # Prepare profile data for storage
+    profile_dict = profile_data.dict(exclude={'user_id'})
+    profile_dict['user_id'] = current_user.id
+    profile_dict['completed_at'] = datetime.utcnow()
+    profile_dict['last_updated'] = datetime.utcnow()
+    
+    # Remove None values
+    profile_dict = {k: v for k, v in profile_dict.items() if v is not None}
+    
+    # Update or create profile
+    existing_profile = await db.user_profiles.find_one({"user_id": current_user.id})
+    
+    if existing_profile:
+        await db.user_profiles.update_one(
+            {"user_id": current_user.id},
+            {"$set": profile_dict}
+        )
+    else:
+        await db.user_profiles.insert_one(profile_dict)
+    
+    # Mark user as having completed profile
+    await db.users.update_one(
+        {"id": current_user.id},
+        {"$set": {"profile_completed": True, "profile_completed_at": datetime.utcnow()}}
+    )
+    
+    return {"message": "Profil complété avec succès"}
+
+@api_router.get("/profile")
+async def get_user_profile_complete(current_user: User = Depends(get_current_user)):
+    # Get user profile data
+    profile = await db.user_profiles.find_one({"user_id": current_user.id})
+    
+    return {
+        "user": current_user,
+        "profile": profile,
+        "profile_completed": profile is not None
+    }
+
 # Dashboard Routes
 @api_router.get("/dashboard", response_model=DashboardData)
 async def get_dashboard(current_user: User = Depends(get_current_user)):

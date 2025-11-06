@@ -68,7 +68,7 @@ const AuthPage = () => {
   return (
     <div className="min-h-screen bg-elysion-bg font-montserrat">
       {/* Navigation */}
-      <nav className="bg-white/80 backdrop-blur-md border-b border-gray-200">
+      <nav className="bg-white/90 backdrop-blur-md border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <button 
@@ -82,9 +82,11 @@ const AuthPage = () => {
         </div>
       </nav>
 
-      {/* Auth Form */}
-      <div className="flex items-center justify-center py-12 px-4">
-        <div className="max-w-md w-full">
+      {/* Split Screen Layout */}
+      <div className="flex min-h-[calc(100vh-4rem)]">
+        {/* Left Side - Form */}
+        <div className="flex-1 flex items-center justify-center p-8">
+          <div className="max-w-md w-full">
           {/* Form Container */}
           <div className="card-elysion fade-in">
             <div className="text-center mb-8">

@@ -138,6 +138,7 @@ function App() {
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/auth" element={<AuthPage />} />
+            <Route path="/simulator" element={<Simulator />} />
             <Route 
               path="/onboarding" 
               element={

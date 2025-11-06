@@ -73,14 +73,26 @@ const OnboardingFlow = () => {
     setError('');
     
     try {
-      await axios.post(`${API}/profile/complete`, {
-        ...profileData,
-        user_id: user.id
+      // Create account with collected data
+      const response = await axios.post(`${API}/auth/register`, {
+        email: profileData.email,
+        password: profileData.password,
+        full_name: `${profileData.email.split('@')[0]}`, // Simple name from email
+        user_type: professionalStatus
       });
       
-      navigate('/dashboard');
+      // Login the user automatically
+      const loginResult = await login(profileData.email, profileData.password);
+      
+      if (loginResult.success) {
+        // Save profile data
+        await axios.post(`${API}/profile/complete`, profileData);
+        navigate('/dashboard');
+      } else {
+        setError(loginResult.error);
+      }
     } catch (err) {
-      setError('Erreur lors de la sauvegarde. Veuillez réessayer.');
+      setError(err.response?.data?.detail || 'Erreur lors de la création du compte');
     } finally {
       setLoading(false);
     }

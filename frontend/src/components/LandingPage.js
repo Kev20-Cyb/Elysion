@@ -374,19 +374,19 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* CTA Footer Section */}
       <section className="py-20 bg-elysion-primary">
         <div className="max-w-4xl mx-auto text-center px-4">
-          <h2 className="text-4xl font-bold text-white mb-6">Prêt à planifier votre retraite ?</h2>
+          <h2 className="text-4xl font-bold text-white mb-6">Prêt à prendre le contrôle de votre avenir ?</h2>
           <p className="text-xl text-white/90 mb-8">
-            Rejoignez des milliers d'utilisateurs qui ont déjà pris le contrôle de leur avenir financier
+            Rejoignez des milliers d'utilisateurs qui font déjà confiance à Elysion
           </p>
           <button 
             onClick={handleGetStarted}
-            className="btn-elysion-accent text-lg px-8 py-4"
+            className="bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-10 py-4 rounded-full text-lg transition-all hover:scale-105 hover:shadow-xl"
             data-testid="cta-get-started-btn"
           >
-            Créer mon compte gratuitement
+            Créer mon compte gratuit
           </button>
         </div>
       </section>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../App';
 import axios from 'axios';
 
@@ -10,15 +10,12 @@ const OnboardingFlow = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const { user, isAuthenticated } = useAuth();
   const navigate = useNavigate();
-
-  // Redirect if not authenticated
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate('/auth');
-    }
-  }, [isAuthenticated, navigate]);
+  const location = useLocation();
+  const { login } = useAuth();
+  
+  // Get professional status from simulator or default to employee
+  const professionalStatus = location.state?.professionalStatus || 'employee';
 
   const [profileData, setProfileData] = useState({
     // Personal Info

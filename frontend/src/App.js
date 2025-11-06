@@ -8,6 +8,7 @@ import LandingPage from './components/LandingPage';
 import AuthPage from './components/AuthPage';
 import Dashboard from './components/Dashboard';
 import OnboardingFlow from './components/OnboardingFlow';
+import Simulator from './components/Simulator';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;

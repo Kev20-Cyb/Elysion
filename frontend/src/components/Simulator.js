@@ -386,7 +386,7 @@ const Simulator = () => {
               Créer mon compte
             </button>
             <button 
-              onClick={handleLogin}
+              onClick={() => navigate('/auth?mode=login')}
               className="border-2 border-white text-white hover:bg-white hover:text-elysion-primary font-semibold px-6 py-3 rounded-lg transition-all"
               data-testid="conversion-login-btn"
             >

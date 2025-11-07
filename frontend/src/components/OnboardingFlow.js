@@ -780,8 +780,16 @@ const OnboardingFlow = () => {
             >
               Elysion
             </button>
-            <div className="text-elysion-text-light">
-              Finalisation du profil
+            <div className="flex items-center space-x-4">
+              <button 
+                onClick={() => navigate('/auth?mode=login')}
+                className="text-elysion-primary hover:text-elysion-accent font-medium transition-colors text-sm"
+              >
+                Déjà un compte ?
+              </button>
+              <div className="text-elysion-text-light text-sm">
+                Finalisation du profil
+              </div>
             </div>
           </div>
         </div>

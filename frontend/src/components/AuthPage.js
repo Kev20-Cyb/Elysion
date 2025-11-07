@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../App';
 import axios from 'axios';
 
@@ -7,7 +7,22 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
 const AuthPage = () => {
-  const [isLogin, setIsLogin] = useState(true);
+  const [searchParams] = useSearchParams();
+  const location = useLocation();
+  
+  // Default to login, but check URL params or state for mode
+  const getInitialMode = () => {
+    const modeParam = searchParams.get('mode');
+    if (modeParam === 'register') return false;
+    if (modeParam === 'login') return true;
+    
+    // Check if coming from onboarding or other flows that expect registration
+    if (location.state?.mode === 'register') return false;
+    
+    return true; // Default to login
+  };
+  
+  const [isLogin, setIsLogin] = useState(getInitialMode());
   const [formData, setFormData] = useState({
     email: '',
     password: '',

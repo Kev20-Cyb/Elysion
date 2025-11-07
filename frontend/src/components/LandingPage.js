@@ -12,11 +12,11 @@ const LandingPage = () => {
   };
 
   const handleCreateAccount = () => {
-    navigate('/auth');
+    navigate('/auth?mode=register');
   };
 
   const handleLogin = () => {
-    navigate('/auth');
+    navigate('/auth?mode=login');
   };
 
   // Target user types

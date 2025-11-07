@@ -123,14 +123,14 @@ const LandingPage = () => {
 
             <div className="flex items-center space-x-4">
               <button 
-                onClick={handleLogin}
+                onClick={() => navigate('/auth?mode=login')}
                 className="text-elysion-primary hover:text-elysion-accent font-medium transition-colors"
                 data-testid="nav-login-btn"
               >
                 Se connecter
               </button>
               <button 
-                onClick={handleCreateAccount}
+                onClick={() => navigate('/auth?mode=register')}
                 className="btn-elysion-accent"
                 data-testid="nav-create-account-btn"
               >

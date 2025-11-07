@@ -120,7 +120,7 @@ const Simulator = () => {
   };
 
   const handleLogin = () => {
-    navigate('/auth');
+    navigate('/auth?mode=login');
   };
 
   const renderIntroSection = () => (

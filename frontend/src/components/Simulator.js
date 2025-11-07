@@ -417,13 +417,13 @@ const Simulator = () => {
             </button>
             <div className="flex items-center space-x-4">
               <button 
-                onClick={() => navigate('/auth')}
+                onClick={() => navigate('/auth?mode=login')}
                 className="text-elysion-primary hover:text-elysion-accent font-medium transition-colors"
               >
                 Se connecter
               </button>
               <button 
-                onClick={() => navigate('/auth')}
+                onClick={() => navigate('/auth?mode=register')}
                 className="btn-elysion-accent"
               >
                 Créer un compte

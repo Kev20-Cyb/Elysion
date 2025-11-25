@@ -56,8 +56,8 @@ Homepage → Simulator (public) → Onboarding → Dashboard
 ### Color Palette (Complete 50-950 Scale)
 ```css
 /* Primary Brand Colors - All implemented in App.css */
---elysion-primary-800: #0A418E;    /* Main brand */
---elysion-accent-500: #E6A857;     /* CTAs */
+--elysion-primary-500: #0A418E;    /* Main brand */
+--elysion-accent-500: #FBB03B;     /* CTAs */
 --elysion-secondary-300: #A8C3E7;  /* Supporting */
 --elysion-bg-50: #F6F9FD;          /* Background */
 

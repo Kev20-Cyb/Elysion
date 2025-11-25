@@ -197,9 +197,20 @@ const AuthPage = () => {
 
               {/* Password */}
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-elysion-text-dark mb-2">
-                  Mot de passe
-                </label>
+                <div className="flex justify-between items-center mb-2">
+                  <label htmlFor="password" className="block text-sm font-medium text-elysion-text-dark">
+                    Mot de passe
+                  </label>
+                  {isLogin && (
+                    <button
+                      type="button"
+                      onClick={() => navigate('/forgot-password')}
+                      className="text-sm text-elysion-primary hover:text-elysion-accent transition-colors"
+                    >
+                      Mot de passe oublié ?
+                    </button>
+                  )}
+                </div>
                 <input
                   type="password"
                   id="password"

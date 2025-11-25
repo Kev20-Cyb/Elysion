@@ -62,7 +62,7 @@ Clear Space: 2x logo height on all sides
 --elysion-primary-500: #0a418e   /* 🎯 MAIN BRAND COLOR */
 --elysion-primary-600: #0c4ca7   /* Button hover states */
 --elysion-primary-700: #083777   /* Button active states */
---elysion-primary-800: #022250   /* Dark text, headers */
+--elysion-primary-500: #022250   /* Dark text, headers */
 --elysion-primary-900: #011532   /* Darker elements */
 --elysion-primary-950: #010b19   /* Darkest elements */
 ```
@@ -260,7 +260,7 @@ Clear Space: 2x logo height on all sides
 ## Text Colors
 ```css
 /* Primary text colors */
-.text-primary { color: var(--elysion-primary-800); }
+.text-primary { color: var(--elysion-primary-500); }
 .text-secondary { color: var(--elysion-gray-600); }
 .text-muted { color: var(--elysion-gray-500); }
 .text-disabled { color: var(--elysion-gray-400); }
@@ -280,7 +280,7 @@ Clear Space: 2x logo height on all sides
 ### Primary Button
 ```css
 .btn-elysion-primary {
-  background-color: var(--elysion-primary-800);
+  background-color: var(--elysion-primary-500);
   color: white;
   padding: 12px 32px;
   border-radius: 12px;
@@ -298,12 +298,12 @@ Clear Space: 2x logo height on all sides
 .btn-elysion-primary:hover {
   background-color: var(--elysion-primary-700);
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px var(--elysion-primary-800)30;
+  box-shadow: 0 8px 25px var(--elysion-primary-500)30;
 }
 
 .btn-elysion-primary:active {
   transform: translateY(0);
-  box-shadow: 0 4px 15px var(--elysion-primary-800)20;
+  box-shadow: 0 4px 15px var(--elysion-primary-500)20;
 }
 
 .btn-elysion-primary:disabled {
@@ -344,9 +344,9 @@ Clear Space: 2x logo height on all sides
 ```css
 .btn-outline-elysion {
   background: transparent;
-  color: var(--elysion-primary-800);
+  color: var(--elysion-primary-500);
   padding: 12px 32px;
-  border: 2px solid var(--elysion-primary-800);
+  border: 2px solid var(--elysion-primary-500);
   border-radius: 12px;
   font-weight: 600;
   font-size: 16px;
@@ -359,7 +359,7 @@ Clear Space: 2x logo height on all sides
 }
 
 .btn-outline-elysion:hover {
-  background-color: var(--elysion-primary-800);
+  background-color: var(--elysion-primary-500);
   color: white;
   transform: translateY(-2px);
 }
@@ -411,7 +411,7 @@ Clear Space: 2x logo height on all sides
 
 .input-elysion:focus {
   outline: none;
-  border-color: var(--elysion-primary-800);
+  border-color: var(--elysion-primary-500);
   box-shadow: 0 0 0 3px var(--elysion-primary-100);
 }
 
@@ -541,7 +541,7 @@ Clear Space: 2x logo height on all sides
 .nav-brand {
   font-size: 24px;
   font-weight: 700;
-  color: var(--elysion-primary-800);
+  color: var(--elysion-primary-500);
   text-decoration: none;
 }
 
@@ -555,12 +555,12 @@ Clear Space: 2x logo height on all sides
 }
 
 .nav-link:hover {
-  color: var(--elysion-primary-800);
+  color: var(--elysion-primary-500);
   background: var(--elysion-primary-50);
 }
 
 .nav-link.active {
-  color: var(--elysion-primary-800);
+  color: var(--elysion-primary-500);
   background: var(--elysion-primary-100);
 }
 ```
@@ -571,7 +571,7 @@ Clear Space: 2x logo height on all sides
 ```css
 .spinner-elysion {
   border: 3px solid var(--elysion-gray-200);
-  border-top: 3px solid var(--elysion-primary-800);
+  border-top: 3px solid var(--elysion-primary-500);
   border-radius: 50%;
   width: 40px;
   height: 40px;
@@ -678,7 +678,7 @@ Clear Space: 2x logo height on all sides
 }
 
 .step-dot.current {
-  background: var(--elysion-primary-800);
+  background: var(--elysion-primary-500);
   color: white;
 }
 
@@ -808,7 +808,7 @@ Clear Space: 2x logo height on all sides
 
 ### Icon Colors
 ```css
-.icon-primary { color: var(--elysion-primary-800); }
+.icon-primary { color: var(--elysion-primary-500); }
 .icon-secondary { color: var(--elysion-gray-500); }
 .icon-accent { color: var(--elysion-accent-500); }
 .icon-success { color: var(--elysion-success-500); }
@@ -856,14 +856,14 @@ Clear Space: 2x logo height on all sides
 }
 
 .hover-glow:hover {
-  box-shadow: 0 0 20px var(--elysion-primary-800)20;
+  box-shadow: 0 0 20px var(--elysion-primary-500)20;
 }
 ```
 
 ### Focus States
 ```css
 .focus-elysion:focus {
-  outline: 2px solid var(--elysion-primary-800);
+  outline: 2px solid var(--elysion-primary-500);
   outline-offset: 2px;
 }
 
@@ -964,7 +964,7 @@ Simulator → "Créer mon compte" → Onboarding (5 steps) → Dashboard
 }
 
 .breadcrumb-current {
-  color: var(--elysion-primary-800);
+  color: var(--elysion-primary-500);
   font-weight: 500;
 }
 ```
@@ -1059,7 +1059,7 @@ Avoid:
 ```css
 /* Focus Management */
 .focus-ring {
-  outline: 2px solid var(--elysion-primary-800);
+  outline: 2px solid var(--elysion-primary-500);
   outline-offset: 2px;
 }
 
@@ -1068,7 +1068,7 @@ Avoid:
   position: absolute;
   top: -40px;
   left: 6px;
-  background: var(--elysion-primary-800);
+  background: var(--elysion-primary-500);
   color: white;
   padding: 8px 16px;
   text-decoration: none;

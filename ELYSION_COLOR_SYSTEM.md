@@ -191,17 +191,17 @@ Gray 700 on Gray 200         /* Secondary text */
 ```css
 :root {
   /* Primary Colors */
-  --elysion-primary-50: #eff6ff;
-  --elysion-primary-100: #dbeafe;
-  --elysion-primary-200: #bfdbfe;
-  --elysion-primary-300: #93c5fd;
-  --elysion-primary-400: #60a5fa;
-  --elysion-primary-500: #3b82f6;
-  --elysion-primary-600: #2563eb;
-  --elysion-primary-700: #1d4ed8;
-  --elysion-primary-800: #0A418E;
-  --elysion-primary-900: #1e3a8a;
-  --elysion-primary-950: #172554;
+  --elysion-primary-50: #f5f7fa;
+  --elysion-primary-100: #eaeff5;
+  --elysion-primary-200: #cddbef;
+  --elysion-primary-300: #97bbec;
+  --elysion-primary-400: #4a90f2;
+  --elysion-primary-500: #0a418e;
+  --elysion-primary-600: #0c4ca7;
+  --elysion-primary-700: #083777;
+  --elysion-primary-800: #022250;
+  --elysion-primary-900: #011532;
+  --elysion-primary-950: #010b19;
   
   /* Add all other colors... */
 }

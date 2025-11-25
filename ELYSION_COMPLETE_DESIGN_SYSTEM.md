@@ -52,19 +52,19 @@ Clear Space: 2x logo height on all sides
 ## Primary Palette
 
 ### Primary Blue - Trust & Stability
-**Main Brand Color: #0A418E (800 level)**
+**Main Brand Color: #0A418E (500 level)**
 ```css
---elysion-primary-50: #eff6ff    /* Very light backgrounds, cards */
---elysion-primary-100: #dbeafe   /* Light highlights, hover states */
---elysion-primary-200: #bfdbfe   /* Subtle accents, borders */
---elysion-primary-300: #93c5fd   /* Disabled states, placeholders */
---elysion-primary-400: #60a5fa   /* Interactive elements */
---elysion-primary-500: #3b82f6   /* Standard blue elements */
---elysion-primary-600: #2563eb   /* Button hover states */
---elysion-primary-700: #1d4ed8   /* Button active states */
---elysion-primary-800: #0A418E   /* 🎯 MAIN BRAND COLOR */
---elysion-primary-900: #1e3a8a   /* Dark text, headers */
---elysion-primary-950: #172554   /* Darkest elements */
+--elysion-primary-50: #f5f7fa    /* Very light backgrounds, cards */
+--elysion-primary-100: #eaeff5   /* Light highlights, hover states */
+--elysion-primary-200: #cddbef   /* Subtle accents, borders */
+--elysion-primary-300: #97bbec   /* Disabled states, placeholders */
+--elysion-primary-400: #4a90f2   /* Interactive elements */
+--elysion-primary-500: #0a418e   /* 🎯 MAIN BRAND COLOR */
+--elysion-primary-600: #0c4ca7   /* Button hover states */
+--elysion-primary-700: #083777   /* Button active states */
+--elysion-primary-800: #022250   /* Dark text, headers */
+--elysion-primary-900: #011532   /* Darker elements */
+--elysion-primary-950: #010b19   /* Darkest elements */
 ```
 
 ### Secondary Light Blue - Calm & Accessibility

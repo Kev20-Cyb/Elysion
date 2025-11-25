@@ -83,20 +83,20 @@ Clear Space: 2x logo height on all sides
 --elysion-secondary-950: #172554   /* Darkest elements */
 ```
 
-### Accent Gold - CTAs & Highlights
-**Action Color: #E6A857 (500 level)**
+### Accent Orange - CTAs & Highlights
+**Action Color: #FBB03B (500 level)**
 ```css
---elysion-accent-50: #fffbeb     /* Light warning backgrounds */
---elysion-accent-100: #fef3c7    /* Subtle highlights */
---elysion-accent-200: #fde68a    /* Light accents */
---elysion-accent-300: #fcd34d    /* Warning states */
---elysion-accent-400: #fbbf24    /* Interactive gold */
---elysion-accent-500: #E6A857    /* 🎯 MAIN ACCENT/CTA */
---elysion-accent-600: #d97706    /* CTA hover states */
---elysion-accent-700: #b45309    /* CTA active states */
---elysion-accent-800: #92400e    /* Dark gold text */
---elysion-accent-900: #78350f    /* Darkest gold */
---elysion-accent-950: #451a03    /* Text on light gold */
+--elysion-accent-50: #faf8f4     /* Light warning backgrounds */
+--elysion-accent-100: #f6f1ea    /* Subtle highlights */
+--elysion-accent-200: #f1e2cb    /* Light accents */
+--elysion-accent-300: #f1cc93    /* Warning states */
+--elysion-accent-400: #fbb241    /* Interactive orange */
+--elysion-accent-500: #fbb03b    /* 🎯 MAIN ACCENT/CTA */
+--elysion-accent-600: #fa9c09    /* CTA hover states */
+--elysion-accent-700: #d68404    /* CTA active states */
+--elysion-accent-800: #b16c00    /* Dark orange text */
+--elysion-accent-900: #935900    /* Darker orange */
+--elysion-accent-950: #744700    /* Darkest orange */
 ```
 
 ### Background Light - Clean Foundation

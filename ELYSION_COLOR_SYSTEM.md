@@ -168,19 +168,21 @@
 ### Recommended Combinations
 ```css
 /* High contrast combinations */
-Primary 900 on Primary 50    /* 11.2:1 */
-Primary 800 on Primary 100   /* 8.7:1 */
-Primary 700 on Primary 200   /* 6.1:1 */
+Primary 900 on Primary 50    /* Excellent contrast */
+Primary 800 on Primary 100   /* Excellent contrast */
+Primary 700 on Primary 200   /* Very good contrast */
+White on Primary 500         /* Main button text */
 
 /* Accent combinations */
-Accent 800 on Accent 50      /* 9.8:1 */
-Accent 700 on Accent 100     /* 7.2:1 */
-Accent 600 on Accent 200     /* 5.1:1 */
+Accent 800 on Accent 50      /* Excellent contrast */
+Accent 700 on Accent 100     /* Excellent contrast */
+Primary 900 on Accent 500    /* CTA text */
+White on Accent 600          /* Dark CTA variant */
 
 /* Gray combinations */
-Gray 900 on Gray 50          /* 15.8:1 */
-Gray 800 on Gray 100         /* 12.1:1 */
-Gray 700 on Gray 200         /* 8.4:1 */
+Gray 900 on Gray 50          /* Body text on light bg */
+Gray 800 on Gray 100         /* Headings on light bg */
+Gray 700 on Gray 200         /* Secondary text */
 ```
 
 ## Implementation

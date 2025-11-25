@@ -209,7 +209,7 @@ DB_NAME="test_database"
 CORS_ORIGINS="*"
 
 # Frontend Environment Variables (configured)
-REACT_APP_BACKEND_URL="https://future-ready-9.preview.emergentagent.com"
+REACT_APP_BACKEND_URL="https://elysion-retire.preview.emergentagent.com"
 ```
 
 ### Production Checklist ✅

@@ -1,8 +1,9 @@
 /* Import Montserrat Font */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
-/* Elysion Brand Colors */
+/* Elysion Brand Colors - Full Scale System */
 :root {
+  /* Legacy colors (maintained for compatibility) */
   --elysion-primary: #0A418E;
   --elysion-bg: #F6F9FD;
   --elysion-accent: #E6A857;
@@ -10,6 +11,87 @@
   --elysion-white: #FFFFFF;
   --elysion-text-dark: #1a1a1a;
   --elysion-text-light: #666666;
+
+  /* Primary Blue Scale */
+  --elysion-primary-50: #eff6ff;
+  --elysion-primary-100: #dbeafe;
+  --elysion-primary-200: #bfdbfe;
+  --elysion-primary-300: #93c5fd;
+  --elysion-primary-400: #60a5fa;
+  --elysion-primary-500: #3b82f6;
+  --elysion-primary-600: #2563eb;
+  --elysion-primary-700: #1d4ed8;
+  --elysion-primary-800: #0A418E;
+  --elysion-primary-900: #1e3a8a;
+  --elysion-primary-950: #172554;
+
+  /* Secondary Light Blue Scale */
+  --elysion-secondary-50: #f0f7ff;
+  --elysion-secondary-100: #e0efff;
+  --elysion-secondary-200: #bae0ff;
+  --elysion-secondary-300: #A8C3E7;
+  --elysion-secondary-400: #60a5fa;
+  --elysion-secondary-500: #3b82f6;
+  --elysion-secondary-600: #2563eb;
+  --elysion-secondary-700: #1d4ed8;
+  --elysion-secondary-800: #1e40af;
+  --elysion-secondary-900: #1e3a8a;
+  --elysion-secondary-950: #172554;
+
+  /* Accent Gold Scale */
+  --elysion-accent-50: #fffbeb;
+  --elysion-accent-100: #fef3c7;
+  --elysion-accent-200: #fde68a;
+  --elysion-accent-300: #fcd34d;
+  --elysion-accent-400: #fbbf24;
+  --elysion-accent-500: #E6A857;
+  --elysion-accent-600: #d97706;
+  --elysion-accent-700: #b45309;
+  --elysion-accent-800: #92400e;
+  --elysion-accent-900: #78350f;
+  --elysion-accent-950: #451a03;
+
+  /* Background Scale */
+  --elysion-bg-50: #F6F9FD;
+  --elysion-bg-100: #f1f5f9;
+  --elysion-bg-200: #e2e8f0;
+  --elysion-bg-300: #cbd5e1;
+  --elysion-bg-400: #94a3b8;
+  --elysion-bg-500: #64748b;
+  --elysion-bg-600: #475569;
+  --elysion-bg-700: #334155;
+  --elysion-bg-800: #1e293b;
+  --elysion-bg-900: #0f172a;
+  --elysion-bg-950: #020617;
+
+  /* Neutral Grays */
+  --elysion-gray-50: #f8fafc;
+  --elysion-gray-100: #f1f5f9;
+  --elysion-gray-200: #e2e8f0;
+  --elysion-gray-300: #cbd5e1;
+  --elysion-gray-400: #94a3b8;
+  --elysion-gray-500: #64748b;
+  --elysion-gray-600: #475569;
+  --elysion-gray-700: #334155;
+  --elysion-gray-800: #1e293b;
+  --elysion-gray-900: #0f172a;
+  --elysion-gray-950: #020617;
+
+  /* Semantic Colors */
+  --elysion-success-50: #f0fdf4;
+  --elysion-success-500: #22c55e;
+  --elysion-success-600: #16a34a;
+  --elysion-success-700: #15803d;
+
+  --elysion-warning-50: #fff7ed;
+  --elysion-warning-500: #f97316;
+  --elysion-warning-600: #ea580c;
+  --elysion-warning-700: #c2410c;
+
+  --elysion-error-50: #fef2f2;
+  --elysion-error-500: #ef4444;
+  --elysion-error-600: #dc2626;
+  --elysion-error-700: #b91c1c;
 }
 
 /* Global Styles */

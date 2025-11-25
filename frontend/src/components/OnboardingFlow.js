@@ -14,31 +14,32 @@ const OnboardingFlow = () => {
   const location = useLocation();
   const { login } = useAuth();
   
-  // Get professional status from simulator or default to employee
+  // Get data from simulator or defaults
   const professionalStatus = location.state?.professionalStatus || 'employee';
+  const simulationData = location.state?.simulationData || {};
 
   const [profileData, setProfileData] = useState({
     // Personal Info (Step 2)
-    date_of_birth: '',
+    date_of_birth: simulationData.birthDate || '',
     gender: '',
     marital_status: '',
     number_of_children: 0,
     
     // Professional Info (Step 3) - varies by user type
-    career_start: '',
-    annual_salary: '',
+    career_start: simulationData.careerStart || '',
+    annual_salary: simulationData.annualIncome || '',
     pension_schemes: [],
     validated_quarters: '',
     
     // Freelancer specific
     activity_type: '',
     legal_status: '',
-    average_income: '',
+    average_income: simulationData.annualIncome || '',
     retirement_regimes: [],
     
     // Business owner specific
     company_legal_form: '',
-    remuneration: '',
+    remuneration: simulationData.annualIncome || '',
     regime_type: '',
     retirement_plans: [],
     

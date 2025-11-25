@@ -136,10 +136,12 @@
 ## Usage Guidelines
 
 ### Primary Use Cases
-- **Primary 800**: Main brand color, primary buttons, headers
+- **Primary 500**: Main brand color, primary buttons, headers
 - **Primary 600**: Hover states for primary elements
-- **Primary 100**: Light backgrounds, subtle highlights
-- **Primary 50**: Very light backgrounds, cards
+- **Primary 400**: Active states, interactive elements
+- **Primary 200**: Light backgrounds, subtle highlights
+- **Primary 100**: Very light backgrounds
+- **Primary 50**: Lightest backgrounds, cards
 
 ### Secondary Use Cases
 - **Secondary 300**: Default secondary color, calm elements

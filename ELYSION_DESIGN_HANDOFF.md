@@ -49,7 +49,7 @@ elysion-accent-100: #fef3c7    /* Subtle highlights */
 elysion-accent-200: #fde68a    /* Light accents */
 elysion-accent-300: #fcd34d    /* Warnings, alerts */
 elysion-accent-400: #fbbf24    /* Interactive gold */
-elysion-accent-500: #E6A857    /* 🎯 MAIN ACCENT/CTA */
+elysion-accent-500: #fbb03b    /* 🎯 MAIN ACCENT/CTA */
 elysion-accent-600: #d97706    /* Hover states */
 elysion-accent-700: #b45309    /* Active states */
 elysion-accent-800: #92400e    /* Dark gold */

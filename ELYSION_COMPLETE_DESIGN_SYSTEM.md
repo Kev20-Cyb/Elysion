@@ -40,7 +40,7 @@
 ## Logo Usage
 ```
 Primary Logo: "Elysion" in Montserrat Bold
-Color: elysion-primary-800 (#0A418E)
+Color: elysion-primary-500 (#0A418E)
 Minimum Size: 120px width
 Clear Space: 2x logo height on all sides
 ```

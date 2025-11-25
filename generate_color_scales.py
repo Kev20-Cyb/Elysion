@@ -65,32 +65,38 @@ def generate_color_scale(base_hex, color_name):
     h, s, l = hex_to_hsl(base_hex)
     
     # Define lightness values for each variant
-    # 500 will use the original lightness
+    # These are percentages that work well for creating balanced scales
     lightness_map = {
-        50: 96,   # Very light
-        100: 92,
-        200: 84,
-        300: 72,
-        400: 60,
+        50: 97,   # Very light
+        100: 94,
+        200: 87,
+        300: 76,
+        400: 62,
         500: l,   # Base color lightness
-        600: l - 12,
-        700: l - 24,
-        800: l - 32,
-        900: l - 40,
-        950: l - 46
+        600: max(l - 10, 35),
+        700: max(l - 18, 25),
+        800: max(l - 26, 16),
+        900: max(l - 32, 10),
+        950: max(l - 38, 5)
     }
     
     scale = {}
     for variant, target_l in lightness_map.items():
-        # Adjust saturation slightly for very light/dark colors
+        # Adjust saturation for better color balance
         adjusted_s = s
         if variant <= 100:
-            adjusted_s = max(s - 20, s * 0.3)  # Desaturate light colors
-        elif variant >= 900:
-            adjusted_s = min(s + 10, s * 1.2)  # Slightly boost saturation in darks
+            # Desaturate very light colors
+            adjusted_s = s * 0.4
+        elif variant == 200:
+            adjusted_s = s * 0.6
+        elif variant == 300:
+            adjusted_s = s * 0.8
+        elif variant >= 800:
+            # Increase saturation slightly for dark colors
+            adjusted_s = min(s * 1.1, 100)
         
         # Ensure lightness stays in valid range
-        final_l = max(2, min(98, target_l))
+        final_l = max(3, min(98, target_l))
         scale[variant] = hsl_to_hex(h, adjusted_s, final_l)
     
     return scale

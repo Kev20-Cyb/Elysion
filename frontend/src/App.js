@@ -8,7 +8,8 @@ import LandingPage from './components/LandingPage';
 import AuthPage from './components/AuthPage';
 import Dashboard from './components/Dashboard';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+// Fallback au cas où la variable d'env n'est pas définie
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
 const API = `${BACKEND_URL}/api`;
 
 // Auth Context
@@ -41,8 +42,11 @@ const AuthProvider = ({ children }) => {
     const checkAuth = async () => {
       if (token) {
         try {
-          const response = await axios.get(`${API}/user/profile`);
-          setUser(response.data);
+          // 👉 Nouveau endpoint Node : /api/auth/me
+          const response = await axios.get(`${API}/auth/me`);
+          const data = response.data;
+          // on gère les deux cas : { user: {...} } ou directement l'objet user
+          setUser(data.user || data);
         } catch (error) {
           console.error('Token invalid:', error);
           logout();
@@ -59,11 +63,14 @@ const AuthProvider = ({ children }) => {
         email,
         password
       });
-      
-      const { access_token, user: userData } = response.data;
-      setToken(access_token);
+
+      // 👉 Backend Node renvoie { token, user }
+      const { token: jwtToken, user: userData } = response.data;
+
+      setToken(jwtToken);
       setUser(userData);
-      localStorage.setItem('elysion_token', access_token);
+      localStorage.setItem('elysion_token', jwtToken);
+
       return { success: true };
     } catch (error) {
       return {
@@ -76,11 +83,14 @@ const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     try {
       const response = await axios.post(`${API}/auth/register`, userData);
-      
-      const { access_token, user: newUser } = response.data;
-      setToken(access_token);
+
+      // 👉 Backend Node renvoie { token, user }
+      const { token: jwtToken, user: newUser } = response.data;
+
+      setToken(jwtToken);
       setUser(newUser);
-      localStorage.setItem('elysion_token', access_token);
+      localStorage.setItem('elysion_token', jwtToken);
+
       return { success: true };
     } catch (error) {
       return {

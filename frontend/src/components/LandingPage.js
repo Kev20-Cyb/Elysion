@@ -1,10 +1,32 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../App';
 
 const LandingPage = () => {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
+
+  // 🔹 Injection du tag Google Analytics
+  useEffect(() => {
+    // Évite de le rajouter plusieurs fois si on revient sur la page
+    const existingScript = document.querySelector(
+      'script[src="https://www.googletagmanager.com/gtag/js?id=G-VPJ5R866Y4"]'
+    );
+    if (!existingScript) {
+      const script = document.createElement('script');
+      script.src = 'https://www.googletagmanager.com/gtag/js?id=G-VPJ5R866Y4';
+      script.async = true;
+      document.head.appendChild(script);
+    }
+
+    // Init dataLayer + gtag
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ window.dataLayer.push(arguments); }
+    window.gtag = window.gtag || gtag;
+
+    window.gtag('js', new Date());
+    window.gtag('config', 'G-VPJ5R866Y4');
+  }, []);
 
   const handleGetStarted = () => {
     if (isAuthenticated) {

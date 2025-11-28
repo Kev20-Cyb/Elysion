@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../App';
-import axios from 'axios';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
 const API = `${BACKEND_URL}/api`;
 
 const AuthPage = () => {
@@ -37,6 +36,7 @@ const AuthPage = () => {
       if (isLogin) {
         result = await login(formData.email, formData.password);
       } else {
+        // 👉 Envoie toujours full_name + user_type au backend Node
         result = await register(formData);
       }
 

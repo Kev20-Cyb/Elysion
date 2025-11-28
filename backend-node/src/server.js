@@ -5,6 +5,7 @@ const dotenv = require("dotenv");
 const { connectDB, disconnectDB } = require("./db");
 const authRoutes = require("./routes/auth.routes");
 const userRoutes = require("./routes/user.routes");
+const dashboardRoutes = require("./routes/dashboard.routes");
 
 dotenv.config();
 
@@ -29,8 +30,9 @@ app.get("/api/health", (req, res) => {
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 
-// Gestion des erreurs basiques
+// Gestion erreurs basiques
 app.use((err, req, res, next) => {
   console.error("Unhandled error:", err);
   res.status(500).json({ detail: "Internal server error" });
@@ -47,7 +49,6 @@ app.listen(PORT, async () => {
   }
 });
 
-// Si tu veux gérer un "shutdown" propre : Ctrl+C ferme le process Node
 process.on("SIGINT", async () => {
   await disconnectDB();
   process.exit(0);

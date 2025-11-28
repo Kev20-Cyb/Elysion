@@ -2,54 +2,53 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { connectDB } = require("../db");
+const { pool } = require("../db");
 const { authRequired } = require("../authMiddleware");
 
 const router = express.Router();
 
+// Helper pour générer le JWT
+function signToken(user) {
+  return jwt.sign(
+    { userId: user.id, email: user.email },
+    process.env.JWT_SECRET,
+    { expiresIn: process.env.JWT_EXPIRES_IN || "1d" }
+  );
+}
+
 // POST /api/auth/register
 router.post("/register", async (req, res) => {
   try {
-    const db = await connectDB();
-    const users = db.collection("users");
+    const { email, password, full_name, user_type } = req.body;
 
-    const { email, password, firstName, lastName } = req.body;
-
-    if (!email || !password) {
-      return res.status(400).json({ detail: "Email and password are required" });
+    if (!email || !password || !full_name || !user_type) {
+      return res.status(400).json({ detail: "Missing required fields" });
     }
 
-    const existing = await users.findOne({ email });
-    if (existing) {
+    // Vérifier si l'utilisateur existe déjà
+    const existing = await pool.query(
+      "SELECT id FROM users WHERE email = $1",
+      [email]
+    );
+    if (existing.rowCount > 0) {
       return res.status(409).json({ detail: "User already exists" });
     }
 
-    const hashed = await bcrypt.hash(password, 10);
+    const passwordHash = await bcrypt.hash(password, 10);
 
-    const user = {
-      email,
-      password: hashed,
-      firstName: firstName || "",
-      lastName: lastName || "",
-      createdAt: new Date()
-    };
-
-    const result = await users.insertOne(user);
-
-    const token = jwt.sign(
-      { userId: result.insertedId, email },
-      process.env.JWT_SECRET,
-      { expiresIn: process.env.JWT_EXPIRES_IN || "1d" }
+    const insertResult = await pool.query(
+      `INSERT INTO users (email, full_name, user_type, password_hash)
+       VALUES ($1, $2, $3, $4)
+       RETURNING id, email, full_name, user_type, created_at`,
+      [email, full_name, user_type, passwordHash]
     );
+
+    const user = insertResult.rows[0];
+    const token = signToken(user);
 
     return res.status(201).json({
       token,
-      user: {
-        id: result.insertedId,
-        email,
-        firstName: user.firstName,
-        lastName: user.lastName
-      }
+      user
     });
   } catch (err) {
     console.error("Register error:", err);
@@ -60,39 +59,36 @@ router.post("/register", async (req, res) => {
 // POST /api/auth/login
 router.post("/login", async (req, res) => {
   try {
-    const db = await connectDB();
-    const users = db.collection("users");
-
     const { email, password } = req.body;
 
     if (!email || !password) {
       return res.status(400).json({ detail: "Email and password are required" });
     }
 
-    const user = await users.findOne({ email });
-    if (!user) {
+    const result = await pool.query(
+      "SELECT id, email, full_name, user_type, password_hash FROM users WHERE email = $1",
+      [email]
+    );
+
+    if (result.rowCount === 0) {
       return res.status(401).json({ detail: "Invalid credentials" });
     }
 
-    const ok = await bcrypt.compare(password, user.password);
+    const user = result.rows[0];
+
+    const ok = await bcrypt.compare(password, user.password_hash);
     if (!ok) {
       return res.status(401).json({ detail: "Invalid credentials" });
     }
 
-    const token = jwt.sign(
-      { userId: user._id, email: user.email },
-      process.env.JWT_SECRET,
-      { expiresIn: process.env.JWT_EXPIRES_IN || "1d" }
-    );
+    const token = signToken(user);
+
+    // On ne renvoie jamais le hash
+    delete user.password_hash;
 
     return res.json({
       token,
-      user: {
-        id: user._id,
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName
-      }
+      user
     });
   } catch (err) {
     console.error("Login error:", err);
@@ -103,20 +99,17 @@ router.post("/login", async (req, res) => {
 // GET /api/auth/me (protégé)
 router.get("/me", authRequired, async (req, res) => {
   try {
-    const db = await connectDB();
-    const users = db.collection("users");
+    const result = await pool.query(
+      "SELECT id, email, full_name, user_type, created_at FROM users WHERE id = $1",
+      [req.user.userId]
+    );
 
-    const user = await users.findOne({ _id: new require("mongodb").ObjectId(req.user.userId) });
-
-    if (!user) {
+    if (result.rowCount === 0) {
       return res.status(404).json({ detail: "User not found" });
     }
 
     return res.json({
-      id: user._id,
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName
+      user: result.rows[0]
     });
   } catch (err) {
     console.error("Me error:", err);

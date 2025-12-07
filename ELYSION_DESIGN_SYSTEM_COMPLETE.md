@@ -629,68 +629,987 @@ Tous les boutons implémentent **4 états** : Default, Hover, Pressed (Active), 
 
 ---
 
-# 5. Form Components
+# 5. Form Components & Cards
 
-## 5.1 Input Fields
+## 5.1 Cards
 
-### Default Input
+Les cartes sont des conteneurs visuels pour regrouper du contenu.
+
+### Default Card
+
+#### Default State
 ```css
-.input-elysion {
-  width: 100%;
-  padding: 16px 20px;
-  border: 2px solid #e5e7eb;
-  border-radius: 12px;
-  font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+.card-elysion {
+  background: #FFFFFF;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
   transition: all 0.3s ease;
-  background-color: white;
+  border: 1px solid var(--elysion-gray-200);
+}
+```
+
+#### Hover State
+```css
+.card-elysion:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px);
+  border-color: var(--elysion-primary-200);
+}
+```
+
+#### Active/Pressed State
+```css
+.card-elysion:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+```
+
+#### Disabled State
+```css
+.card-elysion.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: var(--elysion-gray-50);
+  pointer-events: none;
+}
+```
+
+### Card Variants
+
+#### Elevated Card
+```css
+.card-elevated {
+  background: #FFFFFF;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+  border: none;
 }
 
-.input-elysion:focus {
+.card-elevated:hover {
+  box-shadow: 0 20px 25px rgba(0, 0, 0, 0.15), 0 10px 10px rgba(0, 0, 0, 0.04);
+  transform: translateY(-4px);
+}
+```
+
+#### Outlined Card
+```css
+.card-outlined {
+  background: #FFFFFF;
+  border-radius: 16px;
+  padding: 24px;
+  border: 2px solid var(--elysion-gray-300);
+  box-shadow: none;
+}
+
+.card-outlined:hover {
+  border-color: var(--elysion-primary-500);
+  box-shadow: 0 0 0 1px var(--elysion-primary-500);
+}
+```
+
+#### Interactive Card (Clickable)
+```css
+.card-interactive {
+  cursor: pointer;
+  background: #FFFFFF;
+  border-radius: 16px;
+  padding: 24px;
+  border: 2px solid var(--elysion-gray-200);
+  transition: all 0.2s ease;
+}
+
+.card-interactive:hover {
+  border-color: var(--elysion-primary-500);
+  background-color: var(--elysion-primary-50);
+  transform: translateY(-2px);
+}
+
+.card-interactive:active {
+  transform: scale(0.98);
+}
+
+.card-interactive.selected {
+  border-color: var(--elysion-primary-500);
+  background-color: var(--elysion-primary-50);
+  box-shadow: 0 0 0 2px var(--elysion-primary-500);
+}
+```
+
+### Card Sizes
+
+```css
+.card-sm {
+  padding: 16px;
+  border-radius: 12px;
+}
+
+.card-md {
+  padding: 24px;
+  border-radius: 16px;
+}
+
+.card-lg {
+  padding: 32px;
+  border-radius: 20px;
+}
+```
+
+### Card with Header
+
+```html
+<div class="card-elysion">
+  <div class="card-header">
+    <h3 class="card-title">Titre de la carte</h3>
+    <p class="card-subtitle">Sous-titre optionnel</p>
+  </div>
+  <div class="card-body">
+    Contenu principal
+  </div>
+  <div class="card-footer">
+    Actions ou informations supplémentaires
+  </div>
+</div>
+```
+
+```css
+.card-header {
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--elysion-gray-200);
+}
+
+.card-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--elysion-gray-900);
+  margin-bottom: 4px;
+}
+
+.card-subtitle {
+  font-size: 14px;
+  color: var(--elysion-gray-600);
+}
+
+.card-body {
+  margin-bottom: 16px;
+}
+
+.card-footer {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--elysion-gray-200);
+}
+```
+
+---
+
+## 5.2 Text Input Fields
+
+### Default Text Input
+
+#### Default State
+```css
+.input-text {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid var(--elysion-gray-300);
+  border-radius: 8px;
+  font-size: 16px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  color: var(--elysion-gray-900);
+  background-color: #FFFFFF;
+  transition: all 0.2s ease;
+  line-height: 1.5;
+}
+
+.input-text::placeholder {
+  color: var(--elysion-gray-400);
+  font-weight: 400;
+}
+```
+
+#### Hover State
+```css
+.input-text:hover:not(:disabled) {
+  border-color: var(--elysion-gray-400);
+}
+```
+
+#### Focus State
+```css
+.input-text:focus {
   outline: none;
   border-color: var(--elysion-primary-500);
   box-shadow: 0 0 0 3px rgba(10, 65, 142, 0.1);
 }
+```
 
-.input-elysion:disabled {
+#### Disabled State
+```css
+.input-text:disabled {
   background-color: var(--elysion-gray-100);
+  border-color: var(--elysion-gray-200);
+  color: var(--elysion-gray-500);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+```
+
+#### Error State
+```css
+.input-text.error {
+  border-color: var(--elysion-error-500);
+  background-color: var(--elysion-error-50);
+}
+
+.input-text.error:focus {
+  border-color: var(--elysion-error-500);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+```
+
+#### Success State
+```css
+.input-text.success {
+  border-color: var(--elysion-success-500);
+  background-color: var(--elysion-success-50);
+}
+
+.input-text.success:focus {
+  border-color: var(--elysion-success-500);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+}
+```
+
+### Input Sizes
+
+```css
+.input-sm {
+  padding: 8px 12px;
+  font-size: 14px;
+  border-radius: 6px;
+}
+
+.input-md {
+  padding: 12px 16px;
+  font-size: 16px;
+  border-radius: 8px;
+}
+
+.input-lg {
+  padding: 16px 20px;
+  font-size: 18px;
+  border-radius: 10px;
+}
+```
+
+### Input with Icon
+
+```css
+.input-with-icon {
+  position: relative;
+}
+
+.input-with-icon input {
+  padding-left: 44px;
+}
+
+.input-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--elysion-gray-400);
+  pointer-events: none;
+}
+
+.input-with-icon input:focus ~ .input-icon {
+  color: var(--elysion-primary-500);
+}
+```
+
+---
+
+## 5.3 Textarea
+
+### Default Textarea
+
+#### Default State
+```css
+.textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 12px 16px;
+  border: 2px solid var(--elysion-gray-300);
+  border-radius: 8px;
+  font-size: 16px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  color: var(--elysion-gray-900);
+  background-color: #FFFFFF;
+  transition: all 0.2s ease;
+  line-height: 1.6;
+  resize: vertical;
+}
+
+.textarea::placeholder {
+  color: var(--elysion-gray-400);
+}
+```
+
+#### Hover State
+```css
+.textarea:hover:not(:disabled) {
+  border-color: var(--elysion-gray-400);
+}
+```
+
+#### Focus State
+```css
+.textarea:focus {
+  outline: none;
+  border-color: var(--elysion-primary-500);
+  box-shadow: 0 0 0 3px rgba(10, 65, 142, 0.1);
+}
+```
+
+#### Disabled State
+```css
+.textarea:disabled {
+  background-color: var(--elysion-gray-100);
+  border-color: var(--elysion-gray-200);
+  color: var(--elysion-gray-500);
+  cursor: not-allowed;
+  opacity: 0.6;
+  resize: none;
+}
+```
+
+#### Error State
+```css
+.textarea.error {
+  border-color: var(--elysion-error-500);
+  background-color: var(--elysion-error-50);
+}
+
+.textarea.error:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+```
+
+---
+
+## 5.4 Select / Dropdown
+
+### Default Select
+
+#### Default State
+```css
+.select {
+  width: 100%;
+  padding: 12px 16px;
+  padding-right: 40px;
+  border: 2px solid var(--elysion-gray-300);
+  border-radius: 8px;
+  font-size: 16px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  color: var(--elysion-gray-900);
+  background-color: #FFFFFF;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23475569' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 12px;
+  appearance: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+```
+
+#### Hover State
+```css
+.select:hover:not(:disabled) {
+  border-color: var(--elysion-gray-400);
+}
+```
+
+#### Focus State
+```css
+.select:focus {
+  outline: none;
+  border-color: var(--elysion-primary-500);
+  box-shadow: 0 0 0 3px rgba(10, 65, 142, 0.1);
+}
+```
+
+#### Disabled State
+```css
+.select:disabled {
+  background-color: var(--elysion-gray-100);
+  border-color: var(--elysion-gray-200);
+  color: var(--elysion-gray-500);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+```
+
+#### Error State
+```css
+.select.error {
+  border-color: var(--elysion-error-500);
+  background-color: var(--elysion-error-50);
+}
+```
+
+### Custom Dropdown (Advanced)
+
+```css
+.dropdown {
+  position: relative;
+  width: 100%;
+}
+
+.dropdown-trigger {
+  width: 100%;
+  padding: 12px 16px;
+  padding-right: 40px;
+  border: 2px solid var(--elysion-gray-300);
+  border-radius: 8px;
+  font-size: 16px;
+  background-color: #FFFFFF;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dropdown-trigger:hover {
+  border-color: var(--elysion-gray-400);
+}
+
+.dropdown-trigger.open {
+  border-color: var(--elysion-primary-500);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #FFFFFF;
+  border: 2px solid var(--elysion-primary-500);
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-height: 240px;
+  overflow-y: auto;
+  z-index: 1000;
+  display: none;
+}
+
+.dropdown-menu.open {
+  display: block;
+}
+
+.dropdown-item {
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  font-size: 16px;
+  color: var(--elysion-gray-900);
+}
+
+.dropdown-item:hover {
+  background-color: var(--elysion-primary-50);
+}
+
+.dropdown-item.selected {
+  background-color: var(--elysion-primary-100);
+  color: var(--elysion-primary-700);
+  font-weight: 600;
+}
+
+.dropdown-item:active {
+  background-color: var(--elysion-primary-200);
+}
+```
+
+---
+
+## 5.5 Date Input
+
+### Default Date Input
+
+#### Default State
+```css
+.input-date {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid var(--elysion-gray-300);
+  border-radius: 8px;
+  font-size: 16px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  color: var(--elysion-gray-900);
+  background-color: #FFFFFF;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+/* Custom calendar icon */
+.input-date::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  color: var(--elysion-primary-500);
+  opacity: 0.7;
+}
+
+.input-date::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+```
+
+#### Hover State
+```css
+.input-date:hover:not(:disabled) {
+  border-color: var(--elysion-gray-400);
+}
+```
+
+#### Focus State
+```css
+.input-date:focus {
+  outline: none;
+  border-color: var(--elysion-primary-500);
+  box-shadow: 0 0 0 3px rgba(10, 65, 142, 0.1);
+}
+```
+
+#### Disabled State
+```css
+.input-date:disabled {
+  background-color: var(--elysion-gray-100);
+  border-color: var(--elysion-gray-200);
+  color: var(--elysion-gray-500);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+```
+
+#### Error State
+```css
+.input-date.error {
+  border-color: var(--elysion-error-500);
+  background-color: var(--elysion-error-50);
+}
+```
+
+---
+
+## 5.6 Checkbox
+
+### Default Checkbox
+
+#### Structure
+```html
+<label class="checkbox-wrapper">
+  <input type="checkbox" class="checkbox-input">
+  <span class="checkbox-custom"></span>
+  <span class="checkbox-label">Label du checkbox</span>
+</label>
+```
+
+#### Default State
+```css
+.checkbox-wrapper {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  gap: 12px;
+}
+
+.checkbox-input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkbox-custom {
+  position: relative;
+  height: 20px;
+  width: 20px;
+  border: 2px solid var(--elysion-gray-400);
+  border-radius: 4px;
+  background-color: #FFFFFF;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.checkbox-label {
+  font-size: 16px;
+  color: var(--elysion-gray-900);
+  font-weight: 400;
+}
+```
+
+#### Hover State
+```css
+.checkbox-wrapper:hover .checkbox-custom {
+  border-color: var(--elysion-primary-500);
+}
+```
+
+#### Checked State
+```css
+.checkbox-input:checked ~ .checkbox-custom {
+  background-color: var(--elysion-primary-500);
+  border-color: var(--elysion-primary-500);
+}
+
+.checkbox-input:checked ~ .checkbox-custom::after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+```
+
+#### Focus State
+```css
+.checkbox-input:focus ~ .checkbox-custom {
+  outline: 3px solid rgba(10, 65, 142, 0.2);
+  outline-offset: 2px;
+}
+```
+
+#### Disabled State
+```css
+.checkbox-input:disabled ~ .checkbox-custom {
+  background-color: var(--elysion-gray-100);
+  border-color: var(--elysion-gray-300);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.checkbox-input:disabled ~ .checkbox-label {
   color: var(--elysion-gray-500);
   cursor: not-allowed;
 }
 
-.input-elysion.error {
-  border-color: var(--elysion-error-500);
-}
-
-.input-elysion.success {
-  border-color: var(--elysion-success-500);
+.checkbox-wrapper.disabled {
+  cursor: not-allowed;
 }
 ```
 
+#### Error State
+```css
+.checkbox-custom.error {
+  border-color: var(--elysion-error-500);
+}
+```
+
+### Checkbox Sizes
+
+```css
+/* Small */
+.checkbox-sm .checkbox-custom {
+  height: 16px;
+  width: 16px;
+}
+
+.checkbox-sm .checkbox-label {
+  font-size: 14px;
+}
+
+/* Large */
+.checkbox-lg .checkbox-custom {
+  height: 24px;
+  width: 24px;
+}
+
+.checkbox-lg .checkbox-label {
+  font-size: 18px;
+}
+```
+
+---
+
+## 5.7 Radio Button
+
+### Default Radio Button
+
+#### Structure
+```html
+<label class="radio-wrapper">
+  <input type="radio" name="group" class="radio-input">
+  <span class="radio-custom"></span>
+  <span class="radio-label">Label du radio</span>
+</label>
+```
+
+#### Default State
+```css
+.radio-wrapper {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  gap: 12px;
+}
+
+.radio-input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.radio-custom {
+  position: relative;
+  height: 20px;
+  width: 20px;
+  border: 2px solid var(--elysion-gray-400);
+  border-radius: 50%;
+  background-color: #FFFFFF;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.radio-label {
+  font-size: 16px;
+  color: var(--elysion-gray-900);
+  font-weight: 400;
+}
+```
+
+#### Hover State
+```css
+.radio-wrapper:hover .radio-custom {
+  border-color: var(--elysion-primary-500);
+}
+```
+
+#### Checked State
+```css
+.radio-input:checked ~ .radio-custom {
+  border-color: var(--elysion-primary-500);
+  background-color: #FFFFFF;
+}
+
+.radio-input:checked ~ .radio-custom::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--elysion-primary-500);
+}
+```
+
+#### Focus State
+```css
+.radio-input:focus ~ .radio-custom {
+  outline: 3px solid rgba(10, 65, 142, 0.2);
+  outline-offset: 2px;
+}
+```
+
+#### Disabled State
+```css
+.radio-input:disabled ~ .radio-custom {
+  background-color: var(--elysion-gray-100);
+  border-color: var(--elysion-gray-300);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.radio-input:disabled ~ .radio-label {
+  color: var(--elysion-gray-500);
+  cursor: not-allowed;
+}
+
+.radio-wrapper.disabled {
+  cursor: not-allowed;
+}
+```
+
+#### Error State
+```css
+.radio-custom.error {
+  border-color: var(--elysion-error-500);
+}
+```
+
+### Radio Button Sizes
+
+```css
+/* Small */
+.radio-sm .radio-custom {
+  height: 16px;
+  width: 16px;
+}
+
+.radio-sm .radio-custom::after {
+  width: 8px;
+  height: 8px;
+}
+
+.radio-sm .radio-label {
+  font-size: 14px;
+}
+
+/* Large */
+.radio-lg .radio-custom {
+  height: 24px;
+  width: 24px;
+}
+
+.radio-lg .radio-custom::after {
+  width: 12px;
+  height: 12px;
+}
+
+.radio-lg .radio-label {
+  font-size: 18px;
+}
+```
+
+---
+
+## 5.8 Form Labels & Helper Text
+
 ### Labels
 ```css
-.label-elysion {
+.label {
   display: block;
   font-size: 14px;
   font-weight: 600;
   color: var(--elysion-gray-700);
   margin-bottom: 8px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.label.required::after {
+  content: ' *';
+  color: var(--elysion-error-500);
 }
 ```
 
 ### Helper Text
 ```css
 .helper-text {
+  display: block;
   font-size: 14px;
   color: var(--elysion-gray-600);
-  margin-top: 4px;
+  margin-top: 6px;
+  line-height: 1.4;
 }
+```
 
+### Error Message
+```css
 .error-text {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-size: 14px;
   color: var(--elysion-error-600);
-  margin-top: 4px;
+  margin-top: 6px;
+  font-weight: 500;
 }
+
+.error-text::before {
+  content: '⚠';
+  font-size: 16px;
+}
+```
+
+### Success Message
+```css
+.success-text {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--elysion-success-600);
+  margin-top: 6px;
+  font-weight: 500;
+}
+
+.success-text::before {
+  content: '✓';
+  font-size: 16px;
+}
+```
+
+---
+
+## 5.9 Form Field Container
+
+```css
+.form-field {
+  margin-bottom: 24px;
+}
+
+.form-field-inline {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.form-field-inline > * {
+  flex: 1;
+}
+```
+
+### Complete Form Example
+
+```html
+<div class="form-field">
+  <label for="email" class="label required">Adresse email</label>
+  <input 
+    type="email" 
+    id="email" 
+    class="input-text" 
+    placeholder="votre@email.com"
+  >
+  <span class="helper-text">Nous ne partagerons jamais votre email</span>
+</div>
+
+<div class="form-field">
+  <label for="message" class="label">Message</label>
+  <textarea 
+    id="message" 
+    class="textarea" 
+    placeholder="Votre message..."
+  ></textarea>
+</div>
+
+<div class="form-field">
+  <label class="checkbox-wrapper">
+    <input type="checkbox" class="checkbox-input">
+    <span class="checkbox-custom"></span>
+    <span class="checkbox-label">J'accepte les conditions</span>
+  </label>
+</div>
 ```
 
 ---

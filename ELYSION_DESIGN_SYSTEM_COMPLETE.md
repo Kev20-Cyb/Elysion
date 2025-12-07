@@ -1877,25 +1877,169 @@ export default Button;
 --elysion-bg-50: #F6F9FD;
 ```
 
-### Button Classes
+### Component Classes Quick Reference
+
+#### Buttons
 ```css
 .btn-primary     /* Main actions */
 .btn-accent      /* CTAs */
 .btn-outline     /* Secondary */
 .btn-ghost       /* Tertiary */
+.btn-secondary   /* Alternative */
 .btn-danger      /* Destructive */
+
+/* Sizes */
+.btn-sm    /* Small: 8px/16px padding */
+.btn-md    /* Medium: 12px/24px padding */
+.btn-lg    /* Large: 16px/32px padding */
 ```
 
-### Sizes
+#### Cards
 ```css
-.btn-sm    /* Small */
-.btn-md    /* Medium (default) */
-.btn-lg    /* Large */
+.card-elysion      /* Default card with shadow */
+.card-elevated     /* High elevation card */
+.card-outlined     /* Bordered card */
+.card-interactive  /* Clickable card */
+
+/* Sizes */
+.card-sm    /* Small: 16px padding */
+.card-md    /* Medium: 24px padding */
+.card-lg    /* Large: 32px padding */
+
+/* Parts */
+.card-header
+.card-title
+.card-subtitle
+.card-body
+.card-footer
+```
+
+#### Form Inputs
+```css
+.input-text      /* Standard text input */
+.input-date      /* Date picker input */
+.textarea        /* Multi-line text area */
+.select          /* Dropdown select */
+
+/* Sizes */
+.input-sm    /* Small: 8px/12px padding */
+.input-md    /* Medium: 12px/16px padding */
+.input-lg    /* Large: 16px/20px padding */
+
+/* States */
+.error       /* Error state (red border) */
+.success     /* Success state (green border) */
+```
+
+#### Checkboxes & Radio Buttons
+```css
+.checkbox-wrapper   /* Checkbox container */
+.checkbox-input     /* Hidden native input */
+.checkbox-custom    /* Custom styled checkbox */
+.checkbox-label     /* Checkbox label text */
+
+.radio-wrapper      /* Radio button container */
+.radio-input        /* Hidden native input */
+.radio-custom       /* Custom styled radio */
+.radio-label        /* Radio label text */
+
+/* Sizes */
+.checkbox-sm    /* Small: 16px */
+.checkbox-lg    /* Large: 24px */
+.radio-sm       /* Small: 16px */
+.radio-lg       /* Large: 24px */
+```
+
+#### Labels & Helper Text
+```css
+.label           /* Form label */
+.label.required  /* Label with asterisk */
+.helper-text     /* Helper/hint text */
+.error-text      /* Error message */
+.success-text    /* Success message */
+```
+
+#### Dropdowns
+```css
+.dropdown          /* Dropdown container */
+.dropdown-trigger  /* Clickable trigger */
+.dropdown-menu     /* Dropdown menu */
+.dropdown-item     /* Menu item */
+
+/* States */
+.dropdown-item.selected    /* Selected item */
+.dropdown-trigger.open     /* Open state */
+```
+
+### State Modifiers (All Components)
+
+```css
+:hover      /* Hover state - lighter/darker color, slight elevation */
+:active     /* Pressed state - return to base, darker color */
+:focus      /* Focus state - outline ring, border color change */
+:disabled   /* Disabled state - gray, reduced opacity, no cursor */
+.error      /* Error state - red border/background */
+.success    /* Success state - green border/background */
+```
+
+### Common Patterns
+
+#### Form Field with Label
+```html
+<div class="form-field">
+  <label for="input-id" class="label required">Label</label>
+  <input type="text" id="input-id" class="input-text">
+  <span class="helper-text">Helper text</span>
+</div>
+```
+
+#### Card with Content
+```html
+<div class="card-elysion">
+  <div class="card-header">
+    <h3 class="card-title">Title</h3>
+  </div>
+  <div class="card-body">Content</div>
+</div>
+```
+
+#### Checkbox Group
+```html
+<label class="checkbox-wrapper">
+  <input type="checkbox" class="checkbox-input">
+  <span class="checkbox-custom"></span>
+  <span class="checkbox-label">Label</span>
+</label>
 ```
 
 ---
 
-**Document Version**: 2.0  
+## Component States Summary
+
+| Component | Default | Hover | Focus | Active | Disabled | Error | Success |
+|-----------|---------|-------|-------|--------|----------|-------|---------|
+| **Buttons** | ✓ | ✓ | ✓ | ✓ | ✓ | - | - |
+| **Cards** | ✓ | ✓ | - | ✓ | ✓ | - | - |
+| **Text Input** | ✓ | ✓ | ✓ | - | ✓ | ✓ | ✓ |
+| **Textarea** | ✓ | ✓ | ✓ | - | ✓ | ✓ | - |
+| **Select** | ✓ | ✓ | ✓ | - | ✓ | ✓ | - |
+| **Date Input** | ✓ | ✓ | ✓ | - | ✓ | ✓ | - |
+| **Checkbox** | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | - |
+| **Radio** | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | - |
+| **Dropdown** | ✓ | ✓ | - | ✓ | - | - | - |
+
+---
+
+**Document Version**: 2.1  
 **Last Updated**: Décembre 2024  
 **Maintained By**: Elysion Development Team  
 **Status**: ✅ Production Ready
+
+**What's New in v2.1:**
+- ✨ Complete card component specifications with all states
+- ✨ Detailed form components (text input, textarea, select, date)
+- ✨ Checkbox and radio button with custom styling
+- ✨ Dropdown/select with custom and native versions
+- ✨ Form labels, helper text, error/success messages
+- ✨ Component states summary table
+- ✨ Quick reference with all component classes

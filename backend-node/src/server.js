@@ -1,13 +1,15 @@
-// src/server.js
+require('dotenv').config();
+
+console.log("ORISHAI_API_BASE_URL =", process.env.ORISHAI_API_BASE_URL);
+
 const express = require("express");
 const cors = require("cors");
-const dotenv = require("dotenv");
 const { connectDB, disconnectDB } = require("./db");
 const authRoutes = require("./routes/auth.routes");
 const userRoutes = require("./routes/user.routes");
 const dashboardRoutes = require("./routes/dashboard.routes");
-
-dotenv.config();
+const chatRoutes = require("./routes/chat.routes");
+const chatConfigRoutes = require("./routes/chatConfig.routes");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -18,7 +20,7 @@ app.use(express.json());
 app.use(
   cors({
     origin: process.env.FRONTEND_ORIGIN || "http://localhost:3000",
-    credentials: true
+    credentials: true,
   })
 );
 
@@ -31,6 +33,8 @@ app.get("/api/health", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/chat", chatRoutes);
+app.use("/api/chat/config", chatConfigRoutes);
 
 // Gestion erreurs basiques
 app.use((err, req, res, next) => {

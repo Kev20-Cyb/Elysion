@@ -437,6 +437,286 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+
+# ============================================
+# DOCUMENT MANAGEMENT ROUTES
+# ============================================
+
+# Create uploads directory if it doesn't exist
+UPLOAD_DIR = ROOT_DIR / "uploads" / "documents"
+UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+
+# Document Categories
+class DocumentCategory(str, Enum):
+    SALARY_SLIP = "salary_slip"  # Bulletins de salaire
+    CAREER_STATEMENT = "career_statement"  # Relevés de carrière
+    TAX_DECLARATION = "tax_declaration"  # Déclarations fiscales
+    RETIREMENT_CONTRACT = "retirement_contract"  # Contrats de retraite
+    OTHER = "other"  # Autres documents
+
+# Document Models
+class Document(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str
+    filename: str
+    original_filename: str
+    category: DocumentCategory
+    file_size: int  # in bytes
+    file_path: str
+    uploaded_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+class DocumentUpdate(BaseModel):
+    filename: Optional[str] = None
+    category: Optional[DocumentCategory] = None
+
+class DocumentResponse(BaseModel):
+    id: str
+    filename: str
+    original_filename: str
+    category: str
+    file_size: int
+    uploaded_at: datetime
+    updated_at: datetime
+
+# Helper function to validate PDF
+def is_valid_pdf(file: UploadFile) -> bool:
+    """Check if uploaded file is a valid PDF"""
+    # Check extension
+    if not file.filename.lower().endswith('.pdf'):
+        return False
+    # Check content type
+    if file.content_type not in ['application/pdf', 'application/x-pdf']:
+        return False
+    return True
+
+# Upload Document
+@api_router.post("/documents/upload", response_model=DocumentResponse)
+async def upload_document(
+    file: UploadFile = File(...),
+    category: DocumentCategory = DocumentCategory.OTHER,
+    current_user: User = Depends(get_current_user)
+):
+    """Upload a PDF document (max 10MB)"""
+    
+    # Validate file type
+    if not is_valid_pdf(file):
+        raise HTTPException(
+            status_code=400,
+            detail="Seuls les fichiers PDF sont acceptés"
+        )
+    
+    # Read file content to check size
+    content = await file.read()
+    file_size = len(content)
+    
+    # Check file size (10MB = 10 * 1024 * 1024 bytes)
+    max_size = 10 * 1024 * 1024
+    if file_size > max_size:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Le fichier est trop volumineux. Taille maximale : 10MB"
+        )
+    
+    # Generate unique filename
+    file_extension = Path(file.filename).suffix
+    unique_filename = f"{uuid.uuid4()}{file_extension}"
+    file_path = UPLOAD_DIR / unique_filename
+    
+    # Save file
+    try:
+        async with aiofiles.open(file_path, 'wb') as f:
+            await f.write(content)
+    except Exception as e:
+        logger.error(f"Error saving file: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail="Erreur lors de l'enregistrement du fichier"
+        )
+    
+    # Save document metadata to database
+    document = Document(
+        user_id=current_user.id,
+        filename=file.filename,
+        original_filename=file.filename,
+        category=category,
+        file_size=file_size,
+        file_path=str(file_path)
+    )
+    
+    document_dict = document.dict()
+    await db.documents.insert_one(document_dict)
+    
+    return DocumentResponse(**document_dict)
+
+# Get all documents for current user
+@api_router.get("/documents", response_model=List[DocumentResponse])
+async def get_documents(
+    category: Optional[DocumentCategory] = None,
+    current_user: User = Depends(get_current_user)
+):
+    """Get all documents for current user, optionally filtered by category"""
+    
+    query = {"user_id": current_user.id}
+    if category:
+        query["category"] = category
+    
+    documents = await db.documents.find(query).sort("uploaded_at", -1).to_list(length=None)
+    
+    return [DocumentResponse(**doc) for doc in documents]
+
+# Get single document
+@api_router.get("/documents/{document_id}", response_model=DocumentResponse)
+async def get_document(
+    document_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    """Get a specific document"""
+    
+    document = await db.documents.find_one({
+        "id": document_id,
+        "user_id": current_user.id
+    })
+    
+    if not document:
+        raise HTTPException(
+            status_code=404,
+            detail="Document non trouvé"
+        )
+    
+    return DocumentResponse(**document)
+
+# Download document
+@api_router.get("/documents/{document_id}/download")
+async def download_document(
+    document_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    """Download a document"""
+    
+    document = await db.documents.find_one({
+        "id": document_id,
+        "user_id": current_user.id
+    })
+    
+    if not document:
+        raise HTTPException(
+            status_code=404,
+            detail="Document non trouvé"
+        )
+    
+    file_path = Path(document["file_path"])
+    
+    if not file_path.exists():
+        raise HTTPException(
+            status_code=404,
+            detail="Fichier introuvable sur le serveur"
+        )
+    
+    return FileResponse(
+        path=file_path,
+        filename=document["filename"],
+        media_type="application/pdf"
+    )
+
+# Update document (rename or change category)
+@api_router.patch("/documents/{document_id}", response_model=DocumentResponse)
+async def update_document(
+    document_id: str,
+    update_data: DocumentUpdate,
+    current_user: User = Depends(get_current_user)
+):
+    """Update document metadata (rename or change category)"""
+    
+    document = await db.documents.find_one({
+        "id": document_id,
+        "user_id": current_user.id
+    })
+    
+    if not document:
+        raise HTTPException(
+            status_code=404,
+            detail="Document non trouvé"
+        )
+    
+    # Prepare update data
+    update_dict = {}
+    if update_data.filename:
+        update_dict["filename"] = update_data.filename
+    if update_data.category:
+        update_dict["category"] = update_data.category
+    
+    if update_dict:
+        update_dict["updated_at"] = datetime.utcnow()
+        
+        await db.documents.update_one(
+            {"id": document_id},
+            {"$set": update_dict}
+        )
+        
+        # Get updated document
+        updated_doc = await db.documents.find_one({"id": document_id})
+        return DocumentResponse(**updated_doc)
+    
+    return DocumentResponse(**document)
+
+# Delete document
+@api_router.delete("/documents/{document_id}")
+async def delete_document(
+    document_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    """Delete a document"""
+    
+    document = await db.documents.find_one({
+        "id": document_id,
+        "user_id": current_user.id
+    })
+    
+    if not document:
+        raise HTTPException(
+            status_code=404,
+            detail="Document non trouvé"
+        )
+    
+    # Delete file from filesystem
+    file_path = Path(document["file_path"])
+    try:
+        if file_path.exists():
+            file_path.unlink()
+    except Exception as e:
+        logger.error(f"Error deleting file: {e}")
+    
+    # Delete from database
+    await db.documents.delete_one({"id": document_id})
+    
+    return {"message": "Document supprimé avec succès"}
+
+# Get document statistics
+@api_router.get("/documents/stats/summary")
+async def get_document_stats(current_user: User = Depends(get_current_user)):
+    """Get document statistics for current user"""
+    
+    documents = await db.documents.find({"user_id": current_user.id}).to_list(length=None)
+    
+    total_count = len(documents)
+    total_size = sum(doc["file_size"] for doc in documents)
+    
+    # Count by category
+    category_counts = {}
+    for doc in documents:
+        category = doc["category"]
+        category_counts[category] = category_counts.get(category, 0) + 1
+    
+    return {
+        "total_documents": total_count,
+        "total_size_bytes": total_size,
+        "total_size_mb": round(total_size / (1024 * 1024), 2),
+        "by_category": category_counts,
+        "recent_count": len([d for d in documents if (datetime.utcnow() - d["uploaded_at"]).days <= 7])
+    }
+
+
 @app.on_event("shutdown")
 async def shutdown_db_client():
     client.close()

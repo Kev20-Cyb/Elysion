@@ -2098,6 +2098,1196 @@ Composant pour l'upload de fichiers avec drag & drop.
 
 ---
 
+# 7. Navigation Components
+
+## 7.1 Top Navigation Bar
+
+### Default Navbar
+
+```css
+.navbar {
+  width: 100%;
+  background-color: #FFFFFF;
+  border-bottom: 1px solid var(--elysion-gray-200);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.navbar-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 64px;
+}
+
+.navbar-brand {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--elysion-primary-500);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.navbar-brand:hover {
+  color: var(--elysion-accent-500);
+}
+
+.navbar-menu {
+  display: flex;
+  gap: 32px;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-item {
+  position: relative;
+}
+
+.navbar-link {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--elysion-gray-700);
+  text-decoration: none;
+  transition: color 0.2s ease;
+  padding: 8px 0;
+  display: inline-block;
+}
+
+.navbar-link:hover {
+  color: var(--elysion-primary-500);
+}
+
+.navbar-link.active {
+  color: var(--elysion-primary-500);
+  position: relative;
+}
+
+.navbar-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: -20px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-color: var(--elysion-primary-500);
+}
+
+.navbar-actions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+```
+
+## 7.2 Breadcrumbs
+
+```css
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 0;
+  font-size: 14px;
+}
+
+.breadcrumb-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb-link {
+  color: var(--elysion-gray-600);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.breadcrumb-link:hover {
+  color: var(--elysion-primary-500);
+}
+
+.breadcrumb-separator {
+  color: var(--elysion-gray-400);
+  user-select: none;
+}
+
+.breadcrumb-current {
+  color: var(--elysion-gray-900);
+  font-weight: 600;
+}
+```
+
+## 7.3 Tabs
+
+### Default Tabs
+
+```css
+.tabs {
+  border-bottom: 2px solid var(--elysion-gray-200);
+  display: flex;
+  gap: 4px;
+}
+
+.tab {
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--elysion-gray-600);
+  background-color: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  bottom: -2px;
+}
+
+.tab:hover {
+  color: var(--elysion-primary-500);
+  background-color: var(--elysion-primary-50);
+}
+
+.tab.active {
+  color: var(--elysion-primary-500);
+  border-bottom-color: var(--elysion-primary-500);
+  font-weight: 600;
+}
+
+.tab:disabled {
+  color: var(--elysion-gray-400);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.tab-content {
+  padding: 24px 0;
+}
+```
+
+### Pill Tabs
+
+```css
+.tabs-pill {
+  display: flex;
+  gap: 8px;
+  padding: 4px;
+  background-color: var(--elysion-gray-100);
+  border-radius: 10px;
+  width: fit-content;
+}
+
+.tab-pill {
+  padding: 8px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--elysion-gray-700);
+  background-color: transparent;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tab-pill:hover {
+  background-color: var(--elysion-gray-200);
+}
+
+.tab-pill.active {
+  background-color: #FFFFFF;
+  color: var(--elysion-primary-500);
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+```
+
+## 7.4 Pagination
+
+```css
+.pagination {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 0;
+}
+
+.pagination-button {
+  min-width: 40px;
+  height: 40px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--elysion-gray-300);
+  background-color: #FFFFFF;
+  color: var(--elysion-gray-700);
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pagination-button:hover:not(:disabled) {
+  border-color: var(--elysion-primary-500);
+  color: var(--elysion-primary-500);
+  background-color: var(--elysion-primary-50);
+}
+
+.pagination-button.active {
+  background-color: var(--elysion-primary-500);
+  color: #FFFFFF;
+  border-color: var(--elysion-primary-500);
+  font-weight: 600;
+}
+
+.pagination-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  color: var(--elysion-gray-400);
+}
+
+.pagination-ellipsis {
+  color: var(--elysion-gray-500);
+  padding: 0 8px;
+}
+```
+
+---
+
+# 8. Modals & Overlays
+
+## 8.1 Modal
+
+### Modal Structure
+
+```html
+<div class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title">Titre du modal</h2>
+      <button class="modal-close">✕</button>
+    </div>
+    <div class="modal-body">
+      Contenu du modal
+    </div>
+    <div class="modal-footer">
+      <button class="btn-outline">Annuler</button>
+      <button class="btn-primary">Confirmer</button>
+    </div>
+  </div>
+</div>
+```
+
+### Modal Styles
+
+```css
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 9999;
+  animation: fadeIn 0.2s ease;
+}
+
+.modal {
+  background-color: #FFFFFF;
+  border-radius: 16px;
+  box-shadow: 0 20px 25px rgba(0, 0, 0, 0.15);
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.3s ease;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px;
+  border-bottom: 1px solid var(--elysion-gray-200);
+}
+
+.modal-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--elysion-gray-900);
+  margin: 0;
+}
+
+.modal-close {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background-color: transparent;
+  color: var(--elysion-gray-600);
+  font-size: 24px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+  background-color: var(--elysion-gray-100);
+  color: var(--elysion-gray-900);
+}
+
+.modal-body {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 24px;
+  border-top: 1px solid var(--elysion-gray-200);
+}
+```
+
+### Modal Sizes
+
+```css
+.modal-sm {
+  max-width: 400px;
+}
+
+.modal-md {
+  max-width: 600px;
+}
+
+.modal-lg {
+  max-width: 800px;
+}
+
+.modal-xl {
+  max-width: 1200px;
+}
+
+.modal-full {
+  max-width: calc(100% - 32px);
+  height: calc(100% - 32px);
+}
+```
+
+## 8.2 Drawer / Sidebar
+
+```css
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9998;
+  animation: fadeIn 0.2s ease;
+}
+
+.drawer {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  background-color: #FFFFFF;
+  box-shadow: -4px 0 15px rgba(0, 0, 0, 0.1);
+  width: 400px;
+  max-width: 90%;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+}
+
+.drawer.open {
+  transform: translateX(0);
+}
+
+.drawer-right {
+  right: 0;
+  animation: slideInRight 0.3s ease;
+}
+
+.drawer-left {
+  left: 0;
+  transform: translateX(-100%);
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+  animation: slideInLeft 0.3s ease;
+}
+
+.drawer-left.open {
+  transform: translateX(0);
+}
+
+.drawer-header {
+  padding: 24px;
+  border-bottom: 1px solid var(--elysion-gray-200);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.drawer-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--elysion-gray-900);
+}
+
+.drawer-close {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background-color: transparent;
+  color: var(--elysion-gray-600);
+  font-size: 20px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.drawer-close:hover {
+  background-color: var(--elysion-gray-100);
+}
+
+.drawer-body {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.drawer-footer {
+  padding: 24px;
+  border-top: 1px solid var(--elysion-gray-200);
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+```
+
+## 8.3 Tooltip
+
+```css
+.tooltip-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  padding: 8px 12px;
+  background-color: var(--elysion-gray-900);
+  color: #FFFFFF;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 10000;
+}
+
+.tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--elysion-gray-900);
+}
+
+.tooltip-wrapper:hover .tooltip {
+  opacity: 1;
+}
+
+/* Tooltip positions */
+.tooltip-top {
+  bottom: 100%;
+  margin-bottom: 8px;
+}
+
+.tooltip-bottom {
+  top: 100%;
+  bottom: auto;
+  margin-top: 8px;
+  transform: translateX(-50%) translateY(0);
+}
+
+.tooltip-bottom::after {
+  top: auto;
+  bottom: 100%;
+  border-top-color: transparent;
+  border-bottom-color: var(--elysion-gray-900);
+}
+
+.tooltip-left {
+  left: auto;
+  right: 100%;
+  top: 50%;
+  bottom: auto;
+  margin-right: 8px;
+  transform: translateY(-50%);
+}
+
+.tooltip-right {
+  left: 100%;
+  top: 50%;
+  bottom: auto;
+  margin-left: 8px;
+  transform: translateY(-50%);
+}
+```
+
+---
+
+# 9. Alerts & Notifications
+
+## 9.1 Alert Messages
+
+### Alert Structure
+
+```html
+<div class="alert alert-info">
+  <div class="alert-icon">ℹ️</div>
+  <div class="alert-content">
+    <div class="alert-title">Information</div>
+    <div class="alert-message">Ceci est un message d'information.</div>
+  </div>
+  <button class="alert-close">✕</button>
+</div>
+```
+
+### Alert Base Styles
+
+```css
+.alert {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid;
+  margin-bottom: 16px;
+  animation: slideDown 0.3s ease;
+}
+
+.alert-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.alert-content {
+  flex: 1;
+}
+
+.alert-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.alert-message {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.alert-close {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+  flex-shrink: 0;
+}
+```
+
+### Alert Variants
+
+```css
+/* Success Alert */
+.alert-success {
+  background-color: var(--elysion-success-50);
+  border-color: var(--elysion-success-200);
+  color: var(--elysion-success-800);
+}
+
+.alert-success .alert-close:hover {
+  background-color: var(--elysion-success-100);
+}
+
+/* Error Alert */
+.alert-error {
+  background-color: var(--elysion-error-50);
+  border-color: var(--elysion-error-200);
+  color: var(--elysion-error-800);
+}
+
+.alert-error .alert-close:hover {
+  background-color: var(--elysion-error-100);
+}
+
+/* Warning Alert */
+.alert-warning {
+  background-color: var(--elysion-warning-50);
+  border-color: var(--elysion-warning-200);
+  color: var(--elysion-warning-800);
+}
+
+.alert-warning .alert-close:hover {
+  background-color: var(--elysion-warning-100);
+}
+
+/* Info Alert */
+.alert-info {
+  background-color: var(--elysion-primary-50);
+  border-color: var(--elysion-primary-200);
+  color: var(--elysion-primary-800);
+}
+
+.alert-info .alert-close:hover {
+  background-color: var(--elysion-primary-100);
+}
+```
+
+## 9.2 Toast Notifications
+
+```css
+.toast-container {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 400px;
+}
+
+.toast {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  background-color: #FFFFFF;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-left: 4px solid;
+  min-width: 300px;
+  animation: slideInRight 0.3s ease;
+}
+
+.toast-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.toast-content {
+  flex: 1;
+}
+
+.toast-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--elysion-gray-900);
+}
+
+.toast-message {
+  font-size: 14px;
+  color: var(--elysion-gray-700);
+  line-height: 1.4;
+}
+
+.toast-close {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background-color: transparent;
+  color: var(--elysion-gray-600);
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.toast-close:hover {
+  background-color: var(--elysion-gray-100);
+}
+
+/* Toast Variants */
+.toast-success {
+  border-left-color: var(--elysion-success-500);
+}
+
+.toast-error {
+  border-left-color: var(--elysion-error-500);
+}
+
+.toast-warning {
+  border-left-color: var(--elysion-warning-500);
+}
+
+.toast-info {
+  border-left-color: var(--elysion-primary-500);
+}
+```
+
+## 9.3 Badge / Pill
+
+```css
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 12px;
+  line-height: 1;
+}
+
+/* Badge Variants */
+.badge-primary {
+  background-color: var(--elysion-primary-100);
+  color: var(--elysion-primary-700);
+}
+
+.badge-success {
+  background-color: var(--elysion-success-100);
+  color: var(--elysion-success-700);
+}
+
+.badge-error {
+  background-color: var(--elysion-error-100);
+  color: var(--elysion-error-700);
+}
+
+.badge-warning {
+  background-color: var(--elysion-warning-100);
+  color: var(--elysion-warning-700);
+}
+
+.badge-gray {
+  background-color: var(--elysion-gray-200);
+  color: var(--elysion-gray-700);
+}
+
+/* Badge with dot */
+.badge-dot {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.badge-dot::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: currentColor;
+}
+```
+
+---
+
+# 10. Tables & Lists
+
+## 10.1 Table
+
+```css
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid var(--elysion-gray-200);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #FFFFFF;
+}
+
+.table thead {
+  background-color: var(--elysion-gray-50);
+  border-bottom: 2px solid var(--elysion-gray-200);
+}
+
+.table th {
+  padding: 16px;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--elysion-gray-700);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.table td {
+  padding: 16px;
+  font-size: 14px;
+  color: var(--elysion-gray-900);
+  border-bottom: 1px solid var(--elysion-gray-200);
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.table tbody tr:hover {
+  background-color: var(--elysion-gray-50);
+}
+
+/* Striped table */
+.table-striped tbody tr:nth-child(even) {
+  background-color: var(--elysion-gray-50);
+}
+
+.table-striped tbody tr:hover {
+  background-color: var(--elysion-primary-50);
+}
+```
+
+## 10.2 Lists
+
+```css
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.list-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--elysion-gray-200);
+  transition: background-color 0.2s ease;
+}
+
+.list-item:last-child {
+  border-bottom: none;
+}
+
+.list-item:hover {
+  background-color: var(--elysion-gray-50);
+}
+
+.list-item-icon {
+  font-size: 20px;
+  color: var(--elysion-gray-600);
+  flex-shrink: 0;
+}
+
+.list-item-content {
+  flex: 1;
+}
+
+.list-item-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--elysion-gray-900);
+  margin-bottom: 4px;
+}
+
+.list-item-subtitle {
+  font-size: 14px;
+  color: var(--elysion-gray-600);
+}
+
+.list-item-action {
+  flex-shrink: 0;
+}
+```
+
+---
+
+# 11. Iconography
+
+## 11.1 Icon Guidelines
+
+- **Size**: 16px, 20px, 24px, 32px, 48px
+- **Stroke Width**: 2px (consistent)
+- **Style**: Outlined, rounded corners
+- **Color**: Inherits from parent or uses semantic colors
+
+## 11.2 Icon Sizes
+
+```css
+.icon-xs { width: 16px; height: 16px; }
+.icon-sm { width: 20px; height: 20px; }
+.icon-md { width: 24px; height: 24px; }
+.icon-lg { width: 32px; height: 32px; }
+.icon-xl { width: 48px; height: 48px; }
+```
+
+## 11.3 Common Icons
+
+- 📊 Analytics / Dashboard
+- 👔 Employee / Professional
+- 💻 Freelancer / Digital
+- 🏢 Business Owner / Company
+- 📈 Growth / Progress
+- 💰 Money / Finance
+- 🎯 Goal / Target
+- ✅ Success / Completed
+- ⚠️ Warning / Alert
+- ❌ Error / Delete
+- 📄 Document
+- 📤 Upload
+- 📥 Download
+- 🔒 Lock / Secure
+- 👤 User / Profile
+
+---
+
+# 12. Animation & Interactions
+
+## 12.1 Timing Functions
+
+```css
+:root {
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+}
+```
+
+## 12.2 Standard Animations
+
+```css
+/* Fade In */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Slide Up */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Slide Down */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Slide In Right */
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Slide In Left */
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Scale In */
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Spin (Loading) */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Pulse */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Bounce */
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+```
+
+## 12.3 Transition Durations
+
+```css
+:root {
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+}
+```
+
+**Usage:**
+- **Fast (150ms)**: Hovers, small interactions, color changes
+- **Normal (300ms)**: Default, most interactions, transforms
+- **Slow (500ms)**: Large movements, page transitions, complex animations
+
+---
+
+# 13. Shadows & Elevation
+
+## 13.1 Shadow Scale
+
+```css
+:root {
+  /* Shadows */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15), 0 10px 10px rgba(0, 0, 0, 0.04);
+  --shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.25);
+  
+  /* Inner shadow */
+  --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+```
+
+## 13.2 Shadow Classes
+
+```css
+.shadow-xs { box-shadow: var(--shadow-xs); }
+.shadow-sm { box-shadow: var(--shadow-sm); }
+.shadow-md { box-shadow: var(--shadow-md); }
+.shadow-lg { box-shadow: var(--shadow-lg); }
+.shadow-xl { box-shadow: var(--shadow-xl); }
+.shadow-2xl { box-shadow: var(--shadow-2xl); }
+.shadow-inner { box-shadow: var(--shadow-inner); }
+.shadow-none { box-shadow: none; }
+```
+
+## 13.3 Elevation System
+
+| Level | Usage | Shadow |
+|-------|-------|--------|
+| 0 | Flat elements | None |
+| 1 | Cards, containers | shadow-sm |
+| 2 | Raised cards | shadow-md |
+| 3 | Dropdowns, popovers | shadow-lg |
+| 4 | Modals, dialogs | shadow-xl |
+| 5 | Full screen overlays | shadow-2xl |
+
+---
+
+# 14. Border Radius
+
+## 14.1 Border Radius Scale
+
+```css
+:root {
+  --radius-none: 0;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-2xl: 16px;
+  --radius-3xl: 20px;
+  --radius-full: 9999px;
+}
+```
+
+## 14.2 Border Radius Classes
+
+```css
+.rounded-none { border-radius: var(--radius-none); }
+.rounded-sm { border-radius: var(--radius-sm); }
+.rounded-md { border-radius: var(--radius-md); }
+.rounded-lg { border-radius: var(--radius-lg); }
+.rounded-xl { border-radius: var(--radius-xl); }
+.rounded-2xl { border-radius: var(--radius-2xl); }
+.rounded-3xl { border-radius: var(--radius-3xl); }
+.rounded-full { border-radius: var(--radius-full); }
+```
+
+## 14.3 Usage Guidelines
+
+| Element | Radius | Example |
+|---------|--------|---------|
+| Small buttons | sm-md | 4-6px |
+| Default buttons | lg | 8px |
+| Input fields | lg | 8px |
+| Cards | xl-2xl | 12-16px |
+| Modals | 2xl | 16px |
+| Avatars | full | 9999px |
+| Pills/Badges | full | 9999px |
+
+
+
+---
+
 # 6. Layout & Spacing
 
 ## 6.1 Spacing Scale

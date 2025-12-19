@@ -11,6 +11,7 @@ import OnboardingFlow from './components/OnboardingFlow';
 import Simulator from './components/Simulator';
 import ForgotPassword from './components/ForgotPassword';
 import ResetPassword from './components/ResetPassword';
+import Documents from './components/Documents';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;

@@ -216,8 +216,40 @@ agent_communication:
       2. ✅ Composants ForgotPassword et ResetPassword créés avec routes ajoutées dans App.js
       3. ✅ Lien "Mot de passe oublié ?" ajouté sur AuthPage
       4. ✅ Transfert de données Simulator → Onboarding corrigé
+      5. ✅ Système de gestion de documents PDF implémenté
       
       Prêt pour les tests backend et frontend des nouvelles fonctionnalités.
+  - agent: "main"
+    message: |
+      🆕 NOUVELLE FONCTIONNALITÉ : Gestion de Documents PDF
+      
+      Backend (/app/backend/server.py) :
+      - Route POST /api/documents/upload (max 10MB, PDF uniquement)
+      - Route GET /api/documents (liste avec filtre par catégorie)
+      - Route GET /api/documents/{id}/download (téléchargement)
+      - Route PATCH /api/documents/{id} (renommer, changer catégorie)
+      - Route DELETE /api/documents/{id} (suppression)
+      - Route GET /api/documents/stats/summary (statistiques)
+      - Stockage des fichiers dans /app/backend/uploads/documents/
+      - Métadonnées dans MongoDB collection "documents"
+      
+      Frontend (/app/frontend/src/components/Documents.js) :
+      - Page complète accessible via /documents
+      - Upload drag & drop avec validation
+      - Filtres par catégorie (Bulletins de salaire, Relevés de carrière, etc.)
+      - Prévisualisation PDF en modal
+      - Actions : télécharger, renommer, supprimer, changer catégorie
+      - Statistiques : total docs, espace utilisé, récents
+      - Lien depuis Dashboard "Gérer mes documents"
+      
+      Catégories disponibles :
+      - Bulletins de salaire
+      - Relevés de carrière
+      - Déclarations fiscales
+      - Contrats de retraite
+      - Autres documents
+      
+      Prêt pour tests.
   - agent: "testing"
     message: |
       🧪 BACKEND TESTING COMPLETED - Forgot Password Flow

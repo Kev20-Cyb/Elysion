@@ -3624,6 +3624,88 @@ export default Button;
 .success-text    /* Success message */
 ```
 
+#### Switch/Toggle
+```css
+.switch-wrapper  /* Switch container */
+.switch-input    /* Hidden checkbox input */
+.switch-slider   /* Visual slider */
+.switch-label    /* Label text */
+
+/* Sizes */
+.switch-sm       /* Small: 36px width */
+.switch-lg       /* Large: 56px width */
+```
+
+#### File Upload
+```css
+.file-upload-wrapper     /* Main wrapper */
+.file-upload-area        /* Drop zone */
+.file-upload-icon        /* Upload icon */
+.file-selected           /* Selected file display */
+.file-upload-progress    /* Progress bar */
+.file-upload-list        /* Multiple files list */
+
+/* States */
+.drag-over       /* Active drag state */
+```
+
+#### Navigation
+```css
+.navbar              /* Top navigation bar */
+.navbar-link         /* Nav link */
+.navbar-link.active  /* Active nav link */
+.breadcrumbs         /* Breadcrumb navigation */
+.tabs                /* Tab navigation */
+.tab.active          /* Active tab */
+.pagination          /* Page navigation */
+```
+
+#### Modals & Overlays
+```css
+.modal-overlay   /* Modal backdrop */
+.modal           /* Modal container */
+.modal-header    /* Modal header */
+.modal-body      /* Modal content */
+.modal-footer    /* Modal actions */
+.drawer          /* Sidebar drawer */
+.tooltip         /* Tooltip popup */
+
+/* Modal sizes */
+.modal-sm, .modal-md, .modal-lg, .modal-xl, .modal-full
+```
+
+#### Alerts & Notifications
+```css
+.alert           /* Alert message */
+.alert-success   /* Success alert */
+.alert-error     /* Error alert */
+.alert-warning   /* Warning alert */
+.alert-info      /* Info alert */
+.toast           /* Toast notification */
+.badge           /* Badge/pill */
+```
+
+#### Tables & Lists
+```css
+.table           /* Data table */
+.table-striped   /* Striped table */
+.list            /* Custom list */
+.list-item       /* List item */
+```
+
+#### Shadows & Elevation
+```css
+.shadow-xs, .shadow-sm, .shadow-md
+.shadow-lg, .shadow-xl, .shadow-2xl
+.shadow-inner, .shadow-none
+```
+
+#### Border Radius
+```css
+.rounded-none, .rounded-sm, .rounded-md, .rounded-lg
+.rounded-xl, .rounded-2xl, .rounded-3xl, .rounded-full
+```
+
 #### Dropdowns
 ```css
 .dropdown          /* Dropdown container */

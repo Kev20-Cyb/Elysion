@@ -23,11 +23,19 @@
    - 5.7 [Radio Button](#57-radio-button)
    - 5.8 [Form Labels & Helper Text](#58-form-labels--helper-text)
    - 5.9 [Form Field Container](#59-form-field-container)
+   - 5.10 [Switch / Toggle](#510-switch--toggle)
+   - 5.11 [File Upload](#511-file-upload)
 6. [Layout & Spacing](#6-layout--spacing)
-7. [Iconography](#7-iconography)
-8. [Animation & Interactions](#8-animation--interactions)
-9. [Accessibility Standards](#9-accessibility-standards)
-10. [Implementation Guide](#10-implementation-guide)
+7. [Navigation Components](#7-navigation-components)
+8. [Modals & Overlays](#8-modals--overlays)
+9. [Alerts & Notifications](#9-alerts--notifications)
+10. [Tables & Lists](#10-tables--lists)
+11. [Iconography](#11-iconography)
+12. [Animation & Interactions](#12-animation--interactions)
+13. [Shadows & Elevation](#13-shadows--elevation)
+14. [Border Radius](#14-border-radius)
+15. [Accessibility Standards](#15-accessibility-standards)
+16. [Implementation Guide](#16-implementation-guide)
 
 ---
 

@@ -153,6 +153,14 @@ function App() {
                 </ProtectedRoute>
               } 
             />
+            <Route 
+              path="/documents" 
+              element={
+                <ProtectedRoute>
+                  <Documents />
+                </ProtectedRoute>
+              } 
+            />
           </Routes>
         </BrowserRouter>
       </div>

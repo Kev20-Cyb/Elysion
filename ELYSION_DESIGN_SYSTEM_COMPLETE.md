@@ -64,20 +64,20 @@ Clear Space: 2x logo height on all sides
 
 | Variant | Hex | Usage |
 |---------|-----|-------|
-| 50 | `#f5f7fa` | Very light backgrounds, cards |
-| 100 | `#eaeff5` | Light highlights, hover states |
-| 200 | `#cddbef` | Subtle accents, borders |
-| 300 | `#97bbec` | Disabled states, placeholders |
-| 400 | `#4a90f2` | Interactive elements |
+| 50 | `#deebfd` | Very light backgrounds, cards |
+| 100 | `#bcd6fa` | Light highlights, hover states |
+| 200 | `#7aadf6` | Subtle accents, borders |
+| 300 | `#3784F1` | Disabled states, placeholders |
+| 400 | `#0F60D2` | Interactive elements |
 | **500** | **`#0a418e`** | **🎯 MAIN BRAND COLOR** |
-| 600 | `#0c4ca7` | Button hover states |
-| 700 | `#083777` | Button active states |
-| 800 | `#022250` | Dark text, headers |
-| 900 | `#011532` | Darker elements |
+| 600 | `#083472` | Button hover states |
+| 700 | `#062756` | Button active states |
+| 800 | `#041a39` | Dark text, headers |
+| 900 | `#020d` | Darker elements |
 | 950 | `#010b19` | Darkest elements |
 
 ```css
---elysion-primary-50: #f5f7fa;
+--elysion-primary-50: #DEEBFD;
 --elysion-primary-100: #eaeff5;
 --elysion-primary-200: #cddbef;
 --elysion-primary-300: #97bbec;

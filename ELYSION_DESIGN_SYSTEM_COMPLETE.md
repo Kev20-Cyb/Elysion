@@ -3542,7 +3542,7 @@ export default Button;
 --elysion-bg-50: #F6F9FD;
 ```
 
-### Component Classes Quick Reference
+### All Component Classes
 
 #### Buttons
 ```css

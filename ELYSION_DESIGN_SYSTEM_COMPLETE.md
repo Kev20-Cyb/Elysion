@@ -1629,6 +1629,473 @@ Les cartes sont des conteneurs visuels pour regrouper du contenu.
 </div>
 ```
 
+
+---
+
+## 5.10 Switch / Toggle
+
+Un composant switch pour des actions on/off binaires.
+
+### Default Switch
+
+#### Structure
+```html
+<label class="switch-wrapper">
+  <span class="switch-label">Mode sombre</span>
+  <input type="checkbox" class="switch-input">
+  <span class="switch-slider"></span>
+</label>
+```
+
+#### Default State (Off)
+```css
+.switch-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.switch-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.switch-slider {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 24px;
+  background-color: var(--elysion-gray-300);
+  border-radius: 24px;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.switch-slider::before {
+  content: '';
+  position: absolute;
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  top: 3px;
+  background-color: white;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.switch-label {
+  font-size: 16px;
+  color: var(--elysion-gray-900);
+  font-weight: 400;
+}
+```
+
+#### Hover State
+```css
+.switch-wrapper:hover .switch-slider {
+  background-color: var(--elysion-gray-400);
+}
+```
+
+#### Checked State (On)
+```css
+.switch-input:checked ~ .switch-slider {
+  background-color: var(--elysion-primary-500);
+}
+
+.switch-input:checked ~ .switch-slider::before {
+  transform: translateX(24px);
+}
+```
+
+#### Focus State
+```css
+.switch-input:focus ~ .switch-slider {
+  outline: 3px solid rgba(10, 65, 142, 0.2);
+  outline-offset: 2px;
+}
+```
+
+#### Disabled State
+```css
+.switch-input:disabled ~ .switch-slider {
+  background-color: var(--elysion-gray-200);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.switch-input:disabled ~ .switch-slider::before {
+  background-color: var(--elysion-gray-400);
+}
+
+.switch-input:disabled ~ .switch-label {
+  color: var(--elysion-gray-500);
+  cursor: not-allowed;
+}
+
+.switch-wrapper.disabled {
+  cursor: not-allowed;
+}
+```
+
+### Switch Sizes
+
+```css
+/* Small Switch */
+.switch-sm .switch-slider {
+  width: 36px;
+  height: 20px;
+  border-radius: 20px;
+}
+
+.switch-sm .switch-slider::before {
+  height: 14px;
+  width: 14px;
+  left: 3px;
+  top: 3px;
+}
+
+.switch-sm .switch-input:checked ~ .switch-slider::before {
+  transform: translateX(16px);
+}
+
+/* Large Switch */
+.switch-lg .switch-slider {
+  width: 56px;
+  height: 28px;
+  border-radius: 28px;
+}
+
+.switch-lg .switch-slider::before {
+  height: 22px;
+  width: 22px;
+  left: 3px;
+  top: 3px;
+}
+
+.switch-lg .switch-input:checked ~ .switch-slider::before {
+  transform: translateX(28px);
+}
+```
+
+### Switch with Icons
+
+```css
+.switch-slider-with-icons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 6px;
+}
+
+.switch-slider-with-icons::after,
+.switch-slider-with-icons::before {
+  font-size: 12px;
+  z-index: 1;
+}
+
+/* Icons for on/off states */
+.switch-input:not(:checked) ~ .switch-slider-with-icons::before {
+  content: '✕';
+  color: var(--elysion-gray-600);
+}
+
+.switch-input:checked ~ .switch-slider-with-icons::after {
+  content: '✓';
+  color: white;
+}
+```
+
+---
+
+## 5.11 File Upload
+
+Composant pour l'upload de fichiers avec drag & drop.
+
+### Default File Upload
+
+#### Structure
+```html
+<div class="file-upload-wrapper">
+  <input type="file" id="file-upload" class="file-input">
+  <label for="file-upload" class="file-upload-area">
+    <div class="file-upload-icon">📤</div>
+    <div class="file-upload-text">
+      <span class="file-upload-title">Glissez-déposez votre fichier ici</span>
+      <span class="file-upload-subtitle">ou cliquez pour sélectionner</span>
+    </div>
+  </label>
+</div>
+```
+
+#### Default State
+```css
+.file-upload-wrapper {
+  width: 100%;
+}
+
+.file-input {
+  display: none;
+}
+
+.file-upload-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  border: 2px dashed var(--elysion-gray-300);
+  border-radius: 12px;
+  background-color: var(--elysion-bg-50);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.file-upload-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.7;
+  transition: all 0.3s ease;
+}
+
+.file-upload-text {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.file-upload-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--elysion-gray-900);
+}
+
+.file-upload-subtitle {
+  font-size: 14px;
+  color: var(--elysion-gray-600);
+}
+```
+
+#### Hover State
+```css
+.file-upload-area:hover {
+  border-color: var(--elysion-primary-500);
+  background-color: var(--elysion-primary-50);
+}
+
+.file-upload-area:hover .file-upload-icon {
+  opacity: 1;
+  transform: translateY(-4px);
+}
+```
+
+#### Drag Over State
+```css
+.file-upload-area.drag-over {
+  border-color: var(--elysion-primary-500);
+  background-color: var(--elysion-primary-100);
+  border-style: solid;
+}
+
+.file-upload-area.drag-over .file-upload-icon {
+  transform: scale(1.1);
+}
+```
+
+#### Disabled State
+```css
+.file-upload-area.disabled {
+  background-color: var(--elysion-gray-100);
+  border-color: var(--elysion-gray-200);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.file-upload-area.disabled .file-upload-title,
+.file-upload-area.disabled .file-upload-subtitle {
+  color: var(--elysion-gray-500);
+}
+```
+
+#### Error State
+```css
+.file-upload-area.error {
+  border-color: var(--elysion-error-500);
+  background-color: var(--elysion-error-50);
+}
+```
+
+### File Upload with Selected File
+
+```css
+.file-selected {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background-color: var(--elysion-primary-50);
+  border: 2px solid var(--elysion-primary-200);
+  border-radius: 8px;
+  margin-top: 16px;
+}
+
+.file-selected-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.file-selected-icon {
+  font-size: 24px;
+}
+
+.file-selected-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.file-selected-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--elysion-gray-900);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.file-selected-size {
+  font-size: 14px;
+  color: var(--elysion-gray-600);
+}
+
+.file-selected-remove {
+  padding: 8px;
+  color: var(--elysion-error-500);
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.file-selected-remove:hover {
+  background-color: var(--elysion-error-100);
+}
+```
+
+### File Upload Progress
+
+```css
+.file-upload-progress {
+  margin-top: 16px;
+}
+
+.file-upload-progress-bar {
+  width: 100%;
+  height: 8px;
+  background-color: var(--elysion-gray-200);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.file-upload-progress-fill {
+  height: 100%;
+  background-color: var(--elysion-primary-500);
+  transition: width 0.3s ease;
+  border-radius: 4px;
+}
+
+.file-upload-progress-text {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-size: 14px;
+  color: var(--elysion-gray-600);
+}
+```
+
+### Multiple Files Upload
+
+```css
+.file-upload-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.file-upload-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background-color: white;
+  border: 1px solid var(--elysion-gray-200);
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.file-upload-item:hover {
+  border-color: var(--elysion-primary-300);
+  background-color: var(--elysion-primary-50);
+}
+
+.file-upload-item-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.file-upload-item-icon {
+  font-size: 20px;
+}
+
+.file-upload-item-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.file-upload-item-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--elysion-gray-900);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.file-upload-item-meta {
+  font-size: 12px;
+  color: var(--elysion-gray-600);
+  margin-top: 2px;
+}
+
+.file-upload-item-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.file-upload-item-action {
+  padding: 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.file-upload-item-action:hover {
+  background-color: var(--elysion-gray-100);
+}
+```
+
+
 ---
 
 # 6. Layout & Spacing

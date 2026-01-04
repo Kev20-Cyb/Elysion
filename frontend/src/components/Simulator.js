@@ -450,9 +450,107 @@ const Simulator = () => {
           <div className="text-3xl font-bold text-elysion-accent" data-testid="result-replacement-rate">
             {results?.replacementRate}%
           </div>
-          <p className="text-sm text-elysion-text-light mt-1">de votre dernier salaire</p>
+          <p className="text-sm text-elysion-text-light mt-1">de votre dernier revenu</p>
         </div>
       </div>
+
+      {/* Détails spécifiques pour freelance/indépendant */}
+      {(results?.professionalStatus === 'freelance' || results?.professionalStatus === 'business_owner') && (
+        <div className="bg-white rounded-xl border border-elysion-primary-200 p-6 mb-8">
+          <h3 className="text-xl font-bold text-elysion-primary mb-4">
+            📋 Détails de votre retraite d'indépendant
+          </h3>
+          
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* Trimestres */}
+            <div className="bg-elysion-bg p-4 rounded-lg">
+              <h4 className="font-semibold text-elysion-primary mb-2">Trimestres</h4>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Validés :</span>
+                  <span className="font-semibold">{results?.totalQuarters} trimestres</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Requis :</span>
+                  <span className="font-semibold">{results?.requiredQuarters} trimestres</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Par an (actuel) :</span>
+                  <span className="font-semibold">{results?.quartersPerYear} trimestres</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Taux de pension */}
+            <div className="bg-elysion-bg p-4 rounded-lg">
+              <h4 className="font-semibold text-elysion-primary mb-2">Taux de pension</h4>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Taux appliqué :</span>
+                  <span className="font-semibold">{results?.rate?.toFixed(2)}%</span>
+                </div>
+                {results?.decote > 0 && (
+                  <div className="flex justify-between text-red-600">
+                    <span>Décote :</span>
+                    <span className="font-semibold">-{results?.decote?.toFixed(2)}%</span>
+                  </div>
+                )}
+                {results?.surcote > 0 && (
+                  <div className="flex justify-between text-green-600">
+                    <span>Surcote :</span>
+                    <span className="font-semibold">+{results?.surcote?.toFixed(2)}%</span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Retraite de base */}
+            <div className="bg-elysion-bg p-4 rounded-lg">
+              <h4 className="font-semibold text-elysion-primary mb-2">Retraite de base (SSI)</h4>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Mensuelle :</span>
+                  <span className="font-semibold text-lg">€{results?.breakdown?.base?.toLocaleString()}</span>
+                </div>
+                <p className="text-xs text-gray-500">
+                  Calculée sur 25 meilleures années
+                </p>
+              </div>
+            </div>
+
+            {/* Retraite complémentaire */}
+            <div className="bg-elysion-bg p-4 rounded-lg">
+              <h4 className="font-semibold text-elysion-primary mb-2">Retraite complémentaire (RCI)</h4>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Points acquis :</span>
+                  <span className="font-semibold">{results?.totalPoints}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Valeur du point :</span>
+                  <span className="font-semibold">€{results?.pointValue}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Mensuelle :</span>
+                  <span className="font-semibold text-lg">€{results?.breakdown?.complementary?.toLocaleString()}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Informations complémentaires */}
+          <div className="mt-6 bg-blue-50 border border-blue-200 p-4 rounded-lg">
+            <h4 className="font-semibold text-blue-900 mb-2">💡 Bon à savoir</h4>
+            <ul className="text-sm text-blue-800 space-y-1">
+              <li>• Validation d'1 trimestre : ~4 020€ de revenu annuel</li>
+              <li>• Validation de 4 trimestres : ~16 080€ de revenu annuel</li>
+              <li>• Taux plein automatique à {results?.fullRateAge} ans</li>
+              <li>• Décote : -1,25% par trimestre manquant (max 25%)</li>
+              <li>• Surcote : +1,25% par trimestre supplémentaire après taux plein</li>
+            </ul>
+          </div>
+        </div>
+      )}
 
       {results?.yearsToRetirement > 0 && (
         <div className="bg-white p-6 rounded-xl border-l-4 border-elysion-accent mb-8">
@@ -464,7 +562,10 @@ const Simulator = () => {
 
       <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg mb-8">
         <p className="text-sm text-yellow-800">
-          <strong>Avertissement :</strong> Ces résultats sont basés sur des hypothèses générales du système de retraite et peuvent varier selon vos cotisations individuelles et votre régime.
+          <strong>Avertissement :</strong> Ces résultats sont basés sur des hypothèses générales du système de retraite français et peuvent varier selon vos cotisations individuelles, votre régime et l'évolution de la législation.
+          {(results?.professionalStatus === 'freelance' || results?.professionalStatus === 'business_owner') && (
+            <span> Les calculs pour indépendants prennent en compte le régime SSI (Sécurité Sociale des Indépendants) et la RCI (Retraite Complémentaire des Indépendants).</span>
+          )}
         </p>
       </div>
     </div>

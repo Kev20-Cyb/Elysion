@@ -31,61 +31,165 @@ const Simulator = () => {
     return age;
   };
 
+  // Calcul des trimestres validés pour un freelance
+  const calculateFreelanceQuarters = (annualRevenue, year) => {
+    // Seuils 2024 pour validation des trimestres (SSI)
+    const thresholds = {
+      1: 600 * 6.70,    // ~4020€ pour 1 trimestre
+      2: 600 * 13.40,   // ~8040€ pour 2 trimestres
+      3: 600 * 20.10,   // ~12060€ pour 3 trimestres
+      4: 600 * 26.80    // ~16080€ pour 4 trimestres
+    };
+
+    if (annualRevenue >= thresholds[4]) return 4;
+    if (annualRevenue >= thresholds[3]) return 3;
+    if (annualRevenue >= thresholds[2]) return 2;
+    if (annualRevenue >= thresholds[1]) return 1;
+    return 0;
+  };
+
+  // Calcul de la retraite pour un freelance
+  const calculateFreelanceRetirement = (annualIncome, careerLength, currentAge) => {
+    const birthYear = new Date(formData.birthDate).getFullYear();
+    const legalRetirementAge = 62;
+    const fullRateAge = 67;
+    
+    // 1. Calcul des trimestres
+    const quartersPerYear = calculateFreelanceQuarters(annualIncome, new Date().getFullYear());
+    const totalQuarters = Math.min(careerLength * 4, 172); // Max 172 trimestres (43 ans)
+    const requiredQuarters = 172; // Pour génération née après 1973
+    
+    // 2. Calcul du taux
+    let rate = 0.50; // Taux plein
+    let decote = 0;
+    let surcote = 0;
+    
+    if (currentAge >= legalRetirementAge) {
+      const missingQuarters = Math.max(0, requiredQuarters - totalQuarters);
+      const extraQuarters = Math.max(0, totalQuarters - requiredQuarters);
+      
+      if (missingQuarters > 0) {
+        // Décote : 1.25% par trimestre manquant (max 25%)
+        decote = Math.min(missingQuarters * 0.0125, 0.25);
+        rate = 0.50 * (1 - decote);
+      } else if (extraQuarters > 0 && currentAge >= fullRateAge) {
+        // Surcote : 1.25% par trimestre supplémentaire
+        surcote = extraQuarters * 0.0125;
+        rate = 0.50 * (1 + surcote);
+      }
+    }
+    
+    // 3. Calcul de la retraite de base (SSI)
+    // Revenu annuel moyen des 25 meilleures années (simplifié)
+    const averageRevenue = annualIncome * 0.9; // Approximation
+    const basePension = averageRevenue * rate * (totalQuarters / requiredQuarters);
+    
+    // 4. Calcul de la retraite complémentaire (RCI)
+    // Acquisition de points : environ 1 point pour 12€ cotisés
+    const annualCotisation = annualIncome * 0.07; // ~7% du revenu
+    const pointsPerYear = annualCotisation / 12;
+    const totalPoints = pointsPerYear * careerLength;
+    const pointValue = 1.208; // Valeur du point RCI 2024
+    const complementaryPension = totalPoints * pointValue;
+    
+    // 5. Total des pensions
+    const totalAnnualPension = basePension + complementaryPension;
+    const monthlyPension = totalAnnualPension / 12;
+    
+    return {
+      legalRetirementAge,
+      fullRateAge,
+      totalQuarters,
+      requiredQuarters,
+      quartersPerYear,
+      rate: rate * 100,
+      decote: decote * 100,
+      surcote: surcote * 100,
+      basePension: Math.round(basePension / 12),
+      complementaryPension: Math.round(complementaryPension / 12),
+      totalPoints: Math.round(totalPoints),
+      pointValue,
+      estimatedPension: Math.round(monthlyPension),
+      replacementRate: Math.round((totalAnnualPension / annualIncome) * 100),
+      breakdown: {
+        base: Math.round(basePension / 12),
+        complementary: Math.round(complementaryPension / 12)
+      }
+    };
+  };
+
+  // Calcul pour micro-entrepreneur
+  const calculateMicroEntrepreneurRetirement = (turnover, activityType, careerLength, currentAge) => {
+    // Abattements forfaitaires selon type d'activité
+    const abatements = {
+      'vente': 0.71,      // 71% d'abattement pour vente de marchandises
+      'service_bic': 0.50, // 50% pour prestations de services BIC
+      'service_bnc': 0.34, // 34% pour prestations de services BNC
+      'liberal': 0.34      // 34% pour professions libérales
+    };
+    
+    const abatement = abatements[activityType] || 0.50;
+    const professionalRevenue = turnover * (1 - abatement);
+    
+    // Utiliser le même calcul que pour les freelances classiques
+    return calculateFreelanceRetirement(professionalRevenue, careerLength, currentAge);
+  };
+
   const calculateRetirement = () => {
     const currentAge = calculateAge(formData.birthDate);
     const careerLength = new Date().getFullYear() - parseInt(formData.careerStart);
     const annualIncome = parseInt(formData.annualIncome);
-    const desiredIncome = parseInt(formData.desiredIncome);
 
-    // Simple calculation logic based on professional status
-    let legalRetirementAge = 62;
-    let fullRateAge = 67;
-    let pensionRate = 0.75;
+    let calculatedResults = {};
 
     switch (formData.professionalStatus) {
-      case 'employee':
-        legalRetirementAge = 62;
-        fullRateAge = 67;
-        pensionRate = 0.75;
-        break;
       case 'self_employed':
-        legalRetirementAge = 62;
-        fullRateAge = 67;
-        pensionRate = 0.65;
+      case 'freelance':
+        // Calcul détaillé pour freelance/indépendant
+        calculatedResults = calculateFreelanceRetirement(annualIncome, careerLength, currentAge);
+        calculatedResults.currentAge = currentAge;
+        calculatedResults.yearsToRetirement = calculatedResults.legalRetirementAge - currentAge;
+        calculatedResults.professionalStatus = 'freelance';
         break;
-      case 'civil_servant':
-        legalRetirementAge = 62;
-        fullRateAge = 65;
-        pensionRate = 0.75;
+
+      case 'employee':
+        // Calcul simplifié pour salarié (existant)
+        const legalRetirementAge = 62;
+        const fullRateAge = 67;
+        const pensionRate = 0.75;
+        const estimatedPension = Math.round(annualIncome * pensionRate / 12);
+        
+        calculatedResults = {
+          legalRetirementAge,
+          fullRateAge,
+          estimatedPension,
+          replacementRate: Math.round((estimatedPension * 12 / annualIncome) * 100),
+          currentAge,
+          yearsToRetirement: legalRetirementAge - currentAge,
+          professionalStatus: 'employee'
+        };
         break;
+
       case 'business_owner':
-        legalRetirementAge = 62;
-        fullRateAge = 67;
-        pensionRate = 0.70;
+        // Calcul pour chef d'entreprise (similaire à freelance)
+        calculatedResults = calculateFreelanceRetirement(annualIncome, careerLength, currentAge);
+        calculatedResults.currentAge = currentAge;
+        calculatedResults.yearsToRetirement = calculatedResults.legalRetirementAge - currentAge;
+        calculatedResults.professionalStatus = 'business_owner';
         break;
+
       default:
-        legalRetirementAge = 62;
-        fullRateAge = 67;
-        pensionRate = 0.75;
+        // Calcul par défaut
+        calculatedResults = {
+          legalRetirementAge: 62,
+          fullRateAge: 67,
+          estimatedPension: Math.round(annualIncome * 0.75 / 12),
+          replacementRate: 75,
+          currentAge,
+          yearsToRetirement: 62 - currentAge,
+          professionalStatus: formData.professionalStatus
+        };
     }
-
-    // Adjust based on career length
-    if (careerLength >= 42) {
-      fullRateAge = Math.max(legalRetirementAge, fullRateAge - 2);
-    }
-
-    // Calculate estimated pension
-    const estimatedPension = Math.round(annualIncome * pensionRate / 12);
-    const replacementRate = Math.round((estimatedPension * 12 / annualIncome) * 100);
-
-    const calculatedResults = {
-      legalRetirementAge,
-      fullRateAge,
-      estimatedPension,
-      replacementRate,
-      currentAge,
-      yearsToRetirement: legalRetirementAge - currentAge
-    };
 
     setResults(calculatedResults);
     setCurrentStep('results');

@@ -145,6 +145,7 @@ function App() {
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/simulator" element={<Simulator />} />
             <Route path="/simulator/freelance" element={<FreelanceSimulator />} />
+            <Route path="/simulator/employee" element={<EmployeeSimulator />} />
             <Route path="/onboarding" element={<OnboardingFlow />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />

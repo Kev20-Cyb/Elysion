@@ -1380,12 +1380,6 @@ const EmployeeSimulator = () => {
           {branch === 'private' && currentStep === 5 && renderPrivateStep5()}
           {branch === 'private' && currentStep === 6 && renderPrivateStep6()}
           
-          {branch === 'public' && currentStep === 2 && renderPublicStep2()}
-          {branch === 'public' && currentStep === 3 && renderPublicStep3()}
-          {branch === 'public' && currentStep === 4 && <div className="text-center py-8 text-gray-600">Calcul automatique de la pension fonction publique...</div>}
-          {branch === 'public' && currentStep === 5 && renderPublicStep5()}
-          {branch === 'public' && currentStep === 6 && renderPublicStep6()}
-          
           {currentStep === 7 && renderResults()}
 
           {/* Navigation buttons */}
@@ -1400,7 +1394,6 @@ const EmployeeSimulator = () => {
               </button>
               <button
                 onClick={nextStep}
-                disabled={currentStep === 1 && !formData.employeeType}
                 className="btn-primary disabled:opacity-50"
               >
                 {currentStep === 6 ? 'Calculer ma retraite' : 'Suivant →'}

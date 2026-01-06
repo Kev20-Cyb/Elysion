@@ -1144,7 +1144,7 @@ const EmployeeSimulator = () => {
             Vos estimations de retraite
           </h2>
           <p className="text-gray-600">
-            {branch === 'private' ? 'Salarié du Privé' : 'Fonctionnaire'}
+            Salarié
           </p>
         </div>
 

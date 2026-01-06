@@ -292,7 +292,7 @@ const FreelanceSimulator = () => {
         <select
           value={formData.status}
           onChange={(e) => handleInputChange('status', e.target.value)}
-          className="input-text"
+          className="input-elysion"
         >
           <option value="micro">Micro-entrepreneur</option>
           <option value="independant">Indépendant classique (BIC/BNC)</option>
@@ -312,7 +312,7 @@ const FreelanceSimulator = () => {
             max="2005"
             value={formData.birthYear}
             onChange={(e) => handleInputChange('birthYear', e.target.value)}
-            className="input-text"
+            className="input-elysion"
           />
         </div>
 
@@ -323,7 +323,7 @@ const FreelanceSimulator = () => {
           <select
             value={formData.gender}
             onChange={(e) => handleInputChange('gender', e.target.value)}
-            className="input-text"
+            className="input-elysion"
           >
             <option value="">Sélectionner</option>
             <option value="M">Homme</option>
@@ -344,7 +344,7 @@ const FreelanceSimulator = () => {
             max="10"
             value={formData.children}
             onChange={(e) => handleInputChange('children', parseInt(e.target.value) || 0)}
-            className="input-text"
+            className="input-elysion"
           />
         </div>
 
@@ -359,7 +359,7 @@ const FreelanceSimulator = () => {
             max={new Date().getFullYear()}
             value={formData.freelanceStartYear}
             onChange={(e) => handleInputChange('freelanceStartYear', e.target.value)}
-            className="input-text"
+            className="input-elysion"
           />
         </div>
       </div>
@@ -447,7 +447,7 @@ const FreelanceSimulator = () => {
                           ...yearData,
                           turnover: parseFloat(e.target.value) || 0
                         })}
-                        className="input-text"
+                        className="input-elysion"
                         placeholder="35000"
                       />
                     </div>
@@ -462,7 +462,7 @@ const FreelanceSimulator = () => {
                           ...yearData,
                           activityType: e.target.value
                         })}
-                        className="input-text"
+                        className="input-elysion"
                       >
                         <option value="vente">Vente de marchandises</option>
                         <option value="service_bic">Prestations de services (BIC)</option>
@@ -483,7 +483,7 @@ const FreelanceSimulator = () => {
                         ...yearData,
                         professionalRevenue: parseFloat(e.target.value) || 0
                       })}
-                      className="input-text"
+                      className="input-elysion"
                       placeholder="45000"
                     />
                   </div>
@@ -515,7 +515,7 @@ const FreelanceSimulator = () => {
                         ...yearData,
                         salaryAmount: parseFloat(e.target.value) || 0
                       })}
-                      className="input-text"
+                      className="input-elysion"
                       placeholder="Montant du salaire annuel brut"
                     />
                   )}
@@ -574,7 +574,7 @@ const FreelanceSimulator = () => {
               max="120"
               value={formData.unemploymentMonths}
               onChange={(e) => handleInputChange('unemploymentMonths', parseInt(e.target.value) || 0)}
-              className="input-text"
+              className="input-elysion"
               placeholder="12"
             />
             <p className="text-xs text-gray-500 mt-1">
@@ -609,7 +609,7 @@ const FreelanceSimulator = () => {
               max="120"
               value={formData.illnessMonths}
               onChange={(e) => handleInputChange('illnessMonths', parseInt(e.target.value) || 0)}
-              className="input-text"
+              className="input-elysion"
               placeholder="6"
             />
           </div>
@@ -642,7 +642,7 @@ const FreelanceSimulator = () => {
                 max="10"
                 value={formData.maternityCount}
                 onChange={(e) => handleInputChange('maternityCount', parseInt(e.target.value) || 0)}
-                className="input-text"
+                className="input-elysion"
                 placeholder="2"
               />
               <p className="text-xs text-gray-500 mt-1">

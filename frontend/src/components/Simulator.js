@@ -203,7 +203,7 @@ const Simulator = () => {
         </div>
       </nav>
 
-      <div className="max-w-4xl mx-auto px-4 py-12">
+      <div className="max-w-5xl mx-auto px-4 py-12">
         {/* Intro Section */}
         {currentStep === 'intro' && (
           <div className="text-center mb-12">
@@ -211,17 +211,12 @@ const Simulator = () => {
           </div>
         )}
 
-        {/* Form Sections */}
-        {(currentStep === 'step1' || currentStep === 'step2' || currentStep === 'results') && (
-          <div className="max-w-2xl mx-auto">
-            <div className="bg-white rounded-2xl shadow-xl p-8 mb-8">
-              {currentStep === 'step1' && renderStep1()}
-              {currentStep === 'step2' && renderStep2()}
-              {currentStep === 'results' && renderResults()}
+        {/* Choice Section */}
+        {currentStep === 'choice' && (
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-white rounded-2xl shadow-xl p-8">
+              {renderChoiceSection()}
             </div>
-            
-            {/* Conversion Section - shown after results */}
-            {currentStep === 'results' && renderConversionSection()}
           </div>
         )}
       </div>

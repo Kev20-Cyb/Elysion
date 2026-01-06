@@ -163,7 +163,7 @@ const EmployeeSimulator = () => {
 
   // Calcul complémentaire Agirc-Arrco
   const calculateAgircArrco = () => {
-    const pointValue = 1.4159; // Valeur 2024
+    const pointValue = 1.4386; // Valeur du point Agirc-Arrco 2024
     
     if (formData.knowsPoints) {
       const annual = formData.agircArrcoPoints * pointValue;

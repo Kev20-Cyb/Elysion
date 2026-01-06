@@ -374,14 +374,9 @@ const EmployeeSimulator = () => {
 
   const nextStep = () => {
     if (currentStep === 1) {
-      // Après le profil, définir la branche
-      if (formData.employeeType === 'private') {
-        setBranch('private');
-        setCurrentStep(2);
-      } else if (formData.employeeType === 'public') {
-        setBranch('public');
-        setCurrentStep(2);
-      }
+      // Automatiquement en mode Salarié du Privé
+      setBranch('private');
+      setCurrentStep(2);
     } else if (currentStep < 6) {
       setCurrentStep(currentStep + 1);
     } else if (currentStep === 6) {

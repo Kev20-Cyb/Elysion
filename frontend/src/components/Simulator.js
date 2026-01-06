@@ -49,7 +49,7 @@ const Simulator = () => {
       </div>
 
       <div className="grid md:grid-cols-2 gap-6 mb-8">
-        {/* Salarié du Privé */}
+        {/* Salarié */}
         <button
           onClick={() => {
             setSelectedStatus('employee');
@@ -62,7 +62,7 @@ const Simulator = () => {
           }`}
         >
           <div className="text-5xl mb-4">💼</div>
-          <h3 className="text-xl font-bold text-elysion-primary mb-2">Salarié du Privé</h3>
+          <h3 className="text-xl font-bold text-elysion-primary mb-2">Salarié</h3>
           <p className="text-gray-600 text-sm mb-4">
             Régime général + Agirc-Arrco
           </p>
@@ -70,34 +70,6 @@ const Simulator = () => {
             <li>✓ Calcul SAM (25 meilleures années)</li>
             <li>✓ Trimestres cotisés et assimilés</li>
             <li>✓ Retraite complémentaire Agirc-Arrco</li>
-            <li>✓ Scénarios d'âge de départ</li>
-          </ul>
-          <div className="mt-4 text-elysion-primary font-semibold text-sm flex items-center">
-            Simulateur 6 étapes →
-          </div>
-        </button>
-
-        {/* Fonctionnaire */}
-        <button
-          onClick={() => {
-            setSelectedStatus('civil_servant');
-            handleStartSimulation('civil_servant');
-          }}
-          className={`p-8 rounded-2xl border-2 transition-all text-left hover:shadow-lg ${
-            selectedStatus === 'civil_servant'
-              ? 'border-elysion-primary bg-elysion-primary-50'
-              : 'border-gray-200 bg-white hover:border-elysion-primary'
-          }`}
-        >
-          <div className="text-5xl mb-4">🏛️</div>
-          <h3 className="text-xl font-bold text-elysion-primary mb-2">Fonctionnaire</h3>
-          <p className="text-gray-600 text-sm mb-4">
-            État / Territorial / Hospitalier
-          </p>
-          <ul className="text-xs text-gray-500 space-y-1">
-            <li>✓ Pension à 75% du traitement indiciaire</li>
-            <li>✓ Trimestres liquidables et bonifications</li>
-            <li>✓ RAFP (Retraite Additionnelle)</li>
             <li>✓ Scénarios d'âge de départ</li>
           </ul>
           <div className="mt-4 text-elysion-primary font-semibold text-sm flex items-center">
@@ -126,34 +98,6 @@ const Simulator = () => {
             <li>✓ Calcul selon statut (micro/classique)</li>
             <li>✓ Trimestres SSI (seuils de validation)</li>
             <li>✓ Retraite complémentaire RCI</li>
-            <li>✓ Scénarios d'âge de départ</li>
-          </ul>
-          <div className="mt-4 text-elysion-accent font-semibold text-sm flex items-center">
-            Simulateur 6 étapes →
-          </div>
-        </button>
-
-        {/* Chef d'entreprise */}
-        <button
-          onClick={() => {
-            setSelectedStatus('business_owner');
-            handleStartSimulation('business_owner');
-          }}
-          className={`p-8 rounded-2xl border-2 transition-all text-left hover:shadow-lg ${
-            selectedStatus === 'business_owner'
-              ? 'border-elysion-accent bg-elysion-accent-50'
-              : 'border-gray-200 bg-white hover:border-elysion-accent'
-          }`}
-        >
-          <div className="text-5xl mb-4">🏢</div>
-          <h3 className="text-xl font-bold text-elysion-primary mb-2">Chef d'entreprise</h3>
-          <p className="text-gray-600 text-sm mb-4">
-            TNS, Gérant majoritaire
-          </p>
-          <ul className="text-xs text-gray-500 space-y-1">
-            <li>✓ Régime des indépendants</li>
-            <li>✓ Optimisation rémunération/dividendes</li>
-            <li>✓ Retraite complémentaire</li>
             <li>✓ Scénarios d'âge de départ</li>
           </ul>
           <div className="mt-4 text-elysion-accent font-semibold text-sm flex items-center">

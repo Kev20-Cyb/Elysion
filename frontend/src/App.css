@@ -224,19 +224,40 @@ body {
 /* Input Styles */
 .input-elysion {
   width: 100%;
-  padding: 16px 20px;
-  border: 2px solid #e5e7eb;
-  border-radius: 12px;
-  font-size: 16px;
+  padding: 14px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 15px;
   font-family: 'Montserrat', sans-serif;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   background-color: white;
+  color: var(--elysion-text-dark);
 }
 
 .input-elysion:focus {
   outline: none;
   border-color: var(--elysion-primary);
-  box-shadow: 0 0 0 3px rgba(10, 65, 142, 0.1);
+  box-shadow: 0 0 0 2px rgba(10, 65, 142, 0.08);
+}
+
+.input-elysion::placeholder {
+  color: #9ca3af;
+}
+
+/* Select specific styles */
+select.input-elysion {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 40px;
+}
+
+/* Textarea styles */
+textarea.input-elysion {
+  min-height: 100px;
+  resize: vertical;
 }
 
 /* Card Styles */

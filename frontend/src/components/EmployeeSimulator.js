@@ -468,41 +468,6 @@ const EmployeeSimulator = () => {
         </div>
       </div>
 
-      <div className="bg-elysion-primary-50 p-6 rounded-lg">
-        <label className="block text-sm font-semibold text-gray-900 mb-4">
-          Type de salarié *
-        </label>
-        <div className="grid md:grid-cols-2 gap-4">
-          <button
-            type="button"
-            onClick={() => handleInputChange('employeeType', 'private')}
-            className={`p-6 rounded-lg border-2 transition-all ${
-              formData.employeeType === 'private'
-                ? 'border-elysion-primary bg-white shadow-lg'
-                : 'border-gray-300 bg-white hover:border-elysion-primary'
-            }`}
-          >
-            <div className="text-4xl mb-2">💼</div>
-            <h3 className="font-semibold text-lg mb-1">Salarié du Privé</h3>
-            <p className="text-sm text-gray-600">Régime général + Agirc-Arrco</p>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => handleInputChange('employeeType', 'public')}
-            className={`p-6 rounded-lg border-2 transition-all ${
-              formData.employeeType === 'public'
-                ? 'border-elysion-primary bg-white shadow-lg'
-                : 'border-gray-300 bg-white hover:border-elysion-primary'
-            }`}
-          >
-            <div className="text-4xl mb-2">🏛️</div>
-            <h3 className="font-semibold text-lg mb-1">Fonctionnaire</h3>
-            <p className="text-sm text-gray-600">État / Territorial / Hospitalier</p>
-          </button>
-        </div>
-      </div>
-
       <div className="space-y-4">
         <div className="flex items-center gap-3">
           <input

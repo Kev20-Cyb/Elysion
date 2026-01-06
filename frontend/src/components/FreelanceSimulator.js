@@ -217,7 +217,7 @@ const FreelanceSimulator = () => {
   };
 
   const calculateComplementaryPension = (totalPoints) => {
-    const pointValue = 1.208; // Valeur 2024
+    const pointValue = 1.4386; // Valeur du point RCI 2024
     const annualPension = totalPoints * pointValue;
     
     return {

@@ -911,7 +911,7 @@ const EmployeeSimulator = () => {
         <select
           value={formData.publicServiceType}
           onChange={(e) => handleInputChange('publicServiceType', e.target.value)}
-          className="input-text"
+          className="input-elysion"
         >
           <option value="">Sélectionner</option>
           <option value="state">État (SRE)</option>
@@ -960,7 +960,7 @@ const EmployeeSimulator = () => {
           min="0"
           value={formData.lastIndexedSalary}
           onChange={(e) => handleInputChange('lastIndexedSalary', e.target.value)}
-          className="input-text"
+          className="input-elysion"
           placeholder="3500"
         />
         <p className="text-xs text-gray-500 mt-1">
@@ -988,7 +988,7 @@ const EmployeeSimulator = () => {
           max="50"
           value={formData.publicServiceYears}
           onChange={(e) => handleInputChange('publicServiceYears', parseInt(e.target.value) || 0)}
-          className="input-text"
+          className="input-elysion"
           placeholder="20"
         />
         <p className="text-xs text-gray-500 mt-1">
@@ -1006,7 +1006,7 @@ const EmployeeSimulator = () => {
           max="40"
           value={formData.bonusQuarters}
           onChange={(e) => handleInputChange('bonusQuarters', parseInt(e.target.value) || 0)}
-          className="input-text"
+          className="input-elysion"
           placeholder="8"
         />
         <p className="text-xs text-gray-500 mt-1">
@@ -1024,7 +1024,7 @@ const EmployeeSimulator = () => {
           max="172"
           value={formData.otherRegimeQuarters}
           onChange={(e) => handleInputChange('otherRegimeQuarters', parseInt(e.target.value) || 0)}
-          className="input-text"
+          className="input-elysion"
           placeholder="20"
         />
       </div>

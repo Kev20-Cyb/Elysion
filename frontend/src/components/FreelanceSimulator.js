@@ -840,7 +840,13 @@ const FreelanceSimulator = () => {
           </p>
           <div className="flex gap-4">
             <button
-              onClick={() => navigate('/auth?mode=register')}
+              onClick={() => navigate('/onboarding', { 
+                state: { 
+                  professionalStatus: 'freelance',
+                  simulationData: formData,
+                  results: results
+                }
+              })}
               className="bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-6 py-3 rounded-lg"
             >
               Créer mon compte

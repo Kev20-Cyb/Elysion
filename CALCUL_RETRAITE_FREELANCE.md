@@ -128,16 +128,16 @@ Exemple :
 
 #### Valeur du point (2024)
 ```javascript
-Valeur du point RCI = 1.208€
+Valeur du point RCI = 1.4386€
 ```
 
 #### Pension annuelle
 ```javascript
 Pension complémentaire annuelle = Total points × Valeur du point
-Pension complémentaire mensuelle = (Total points × 1.208) / 12
+Pension complémentaire mensuelle = (Total points × 1.4386) / 12
 
 Exemple avec 5 250 points :
-Annuelle = 5 250 × 1.208 = 6 342€
+Annuelle = 5 250 × 1.4386 = 6 342€
 Mensuelle = 6 342 / 12 = 528.5€
 ```
 
@@ -174,7 +174,7 @@ Taux de remplacement = (Pension annuelle totale / Revenu annuel actuel) × 100
 
 4. **Pension complémentaire** :
    - Points totaux : (45 000 × 0.07 / 12) × 42 ans = 11 025 points
-   - Complémentaire annuelle : 11 025 × 1.208 = 13 318€
+   - Complémentaire annuelle : 11 025 × 1.4386 = 13 318€
    - Complémentaire mensuelle : 13 318 / 12 = **1 110€**
 
 5. **Total mensuel** : 1 650 + 1 110 = **2 760€**

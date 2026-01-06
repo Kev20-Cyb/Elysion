@@ -410,7 +410,7 @@ const EmployeeSimulator = () => {
             max="2005"
             value={formData.birthYear}
             onChange={(e) => handleInputChange('birthYear', e.target.value)}
-            className="input-text"
+            className="input-elysion"
             required
           />
         </div>
@@ -422,7 +422,7 @@ const EmployeeSimulator = () => {
           <select
             value={formData.gender}
             onChange={(e) => handleInputChange('gender', e.target.value)}
-            className="input-text"
+            className="input-elysion"
           >
             <option value="">Sélectionner</option>
             <option value="M">Homme</option>
@@ -443,7 +443,7 @@ const EmployeeSimulator = () => {
             max="10"
             value={formData.children}
             onChange={(e) => handleInputChange('children', parseInt(e.target.value) || 0)}
-            className="input-text"
+            className="input-elysion"
           />
         </div>
 
@@ -458,7 +458,7 @@ const EmployeeSimulator = () => {
             max={new Date().getFullYear()}
             value={formData.careerStartYear}
             onChange={(e) => handleInputChange('careerStartYear', e.target.value)}
-            className="input-text"
+            className="input-elysion"
           />
         </div>
       </div>
@@ -487,7 +487,7 @@ const EmployeeSimulator = () => {
               min="0"
               value={formData.unemploymentMonths}
               onChange={(e) => handleInputChange('unemploymentMonths', parseInt(e.target.value) || 0)}
-              className="input-text"
+              className="input-elysion"
               placeholder="12"
             />
           </div>
@@ -516,7 +516,7 @@ const EmployeeSimulator = () => {
               min="0"
               value={formData.parentalLeaveMonths}
               onChange={(e) => handleInputChange('parentalLeaveMonths', parseInt(e.target.value) || 0)}
-              className="input-text"
+              className="input-elysion"
               placeholder="6"
             />
           </div>
@@ -608,7 +608,7 @@ const EmployeeSimulator = () => {
                       ...period,
                       startYear: parseInt(e.target.value)
                     })}
-                    className="input-text"
+                    className="input-elysion"
                   />
                 </div>
 
@@ -623,7 +623,7 @@ const EmployeeSimulator = () => {
                       ...period,
                       endYear: parseInt(e.target.value)
                     })}
-                    className="input-text"
+                    className="input-elysion"
                   />
                 </div>
 
@@ -638,7 +638,7 @@ const EmployeeSimulator = () => {
                       ...period,
                       averageSalary: parseFloat(e.target.value) || 0
                     })}
-                    className="input-text"
+                    className="input-elysion"
                     placeholder="35000"
                   />
                 </div>
@@ -676,7 +676,7 @@ const EmployeeSimulator = () => {
                       ...yearData,
                       salary: parseFloat(e.target.value) || 0
                     })}
-                    className="input-text"
+                    className="input-elysion"
                     placeholder="35000 €"
                   />
                   <button
@@ -723,7 +723,7 @@ const EmployeeSimulator = () => {
             max="50"
             value={formData.fullTimeYears}
             onChange={(e) => handleInputChange('fullTimeYears', parseInt(e.target.value) || 0)}
-            className="input-text"
+            className="input-elysion"
             placeholder="15"
           />
         </div>
@@ -738,7 +738,7 @@ const EmployeeSimulator = () => {
             max="50"
             value={formData.partTimeYears}
             onChange={(e) => handleInputChange('partTimeYears', parseInt(e.target.value) || 0)}
-            className="input-text"
+            className="input-elysion"
             placeholder="5"
           />
         </div>
@@ -816,7 +816,7 @@ const EmployeeSimulator = () => {
               min="0"
               value={formData.agircArrcoPoints}
               onChange={(e) => handleInputChange('agircArrcoPoints', parseFloat(e.target.value) || 0)}
-              className="input-text"
+              className="input-elysion"
               placeholder="5000"
             />
             <p className="text-xs text-gray-500 mt-1">
@@ -931,7 +931,7 @@ const EmployeeSimulator = () => {
             max={new Date().getFullYear()}
             value={formData.permanentSinceYear}
             onChange={(e) => handleInputChange('permanentSinceYear', e.target.value)}
-            className="input-text"
+            className="input-elysion"
             placeholder="2005"
           />
         </div>
@@ -943,7 +943,7 @@ const EmployeeSimulator = () => {
           <select
             value={formData.fullTime ? 'full' : 'part'}
             onChange={(e) => handleInputChange('fullTime', e.target.value === 'full')}
-            className="input-text"
+            className="input-elysion"
           >
             <option value="full">Temps plein</option>
             <option value="part">Temps partiel</option>
@@ -1113,7 +1113,7 @@ const EmployeeSimulator = () => {
               min="0"
               value={formData.rafpAmount}
               onChange={(e) => handleInputChange('rafpAmount', parseFloat(e.target.value) || 0)}
-              className="input-text"
+              className="input-elysion"
               placeholder="150"
             />
           </div>

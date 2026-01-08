@@ -20,11 +20,16 @@ const FreelanceSimulator = () => {
     
     // Étape 3 - Trimestres assimilés
     hadUnemployment: false,
-    unemploymentMonths: 0,
+    unemploymentDuration: 0,
+    unemploymentUnit: 'months', // 'days' or 'months'
     hadLongIllness: false,
-    illnessMonths: 0,
+    illnessDuration: 0,
+    illnessUnit: 'days', // 'days' or 'months'
     hadMaternity: false,
     maternityCount: 0,
+    hadParentalLeave: false,
+    parentalLeaveDuration: 0,
+    parentalLeaveUnit: 'months', // 'days' or 'months'
     
     // Calculs intermédiaires
     totalQuarters: 0,
@@ -33,6 +38,14 @@ const FreelanceSimulator = () => {
   });
 
   const [results, setResults] = useState(null);
+
+  // Convertir la durée en mois selon l'unité
+  const convertToMonths = (duration, unit) => {
+    if (unit === 'days') {
+      return duration / 30; // 30 jours = 1 mois approximativement
+    }
+    return duration;
+  };
 
   // Seuils de validation des trimestres 2024
   const QUARTER_THRESHOLDS = {

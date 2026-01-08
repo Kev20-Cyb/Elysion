@@ -508,18 +508,33 @@ const EmployeeSimulator = () => {
         </div>
 
         {formData.hadUnemployment && (
-          <div className="ml-8">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Durée totale (en mois)
-            </label>
-            <input
-              type="number"
-              min="0"
-              value={formData.unemploymentMonths}
-              onChange={(e) => handleInputChange('unemploymentMonths', parseInt(e.target.value) || 0)}
-              className="input-elysion"
-              placeholder="12"
-            />
+          <div className="ml-8 space-y-3">
+            <div className="flex gap-3 items-end">
+              <div className="flex-1">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Durée totale
+                </label>
+                <input
+                  type="number"
+                  min="0"
+                  value={formData.unemploymentDuration}
+                  onChange={(e) => handleInputChange('unemploymentDuration', parseInt(e.target.value) || 0)}
+                  className="input-elysion"
+                  placeholder="12"
+                />
+              </div>
+              <div className="w-32">
+                <select
+                  value={formData.unemploymentUnit}
+                  onChange={(e) => handleInputChange('unemploymentUnit', e.target.value)}
+                  className="input-elysion"
+                >
+                  <option value="days">Jours</option>
+                  <option value="months">Mois</option>
+                </select>
+              </div>
+            </div>
+            <p className="text-xs text-gray-500">1 trimestre validé par période de 50 jours de chômage indemnisé</p>
           </div>
         )}
 
@@ -537,18 +552,77 @@ const EmployeeSimulator = () => {
         </div>
 
         {formData.hadParentalLeave && (
-          <div className="ml-8">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Durée totale (en mois)
-            </label>
-            <input
-              type="number"
-              min="0"
-              value={formData.parentalLeaveMonths}
-              onChange={(e) => handleInputChange('parentalLeaveMonths', parseInt(e.target.value) || 0)}
-              className="input-elysion"
-              placeholder="6"
-            />
+          <div className="ml-8 space-y-3">
+            <div className="flex gap-3 items-end">
+              <div className="flex-1">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Durée totale
+                </label>
+                <input
+                  type="number"
+                  min="0"
+                  value={formData.parentalLeaveDuration}
+                  onChange={(e) => handleInputChange('parentalLeaveDuration', parseInt(e.target.value) || 0)}
+                  className="input-elysion"
+                  placeholder="6"
+                />
+              </div>
+              <div className="w-32">
+                <select
+                  value={formData.parentalLeaveUnit}
+                  onChange={(e) => handleInputChange('parentalLeaveUnit', e.target.value)}
+                  className="input-elysion"
+                >
+                  <option value="days">Jours</option>
+                  <option value="months">Mois</option>
+                </select>
+              </div>
+            </div>
+            <p className="text-xs text-gray-500">Maximum 12 trimestres (3 ans) de congé parental</p>
+          </div>
+        )}
+
+        <div className="flex items-center gap-3">
+          <input
+            type="checkbox"
+            id="hadSickLeave"
+            checked={formData.hadSickLeave}
+            onChange={(e) => handleInputChange('hadSickLeave', e.target.checked)}
+            className="w-5 h-5"
+          />
+          <label htmlFor="hadSickLeave" className="text-sm font-medium text-gray-700">
+            J'ai eu des arrêts maladie longue durée
+          </label>
+        </div>
+
+        {formData.hadSickLeave && (
+          <div className="ml-8 space-y-3">
+            <div className="flex gap-3 items-end">
+              <div className="flex-1">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Durée totale
+                </label>
+                <input
+                  type="number"
+                  min="0"
+                  value={formData.sickLeaveDuration}
+                  onChange={(e) => handleInputChange('sickLeaveDuration', parseInt(e.target.value) || 0)}
+                  className="input-elysion"
+                  placeholder="60"
+                />
+              </div>
+              <div className="w-32">
+                <select
+                  value={formData.sickLeaveUnit}
+                  onChange={(e) => handleInputChange('sickLeaveUnit', e.target.value)}
+                  className="input-elysion"
+                >
+                  <option value="days">Jours</option>
+                  <option value="months">Mois</option>
+                </select>
+              </div>
+            </div>
+            <p className="text-xs text-gray-500">1 trimestre validé par période de 60 jours d'indemnisation</p>
           </div>
         )}
       </div>

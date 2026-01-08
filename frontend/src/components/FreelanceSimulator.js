@@ -591,21 +591,35 @@ const FreelanceSimulator = () => {
         </label>
 
         {formData.hadUnemployment && (
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Durée totale (en mois)
-            </label>
-            <input
-              type="number"
-              min="0"
-              max="120"
-              value={formData.unemploymentMonths}
-              onChange={(e) => handleInputChange('unemploymentMonths', parseInt(e.target.value) || 0)}
-              className="input-elysion"
-              placeholder="12"
-            />
-            <p className="text-xs text-gray-500 mt-1">
-              3 mois = 1 trimestre assimilé
+          <div className="space-y-3">
+            <div className="flex gap-3 items-end">
+              <div className="flex-1">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Durée totale
+                </label>
+                <input
+                  type="number"
+                  min="0"
+                  max="3600"
+                  value={formData.unemploymentDuration}
+                  onChange={(e) => handleInputChange('unemploymentDuration', parseInt(e.target.value) || 0)}
+                  className="input-elysion"
+                  placeholder="12"
+                />
+              </div>
+              <div className="w-32">
+                <select
+                  value={formData.unemploymentUnit}
+                  onChange={(e) => handleInputChange('unemploymentUnit', e.target.value)}
+                  className="input-elysion"
+                >
+                  <option value="days">Jours</option>
+                  <option value="months">Mois</option>
+                </select>
+              </div>
+            </div>
+            <p className="text-xs text-gray-500">
+              1 trimestre validé par période de 50 jours de chômage indemnisé
             </p>
           </div>
         )}
@@ -626,19 +640,85 @@ const FreelanceSimulator = () => {
         </label>
 
         {formData.hadLongIllness && (
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Durée totale (en mois)
-            </label>
-            <input
-              type="number"
-              min="0"
-              max="120"
-              value={formData.illnessMonths}
-              onChange={(e) => handleInputChange('illnessMonths', parseInt(e.target.value) || 0)}
-              className="input-elysion"
-              placeholder="6"
-            />
+          <div className="space-y-3">
+            <div className="flex gap-3 items-end">
+              <div className="flex-1">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Durée totale
+                </label>
+                <input
+                  type="number"
+                  min="0"
+                  max="3600"
+                  value={formData.illnessDuration}
+                  onChange={(e) => handleInputChange('illnessDuration', parseInt(e.target.value) || 0)}
+                  className="input-elysion"
+                  placeholder="60"
+                />
+              </div>
+              <div className="w-32">
+                <select
+                  value={formData.illnessUnit}
+                  onChange={(e) => handleInputChange('illnessUnit', e.target.value)}
+                  className="input-elysion"
+                >
+                  <option value="days">Jours</option>
+                  <option value="months">Mois</option>
+                </select>
+              </div>
+            </div>
+            <p className="text-xs text-gray-500">
+              1 trimestre validé par période de 60 jours d'indemnisation
+            </p>
+          </div>
+        )}
+      </div>
+
+      {/* Congé parental */}
+      <div className="bg-white p-4 rounded-lg border border-gray-200">
+        <label className="flex items-center gap-3 mb-3">
+          <input
+            type="checkbox"
+            checked={formData.hadParentalLeave}
+            onChange={(e) => handleInputChange('hadParentalLeave', e.target.checked)}
+            className="w-5 h-5"
+          />
+          <span className="font-semibold text-gray-900">
+            J'ai eu des congés parentaux
+          </span>
+        </label>
+
+        {formData.hadParentalLeave && (
+          <div className="space-y-3">
+            <div className="flex gap-3 items-end">
+              <div className="flex-1">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Durée totale
+                </label>
+                <input
+                  type="number"
+                  min="0"
+                  max="1080"
+                  value={formData.parentalLeaveDuration}
+                  onChange={(e) => handleInputChange('parentalLeaveDuration', parseInt(e.target.value) || 0)}
+                  className="input-elysion"
+                  placeholder="6"
+                />
+              </div>
+              <div className="w-32">
+                <select
+                  value={formData.parentalLeaveUnit}
+                  onChange={(e) => handleInputChange('parentalLeaveUnit', e.target.value)}
+                  className="input-elysion"
+                >
+                  <option value="days">Jours</option>
+                  <option value="months">Mois</option>
+                </select>
+              </div>
+            </div>
+            <p className="text-xs text-gray-500">
+              Maximum 12 trimestres (3 ans) de congé parental
+            </p>
           </div>
         )}
       </div>

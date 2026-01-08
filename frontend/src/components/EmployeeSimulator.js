@@ -87,11 +87,19 @@ const EmployeeSimulator = () => {
     // Trimestres congé parental (max 12 trimestres)
     const parentalQuarters = Math.min(Math.floor(formData.parentalLeaveMonths / 3), 12);
     
+    // Majorations pour enfants (pour les femmes)
+    // 8 trimestres par enfant : 4 (maternité) + 4 (éducation)
+    let childrenQuarters = 0;
+    if (formData.gender === 'F' && formData.children > 0) {
+      childrenQuarters = formData.children * 8;
+    }
+    
     return {
       worked: workedQuarters,
       unemployment: unemploymentQuarters,
       parental: parentalQuarters,
-      total: Math.min(workedQuarters + unemploymentQuarters + parentalQuarters, 172)
+      children: childrenQuarters,
+      total: Math.min(workedQuarters + unemploymentQuarters + parentalQuarters + childrenQuarters, 172)
     };
   };
 

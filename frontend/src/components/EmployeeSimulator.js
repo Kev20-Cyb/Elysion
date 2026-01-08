@@ -775,6 +775,12 @@ const EmployeeSimulator = () => {
                   <span className="font-semibold">{quarters.parental}</span>
                 </div>
               )}
+              {formData.gender === 'F' && formData.children > 0 && (
+                <div className="flex justify-between text-green-700">
+                  <span>Majoration enfants ({formData.children} enfant{formData.children > 1 ? 's' : ''}) :</span>
+                  <span className="font-semibold">+{quarters.children}</span>
+                </div>
+              )}
               <div className="flex justify-between pt-2 border-t border-gray-200">
                 <span className="font-bold">Total :</span>
                 <span className="font-bold text-lg text-elysion-primary">{quarters.total}</span>

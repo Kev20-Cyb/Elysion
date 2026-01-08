@@ -871,6 +871,12 @@ const EmployeeSimulator = () => {
                   <span className="font-semibold">{quarters.parental}</span>
                 </div>
               )}
+              {formData.hadSickLeave && (
+                <div className="flex justify-between">
+                  <span>Trimestres maladie :</span>
+                  <span className="font-semibold">{quarters.sickLeave}</span>
+                </div>
+              )}
               {formData.gender === 'F' && formData.children > 0 && (
                 <div className="flex justify-between text-green-700">
                   <span>Majoration enfants ({formData.children} enfant{formData.children > 1 ? 's' : ''}) :</span>

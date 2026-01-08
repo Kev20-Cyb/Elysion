@@ -94,11 +94,19 @@ const EmployeeSimulator = () => {
     // Trimestres travaillés
     let workedQuarters = (formData.fullTimeYears * 4) + (formData.partTimeYears * 2); // Approximation temps partiel
     
-    // Trimestres chômage (1 trimestre par période de 50 jours)
-    const unemploymentQuarters = Math.floor(formData.unemploymentMonths / 1.7);
+    // Convertir les durées en mois
+    const unemploymentMonths = convertToMonths(formData.unemploymentDuration, formData.unemploymentUnit);
+    const parentalMonths = convertToMonths(formData.parentalLeaveDuration, formData.parentalLeaveUnit);
+    const sickLeaveMonths = convertToMonths(formData.sickLeaveDuration, formData.sickLeaveUnit);
+    
+    // Trimestres chômage (1 trimestre par période de 50 jours ≈ 1.67 mois)
+    const unemploymentQuarters = Math.floor(unemploymentMonths / 1.67);
     
     // Trimestres congé parental (max 12 trimestres)
-    const parentalQuarters = Math.min(Math.floor(formData.parentalLeaveMonths / 3), 12);
+    const parentalQuarters = Math.min(Math.floor(parentalMonths / 3), 12);
+    
+    // Trimestres maladie (1 trimestre par 60 jours ≈ 2 mois)
+    const sickLeaveQuarters = Math.floor(sickLeaveMonths / 2);
     
     // Majorations pour enfants (pour les femmes)
     // 8 trimestres par enfant : 4 (maternité) + 4 (éducation)
@@ -111,8 +119,9 @@ const EmployeeSimulator = () => {
       worked: workedQuarters,
       unemployment: unemploymentQuarters,
       parental: parentalQuarters,
+      sickLeave: sickLeaveQuarters,
       children: childrenQuarters,
-      total: Math.min(workedQuarters + unemploymentQuarters + parentalQuarters + childrenQuarters, 172)
+      total: Math.min(workedQuarters + unemploymentQuarters + parentalQuarters + sickLeaveQuarters + childrenQuarters, 172)
     };
   };
 

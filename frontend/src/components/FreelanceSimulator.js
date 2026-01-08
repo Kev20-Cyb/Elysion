@@ -720,6 +720,12 @@ const FreelanceSimulator = () => {
               <span className="text-gray-600">Enfants :</span>
               <span className="font-semibold">{formData.children}</span>
             </div>
+            {formData.gender === 'F' && formData.children > 0 && (
+              <div className="flex justify-between text-green-700">
+                <span>Majoration enfants :</span>
+                <span className="font-semibold">+{formData.children * 8} trimestres</span>
+              </div>
+            )}
           </div>
         </div>
 

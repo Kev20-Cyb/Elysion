@@ -2,7 +2,7 @@
 
 ## Vue d'ensemble
 
-Le simulateur Elysion implémente un calcul détaillé de retraite spécifiquement adapté aux **freelances, indépendants et chefs d'entreprise** affiliés au régime SSI (Sécurité Sociale des Indépendants).
+Le simulateur Elysion implémente un calcul détaillé de retraite spécifiquement adapté aux **freelances, indépendants et micro-entrepreneurs** affiliés au régime SSI (Sécurité Sociale des Indépendants).
 
 ---
 
@@ -128,7 +128,7 @@ Exemple :
 
 #### Valeur du point (2024)
 ```javascript
-Valeur du point RCI = 1.4386€
+Valeur du point RCI = 1,4386€
 ```
 
 #### Pension annuelle
@@ -137,8 +137,8 @@ Pension complémentaire annuelle = Total points × Valeur du point
 Pension complémentaire mensuelle = (Total points × 1.4386) / 12
 
 Exemple avec 5 250 points :
-Annuelle = 5 250 × 1.4386 = 6 342€
-Mensuelle = 6 342 / 12 = 528.5€
+Annuelle = 5 250 × 1.4386 = 7 553€
+Mensuelle = 7 553 / 12 = 629€
 ```
 
 ---
@@ -174,11 +174,11 @@ Taux de remplacement = (Pension annuelle totale / Revenu annuel actuel) × 100
 
 4. **Pension complémentaire** :
    - Points totaux : (45 000 × 0.07 / 12) × 42 ans = 11 025 points
-   - Complémentaire annuelle : 11 025 × 1.4386 = 13 318€
-   - Complémentaire mensuelle : 13 318 / 12 = **1 110€**
+   - Complémentaire annuelle : 11 025 × 1.4386 = 15 860€
+   - Complémentaire mensuelle : 15 860 / 12 = **1 322€**
 
-5. **Total mensuel** : 1 650 + 1 110 = **2 760€**
-6. **Taux de remplacement** : (33 120 / 45 000) × 100 = **73.6%**
+5. **Total mensuel** : 1 650 + 1 322 = **2 972€**
+6. **Taux de remplacement** : (35 662 / 45 000) × 100 = **79.2%**
 
 ---
 
@@ -224,8 +224,8 @@ Revenu retraite = 60 000 × (1 - 0.34) = 39 600€
 
 ### Scénarios testés automatiquement
 1. **Départ à 62 ans** (âge légal)
-2. **Départ à 67 ans** (taux plein automatique)
-3. **Impact de la décote/surcote**
+2. **Départ à 64 ans** (âge intermédiaire)
+3. **Départ à 67 ans** (taux plein automatique)
 
 ---
 
@@ -254,33 +254,29 @@ Les résultats sont des **estimations** basées sur la législation 2024. Pour u
 
 ## 8. Implémentation Technique
 
-### Fichier : `/app/frontend/src/components/Simulator.js`
+### Fichier : `/app/frontend/src/components/FreelanceSimulator.js`
 
 **Fonctions principales :**
 ```javascript
-calculateFreelanceQuarters(revenue, year)
+calculateQuartersValidated(annualRevenue)
   → Retourne le nombre de trimestres validés
 
-calculateFreelanceRetirement(income, careerLength, age)
-  → Retourne objet complet avec :
-    - totalQuarters
-    - rate, decote, surcote
-    - basePension, complementaryPension
-    - totalPoints, pointValue
-    - estimatedPension, replacementRate
+calculateBasePension(sam, rate, quarters, requiredQuarters)
+  → Calcule la pension de base SSI
 
-calculateMicroEntrepreneurRetirement(turnover, activityType, ...)
-  → Applique abattement puis calcul standard
+calculateComplementaryPension(points, pointValue)
+  → Calcule la pension complémentaire RCI
+
+calculateScenarios()
+  → Génère les scénarios pour différents âges de départ
 ```
 
 ### Affichage des résultats
-- Résultats généraux (tous profils)
-- Section détaillée spécifique freelance avec :
-  - Trimestres (validés, requis, par an)
-  - Taux (avec décote/surcote)
-  - Décomposition base + complémentaire
-  - Points RCI
-  - Conseils personnalisés
+- Tableau comparatif par âge de départ
+- Détails : trimestres, taux, décote/surcote
+- Décomposition base + complémentaire
+- Points RCI acquis
+- Taux de remplacement
 
 ---
 
@@ -293,6 +289,6 @@ calculateMicroEntrepreneurRetirement(turnover, activityType, ...)
 
 ---
 
-**Document Version** : 1.0  
-**Date** : Décembre 2024  
-**Dernière mise à jour** : Intégration dans Elysion v1.0
+**Document Version** : 1.1  
+**Date** : Janvier 2025  
+**Valeur du point RCI** : 1,4386€

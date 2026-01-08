@@ -121,6 +121,12 @@ const FreelanceSimulator = () => {
     if (formData.hadMaternity) {
       totalQuarters += formData.maternityCount * 4; // 4 trimestres par maternité
     }
+    
+    // Majorations pour enfants (femmes uniquement)
+    // 8 trimestres par enfant : 4 (maternité/adoption) + 4 (éducation)
+    if (formData.gender === 'F' && formData.children > 0) {
+      totalQuarters += formData.children * 8;
+    }
 
     return Math.min(totalQuarters, 172); // Max 172 trimestres
   };

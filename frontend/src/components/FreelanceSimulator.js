@@ -124,15 +124,23 @@ const FreelanceSimulator = () => {
       }
     });
 
+    // Convertir les durées en mois
+    const unemploymentMonths = convertToMonths(formData.unemploymentDuration, formData.unemploymentUnit);
+    const illnessMonths = convertToMonths(formData.illnessDuration, formData.illnessUnit);
+    const parentalMonths = convertToMonths(formData.parentalLeaveDuration, formData.parentalLeaveUnit);
+
     // Trimestres assimilés
     if (formData.hadUnemployment) {
-      totalQuarters += Math.floor(formData.unemploymentMonths / 3); // 3 mois = 1 trimestre
+      totalQuarters += Math.floor(unemploymentMonths / 1.67); // 50 jours ≈ 1.67 mois = 1 trimestre
     }
     if (formData.hadLongIllness) {
-      totalQuarters += Math.floor(formData.illnessMonths / 3);
+      totalQuarters += Math.floor(illnessMonths / 2); // 60 jours ≈ 2 mois = 1 trimestre
     }
     if (formData.hadMaternity) {
       totalQuarters += formData.maternityCount * 4; // 4 trimestres par maternité
+    }
+    if (formData.hadParentalLeave) {
+      totalQuarters += Math.min(Math.floor(parentalMonths / 3), 12); // max 12 trimestres
     }
     
     // Majorations pour enfants (femmes uniquement)

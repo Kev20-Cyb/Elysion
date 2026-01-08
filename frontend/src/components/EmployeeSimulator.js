@@ -14,9 +14,14 @@ const EmployeeSimulator = () => {
     employeeType: '', // 'private' or 'public'
     careerStartYear: '',
     hadUnemployment: false,
-    unemploymentMonths: 0,
+    unemploymentDuration: 0,
+    unemploymentUnit: 'months', // 'days' or 'months'
     hadParentalLeave: false,
-    parentalLeaveMonths: 0,
+    parentalLeaveDuration: 0,
+    parentalLeaveUnit: 'months', // 'days' or 'months'
+    hadSickLeave: false,
+    sickLeaveDuration: 0,
+    sickLeaveUnit: 'days', // 'days' or 'months'
     
     // Branche Privé - Salaires
     salaryMode: 'simple', // 'simple' or 'detailed'
@@ -51,6 +56,14 @@ const EmployeeSimulator = () => {
   });
   
   const [results, setResults] = useState(null);
+
+  // Convertir la durée en mois selon l'unité
+  const convertToMonths = (duration, unit) => {
+    if (unit === 'days') {
+      return duration / 30; // 30 jours = 1 mois approximativement
+    }
+    return duration;
+  };
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({

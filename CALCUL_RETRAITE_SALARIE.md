@@ -25,28 +25,53 @@ Un salarié valide des trimestres en fonction de son salaire soumis à cotisatio
 ```javascript
 // Périodes comptabilisées sans cotisation :
 - Chômage indemnisé : 1 trimestre par période de 50 jours
-- Congé parental : maximum 12 trimestres
-- Maladie longue durée : selon durée
+- Congé parental : maximum 12 trimestres (3 ans)
+- Maladie longue durée : 1 trimestre par 60 jours d'indemnisation
 - Service militaire : 4 trimestres par an
 ```
 
-### Calcul automatique
+### Calcul automatique avec conversion jours/mois
 ```javascript
+// Fonction de conversion
+const convertToMonths = (duration, unit) => {
+  if (unit === 'days') {
+    return duration / 30; // 30 jours = 1 mois
+  }
+  return duration;
+};
+
 const calculatePrivateQuarters = () => {
   // Trimestres travaillés
   let workedQuarters = (fullTimeYears * 4) + (partTimeYears * 2);
   
-  // Trimestres chômage (1 trimestre par 50 jours)
-  const unemploymentQuarters = Math.floor(unemploymentMonths / 1.7);
+  // Conversion des durées saisies (jours ou mois) en mois
+  const unemploymentMonths = convertToMonths(unemploymentDuration, unemploymentUnit);
+  const parentalMonths = convertToMonths(parentalLeaveDuration, parentalLeaveUnit);
+  const sickLeaveMonths = convertToMonths(sickLeaveDuration, sickLeaveUnit);
   
-  // Trimestres congé parental (max 12)
-  const parentalQuarters = Math.min(Math.floor(parentalLeaveMonths / 3), 12);
+  // Trimestres chômage (1 trimestre par 50 jours ≈ 1.67 mois)
+  const unemploymentQuarters = Math.floor(unemploymentMonths / 1.67);
+  
+  // Trimestres congé parental (max 12 trimestres)
+  const parentalQuarters = Math.min(Math.floor(parentalMonths / 3), 12);
+  
+  // Trimestres maladie (1 trimestre par 60 jours ≈ 2 mois)
+  const sickLeaveQuarters = Math.floor(sickLeaveMonths / 2);
+  
+  // Majorations pour enfants (femmes uniquement)
+  // 8 trimestres par enfant : 4 (maternité) + 4 (éducation)
+  let childrenQuarters = 0;
+  if (gender === 'F' && children > 0) {
+    childrenQuarters = children * 8;
+  }
   
   return {
     worked: workedQuarters,
     unemployment: unemploymentQuarters,
     parental: parentalQuarters,
-    total: Math.min(workedQuarters + unemploymentQuarters + parentalQuarters, 172)
+    sickLeave: sickLeaveQuarters,
+    children: childrenQuarters,
+    total: Math.min(worked + unemployment + parental + sickLeave + children, 172)
   };
 };
 ```
@@ -177,20 +202,6 @@ La retraite complémentaire Agirc-Arrco fonctionne par **points** acquis tout au
 Prix d'achat = 19,6321€
 ```
 
-### Calcul des points
-
-Si l'utilisateur connaît son nombre de points (via son relevé Agirc-Arrco) :
-```javascript
-// Saisie directe du nombre total de points
-totalPoints = userInputPoints;
-```
-
-Sinon, estimation approximative :
-```javascript
-// Estimation : environ 10% du dernier salaire annuel
-const estimatedComplementary = lastAnnualSalary * 0.10 / 12;
-```
-
 ### Valeur du point (2024)
 ```javascript
 Valeur du point Agirc-Arrco = 1,4386€
@@ -211,7 +222,7 @@ const calculateAgircArrco = () => {
     };
   }
   
-  // Mode estimation
+  // Mode estimation (environ 10% du dernier salaire)
   return {
     points: 'Estimation',
     pointValue,
@@ -232,7 +243,69 @@ Pension complémentaire mensuelle = 12 228 / 12 = 1 019€
 
 ---
 
-## 4. Calcul Total
+## 4. Périodes Assimilées - Règles de conversion
+
+### Saisie flexible (jours ou mois)
+L'utilisateur peut saisir les durées en **jours** ou en **mois**. Le simulateur convertit automatiquement.
+
+### Chômage indemnisé
+```javascript
+// Règle : 1 trimestre par période de 50 jours
+// Conversion : 50 jours ≈ 1.67 mois
+
+const unemploymentMonths = convertToMonths(duration, unit);
+const unemploymentQuarters = Math.floor(unemploymentMonths / 1.67);
+
+// Exemples :
+// 100 jours → 100/30 = 3.33 mois → 3.33/1.67 = 2 trimestres
+// 6 mois → 6/1.67 = 3 trimestres
+```
+
+### Congé parental
+```javascript
+// Règle : 1 trimestre par 3 mois, maximum 12 trimestres (3 ans)
+
+const parentalMonths = convertToMonths(duration, unit);
+const parentalQuarters = Math.min(Math.floor(parentalMonths / 3), 12);
+
+// Exemples :
+// 180 jours → 6 mois → 2 trimestres
+// 24 mois → 8 trimestres
+// 48 mois → 12 trimestres (plafonné)
+```
+
+### Arrêt maladie longue durée
+```javascript
+// Règle : 1 trimestre par période de 60 jours d'indemnisation
+// Conversion : 60 jours ≈ 2 mois
+
+const sickLeaveMonths = convertToMonths(duration, unit);
+const sickLeaveQuarters = Math.floor(sickLeaveMonths / 2);
+
+// Exemples :
+// 120 jours → 4 mois → 2 trimestres
+// 6 mois → 3 trimestres
+```
+
+### Majoration pour enfants (femmes)
+```javascript
+// Règle : 8 trimestres par enfant
+// - 4 trimestres pour maternité/adoption
+// - 4 trimestres pour éducation
+
+if (gender === 'F' && children > 0) {
+  childrenQuarters = children * 8;
+}
+
+// Exemples :
+// 1 enfant → +8 trimestres
+// 2 enfants → +16 trimestres
+// 3 enfants → +24 trimestres
+```
+
+---
+
+## 5. Calcul Total
 
 ### Formule finale
 ```javascript
@@ -246,84 +319,33 @@ Taux de remplacement = (Pension annuelle totale / Dernier salaire annuel) × 100
 
 ### Exemple complet
 
-**Profil salarié :**
-- Âge : 45 ans
+**Profil salariée :**
+- Âge : 45 ans, Femme, 2 enfants
 - Début carrière : 2003 (22 ans de carrière)
 - Dernier salaire brut : 48 000€/an
 - Points Agirc-Arrco : 6 200 points
-- Trimestres validés : 88 (22 ans × 4)
+- Congé parental : 18 mois
+- Chômage : 100 jours
 
-**Calcul à 62 ans (17 ans supplémentaires) :**
+**Calcul des trimestres :**
+1. Travaillés : 22 × 4 = 88 trimestres
+2. Congé parental : 18 mois / 3 = 6 trimestres
+3. Chômage : 100 jours ≈ 3.33 mois / 1.67 = 2 trimestres
+4. Majoration enfants : 2 × 8 = 16 trimestres
+5. **Total : 112 trimestres**
 
-1. **Trimestres totaux** : 88 + (17 × 4) = 156 trimestres
-2. **Trimestres manquants** : 172 - 156 = 16 trimestres
-3. **Décote** : 16 × 1.25% = 20%
-4. **Taux appliqué** : 50% × (1 - 0.20) = 40%
-
-5. **Pension de base** :
-   - SAM : 42 000€ (moyenne 25 meilleures années)
-   - Base annuelle : 42 000 × 0.40 × (156/172) = 15 233€
-   - Base mensuelle : **1 269€**
-
-6. **Pension complémentaire** :
-   - Points estimés à 62 ans : 6 200 + (17 × 300) = 11 300 points
-   - Complémentaire annuelle : 11 300 × 1,4386 = 16 256€
-   - Complémentaire mensuelle : **1 355€**
-
-7. **Total mensuel** : 1 269 + 1 355 = **2 624€**
-8. **Taux de remplacement** : (31 489 / 48 000) × 100 = **65.6%**
+**Calcul à 62 ans (+17 ans) :**
+- Trimestres totaux : 112 + (17 × 4) = 180 trimestres (plafonné à 172)
+- Pas de décote (172 trimestres atteints)
 
 ---
 
-## 5. Périodes Assimilées
-
-### Chômage
-```javascript
-// Chômage indemnisé : 1 trimestre par 50 jours
-const unemploymentQuarters = Math.floor(unemploymentDays / 50);
-
-// Chômage non indemnisé : limité à 4 trimestres (1ère période)
-// + 4 trimestres supplémentaires si > 55 ans et > 20 ans de cotisation
-```
-
-### Congé parental
-```javascript
-// Maximum 12 trimestres (3 ans)
-const parentalQuarters = Math.min(Math.floor(parentalMonths / 3), 12);
-```
-
-### Maladie / Maternité
-```javascript
-// 1 trimestre par 60 jours d'indemnisation
-// Congé maternité : trimestres assimilés selon durée
-```
-
----
-
-## 6. Projections et Scénarios
-
-### Variables de projection
-```javascript
-- Âge de départ souhaité (62, 64, 67 ans)
-- Évolution salariale jusqu'au départ
-- Trimestres supplémentaires à acquérir
-- Points complémentaires futurs estimés
-```
-
-### Scénarios testés automatiquement
-1. **Départ à 62 ans** - Impact décote si trimestres insuffisants
-2. **Départ à 64 ans** - Équilibre décote/pension
-3. **Départ à 67 ans** - Taux plein automatique
-
----
-
-## 7. Limites et Avertissements
+## 6. Limites et Avertissements
 
 ### Hypothèses simplificatrices
 - Salaire constant ou moyenne par période
-- Pas de changement de régime (toujours salarié privé)
+- Carri��re complète dans le privé
 - Coefficients de revalorisation non appliqués
-- Carrière complète dans le privé
 
 ### Non pris en compte
 - Majorations familiales (+10% si 3 enfants ou plus)
@@ -334,54 +356,47 @@ const parentalQuarters = Math.min(Math.floor(parentalMonths / 3), 12);
 - Carrière longue (départ anticipé)
 
 ### Précision
-Les résultats sont des **estimations** basées sur la législation 2024. Pour un calcul exact :
+Les résultats sont des **estimations**. Pour un calcul exact :
 - Consulter son relevé de carrière sur info-retraite.fr
 - Vérifier ses points Agirc-Arrco sur agirc-arrco.fr
-- Demander une estimation personnalisée à sa caisse
 
 ---
 
-## 8. Implémentation Technique
+## 7. Implémentation Technique
 
 ### Fichier : `/app/frontend/src/components/EmployeeSimulator.js`
 
 **Fonctions principales :**
 ```javascript
+convertToMonths(duration, unit)
+  → Convertit jours en mois si nécessaire
+
 calculatePrivateQuarters()
-  → Retourne les trimestres par catégorie (travaillés, chômage, parental)
+  → Retourne les trimestres par catégorie
 
 calculateSAM(salaryPeriods)
-  → Calcule le Salaire Annuel Moyen des 25 meilleures années
+  → Calcule le Salaire Annuel Moyen (25 meilleures années)
 
 calculatePrivateBasePension(age, totalQuarters)
   → Calcule la pension de base avec décote/surcote
 
 calculateAgircArrco()
-  → Calcule la pension complémentaire (points ou estimation)
+  → Calcule la pension complémentaire
 
 calculateScenarios()
   → Génère les projections pour 62, 64, 67 ans
 ```
 
-### Affichage des résultats
-- Tableau comparatif par âge de départ
-- Détails : SAM, trimestres, taux, décote/surcote
-- Décomposition base + complémentaire
-- Points Agirc-Arrco
-- Taux de remplacement
-- Messages clés personnalisés
-
 ---
 
-## 9. Sources et Références
+## 8. Sources et Références
 
 - **L'Assurance Retraite** : https://www.lassuranceretraite.fr
 - **Agirc-Arrco** : https://www.agirc-arrco.fr
 - **Info Retraite** : https://www.info-retraite.fr
-- **Législation 2024** : Réforme des retraites 2023 applicable
 
 ---
 
-**Document Version** : 1.0  
+**Document Version** : 1.1  
 **Date** : Janvier 2025  
 **Valeur du point Agirc-Arrco** : 1,4386€

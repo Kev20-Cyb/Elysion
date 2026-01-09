@@ -225,15 +225,25 @@ Clear Space: 2x logo height on all sides
 | Classe | Couleur | Usage |
 |--------|---------|-------|
 | `bg-elysion-primary` | #0A418E | Fond principal bleu |
-| `bg-elysion-primary-50` | #f5f7fa | Fond très clair |
-| `bg-elysion-primary-100` | #eaeff5 | Fond clair |
-| `bg-elysion-primary-200` | #cddbef | Fond moyen clair |
-| `bg-elysion-primary-700` | #083777 | Fond foncé |
-| `bg-elysion-primary-900` | #011532 | Fond très foncé |
+| `bg-elysion-primary-50` | #deebfd | Fond très clair |
+| `bg-elysion-primary-100` | #bcd6fa | Fond clair |
+| `bg-elysion-primary-200` | #7aadf6 | Fond moyen clair |
+| `bg-elysion-primary-300` | #3784f1 | Fond moyen |
+| `bg-elysion-primary-400` | #0f60d2 | Fond moyen foncé |
+| `bg-elysion-primary-500` | #0a418e | Fond principal |
+| `bg-elysion-primary-600` | #083472 | Fond foncé |
+| `bg-elysion-primary-700` | #062756 | Fond très foncé |
+| `bg-elysion-primary-800` | #041a39 | Fond sombre |
+| `bg-elysion-primary-900` | #020d1d | Fond très sombre |
 | `bg-elysion-accent` | #FBB03B | Fond orange accent |
 | `bg-elysion-accent-50` | #faf8f4 | Fond orange très clair |
 | `bg-elysion-accent-100` | #f6f1ea | Fond orange clair |
+| `bg-elysion-accent-500` | #fbb03b | Fond orange principal |
+| `bg-elysion-accent-600` | #fa9c09 | Fond orange foncé |
 | `bg-elysion-secondary` | #A8C3E7 | Fond bleu secondaire |
+| `bg-elysion-secondary-50` | #f7f9fd | Fond secondaire très clair |
+| `bg-elysion-secondary-100` | #f0f4fa | Fond secondaire clair |
+| `bg-elysion-secondary-500` | #a8c3e7 | Fond secondaire principal |
 | `bg-elysion-bg` | #F6F9FD | Fond page |
 | `bg-elysion-gray-50` | #f8fafc | Fond gris très clair |
 | `bg-elysion-gray-100` | #f1f5f9 | Fond gris clair |
@@ -247,29 +257,43 @@ Clear Space: 2x logo height on all sides
 | Classe | Couleur | Usage |
 |--------|---------|-------|
 | `text-elysion-primary` | #0A418E | Texte principal bleu |
-| `text-elysion-primary-400` | #4a90f2 | Texte bleu clair |
-| `text-elysion-primary-600` | #0c4ca7 | Texte bleu foncé |
-| `text-elysion-primary-900` | #011532 | Texte bleu très foncé |
+| `text-elysion-primary-50` | #deebfd | Texte bleu très clair |
+| `text-elysion-primary-100` | #bcd6fa | Texte bleu clair |
+| `text-elysion-primary-400` | #0f60d2 | Texte bleu moyen |
+| `text-elysion-primary-500` | #0a418e | Texte bleu principal |
+| `text-elysion-primary-600` | #083472 | Texte bleu foncé |
+| `text-elysion-primary-700` | #062756 | Texte bleu très foncé |
+| `text-elysion-primary-800` | #041a39 | Texte bleu sombre |
+| `text-elysion-primary-900` | #020d1d | Texte bleu très sombre |
 | `text-elysion-accent` | #FBB03B | Texte orange |
+| `text-elysion-accent-500` | #fbb03b | Texte orange principal |
 | `text-elysion-accent-600` | #fa9c09 | Texte orange foncé |
+| `text-elysion-accent-700` | #d68404 | Texte orange très foncé |
 | `text-elysion-secondary` | #A8C3E7 | Texte bleu secondaire |
+| `text-elysion-secondary-500` | #a8c3e7 | Texte secondaire principal |
+| `text-elysion-secondary-600` | #689ace | Texte secondaire foncé |
 | `text-elysion-gray-400` | #94a3b8 | Texte gris clair |
 | `text-elysion-gray-500` | #64748b | Texte gris moyen |
 | `text-elysion-gray-600` | #475569 | Texte gris foncé |
+| `text-elysion-gray-700` | #334155 | Texte gris très foncé |
+| `text-elysion-gray-800` | #1e293b | Texte gris sombre |
 | `text-elysion-gray-900` | #0f172a | Texte très foncé |
 | `text-elysion-text-dark` | #1a1a1a | Texte sombre legacy |
 | `text-elysion-text-light` | #666666 | Texte clair legacy |
-| `text-elysion-success-600` | #16a34a | Texte succès |
-| `text-elysion-warning-600` | #ea580c | Texte warning |
-| `text-elysion-error-600` | #dc2626 | Texte erreur |
+| `text-elysion-success-500` | #22c55e | Texte succès |
+| `text-elysion-success-600` | #16a34a | Texte succès foncé |
+| `text-elysion-warning-500` | #f97316 | Texte warning |
+| `text-elysion-warning-600` | #ea580c | Texte warning foncé |
+| `text-elysion-error-500` | #ef4444 | Texte erreur |
+| `text-elysion-error-600` | #dc2626 | Texte erreur foncé |
 
 ### Couleurs de bordure (Border)
 
 | Classe | Couleur |
 |--------|---------|
 | `border-elysion-primary` | #0A418E |
-| `border-elysion-primary-200` | #cddbef |
-| `border-elysion-primary-300` | #97bbec |
+| `border-elysion-primary-200` | #7aadf6 |
+| `border-elysion-primary-300` | #3784f1 |
 | `border-elysion-accent` | #FBB03B |
 | `border-elysion-gray-200` | #e2e8f0 |
 | `border-elysion-gray-300` | #cbd5e1 |

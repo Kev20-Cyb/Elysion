@@ -75,44 +75,58 @@ Clear Space: 2x logo height on all sides
 | 50 | `#deebfd` | Very light backgrounds, cards |
 | 100 | `#bcd6fa` | Light highlights, hover states |
 | 200 | `#7aadf6` | Subtle accents, borders |
-| 300 | `#3784F1` | Disabled states, placeholders |
-| 400 | `#0F60D2` | Interactive elements |
+| 300 | `#3784f1` | Disabled states, placeholders |
+| 400 | `#0f60d2` | Interactive elements |
 | **500** | **`#0a418e`** | **🎯 MAIN BRAND COLOR** |
 | 600 | `#083472` | Button hover states |
 | 700 | `#062756` | Button active states |
 | 800 | `#041a39` | Dark text, headers |
-| 900 | `#020d` | Darker elements |
-| 950 | `#010b19` | Darkest elements |
+| 900 | `#020d1d` | Darker elements |
+| 950 | `#01070e` | Darkest elements |
 
 ```css
---elysion-primary-50: #DEEBFD;
---elysion-primary-100: #eaeff5;
---elysion-primary-200: #cddbef;
---elysion-primary-300: #97bbec;
---elysion-primary-400: #4a90f2;
+--elysion-primary-50: #deebfd;
+--elysion-primary-100: #bcd6fa;
+--elysion-primary-200: #7aadf6;
+--elysion-primary-300: #3784f1;
+--elysion-primary-400: #0f60d2;
 --elysion-primary-500: #0a418e;
---elysion-primary-600: #0c4ca7;
---elysion-primary-700: #083777;
---elysion-primary-800: #022250;
---elysion-primary-900: #011532;
---elysion-primary-950: #010b19;
+--elysion-primary-600: #083472;
+--elysion-primary-700: #062756;
+--elysion-primary-800: #041a39;
+--elysion-primary-900: #020d1d;
+--elysion-primary-950: #01070e;
 ```
 
 ### Secondary Light Blue - Calm & Accessibility
-**Supporting Color: #A8C3E7 (300 level)**
+**Supporting Color: #A8C3E7 (500 level)**
+
+| Variant | Hex | Usage |
+|---------|-----|-------|
+| 50 | `#f7f9fd` | Very light backgrounds |
+| 100 | `#f0f4fa` | Light backgrounds |
+| 200 | `#dce6f5` | Subtle accents |
+| 300 | `#cddbf1` | Light borders |
+| 400 | `#b9ceeb` | Interactive elements |
+| **500** | **`#a8c3e7`** | **🎯 MAIN SECONDARY** |
+| 600 | `#689ace` | Hover states |
+| 700 | `#4d729b` | Active states |
+| 800 | `#314b67` | Dark elements |
+| 900 | `#19293a` | Darker elements |
+| 950 | `#0d1824` | Darkest elements |
 
 ```css
---elysion-secondary-50: #f0f7ff;
---elysion-secondary-100: #e0efff;
---elysion-secondary-200: #bae0ff;
---elysion-secondary-300: #A8C3E7;  /* Main secondary */
---elysion-secondary-400: #60a5fa;
---elysion-secondary-500: #3b82f6;
---elysion-secondary-600: #2563eb;
---elysion-secondary-700: #1d4ed8;
---elysion-secondary-800: #1e40af;
---elysion-secondary-900: #1e3a8a;
---elysion-secondary-950: #172554;
+--elysion-secondary-50: #f7f9fd;
+--elysion-secondary-100: #f0f4fa;
+--elysion-secondary-200: #dce6f5;
+--elysion-secondary-300: #cddbf1;
+--elysion-secondary-400: #b9ceeb;
+--elysion-secondary-500: #a8c3e7;
+--elysion-secondary-600: #689ace;
+--elysion-secondary-700: #4d729b;
+--elysion-secondary-800: #314b67;
+--elysion-secondary-900: #19293a;
+--elysion-secondary-950: #0d1824;
 ```
 
 ### Accent Orange - CTAs & Highlights

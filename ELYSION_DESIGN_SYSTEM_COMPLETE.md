@@ -204,7 +204,132 @@ Clear Space: 2x logo height on all sides
 --elysion-gray-950: #020617;
 ```
 
-## 2.3 Color Usage Guidelines
+## 2.3 Classes CSS Disponibles
+
+### Couleurs de fond (Background)
+
+| Classe | Couleur | Usage |
+|--------|---------|-------|
+| `bg-elysion-primary` | #0A418E | Fond principal bleu |
+| `bg-elysion-primary-50` | #f5f7fa | Fond très clair |
+| `bg-elysion-primary-100` | #eaeff5 | Fond clair |
+| `bg-elysion-primary-200` | #cddbef | Fond moyen clair |
+| `bg-elysion-primary-700` | #083777 | Fond foncé |
+| `bg-elysion-primary-900` | #011532 | Fond très foncé |
+| `bg-elysion-accent` | #FBB03B | Fond orange accent |
+| `bg-elysion-accent-50` | #faf8f4 | Fond orange très clair |
+| `bg-elysion-accent-100` | #f6f1ea | Fond orange clair |
+| `bg-elysion-secondary` | #A8C3E7 | Fond bleu secondaire |
+| `bg-elysion-bg` | #F6F9FD | Fond page |
+| `bg-elysion-gray-50` | #f8fafc | Fond gris très clair |
+| `bg-elysion-gray-100` | #f1f5f9 | Fond gris clair |
+| `bg-elysion-gray-200` | #e2e8f0 | Fond gris moyen |
+| `bg-elysion-success-50` | #f0fdf4 | Fond succès clair |
+| `bg-elysion-warning-50` | #fff7ed | Fond warning clair |
+| `bg-elysion-error-50` | #fef2f2 | Fond erreur clair |
+
+### Couleurs de texte (Text)
+
+| Classe | Couleur | Usage |
+|--------|---------|-------|
+| `text-elysion-primary` | #0A418E | Texte principal bleu |
+| `text-elysion-primary-400` | #4a90f2 | Texte bleu clair |
+| `text-elysion-primary-600` | #0c4ca7 | Texte bleu foncé |
+| `text-elysion-primary-900` | #011532 | Texte bleu très foncé |
+| `text-elysion-accent` | #FBB03B | Texte orange |
+| `text-elysion-accent-600` | #fa9c09 | Texte orange foncé |
+| `text-elysion-secondary` | #A8C3E7 | Texte bleu secondaire |
+| `text-elysion-gray-400` | #94a3b8 | Texte gris clair |
+| `text-elysion-gray-500` | #64748b | Texte gris moyen |
+| `text-elysion-gray-600` | #475569 | Texte gris foncé |
+| `text-elysion-gray-900` | #0f172a | Texte très foncé |
+| `text-elysion-text-dark` | #1a1a1a | Texte sombre legacy |
+| `text-elysion-text-light` | #666666 | Texte clair legacy |
+| `text-elysion-success-600` | #16a34a | Texte succès |
+| `text-elysion-warning-600` | #ea580c | Texte warning |
+| `text-elysion-error-600` | #dc2626 | Texte erreur |
+
+### Couleurs de bordure (Border)
+
+| Classe | Couleur |
+|--------|---------|
+| `border-elysion-primary` | #0A418E |
+| `border-elysion-primary-200` | #cddbef |
+| `border-elysion-primary-300` | #97bbec |
+| `border-elysion-accent` | #FBB03B |
+| `border-elysion-gray-200` | #e2e8f0 |
+| `border-elysion-gray-300` | #cbd5e1 |
+
+### Exemples d'utilisation
+
+```jsx
+// Fond bleu primaire avec texte blanc
+<div className="bg-elysion-primary text-white">
+  Fond bleu
+</div>
+
+// Fond clair avec texte foncé
+<div className="bg-elysion-primary-50 text-elysion-primary-900">
+  Fond très clair
+</div>
+
+// Fond orange accent
+<div className="bg-elysion-accent text-elysion-primary-900">
+  Bouton CTA
+</div>
+
+// Fond gris avec bordure
+<div className="bg-elysion-gray-100 border border-elysion-gray-300">
+  Card simple
+</div>
+
+// Texte coloré
+<p className="text-elysion-primary">Texte bleu primaire</p>
+<p className="text-elysion-accent">Texte orange</p>
+<p className="text-elysion-gray-500">Texte gris</p>
+<p className="text-elysion-success-600">Texte succès</p>
+<p className="text-elysion-error-600">Texte erreur</p>
+```
+
+## 2.4 Comment modifier une couleur ?
+
+### Option 1 : Utiliser les classes existantes
+```jsx
+// Avant
+<div className="bg-white">
+
+// Après - avec fond bleu clair
+<div className="bg-elysion-primary-100">
+```
+
+### Option 2 : Utiliser les variables CSS dans un style inline
+```jsx
+<div style={{ backgroundColor: 'var(--elysion-primary-200)' }}>
+  Fond personnalisé
+</div>
+
+<p style={{ color: 'var(--elysion-accent-600)' }}>
+  Texte personnalisé
+</p>
+```
+
+### Option 3 : Utiliser Tailwind avec les couleurs standard
+```jsx
+// Tailwind standard colors are also available
+<div className="bg-blue-500 text-white">
+<div className="bg-orange-400 text-gray-900">
+<div className="bg-gray-100 text-gray-700">
+```
+
+### Option 4 : Modifier les variables CSS dans App.css
+Pour changer une couleur globalement, modifier la variable dans `:root` :
+```css
+:root {
+  --elysion-primary: #NEW_HEX_COLOR;
+}
+```
+
+## 2.5 Color Usage Guidelines
 
 ### Primary Use Cases
 - **Primary 500**: Main brand color, primary buttons, headers

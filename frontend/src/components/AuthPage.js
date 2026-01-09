@@ -1,12 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../App';
+import axios from 'axios';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
 const AuthPage = () => {
-  const [isLogin, setIsLogin] = useState(true);
+  const [searchParams] = useSearchParams();
+  const location = useLocation();
+  
+  // Default to login, but check URL params or state for mode
+  const getInitialMode = () => {
+    const modeParam = searchParams.get('mode');
+    if (modeParam === 'register') return false;
+    if (modeParam === 'login') return true;
+    
+    // Check if coming from onboarding or other flows that expect registration
+    if (location.state?.mode === 'register') return false;
+    
+    return true; // Default to login
+  };
+  
+  const [isLogin, setIsLogin] = useState(getInitialMode());
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -36,7 +52,6 @@ const AuthPage = () => {
       if (isLogin) {
         result = await login(formData.email, formData.password);
       } else {
-        // 👉 Envoie toujours full_name + user_type au backend Node
         result = await register(formData);
       }
 
@@ -68,7 +83,7 @@ const AuthPage = () => {
   return (
     <div className="min-h-screen bg-elysion-bg font-montserrat">
       {/* Navigation */}
-      <nav className="bg-white/80 backdrop-blur-md border-b border-gray-200">
+      <nav className="bg-white/90 backdrop-blur-md border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <button 
@@ -82,9 +97,11 @@ const AuthPage = () => {
         </div>
       </nav>
 
-      {/* Auth Form */}
-      <div className="flex items-center justify-center py-12 px-4">
-        <div className="max-w-md w-full">
+      {/* Split Screen Layout */}
+      <div className="flex min-h-[calc(100vh-4rem)]">
+        {/* Left Side - Form */}
+        <div className="flex-1 flex items-center justify-center p-8">
+          <div className="max-w-md w-full">
           {/* Form Container */}
           <div className="card-elysion fade-in">
             <div className="text-center mb-8">
@@ -180,9 +197,20 @@ const AuthPage = () => {
 
               {/* Password */}
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-elysion-text-dark mb-2">
-                  Mot de passe
-                </label>
+                <div className="flex justify-between items-center mb-2">
+                  <label htmlFor="password" className="block text-sm font-medium text-elysion-text-dark">
+                    Mot de passe
+                  </label>
+                  {isLogin && (
+                    <button
+                      type="button"
+                      onClick={() => navigate('/forgot-password')}
+                      className="text-sm text-elysion-primary hover:text-elysion-accent transition-colors"
+                    >
+                      Mot de passe oublié ?
+                    </button>
+                  )}
+                </div>
                 <input
                   type="password"
                   id="password"
@@ -234,9 +262,35 @@ const AuthPage = () => {
             </div>
           </div>
 
-          {/* Security Notice */}
-          <div className="mt-8 text-center text-sm text-elysion-text-light">
-            <p>🔒 Vos données sont chiffrées et stockées en France conformément au RGPD</p>
+            {/* Security Notice */}
+            <div className="mt-8 text-center text-sm text-elysion-text-light">
+              <p>🔒 Vos données sont chiffrées et stockées en France conformément au RGPD</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Side - Illustration */}
+        <div className="hidden lg:flex flex-1 bg-gradient-to-br from-elysion-primary to-elysion-secondary items-center justify-center p-8">
+          <div className="text-center text-white">
+            <div className="text-8xl mb-6">🏦</div>
+            <h2 className="text-3xl font-bold mb-4">Votre avenir financier en toute sérénité</h2>
+            <p className="text-xl opacity-90 mb-6">
+              Rejoignez des milliers d'utilisateurs qui planifient déjà leur retraite avec Elysion
+            </p>
+            <div className="grid grid-cols-3 gap-6 mt-8">
+              <div className="text-center">
+                <div className="text-3xl mb-2">📊</div>
+                <div className="text-sm font-medium">Simulations précises</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl mb-2">🔒</div>
+                <div className="text-sm font-medium">Sécurité maximale</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl mb-2">💡</div>
+                <div className="text-sm font-medium">Conseils personnalisés</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

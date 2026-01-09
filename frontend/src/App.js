@@ -7,9 +7,13 @@ import './App.css';
 import LandingPage from './components/LandingPage';
 import AuthPage from './components/AuthPage';
 import Dashboard from './components/Dashboard';
+import OnboardingFlow from './components/OnboardingFlow';
+import Simulator from './components/Simulator';
+import ForgotPassword from './components/ForgotPassword';
+import ResetPassword from './components/ResetPassword';
+import ChatBubble from "./components/ChatBubble";
 
-// Fallback au cas où la variable d'env n'est pas définie
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
 const API = `${BACKEND_URL}/api`;
 
 // Auth Context
@@ -42,11 +46,8 @@ const AuthProvider = ({ children }) => {
     const checkAuth = async () => {
       if (token) {
         try {
-          // 👉 Nouveau endpoint Node : /api/auth/me
-          const response = await axios.get(`${API}/auth/me`);
-          const data = response.data;
-          // on gère les deux cas : { user: {...} } ou directement l'objet user
-          setUser(data.user || data);
+          const response = await axios.get(`${API}/users/profile`);
+          setUser(response.data.user);
         } catch (error) {
           console.error('Token invalid:', error);
           logout();
@@ -55,28 +56,20 @@ const AuthProvider = ({ children }) => {
       setLoading(false);
     };
     checkAuth();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   const login = async (email, password) => {
     try {
-      const response = await axios.post(`${API}/auth/login`, {
-        email,
-        password
-      });
+      const response = await axios.post(`${API}/auth/login`, { email, password });
 
-      // 👉 Backend Node renvoie { token, user }
-      const { token: jwtToken, user: userData } = response.data;
-
-      setToken(jwtToken);
+      const { token, user: userData } = response.data;
+      setToken(token);
       setUser(userData);
-      localStorage.setItem('elysion_token', jwtToken);
-
+      localStorage.setItem("elysion_token", token);
       return { success: true };
     } catch (error) {
-      return {
-        success: false,
-        error: error.response?.data?.detail || 'Login failed'
-      };
+      return { success: false, error: error.response?.data?.detail || "Login failed" };
     }
   };
 
@@ -84,19 +77,13 @@ const AuthProvider = ({ children }) => {
     try {
       const response = await axios.post(`${API}/auth/register`, userData);
 
-      // 👉 Backend Node renvoie { token, user }
-      const { token: jwtToken, user: newUser } = response.data;
-
-      setToken(jwtToken);
+      const { token, user: newUser } = response.data;
+      setToken(token);
       setUser(newUser);
-      localStorage.setItem('elysion_token', jwtToken);
-
+      localStorage.setItem("elysion_token", token);
       return { success: true };
     } catch (error) {
-      return {
-        success: false,
-        error: error.response?.data?.detail || 'Registration failed'
-      };
+      return { success: false, error: error.response?.data?.detail || "Registration failed" };
     }
   };
 
@@ -123,10 +110,17 @@ const AuthProvider = ({ children }) => {
   );
 };
 
+// ✅ Chat visible seulement si connecté (et pas pendant le loading)
+const ChatWhenAuthed = () => {
+  const { isAuthenticated, loading } = useAuth();
+  if (loading) return null;
+  return isAuthenticated ? <ChatBubble /> : null;
+};
+
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
-  
+
   if (loading) {
     return (
       <div className="min-h-screen bg-elysion-bg flex items-center justify-center">
@@ -134,7 +128,7 @@ const ProtectedRoute = ({ children }) => {
       </div>
     );
   }
-  
+
   return isAuthenticated ? children : <Navigate to="/auth" replace />;
 };
 
@@ -146,15 +140,22 @@ function App() {
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/auth" element={<AuthPage />} />
-            <Route 
-              path="/dashboard" 
+            <Route path="/simulator" element={<Simulator />} />
+            <Route path="/onboarding" element={<OnboardingFlow />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route
+              path="/dashboard"
               element={
                 <ProtectedRoute>
                   <Dashboard />
                 </ProtectedRoute>
-              } 
+              }
             />
           </Routes>
+
+          {/* ✅ Le chatbot est disponible partout quand connecté */}
+          <ChatWhenAuthed />
         </BrowserRouter>
       </div>
     </AuthProvider>

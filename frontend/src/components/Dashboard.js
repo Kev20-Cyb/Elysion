@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useAuth } from '../App';
 import { useNavigate } from 'react-router-dom';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
 const Dashboard = () => {
@@ -19,7 +19,6 @@ const Dashboard = () => {
 
   const fetchDashboardData = async () => {
     try {
-      // 👉 Backend Node : expose /api/dashboard
       const response = await axios.get(`${API}/dashboard`);
       setDashboardData(response.data);
     } catch (err) {

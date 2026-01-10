@@ -7,7 +7,7 @@ const FreelanceSimulator = () => {
   const [formData, setFormData] = useState({
     // Étape 1 - Profil
     status: 'micro', // micro, independant, mixte
-    birthYear: '',
+    birthDate: '',
     gender: '',
     children: 0,
     freelanceStartYear: '',
@@ -38,6 +38,12 @@ const FreelanceSimulator = () => {
   });
 
   const [results, setResults] = useState(null);
+
+  // Extraire l'année de naissance depuis la date
+  const getBirthYear = () => {
+    if (!formData.birthDate) return null;
+    return new Date(formData.birthDate).getFullYear();
+  };
 
   // Convertir la durée en mois selon l'unité
   const convertToMonths = (duration, unit) => {
@@ -178,7 +184,7 @@ const FreelanceSimulator = () => {
 
   // Étape 5 : Calcul de la retraite de base
   const calculateBasePension = (averageRevenue, totalQuarters) => {
-    const birthYear = parseInt(formData.birthYear);
+    const birthYear = getBirthYear();
     const currentYear = new Date().getFullYear();
     const age = currentYear - birthYear;
     
@@ -283,7 +289,7 @@ const FreelanceSimulator = () => {
       totalMonthly: Math.round(totalMonthly),
       totalAnnual: Math.round(totalAnnual),
       replacementRate: Math.round(replacementRate),
-      currentAge: new Date().getFullYear() - parseInt(formData.birthYear)
+      currentAge: new Date().getFullYear() - getBirthYear()
     };
     
     setResults(results);
@@ -330,15 +336,12 @@ const FreelanceSimulator = () => {
       <div className="grid md:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-2">
-            Année de naissance
+            Date de naissance
           </label>
           <input
-            type="number"
-            placeholder="1985"
-            min="1950"
-            max="2005"
-            value={formData.birthYear}
-            onChange={(e) => handleInputChange('birthYear', e.target.value)}
+            type="date"
+            value={formData.birthDate}
+            onChange={(e) => handleInputChange('birthDate', e.target.value)}
             className="input-elysion"
           />
         </div>

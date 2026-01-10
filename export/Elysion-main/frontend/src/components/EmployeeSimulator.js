@@ -8,7 +8,7 @@ const EmployeeSimulator = () => {
   
   const [formData, setFormData] = useState({
     // Écran 1 - Profil
-    birthYear: '',
+    birthDate: '',
     gender: '',
     children: 0,
     employeeType: '', // 'private' or 'public'
@@ -56,6 +56,12 @@ const EmployeeSimulator = () => {
   });
   
   const [results, setResults] = useState(null);
+
+  // Extraire l'année de naissance depuis la date
+  const getBirthYear = () => {
+    if (!formData.birthDate) return null;
+    return new Date(formData.birthDate).getFullYear();
+  };
 
   // Convertir la durée en mois selon l'unité
   const convertToMonths = (duration, unit) => {
@@ -151,7 +157,7 @@ const EmployeeSimulator = () => {
 
   // Calcul retraite de base privé
   const calculatePrivateBasePension = (age, quarters) => {
-    const birthYear = parseInt(formData.birthYear);
+    const birthYear = getBirthYear();
     const requiredQuarters = birthYear >= 1973 ? 172 : 
                             birthYear >= 1961 ? 168 : 166;
     
@@ -248,7 +254,7 @@ const EmployeeSimulator = () => {
 
   // Calcul pension fonction publique
   const calculatePublicPension = (age, quarters) => {
-    const birthYear = parseInt(formData.birthYear);
+    const birthYear = getBirthYear();
     const requiredQuarters = birthYear >= 1973 ? 172 : 
                             birthYear >= 1961 ? 168 : 166;
     
@@ -311,7 +317,7 @@ const EmployeeSimulator = () => {
   const calculateScenarios = () => {
     const scenarios = [];
     const currentYear = new Date().getFullYear();
-    const currentAge = currentYear - parseInt(formData.birthYear);
+    const currentAge = currentYear - getBirthYear();
     
     if (branch === 'private') {
       const baseQuarters = calculatePrivateQuarters();
@@ -392,7 +398,7 @@ const EmployeeSimulator = () => {
     setResults({
       branch,
       scenarios,
-      currentAge: new Date().getFullYear() - parseInt(formData.birthYear)
+      currentAge: new Date().getFullYear() - getBirthYear()
     });
     
     if (branch === 'private') {
@@ -431,15 +437,12 @@ const EmployeeSimulator = () => {
       <div className="grid md:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-2">
-            Année de naissance
+            Date de naissance
           </label>
           <input
-            type="number"
-            placeholder="1985"
-            min="1950"
-            max="2005"
-            value={formData.birthYear}
-            onChange={(e) => handleInputChange('birthYear', e.target.value)}
+            type="date"
+            value={formData.birthDate}
+            onChange={(e) => handleInputChange('birthDate', e.target.value)}
             className="input-elysion"
             required
           />

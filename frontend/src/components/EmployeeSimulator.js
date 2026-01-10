@@ -547,7 +547,7 @@ const EmployeeSimulator = () => {
             id="hadParentalLeave"
             checked={formData.hadParentalLeave}
             onChange={(e) => handleInputChange('hadParentalLeave', e.target.checked)}
-            className="w-5 h-5"
+            className="checkbox-elysion"
           />
           <label htmlFor="hadParentalLeave" className="text-sm font-medium text-gray-700">
             J'ai eu des congés parentaux
@@ -591,7 +591,7 @@ const EmployeeSimulator = () => {
             id="hadSickLeave"
             checked={formData.hadSickLeave}
             onChange={(e) => handleInputChange('hadSickLeave', e.target.checked)}
-            className="w-5 h-5"
+            className="checkbox-elysion"
           />
           <label htmlFor="hadSickLeave" className="text-sm font-medium text-gray-700">
             J'ai eu des arrêts maladie longue durée

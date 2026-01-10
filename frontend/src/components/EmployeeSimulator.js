@@ -503,7 +503,7 @@ const EmployeeSimulator = () => {
             id="hadUnemployment"
             checked={formData.hadUnemployment}
             onChange={(e) => handleInputChange('hadUnemployment', e.target.checked)}
-            className="w-5 h-5"
+            className="checkbox-elysion"
           />
           <label htmlFor="hadUnemployment" className="text-sm font-medium text-gray-700">
             J'ai eu des périodes de chômage

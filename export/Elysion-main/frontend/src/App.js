@@ -12,6 +12,10 @@ import Simulator from './components/Simulator';
 import ForgotPassword from './components/ForgotPassword';
 import ResetPassword from './components/ResetPassword';
 import ChatBubble from "./components/ChatBubble";
+// Nouveaux composants - Simulateurs détaillés
+import EmployeeSimulator from './components/EmployeeSimulator';
+import FreelanceSimulator from './components/FreelanceSimulator';
+import Documents from './components/Documents';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
 const API = `${BACKEND_URL}/api`;

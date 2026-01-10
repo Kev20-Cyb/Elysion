@@ -1,0 +1,329 @@
+/* Import Montserrat Font */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+/* Elysion Brand Colors - Full Scale System */
+:root {
+  /* Legacy colors (maintained for compatibility) */
+  --elysion-primary: #0A418E;
+  --elysion-bg: #F6F9FD;
+  --elysion-accent: #FBB03B;
+  --elysion-secondary: #A8C3E7;
+  --elysion-white: #FFFFFF;
+  --elysion-text-dark: #1a1a1a;
+  --elysion-text-light: #666666;
+
+  /* Primary Blue Scale */
+  --elysion-primary-50: #f5f7fa;
+  --elysion-primary-100: #eaeff5;
+  --elysion-primary-200: #cddbef;
+  --elysion-primary-300: #97bbec;
+  --elysion-primary-400: #4a90f2;
+  --elysion-primary-500: #0a418e;
+  --elysion-primary-600: #0c4ca7;
+  --elysion-primary-700: #083777;
+  --elysion-primary-800: #022250;
+  --elysion-primary-900: #011532;
+  --elysion-primary-950: #010b19;
+
+  /* Secondary Light Blue Scale */
+  --elysion-secondary-50: #f0f7ff;
+  --elysion-secondary-100: #e0efff;
+  --elysion-secondary-200: #bae0ff;
+  --elysion-secondary-300: #A8C3E7;
+  --elysion-secondary-400: #60a5fa;
+  --elysion-secondary-500: #3b82f6;
+  --elysion-secondary-600: #2563eb;
+  --elysion-secondary-700: #1d4ed8;
+  --elysion-secondary-800: #1e40af;
+  --elysion-secondary-900: #1e3a8a;
+  --elysion-secondary-950: #172554;
+
+  /* Accent Orange Scale */
+  --elysion-accent-50: #faf8f4;
+  --elysion-accent-100: #f6f1ea;
+  --elysion-accent-200: #f1e2cb;
+  --elysion-accent-300: #f1cc93;
+  --elysion-accent-400: #fbb241;
+  --elysion-accent-500: #fbb03b;
+  --elysion-accent-600: #fa9c09;
+  --elysion-accent-700: #d68404;
+  --elysion-accent-800: #b16c00;
+  --elysion-accent-900: #935900;
+  --elysion-accent-950: #744700;
+
+  /* Background Scale */
+  --elysion-bg-50: #F6F9FD;
+  --elysion-bg-100: #f1f5f9;
+  --elysion-bg-200: #e2e8f0;
+  --elysion-bg-300: #cbd5e1;
+  --elysion-bg-400: #94a3b8;
+  --elysion-bg-500: #64748b;
+  --elysion-bg-600: #475569;
+  --elysion-bg-700: #334155;
+  --elysion-bg-800: #1e293b;
+  --elysion-bg-900: #0f172a;
+  --elysion-bg-950: #020617;
+
+  /* Neutral Grays */
+  --elysion-gray-50: #f8fafc;
+  --elysion-gray-100: #f1f5f9;
+  --elysion-gray-200: #e2e8f0;
+  --elysion-gray-300: #cbd5e1;
+  --elysion-gray-400: #94a3b8;
+  --elysion-gray-500: #64748b;
+  --elysion-gray-600: #475569;
+  --elysion-gray-700: #334155;
+  --elysion-gray-800: #1e293b;
+  --elysion-gray-900: #0f172a;
+  --elysion-gray-950: #020617;
+
+  /* Semantic Colors */
+  --elysion-success-50: #f0fdf4;
+  --elysion-success-500: #22c55e;
+  --elysion-success-600: #16a34a;
+  --elysion-success-700: #15803d;
+
+  --elysion-warning-50: #fff7ed;
+  --elysion-warning-500: #f97316;
+  --elysion-warning-600: #ea580c;
+  --elysion-warning-700: #c2410c;
+
+  --elysion-error-50: #fef2f2;
+  --elysion-error-500: #ef4444;
+  --elysion-error-600: #dc2626;
+  --elysion-error-700: #b91c1c;
+}
+
+/* Global Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background-color: var(--elysion-bg);
+  color: var(--elysion-text-dark);
+  line-height: 1.6;
+}
+
+.App {
+  min-height: 100vh;
+}
+
+/* Utility Classes */
+.font-montserrat {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.bg-elysion-primary {
+  background-color: var(--elysion-primary);
+}
+
+.bg-elysion-bg {
+  background-color: var(--elysion-bg);
+}
+
+.bg-elysion-accent {
+  background-color: var(--elysion-accent);
+}
+
+.bg-elysion-secondary {
+  background-color: var(--elysion-secondary);
+}
+
+.text-elysion-primary {
+  color: var(--elysion-primary);
+}
+
+.text-elysion-accent {
+  color: var(--elysion-accent);
+}
+
+.text-elysion-secondary {
+  color: var(--elysion-secondary);
+}
+
+.border-elysion-primary {
+  border-color: var(--elysion-primary);
+}
+
+.border-elysion-accent {
+  border-color: var(--elysion-accent);
+}
+
+/* Button Styles */
+.btn-elysion-primary {
+  background-color: var(--elysion-primary);
+  color: white;
+  padding: 12px 32px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-family: 'Montserrat', sans-serif;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-elysion-primary:hover {
+  background-color: #083a7a;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(10, 65, 142, 0.3);
+}
+
+.btn-elysion-accent {
+  background-color: var(--elysion-accent);
+  color: white;
+  padding: 12px 32px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-family: 'Montserrat', sans-serif;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-elysion-accent:hover {
+  background-color: #d49749;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(230, 168, 87, 0.3);
+}
+
+.btn-outline-elysion {
+  background: transparent;
+  color: var(--elysion-primary);
+  padding: 12px 32px;
+  border: 2px solid var(--elysion-primary);
+  border-radius: 50px;
+  font-weight: 600;
+  font-family: 'Montserrat', sans-serif;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-outline-elysion:hover {
+  background-color: var(--elysion-primary);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(10, 65, 142, 0.2);
+}
+
+/* Input Styles */
+.input-elysion {
+  width: 100%;
+  padding: 16px 20px;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 16px;
+  font-family: 'Montserrat', sans-serif;
+  transition: all 0.3s ease;
+  background-color: white;
+}
+
+.input-elysion:focus {
+  outline: none;
+  border-color: var(--elysion-primary);
+  box-shadow: 0 0 0 3px rgba(10, 65, 142, 0.1);
+}
+
+/* Card Styles */
+.card-elysion {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.card-elysion:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+/* Glass Effect */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Hero Section Gradient */
+.hero-gradient {
+  background: linear-gradient(135deg, var(--elysion-bg) 0%, rgba(168, 195, 231, 0.3) 100%);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .btn-elysion-primary,
+  .btn-elysion-accent,
+  .btn-outline-elysion {
+    padding: 10px 24px;
+    font-size: 14px;
+  }
+  
+  .input-elysion {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+  
+  .card-elysion {
+    padding: 16px;
+  }
+}
+
+/* Animation Classes */
+.fade-in {
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+.slide-up {
+  animation: slideUp 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Loading Spinner */
+.spinner {
+  border: 3px solid rgba(10, 65, 142, 0.1);
+  border-top: 3px solid var(--elysion-primary);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

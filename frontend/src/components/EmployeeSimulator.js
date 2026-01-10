@@ -918,7 +918,7 @@ const EmployeeSimulator = () => {
             type="checkbox"
             checked={formData.knowsPoints}
             onChange={(e) => handleInputChange('knowsPoints', e.target.checked)}
-            className="w-5 h-5"
+            className="checkbox-elysion"
           />
           <span className="font-semibold text-gray-900">
             Je connais mon nombre de points Agirc-Arrco
@@ -988,7 +988,7 @@ const EmployeeSimulator = () => {
                     handleInputChange('retirementAges', formData.retirementAges.filter(a => a !== age));
                   }
                 }}
-                className="w-4 h-4"
+                className="checkbox-elysion"
                 disabled={!formData.retirementAges.includes(age) && formData.retirementAges.length >= 3}
               />
               <span className="text-sm font-medium">{age} ans</span>
@@ -1215,7 +1215,7 @@ const EmployeeSimulator = () => {
             type="checkbox"
             checked={formData.knowsRAFP}
             onChange={(e) => handleInputChange('knowsRAFP', e.target.checked)}
-            className="w-5 h-5"
+            className="checkbox-elysion"
           />
           <span className="font-semibold text-gray-900">
             Je connais le montant estimé de mon RAFP

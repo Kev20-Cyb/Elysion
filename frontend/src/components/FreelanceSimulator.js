@@ -7,7 +7,7 @@ const FreelanceSimulator = () => {
   const [formData, setFormData] = useState({
     // Étape 1 - Profil
     status: 'micro', // micro, independant, mixte
-    birthYear: '',
+    birthDate: '',
     gender: '',
     children: 0,
     freelanceStartYear: '',

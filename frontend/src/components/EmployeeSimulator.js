@@ -8,7 +8,7 @@ const EmployeeSimulator = () => {
   
   const [formData, setFormData] = useState({
     // Écran 1 - Profil
-    birthYear: '',
+    birthDate: '',
     gender: '',
     children: 0,
     employeeType: '', // 'private' or 'public'

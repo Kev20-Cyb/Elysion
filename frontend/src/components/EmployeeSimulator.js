@@ -157,7 +157,7 @@ const EmployeeSimulator = () => {
 
   // Calcul retraite de base privé
   const calculatePrivateBasePension = (age, quarters) => {
-    const birthYear = parseInt(formData.birthYear);
+    const birthYear = getBirthYear();
     const requiredQuarters = birthYear >= 1973 ? 172 : 
                             birthYear >= 1961 ? 168 : 166;
     
@@ -254,7 +254,7 @@ const EmployeeSimulator = () => {
 
   // Calcul pension fonction publique
   const calculatePublicPension = (age, quarters) => {
-    const birthYear = parseInt(formData.birthYear);
+    const birthYear = getBirthYear();
     const requiredQuarters = birthYear >= 1973 ? 172 : 
                             birthYear >= 1961 ? 168 : 166;
     
@@ -317,7 +317,7 @@ const EmployeeSimulator = () => {
   const calculateScenarios = () => {
     const scenarios = [];
     const currentYear = new Date().getFullYear();
-    const currentAge = currentYear - parseInt(formData.birthYear);
+    const currentAge = currentYear - getBirthYear();
     
     if (branch === 'private') {
       const baseQuarters = calculatePrivateQuarters();
@@ -398,7 +398,7 @@ const EmployeeSimulator = () => {
     setResults({
       branch,
       scenarios,
-      currentAge: new Date().getFullYear() - parseInt(formData.birthYear)
+      currentAge: new Date().getFullYear() - getBirthYear()
     });
     
     if (branch === 'private') {

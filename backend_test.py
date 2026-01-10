@@ -10,7 +10,7 @@ import re
 from datetime import datetime
 
 # Configuration
-BASE_URL = "https://pension-sim.preview.emergentagent.com/api"
+BASE_URL = "https://pension-sim-1.preview.emergentagent.com/api"
 TEST_EMAIL = "test@example.com"
 NEW_PASSWORD = "nouveau123"
 

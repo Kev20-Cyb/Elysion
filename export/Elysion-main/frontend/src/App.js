@@ -145,6 +145,9 @@ function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/simulator" element={<Simulator />} />
+            {/* Nouveaux simulateurs détaillés */}
+            <Route path="/simulator/employee" element={<EmployeeSimulator />} />
+            <Route path="/simulator/freelance" element={<FreelanceSimulator />} />
             <Route path="/onboarding" element={<OnboardingFlow />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />
@@ -153,6 +156,15 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            {/* Nouvelle page Documents (protégée) */}
+            <Route
+              path="/documents"
+              element={
+                <ProtectedRoute>
+                  <Documents />
                 </ProtectedRoute>
               }
             />

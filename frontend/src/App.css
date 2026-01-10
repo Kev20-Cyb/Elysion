@@ -406,6 +406,46 @@ textarea.input-elysion {
   resize: vertical;
 }
 
+/* Checkbox Elysion - Primary color when checked */
+.checkbox-elysion {
+  width: 20px;
+  height: 20px;
+  appearance: none;
+  -webkit-appearance: none;
+  border: 2px solid #d1d5db;
+  border-radius: 4px;
+  background-color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.checkbox-elysion:hover {
+  border-color: var(--elysion-primary);
+}
+
+.checkbox-elysion:checked {
+  background-color: var(--elysion-primary);
+  border-color: var(--elysion-primary);
+}
+
+.checkbox-elysion:checked::after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.checkbox-elysion:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(10, 65, 142, 0.15);
+}
+
 /* Card Styles */
 .card-elysion {
   background: white;

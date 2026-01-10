@@ -400,7 +400,7 @@ const FreelanceSimulator = () => {
           id="hadSalariedPeriods"
           checked={formData.hadSalariedPeriods}
           onChange={(e) => handleInputChange('hadSalariedPeriods', e.target.checked)}
-          className="w-5 h-5"
+          className="checkbox-elysion"
         />
         <label htmlFor="hadSalariedPeriods" className="text-sm font-medium text-gray-700">
           J'ai eu des périodes salariées avant/après mon activité freelance
@@ -530,7 +530,7 @@ const FreelanceSimulator = () => {
                         ...yearData,
                         hadSalary: e.target.checked
                       })}
-                      className="w-4 h-4"
+                      className="checkbox-elysion"
                     />
                     <span className="text-sm font-medium text-gray-700">
                       J'avais aussi un salaire cette année
@@ -586,7 +586,7 @@ const FreelanceSimulator = () => {
             type="checkbox"
             checked={formData.hadUnemployment}
             onChange={(e) => handleInputChange('hadUnemployment', e.target.checked)}
-            className="w-5 h-5"
+            className="checkbox-elysion"
           />
           <span className="font-semibold text-gray-900">
             J'ai eu des périodes de chômage indemnisé
@@ -635,7 +635,7 @@ const FreelanceSimulator = () => {
             type="checkbox"
             checked={formData.hadLongIllness}
             onChange={(e) => handleInputChange('hadLongIllness', e.target.checked)}
-            className="w-5 h-5"
+            className="checkbox-elysion"
           />
           <span className="font-semibold text-gray-900">
             J'ai eu des arrêts maladie de longue durée
@@ -684,7 +684,7 @@ const FreelanceSimulator = () => {
             type="checkbox"
             checked={formData.hadParentalLeave}
             onChange={(e) => handleInputChange('hadParentalLeave', e.target.checked)}
-            className="w-5 h-5"
+            className="checkbox-elysion"
           />
           <span className="font-semibold text-gray-900">
             J'ai eu des congés parentaux
@@ -734,7 +734,7 @@ const FreelanceSimulator = () => {
               type="checkbox"
               checked={formData.hadMaternity}
               onChange={(e) => handleInputChange('hadMaternity', e.target.checked)}
-              className="w-5 h-5"
+              className="checkbox-elysion"
             />
             <span className="font-semibold text-gray-900">
               J'ai eu des congés maternité

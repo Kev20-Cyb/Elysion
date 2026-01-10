@@ -39,6 +39,12 @@ const FreelanceSimulator = () => {
 
   const [results, setResults] = useState(null);
 
+  // Extraire l'année de naissance depuis la date
+  const getBirthYear = () => {
+    if (!formData.birthDate) return null;
+    return new Date(formData.birthDate).getFullYear();
+  };
+
   // Convertir la durée en mois selon l'unité
   const convertToMonths = (duration, unit) => {
     if (unit === 'days') {

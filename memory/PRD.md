@@ -19,6 +19,7 @@ Elysion est une application de planification de retraite permettant aux utilisat
 - Valeur du point: `1,4386€`
 - +8 trimestres automatiques par enfant pour les femmes
 - Périodes d'inactivité en jours ou mois (chômage, congé parental, maladie)
+- Champ "Date de naissance" complet (jour/mois/année) au lieu de l'année seule
 - Redirection finale vers `/onboarding`
 
 ### Design System

@@ -184,7 +184,7 @@ const FreelanceSimulator = () => {
 
   // Étape 5 : Calcul de la retraite de base
   const calculateBasePension = (averageRevenue, totalQuarters) => {
-    const birthYear = parseInt(formData.birthYear);
+    const birthYear = getBirthYear();
     const currentYear = new Date().getFullYear();
     const age = currentYear - birthYear;
     
@@ -289,7 +289,7 @@ const FreelanceSimulator = () => {
       totalMonthly: Math.round(totalMonthly),
       totalAnnual: Math.round(totalAnnual),
       replacementRate: Math.round(replacementRate),
-      currentAge: new Date().getFullYear() - parseInt(formData.birthYear)
+      currentAge: new Date().getFullYear() - getBirthYear()
     };
     
     setResults(results);

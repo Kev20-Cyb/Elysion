@@ -336,15 +336,12 @@ const FreelanceSimulator = () => {
       <div className="grid md:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-2">
-            Année de naissance
+            Date de naissance
           </label>
           <input
-            type="number"
-            placeholder="1985"
-            min="1950"
-            max="2005"
-            value={formData.birthYear}
-            onChange={(e) => handleInputChange('birthYear', e.target.value)}
+            type="date"
+            value={formData.birthDate}
+            onChange={(e) => handleInputChange('birthDate', e.target.value)}
             className="input-elysion"
           />
         </div>

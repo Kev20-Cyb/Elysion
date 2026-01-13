@@ -305,7 +305,10 @@ const FreelanceSimulator = () => {
   };
 
   const prevStep = () => {
-    if (currentStep > 1) {
+    if (currentStep === 1) {
+      // Retour vers la page de sélection du simulateur
+      navigate('/simulator');
+    } else if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
     }
   };

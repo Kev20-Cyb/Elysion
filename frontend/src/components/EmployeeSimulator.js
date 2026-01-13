@@ -1024,7 +1024,7 @@ const EmployeeSimulator = () => {
     <div className="space-y-6">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-elysion-primary mb-2">Votre carrière</h2>
-        <p className="text-gray-600">Fonctionnaire - Étape 2/6</p>
+        <p className="text-gray-600">Fonctionnaire - Étape 2/5</p>
       </div>
 
       <div>
@@ -1098,7 +1098,7 @@ const EmployeeSimulator = () => {
     <div className="space-y-6">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-elysion-primary mb-2">Vos trimestres</h2>
-        <p className="text-gray-600">Fonctionnaire - Étape 3/6</p>
+        <p className="text-gray-600">Fonctionnaire - Étape 3/5</p>
       </div>
 
       <div>
@@ -1203,7 +1203,7 @@ const EmployeeSimulator = () => {
     <div className="space-y-6">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-elysion-primary mb-2">Retraite additionnelle</h2>
-        <p className="text-gray-600">Fonctionnaire - Étape 5/6</p>
+        <p className="text-gray-600">Fonctionnaire - Étape 4/5</p>
       </div>
 
       <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">

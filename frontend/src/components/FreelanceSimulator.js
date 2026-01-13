@@ -1041,8 +1041,7 @@ const FreelanceSimulator = () => {
             <div className="flex justify-between mt-8">
               <button
                 onClick={prevStep}
-                disabled={currentStep === 1}
-                className="btn-outline disabled:opacity-50"
+                className="btn-outline"
               >
                 ← Retour
               </button>

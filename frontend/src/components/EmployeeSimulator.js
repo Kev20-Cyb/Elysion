@@ -413,9 +413,9 @@ const EmployeeSimulator = () => {
       // Automatiquement en mode Salarié du Privé
       setBranch('private');
       setCurrentStep(2);
-    } else if (currentStep < 6) {
+    } else if (currentStep < 5) {
       setCurrentStep(currentStep + 1);
-    } else if (currentStep === 6) {
+    } else if (currentStep === 5) {
       handleCalculate();
     }
   };

@@ -1198,8 +1198,8 @@ const EmployeeSimulator = () => {
     </div>
   );
 
-  // Écran 5 : RAFP
-  const renderPublicStep5 = () => (
+  // Écran 4 : RAFP
+  const renderPublicStep4 = () => (
     <div className="space-y-6">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-elysion-primary mb-2">Retraite additionnelle</h2>

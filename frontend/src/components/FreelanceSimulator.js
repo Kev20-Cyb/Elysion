@@ -318,7 +318,7 @@ const FreelanceSimulator = () => {
     <div className="space-y-6">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-elysion-primary mb-2">Votre profil</h2>
-        <p className="text-gray-600">Étape 1/6</p>
+        <p className="text-gray-600">Étape 1/4</p>
       </div>
 
       <div>

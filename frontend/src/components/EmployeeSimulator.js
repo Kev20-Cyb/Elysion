@@ -1252,10 +1252,10 @@ const EmployeeSimulator = () => {
     </div>
   );
 
-  // Écran 6 : Scénarios (identique au privé)
-  const renderPublicStep5 = () => renderPrivateStep5(); // Même interface
+  // Écran 5 : Scénarios (identique au privé)
+  // renderPrivateStep5 est déjà défini et contient les scénarios
 
-  // Écran 7 : Résultats
+  // Écran 6 : Résultats
   const renderResults = () => {
     if (!results) return null;
 

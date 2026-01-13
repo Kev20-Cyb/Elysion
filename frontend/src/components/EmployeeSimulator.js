@@ -402,9 +402,9 @@ const EmployeeSimulator = () => {
     });
     
     if (branch === 'private') {
-      setCurrentStep(7); // Écran résultats privé
+      setCurrentStep(6); // Écran résultats privé
     } else {
-      setCurrentStep(7); // Écran résultats public
+      setCurrentStep(6); // Écran résultats public
     }
   };
 

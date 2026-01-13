@@ -1002,10 +1002,10 @@ const FreelanceSimulator = () => {
       <div className="max-w-4xl mx-auto px-4 py-12">
         <div className="bg-white rounded-2xl shadow-xl p-8">
           {/* Progress bar */}
-          {currentStep <= 6 && (
+          {currentStep <= 4 && (
             <div className="mb-8">
               <div className="flex justify-between mb-2">
-                {[1, 2, 3, 4, 5, 6].map((step) => (
+                {[1, 2, 3, 4].map((step) => (
                   <div
                     key={step}
                     className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold ${
@@ -1023,7 +1023,7 @@ const FreelanceSimulator = () => {
               <div className="h-2 bg-gray-200 rounded-full">
                 <div
                   className="h-full bg-elysion-accent rounded-full transition-all"
-                  style={{ width: `${(currentStep / 6) * 100}%` }}
+                  style={{ width: `${(currentStep / 4) * 100}%` }}
                 />
               </div>
             </div>
@@ -1033,11 +1033,11 @@ const FreelanceSimulator = () => {
           {currentStep === 1 && renderStep1()}
           {currentStep === 2 && renderStep2()}
           {currentStep === 3 && renderStep3()}
-          {(currentStep === 4 || currentStep === 5 || currentStep === 6) && renderStep456()}
-          {currentStep === 7 && renderResults()}
+          {currentStep === 4 && renderStep456()}
+          {currentStep === 5 && renderResults()}
 
           {/* Navigation buttons */}
-          {currentStep <= 6 && (
+          {currentStep <= 4 && (
             <div className="flex justify-between mt-8">
               <button
                 onClick={prevStep}
@@ -1049,7 +1049,7 @@ const FreelanceSimulator = () => {
                 onClick={nextStep}
                 className="btn-primary"
               >
-                {currentStep === 6 ? 'Calculer ma retraite' : 'Suivant →'}
+                {currentStep === 4 ? 'Calculer ma retraite' : 'Suivant →'}
               </button>
             </div>
           )}

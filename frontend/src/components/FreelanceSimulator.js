@@ -293,7 +293,7 @@ const FreelanceSimulator = () => {
     };
     
     setResults(results);
-    setCurrentStep(7); // Résultats
+    setCurrentStep(5); // Résultats
   };
 
   const nextStep = () => {

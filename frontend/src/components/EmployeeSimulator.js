@@ -1468,10 +1468,10 @@ const EmployeeSimulator = () => {
       <div className="max-w-4xl mx-auto px-4 py-12">
         <div className="bg-white rounded-2xl shadow-xl p-8">
           {/* Progress bar */}
-          {currentStep <= 6 && (
+          {currentStep <= 5 && (
             <div className="mb-8">
               <div className="flex justify-between mb-2">
-                {[1, 2, 3, 4, 5, 6].map((step) => (
+                {[1, 2, 3, 4, 5].map((step) => (
                   <div
                     key={step}
                     className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold ${
@@ -1489,7 +1489,7 @@ const EmployeeSimulator = () => {
               <div className="h-2 bg-gray-200 rounded-full">
                 <div
                   className="h-full bg-elysion-accent rounded-full transition-all"
-                  style={{ width: `${(currentStep / 6) * 100}%` }}
+                  style={{ width: `${(currentStep / 5) * 100}%` }}
                 />
               </div>
             </div>
@@ -1499,14 +1499,13 @@ const EmployeeSimulator = () => {
           {currentStep === 1 && renderStep1()}
           {branch === 'private' && currentStep === 2 && renderPrivateStep2()}
           {branch === 'private' && currentStep === 3 && renderPrivateStep3()}
-          {branch === 'private' && currentStep === 4 && <div className="text-center py-8 text-gray-600">Calcul automatique de la retraite de base...</div>}
+          {branch === 'private' && currentStep === 4 && renderPrivateStep4()}
           {branch === 'private' && currentStep === 5 && renderPrivateStep5()}
-          {branch === 'private' && currentStep === 6 && renderPrivateStep6()}
           
-          {currentStep === 7 && renderResults()}
+          {currentStep === 6 && renderResults()}
 
           {/* Navigation buttons */}
-          {currentStep <= 6 && (
+          {currentStep <= 5 && (
             <div className="flex justify-between mt-8">
               <button
                 onClick={prevStep}
@@ -1518,7 +1517,7 @@ const EmployeeSimulator = () => {
                 onClick={nextStep}
                 className="btn-primary disabled:opacity-50"
               >
-                {currentStep === 6 ? 'Calculer ma retraite' : 'Suivant →'}
+                {currentStep === 5 ? 'Calculer ma retraite' : 'Suivant →'}
               </button>
             </div>
           )}

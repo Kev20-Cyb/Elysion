@@ -768,8 +768,8 @@ const FreelanceSimulator = () => {
     </div>
   );
 
-  // Rendu Étape 4, 5, 6 : Récapitulatif et validation
-  const renderStep456 = () => {
+  // Rendu Étape 4 : Récapitulatif et validation
+  const renderStep4 = () => {
     const totalQuarters = calculateTotalQuarters();
     const averageRevenue = calculateAverageRevenue();
     const totalPoints = calculateComplementaryPoints();
@@ -1033,7 +1033,7 @@ const FreelanceSimulator = () => {
           {currentStep === 1 && renderStep1()}
           {currentStep === 2 && renderStep2()}
           {currentStep === 3 && renderStep3()}
-          {currentStep === 4 && renderStep456()}
+          {currentStep === 4 && renderStep4()}
           {currentStep === 5 && renderResults()}
 
           {/* Navigation buttons */}

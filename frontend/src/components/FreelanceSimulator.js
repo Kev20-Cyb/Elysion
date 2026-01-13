@@ -297,9 +297,9 @@ const FreelanceSimulator = () => {
   };
 
   const nextStep = () => {
-    if (currentStep < 6) {
+    if (currentStep < 4) {
       setCurrentStep(currentStep + 1);
-    } else if (currentStep === 6) {
+    } else if (currentStep === 4) {
       calculateFullRetirement();
     }
   };

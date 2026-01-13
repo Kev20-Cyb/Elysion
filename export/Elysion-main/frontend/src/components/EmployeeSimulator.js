@@ -402,9 +402,9 @@ const EmployeeSimulator = () => {
     });
     
     if (branch === 'private') {
-      setCurrentStep(7); // Écran résultats privé
+      setCurrentStep(6); // Écran résultats privé
     } else {
-      setCurrentStep(7); // Écran résultats public
+      setCurrentStep(6); // Écran résultats public
     }
   };
 
@@ -413,9 +413,9 @@ const EmployeeSimulator = () => {
       // Automatiquement en mode Salarié du Privé
       setBranch('private');
       setCurrentStep(2);
-    } else if (currentStep < 6) {
+    } else if (currentStep < 5) {
       setCurrentStep(currentStep + 1);
-    } else if (currentStep === 6) {
+    } else if (currentStep === 5) {
       handleCalculate();
     }
   };
@@ -434,7 +434,7 @@ const EmployeeSimulator = () => {
     <div className="space-y-6">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-elysion-primary mb-2">Votre profil</h2>
-        <p className="text-gray-600">Étape 1</p>
+        <p className="text-gray-600">Salarié - Étape 1/5</p>
       </div>
 
       <div className="grid md:grid-cols-2 gap-4">
@@ -640,7 +640,7 @@ const EmployeeSimulator = () => {
     <div className="space-y-6">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-elysion-primary mb-2">Vos salaires</h2>
-        <p className="text-gray-600">Salarié - Étape 2/6</p>
+        <p className="text-gray-600">Salarié - Étape 2/5</p>
       </div>
 
       <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
@@ -812,7 +812,7 @@ const EmployeeSimulator = () => {
     <div className="space-y-6">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-elysion-primary mb-2">Vos trimestres</h2>
-        <p className="text-gray-600">Salarié - Étape 3/6</p>
+        <p className="text-gray-600">Salarié - Étape 3/5</p>
       </div>
 
       <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
@@ -902,11 +902,12 @@ const EmployeeSimulator = () => {
 
   // BRANCHE PRIVÉ - Écran 4 : Retraite de base (automatique, juste affichage)
   // BRANCHE PRIVÉ - Écran 5 : Agirc-Arrco
-  const renderPrivateStep5 = () => (
+  // BRANCHE PRIVÉ - Écran 4 : Retraite complémentaire
+  const renderPrivateStep4 = () => (
     <div className="space-y-6">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-elysion-primary mb-2">Retraite complémentaire</h2>
-        <p className="text-gray-600">Salarié - Étape 5/6</p>
+        <p className="text-gray-600">Salarié - Étape 4/5</p>
       </div>
 
       <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
@@ -957,12 +958,12 @@ const EmployeeSimulator = () => {
     </div>
   );
 
-  // BRANCHE PRIVÉ - Écran 6 : Scénarios d'âge
-  const renderPrivateStep6 = () => (
+  // BRANCHE PRIVÉ - Écran 5 : Scénarios d'âge
+  const renderPrivateStep5 = () => (
     <div className="space-y-6">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-elysion-primary mb-2">Scénarios de départ</h2>
-        <p className="text-gray-600">Salarié - Étape 6/6</p>
+        <p className="text-gray-600">Salarié - Étape 5/5</p>
       </div>
 
       <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
@@ -1023,7 +1024,7 @@ const EmployeeSimulator = () => {
     <div className="space-y-6">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-elysion-primary mb-2">Votre carrière</h2>
-        <p className="text-gray-600">Fonctionnaire - Étape 2/6</p>
+        <p className="text-gray-600">Fonctionnaire - Étape 2/5</p>
       </div>
 
       <div>
@@ -1097,7 +1098,7 @@ const EmployeeSimulator = () => {
     <div className="space-y-6">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-elysion-primary mb-2">Vos trimestres</h2>
-        <p className="text-gray-600">Fonctionnaire - Étape 3/6</p>
+        <p className="text-gray-600">Fonctionnaire - Étape 3/5</p>
       </div>
 
       <div>
@@ -1197,12 +1198,12 @@ const EmployeeSimulator = () => {
     </div>
   );
 
-  // Écran 5 : RAFP
-  const renderPublicStep5 = () => (
+  // Écran 4 : RAFP
+  const renderPublicStep4 = () => (
     <div className="space-y-6">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-elysion-primary mb-2">Retraite additionnelle</h2>
-        <p className="text-gray-600">Fonctionnaire - Étape 5/6</p>
+        <p className="text-gray-600">Fonctionnaire - Étape 4/5</p>
       </div>
 
       <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
@@ -1251,10 +1252,10 @@ const EmployeeSimulator = () => {
     </div>
   );
 
-  // Écran 6 : Scénarios (identique au privé)
-  const renderPublicStep6 = () => renderPrivateStep6(); // Même interface
+  // Écran 5 : Scénarios (identique au privé)
+  // renderPrivateStep5 est déjà défini et contient les scénarios
 
-  // Écran 7 : Résultats
+  // Écran 6 : Résultats
   const renderResults = () => {
     if (!results) return null;
 
@@ -1467,10 +1468,10 @@ const EmployeeSimulator = () => {
       <div className="max-w-4xl mx-auto px-4 py-12">
         <div className="bg-white rounded-2xl shadow-xl p-8">
           {/* Progress bar */}
-          {currentStep <= 6 && (
+          {currentStep <= 5 && (
             <div className="mb-8">
               <div className="flex justify-between mb-2">
-                {[1, 2, 3, 4, 5, 6].map((step) => (
+                {[1, 2, 3, 4, 5].map((step) => (
                   <div
                     key={step}
                     className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold ${
@@ -1488,7 +1489,7 @@ const EmployeeSimulator = () => {
               <div className="h-2 bg-gray-200 rounded-full">
                 <div
                   className="h-full bg-elysion-accent rounded-full transition-all"
-                  style={{ width: `${(currentStep / 6) * 100}%` }}
+                  style={{ width: `${(currentStep / 5) * 100}%` }}
                 />
               </div>
             </div>
@@ -1498,14 +1499,13 @@ const EmployeeSimulator = () => {
           {currentStep === 1 && renderStep1()}
           {branch === 'private' && currentStep === 2 && renderPrivateStep2()}
           {branch === 'private' && currentStep === 3 && renderPrivateStep3()}
-          {branch === 'private' && currentStep === 4 && <div className="text-center py-8 text-gray-600">Calcul automatique de la retraite de base...</div>}
+          {branch === 'private' && currentStep === 4 && renderPrivateStep4()}
           {branch === 'private' && currentStep === 5 && renderPrivateStep5()}
-          {branch === 'private' && currentStep === 6 && renderPrivateStep6()}
           
-          {currentStep === 7 && renderResults()}
+          {currentStep === 6 && renderResults()}
 
           {/* Navigation buttons */}
-          {currentStep <= 6 && (
+          {currentStep <= 5 && (
             <div className="flex justify-between mt-8">
               <button
                 onClick={prevStep}
@@ -1517,7 +1517,7 @@ const EmployeeSimulator = () => {
                 onClick={nextStep}
                 className="btn-primary disabled:opacity-50"
               >
-                {currentStep === 6 ? 'Calculer ma retraite' : 'Suivant →'}
+                {currentStep === 5 ? 'Calculer ma retraite' : 'Suivant →'}
               </button>
             </div>
           )}

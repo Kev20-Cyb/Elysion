@@ -293,13 +293,13 @@ const FreelanceSimulator = () => {
     };
     
     setResults(results);
-    setCurrentStep(7); // Résultats
+    setCurrentStep(5); // Résultats
   };
 
   const nextStep = () => {
-    if (currentStep < 6) {
+    if (currentStep < 4) {
       setCurrentStep(currentStep + 1);
-    } else if (currentStep === 6) {
+    } else if (currentStep === 4) {
       calculateFullRetirement();
     }
   };
@@ -318,7 +318,7 @@ const FreelanceSimulator = () => {
     <div className="space-y-6">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-elysion-primary mb-2">Votre profil</h2>
-        <p className="text-gray-600">Étape 1/6</p>
+        <p className="text-gray-600">Étape 1/4</p>
       </div>
 
       <div>
@@ -426,7 +426,7 @@ const FreelanceSimulator = () => {
       <div className="space-y-6">
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold text-elysion-primary mb-2">Historique de revenus</h2>
-          <p className="text-gray-600">Étape 2/6</p>
+          <p className="text-gray-600">Étape 2/4</p>
         </div>
 
         <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg mb-6">
@@ -572,7 +572,7 @@ const FreelanceSimulator = () => {
     <div className="space-y-6">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-elysion-primary mb-2">Trimestres assimilés</h2>
-        <p className="text-gray-600">Étape 3/6</p>
+        <p className="text-gray-600">Étape 3/4</p>
       </div>
 
       <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg mb-6">
@@ -768,8 +768,8 @@ const FreelanceSimulator = () => {
     </div>
   );
 
-  // Rendu Étape 4, 5, 6 : Récapitulatif et validation
-  const renderStep456 = () => {
+  // Rendu Étape 4 : Récapitulatif et validation
+  const renderStep4 = () => {
     const totalQuarters = calculateTotalQuarters();
     const averageRevenue = calculateAverageRevenue();
     const totalPoints = calculateComplementaryPoints();
@@ -778,7 +778,7 @@ const FreelanceSimulator = () => {
       <div className="space-y-6">
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold text-elysion-primary mb-2">Récapitulatif</h2>
-          <p className="text-gray-600">Étapes 4-6/6</p>
+          <p className="text-gray-600">Étape 4/4</p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-6">
@@ -1002,10 +1002,10 @@ const FreelanceSimulator = () => {
       <div className="max-w-4xl mx-auto px-4 py-12">
         <div className="bg-white rounded-2xl shadow-xl p-8">
           {/* Progress bar */}
-          {currentStep <= 6 && (
+          {currentStep <= 4 && (
             <div className="mb-8">
               <div className="flex justify-between mb-2">
-                {[1, 2, 3, 4, 5, 6].map((step) => (
+                {[1, 2, 3, 4].map((step) => (
                   <div
                     key={step}
                     className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold ${
@@ -1023,7 +1023,7 @@ const FreelanceSimulator = () => {
               <div className="h-2 bg-gray-200 rounded-full">
                 <div
                   className="h-full bg-elysion-accent rounded-full transition-all"
-                  style={{ width: `${(currentStep / 6) * 100}%` }}
+                  style={{ width: `${(currentStep / 4) * 100}%` }}
                 />
               </div>
             </div>
@@ -1033,11 +1033,11 @@ const FreelanceSimulator = () => {
           {currentStep === 1 && renderStep1()}
           {currentStep === 2 && renderStep2()}
           {currentStep === 3 && renderStep3()}
-          {(currentStep === 4 || currentStep === 5 || currentStep === 6) && renderStep456()}
-          {currentStep === 7 && renderResults()}
+          {currentStep === 4 && renderStep4()}
+          {currentStep === 5 && renderResults()}
 
           {/* Navigation buttons */}
-          {currentStep <= 6 && (
+          {currentStep <= 4 && (
             <div className="flex justify-between mt-8">
               <button
                 onClick={prevStep}
@@ -1049,7 +1049,7 @@ const FreelanceSimulator = () => {
                 onClick={nextStep}
                 className="btn-primary"
               >
-                {currentStep === 6 ? 'Calculer ma retraite' : 'Suivant →'}
+                {currentStep === 4 ? 'Calculer ma retraite' : 'Suivant →'}
               </button>
             </div>
           )}

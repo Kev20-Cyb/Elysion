@@ -640,7 +640,7 @@ const EmployeeSimulator = () => {
     <div className="space-y-6">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-elysion-primary mb-2">Vos salaires</h2>
-        <p className="text-gray-600">Salarié - Étape 2/6</p>
+        <p className="text-gray-600">Salarié - Étape 2/5</p>
       </div>
 
       <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">

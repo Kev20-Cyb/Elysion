@@ -421,7 +421,10 @@ const EmployeeSimulator = () => {
   };
 
   const prevStep = () => {
-    if (currentStep > 1) {
+    if (currentStep === 1) {
+      // Retour vers la page de sélection du simulateur
+      navigate('/simulator');
+    } else if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
     }
   };
@@ -1506,8 +1509,7 @@ const EmployeeSimulator = () => {
             <div className="flex justify-between mt-8">
               <button
                 onClick={prevStep}
-                disabled={currentStep === 1}
-                className="btn-outline disabled:opacity-50"
+                className="btn-outline"
               >
                 ← Retour
               </button>

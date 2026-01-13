@@ -426,7 +426,7 @@ const FreelanceSimulator = () => {
       <div className="space-y-6">
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold text-elysion-primary mb-2">Historique de revenus</h2>
-          <p className="text-gray-600">Étape 2/6</p>
+          <p className="text-gray-600">Étape 2/4</p>
         </div>
 
         <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg mb-6">
@@ -572,7 +572,7 @@ const FreelanceSimulator = () => {
     <div className="space-y-6">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-elysion-primary mb-2">Trimestres assimilés</h2>
-        <p className="text-gray-600">Étape 3/6</p>
+        <p className="text-gray-600">Étape 3/4</p>
       </div>
 
       <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg mb-6">
@@ -778,7 +778,7 @@ const FreelanceSimulator = () => {
       <div className="space-y-6">
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold text-elysion-primary mb-2">Récapitulatif</h2>
-          <p className="text-gray-600">Étapes 4-6/6</p>
+          <p className="text-gray-600">Étape 4/4</p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-6">

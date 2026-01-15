@@ -323,6 +323,7 @@ const Dashboard = () => {
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <button 
+              onClick={() => navigate('/simulator')}
               className="p-6 bg-elysion-bg rounded-lg border border-elysion-secondary hover:bg-elysion-secondary/20 transition-all text-left"
               data-testid="dashboard-start-simulation-btn"
             >
@@ -332,6 +333,7 @@ const Dashboard = () => {
             </button>
             
             <button 
+              onClick={() => navigate('/onboarding')}
               className="p-6 bg-elysion-bg rounded-lg border border-elysion-secondary hover:bg-elysion-secondary/20 transition-all text-left"
               data-testid="dashboard-update-profile-btn"
             >
@@ -341,12 +343,13 @@ const Dashboard = () => {
             </button>
             
             <button 
+              onClick={() => navigate('/documents')}
               className="p-6 bg-elysion-bg rounded-lg border border-elysion-secondary hover:bg-elysion-secondary/20 transition-all text-left"
               data-testid="dashboard-export-data-btn"
             >
               <div className="text-2xl mb-2">📊</div>
-              <h4 className="font-semibold text-elysion-text-dark mb-1">Exporter données</h4>
-              <p className="text-sm text-elysion-text-light">Téléchargez un rapport complet</p>
+              <h4 className="font-semibold text-elysion-text-dark mb-1">Mes documents</h4>
+              <p className="text-sm text-elysion-text-light">Gérez vos justificatifs et relevés</p>
             </button>
           </div>
         </div>

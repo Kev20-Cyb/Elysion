@@ -2048,11 +2048,13 @@ const EmployeeSimulator = () => {
           {branch === 'private' && currentStep === 3 && renderPrivateStep3()}
           {branch === 'private' && currentStep === 4 && renderPrivateStep4()}
           {branch === 'private' && currentStep === 5 && renderPrivateStep5()}
+          {branch === 'private' && currentStep === 6 && renderPrivateStep6()}
+          {branch === 'private' && currentStep === 7 && renderPrivateStep7()}
           
-          {currentStep === 6 && renderResults()}
+          {currentStep === 8 && renderResults()}
 
           {/* Navigation buttons */}
-          {currentStep <= 5 && (
+          {currentStep <= 7 && (
             <div className="flex justify-between mt-8">
               <button
                 onClick={prevStep}
@@ -2064,7 +2066,7 @@ const EmployeeSimulator = () => {
                 onClick={nextStep}
                 className="btn-primary disabled:opacity-50"
               >
-                {currentStep === 5 ? 'Calculer ma retraite' : 'Suivant →'}
+                {currentStep === 7 ? 'Calculer ma retraite' : 'Suivant →'}
               </button>
             </div>
           )}

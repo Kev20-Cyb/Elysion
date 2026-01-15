@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { useAuth } from '../App';
 import { useNavigate } from 'react-router-dom';
@@ -10,24 +10,42 @@ const Dashboard = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [dashboardData, setDashboardData] = useState(null);
+  const [recentDocuments, setRecentDocuments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    fetchDashboardData();
-  }, []);
-
-  const fetchDashboardData = async () => {
+  const fetchDashboardData = useCallback(async () => {
     try {
-      const response = await axios.get(`${API}/dashboard`);
-      setDashboardData(response.data);
+      setLoading(true);
+      setError('');
+      
+      // Fetch dashboard data and documents in parallel
+      const [dashboardResponse, documentsResponse] = await Promise.all([
+        axios.get(`${API}/dashboard`),
+        axios.get(`${API}/documents`).catch(() => ({ data: [] })) // Fallback to empty array if no documents
+      ]);
+      
+      setDashboardData(dashboardResponse.data);
+      
+      // Get the 3 most recent documents
+      const docs = documentsResponse.data || [];
+      setRecentDocuments(docs.slice(0, 3));
+      
     } catch (err) {
-      setError('Erreur lors du chargement du tableau de bord');
       console.error('Dashboard error:', err);
+      if (err.response?.status === 401) {
+        setError('Session expirée. Veuillez vous reconnecter.');
+      } else {
+        setError('Erreur lors du chargement du tableau de bord');
+      }
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchDashboardData();
+  }, [fetchDashboardData]);
 
   const getUserTypeInfo = (userType) => {
     const types = {
@@ -252,33 +270,47 @@ const Dashboard = () => {
               <span className="text-2xl">📄</span>
             </div>
             <div className="space-y-3">
-              {dashboardData?.recent_documents?.map((doc, index) => (
-                <div 
-                  key={index} 
-                  className="flex items-center justify-between p-3 bg-elysion-bg rounded-lg hover:bg-gray-100 transition-colors cursor-pointer"
-                  data-testid={`dashboard-document-${index}`}
-                >
-                  <div className="flex items-center space-x-3">
-                    <span className="text-lg">
-                      {doc.type === 'tax' && '📊'}
-                      {doc.type === 'retirement' && '🏦'}
-                      {doc.type === 'income' && '💵'}
-                    </span>
-                    <div>
-                      <p className="font-medium text-elysion-text-dark">{doc.name}</p>
-                      <p className="text-sm text-elysion-text-light">{doc.date}</p>
+              {recentDocuments.length > 0 ? (
+                recentDocuments.map((doc, index) => (
+                  <div 
+                    key={doc.id || index} 
+                    className="flex items-center justify-between p-3 bg-elysion-bg rounded-lg hover:bg-gray-100 transition-colors cursor-pointer"
+                    onClick={() => navigate('/documents')}
+                    data-testid={`dashboard-document-${index}`}
+                  >
+                    <div className="flex items-center space-x-3">
+                      <span className="text-lg">
+                        {doc.category === 'salary_slip' && '💵'}
+                        {doc.category === 'career_statement' && '📋'}
+                        {doc.category === 'tax_declaration' && '📊'}
+                        {doc.category === 'retirement_contract' && '🏦'}
+                        {doc.category === 'other' && '📄'}
+                        {!doc.category && '📄'}
+                      </span>
+                      <div>
+                        <p className="font-medium text-elysion-text-dark truncate max-w-[200px]">{doc.filename}</p>
+                        <p className="text-sm text-elysion-text-light">
+                          {doc.uploaded_at ? new Date(doc.uploaded_at).toLocaleDateString('fr-FR') : '-'}
+                        </p>
+                      </div>
                     </div>
+                    <span className="text-elysion-primary">→</span>
                   </div>
-                  <span className="text-elysion-primary">→</span>
+                ))
+              ) : (
+                <div className="text-center py-6 text-elysion-text-light">
+                  <span className="text-3xl block mb-2">📁</span>
+                  <p>Aucun document téléchargé</p>
+                  <p className="text-sm mt-1">Ajoutez vos documents pour les retrouver ici</p>
                 </div>
-              ))}
+              )}
             </div>
             <button 
               onClick={() => navigate('/documents')} 
               className="w-full mt-6 btn-elysion-primary" 
               data-testid="dashboard-upload-document-btn"
             >
-              Gérer mes documents
+              {recentDocuments.length > 0 ? 'Gérer mes documents' : 'Ajouter un document'}
             </button>
           </div>
         </div>
@@ -291,6 +323,7 @@ const Dashboard = () => {
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <button 
+              onClick={() => navigate('/simulator')}
               className="p-6 bg-elysion-bg rounded-lg border border-elysion-secondary hover:bg-elysion-secondary/20 transition-all text-left"
               data-testid="dashboard-start-simulation-btn"
             >
@@ -300,6 +333,7 @@ const Dashboard = () => {
             </button>
             
             <button 
+              onClick={() => navigate('/onboarding')}
               className="p-6 bg-elysion-bg rounded-lg border border-elysion-secondary hover:bg-elysion-secondary/20 transition-all text-left"
               data-testid="dashboard-update-profile-btn"
             >
@@ -309,12 +343,13 @@ const Dashboard = () => {
             </button>
             
             <button 
+              onClick={() => navigate('/documents')}
               className="p-6 bg-elysion-bg rounded-lg border border-elysion-secondary hover:bg-elysion-secondary/20 transition-all text-left"
               data-testid="dashboard-export-data-btn"
             >
               <div className="text-2xl mb-2">📊</div>
-              <h4 className="font-semibold text-elysion-text-dark mb-1">Exporter données</h4>
-              <p className="text-sm text-elysion-text-light">Téléchargez un rapport complet</p>
+              <h4 className="font-semibold text-elysion-text-dark mb-1">Mes documents</h4>
+              <p className="text-sm text-elysion-text-light">Gérez vos justificatifs et relevés</p>
             </button>
           </div>
         </div>

@@ -400,3 +400,162 @@ calculateScenarios()
 **Document Version** : 1.1  
 **Date** : Janvier 2025  
 **Valeur du point Agirc-Arrco** : 1,4386€
+
+---
+
+## 8. Module Épargne & Besoin (NOUVEAU)
+
+### Objectif
+Déterminer si l'utilisateur aura besoin d'une épargne complémentaire pour maintenir son niveau de vie à la retraite.
+
+### Étape 5 : Épargne & Besoin
+
+#### Données collectées
+```javascript
+currentMonthlyIncome: 0,      // Revenu mensuel net actuel
+targetIncomeMode: 'percentage', // 'percentage' ou 'amount'
+targetIncomePercentage: 70,    // % du revenu actuel souhaité
+targetIncomeAmount: 0,         // Montant fixe en euros
+currentSavings: 0,             // Capital déjà épargné
+wantsEpargneCalculation: true  // Calcul souhaité ou non
+```
+
+#### Calcul du taux de remplacement
+```javascript
+const replacementRate = (pensionEstimée / revenuActuel) * 100;
+// < 50% : Niveau faible - épargne conseillée
+// 50-70% : Niveau modéré - épargne recommandée
+// >= 70% : Bon niveau de remplacement
+```
+
+---
+
+## 9. Profils de Risque (NOUVEAU)
+
+### Questionnaire de Profilage
+
+#### Question 1 : Horizon de placement
+```javascript
+'short'  : < 10 ans  → Score +1
+'medium' : 10-20 ans → Score +2
+'long'   : > 20 ans  → Score +3
+```
+
+#### Question 2 : Tolérance aux pertes
+```javascript
+'5%'  : Très prudent       → Score +1
+'10%' : Modéré             → Score +2
+'20%' : Tolérant au risque → Score +3
+```
+
+#### Question 3 : Connaissance des marchés
+```javascript
+'beginner'     : Débutant      → Score +1
+'intermediate' : Intermédiaire → Score +2
+'advanced'     : Avancé        → Score +3
+```
+
+### Classification automatique
+```javascript
+const calculateRiskProfile = () => {
+  let score = horizonScore + toleranceScore + knowledgeScore;
+  
+  if (score <= 4) return 'prudent';
+  if (score <= 7) return 'equilibre';
+  return 'dynamique';
+};
+```
+
+### Paramètres par profil
+```javascript
+const RISK_PROFILES = {
+  prudent: {
+    name: 'Prudent',
+    annualReturn: 0.015,  // 1.5% réel
+    recommendation: 'Fonds euros, livrets réglementés, obligations'
+  },
+  equilibre: {
+    name: 'Équilibré',
+    annualReturn: 0.04,   // 4% réel
+    recommendation: 'Mix fonds euros/UC, PER équilibré, assurance-vie diversifiée'
+  },
+  dynamique: {
+    name: 'Dynamique',
+    annualReturn: 0.07,   // 7% réel
+    recommendation: 'Actions, ETF, PER dynamique, PEA'
+  }
+};
+```
+
+---
+
+## 10. Calcul de l'Effort d'Épargne (NOUVEAU)
+
+### Formule de calcul
+```javascript
+const calculateRequiredSavings = (targetIncome, currentPension, yearsUntilRetirement, profile) => {
+  // Écart mensuel à combler
+  const monthlyGap = targetIncome - currentPension;
+  if (monthlyGap <= 0) return { monthlyContribution: 0, message: 'Pension suffisante' };
+  
+  // Durée de consommation estimée (25 ans)
+  const retirementDuration = 25;
+  const annualReturn = RISK_PROFILES[profile].annualReturn;
+  const monthlyReturn = annualReturn / 12;
+  
+  // Capital nécessaire pour générer le revenu complémentaire
+  const requiredCapital = monthlyGap * 12 * retirementDuration * 0.85; // 0.85 = ajustement inflation
+  
+  // Capital déjà épargné avec projection des rendements
+  const currentSavingsProjected = currentSavings * Math.pow(1 + annualReturn, yearsUntilRetirement);
+  
+  // Capital restant à constituer
+  const capitalToAccumulate = Math.max(0, requiredCapital - currentSavingsProjected);
+  
+  // Versement mensuel nécessaire (formule d'annuité)
+  const n = yearsUntilRetirement * 12;
+  const monthlyContribution = capitalToAccumulate * monthlyReturn / (Math.pow(1 + monthlyReturn, n) - 1);
+  
+  return {
+    monthlyGap,
+    requiredCapital,
+    currentSavingsProjected,
+    capitalToAccumulate,
+    monthlyContribution,
+    annualReturn: annualReturn * 100
+  };
+};
+```
+
+### Résultat affiché
+Pour chaque scénario d'âge de départ :
+- Pension obligatoire estimée (base + complémentaire)
+- Revenu cible souhaité
+- Écart mensuel à combler
+- Capital nécessaire
+- Versement mensuel indicatif par profil (Prudent / Équilibré / Dynamique)
+
+### Avertissement légal
+> ⚠️ Ces estimations sont indicatives et basées sur des hypothèses de rendement non garanties. 
+> Les performances passées ne préjugent pas des performances futures. 
+> Consultez un conseiller financier pour une stratégie personnalisée.
+
+---
+
+## 11. Synthèse du Tunnel (NOUVEAU)
+
+### Parcours utilisateur en 7 étapes
+1. **Profil & carrière** - Données personnelles et professionnelles
+2. **Salaires** - Historique des revenus
+3. **Trimestres & enfants** - Validation des trimestres + bonus enfants
+4. **Complémentaire** - Points Agirc-Arrco
+5. **Épargne & Besoin** - Objectif de revenu et capital existant
+6. **Profil de risque** - 3 questions pour classification
+7. **Scénarios** - Choix des âges de départ
+
+### Résultats finaux
+- Tableau comparatif des pensions par âge
+- Projections d'épargne par profil de risque
+- Recommandations de supports d'investissement
+- Points clés et conseils personnalisés
+

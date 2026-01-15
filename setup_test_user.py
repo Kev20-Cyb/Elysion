@@ -7,7 +7,7 @@ import requests
 import json
 from datetime import datetime
 
-BASE_URL = "https://pension-sim-1.preview.emergentagent.com/api"
+BASE_URL = "https://future-nest-1.preview.emergentagent.com/api"
 TEST_EMAIL = "test@example.com"
 TEST_PASSWORD = "password123"
 TEST_NAME = "Test User"

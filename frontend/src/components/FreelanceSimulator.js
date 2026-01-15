@@ -1240,21 +1240,48 @@ const FreelanceSimulator = () => {
   // Rendu Étape 7 : Résultats
   const renderResults = () => {
     if (!results) return null;
+    
+    const profileData = RISK_PROFILES[results.riskProfile];
 
     return (
       <div className="space-y-6">
         <div className="text-center mb-8">
           <div className="text-4xl mb-4">🎉</div>
           <h2 className="text-3xl font-bold text-elysion-primary mb-2">Votre estimation de retraite</h2>
+          <p className="text-gray-600">Freelance - Synthèse complète</p>
         </div>
+
+        {/* Récapitulatif objectif */}
+        {results.targetIncome > 0 && (
+          <div className="bg-gradient-to-r from-elysion-primary-50 to-elysion-secondary-50 p-6 rounded-xl border border-elysion-primary-200">
+            <h3 className="font-semibold text-gray-900 mb-4">🎯 Votre objectif</h3>
+            <div className="grid md:grid-cols-3 gap-4 text-center">
+              <div>
+                <p className="text-sm text-gray-600">Revenu actuel</p>
+                <p className="text-xl font-bold text-gray-900">{results.currentIncome?.toLocaleString()} €/mois</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-600">Objectif retraite</p>
+                <p className="text-xl font-bold text-elysion-primary">{results.targetIncome?.toLocaleString()} €/mois</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-600">Profil de risque</p>
+                <p className={`text-xl font-bold ${results.riskProfile === 'prudent' ? 'text-green-600' : results.riskProfile === 'equilibre' ? 'text-blue-600' : 'text-orange-500'}`}>
+                  {profileData?.name}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Montant principal */}
         <div className="bg-gradient-to-r from-elysion-primary to-elysion-accent text-white p-8 rounded-2xl text-center">
           <h3 className="text-xl mb-4">Pension mensuelle estimée</h3>
           <div className="text-5xl font-bold mb-2">
-            €{results.totalMonthly.toLocaleString()}
+            {results.totalMonthly.toLocaleString()} €
           </div>
           <p className="text-white/80">par mois (base + complémentaire)</p>
+          <p className="mt-2 text-sm">Taux de remplacement : <strong>{results.replacementRate}%</strong></p>
         </div>
 
         {/* Détails */}
@@ -1286,7 +1313,7 @@ const FreelanceSimulator = () => {
               )}
               <div className="flex justify-between pt-2 border-t border-gray-200">
                 <span>Montant mensuel :</span>
-                <span className="font-bold text-lg">€{Math.round(results.basePension.monthly).toLocaleString()}</span>
+                <span className="font-bold text-lg">{Math.round(results.basePension.monthly).toLocaleString()} €</span>
               </div>
             </div>
           </div>
@@ -1302,32 +1329,110 @@ const FreelanceSimulator = () => {
               </div>
               <div className="flex justify-between">
                 <span>Valeur du point :</span>
-                <span className="font-semibold">€{results.complementaryPension.pointValue}</span>
+                <span className="font-semibold">{results.complementaryPension.pointValue} €</span>
               </div>
               <div className="flex justify-between pt-2 border-t border-gray-200">
                 <span>Montant mensuel :</span>
-                <span className="font-bold text-lg">€{Math.round(results.complementaryPension.monthly).toLocaleString()}</span>
+                <span className="font-bold text-lg">{Math.round(results.complementaryPension.monthly).toLocaleString()} €</span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Infos supplémentaires */}
-        <div className="grid md:grid-cols-2 gap-6">
-          <div className="bg-elysion-bg p-6 rounded-lg">
-            <h4 className="font-semibold mb-2">Taux de remplacement</h4>
-            <div className="text-3xl font-bold text-elysion-accent">{results.replacementRate}%</div>
-            <p className="text-sm text-gray-600 mt-1">de votre dernier revenu</p>
-          </div>
-
-          <div className="bg-elysion-bg p-6 rounded-lg">
-            <h4 className="font-semibold mb-2">Revenu moyen de référence</h4>
-            <div className="text-3xl font-bold text-elysion-primary">
-              €{Math.round(results.averageRevenue).toLocaleString()}
+        {/* Section Épargne complémentaire */}
+        {formData.wantsEpargneCalculation && results.targetIncome > 0 && results.savingsProjections && (
+          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <div className="bg-elysion-accent-50 p-4 border-b">
+              <h3 className="font-semibold text-elysion-accent-700">💰 Épargne complémentaire nécessaire</h3>
+              <p className="text-sm text-gray-600">Pour atteindre votre objectif de {results.targetIncome?.toLocaleString()} €/mois</p>
             </div>
-            <p className="text-sm text-gray-600 mt-1">25 meilleures années</p>
+            
+            <div className="p-4">
+              {/* Écart à combler */}
+              <div className="bg-gray-50 p-4 rounded-lg mb-4">
+                <div className="grid grid-cols-3 gap-4 text-center">
+                  <div>
+                    <p className="text-xs text-gray-500">Objectif</p>
+                    <p className="font-semibold text-gray-900">{results.targetIncome?.toLocaleString()} €</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500">Pension estimée</p>
+                    <p className="font-semibold text-elysion-primary">{results.totalMonthly?.toLocaleString()} €</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500">Écart mensuel</p>
+                    <p className={`font-semibold ${results.savingsProjections[results.riskProfile]?.monthlyGap > 0 ? 'text-red-500' : 'text-green-600'}`}>
+                      {results.savingsProjections[results.riskProfile]?.monthlyGap > 0 
+                        ? `${results.savingsProjections[results.riskProfile]?.monthlyGap?.toLocaleString()} €`
+                        : '✓ Couvert'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Projections par profil */}
+              {results.savingsProjections[results.riskProfile]?.monthlyGap > 0 && (
+                <div className="grid md:grid-cols-3 gap-4">
+                  {['prudent', 'equilibre', 'dynamique'].map((profile) => {
+                    const proj = results.savingsProjections[profile];
+                    const profileInfo = RISK_PROFILES[profile];
+                    const isSelected = profile === results.riskProfile;
+                    
+                    return (
+                      <div 
+                        key={profile} 
+                        className={`p-4 rounded-lg border-2 ${isSelected ? 'border-elysion-primary bg-elysion-primary-50' : 'border-gray-200'}`}
+                      >
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className={`w-8 h-8 rounded-full flex items-center justify-center text-white text-sm ${
+                            profile === 'prudent' ? 'bg-green-500' : profile === 'equilibre' ? 'bg-blue-500' : 'bg-orange-500'
+                          }`}>
+                            {profile === 'prudent' ? '🛡️' : profile === 'equilibre' ? '⚖️' : '🚀'}
+                          </span>
+                          <span className="font-semibold text-sm">{profileInfo.name}</span>
+                          {isSelected && <span className="text-xs bg-elysion-primary text-white px-2 py-0.5 rounded">Votre profil</span>}
+                        </div>
+                        <p className="text-xs text-gray-500 mb-3">Rendement : {proj?.annualReturn}%/an</p>
+                        
+                        <div className="space-y-2 text-sm">
+                          <div className="flex justify-between">
+                            <span className="text-gray-600">Capital nécessaire :</span>
+                            <span className="font-semibold">{proj?.requiredCapital?.toLocaleString()} €</span>
+                          </div>
+                          <hr className="my-2" />
+                          <div className="flex justify-between items-center">
+                            <span className="text-gray-600">Versement mensuel :</span>
+                            <span className={`text-lg font-bold ${isSelected ? 'text-elysion-primary' : 'text-gray-900'}`}>
+                              {proj?.monthlyContribution?.toLocaleString()} €
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
+              {results.savingsProjections[results.riskProfile]?.monthlyGap <= 0 && (
+                <div className="bg-green-50 border border-green-200 p-4 rounded-lg text-center">
+                  <p className="text-green-800 font-semibold">✓ Votre pension couvre déjà votre objectif</p>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
+        )}
+
+        {/* Recommandations */}
+        {profileData && (
+          <div className="bg-white rounded-xl border border-gray-200 p-6">
+            <h3 className="font-semibold text-gray-900 mb-4">📈 Recommandations pour votre profil {profileData.name}</h3>
+            <p className="text-sm text-gray-600 mb-4">{profileData.description}</p>
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <p className="text-sm font-semibold text-gray-700 mb-2">Supports d'épargne adaptés :</p>
+              <p className="text-sm text-gray-600">{profileData.recommendation}</p>
+            </div>
+          </div>
+        )}
 
         {/* Informations importantes */}
         <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
@@ -1338,6 +1443,14 @@ const FreelanceSimulator = () => {
             <li>• Votre âge actuel : {results.currentAge} ans</li>
             <li>• Ces montants sont des estimations basées sur la législation 2024</li>
           </ul>
+        </div>
+
+        {/* Avertissement */}
+        <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg">
+          <p className="text-sm text-yellow-800">
+            <strong>⚠️ Avertissement :</strong> Ces estimations sont indicatives et basées sur des hypothèses de rendement non garanties. 
+            Consultez un conseiller financier pour une stratégie personnalisée.
+          </p>
         </div>
 
         {/* CTA */}

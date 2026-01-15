@@ -11,15 +11,28 @@ Elysion est une application de planification de retraite permettant aux utilisat
 ## Fonctionnalités implémentées
 
 ### Simulateurs de retraite
-- **Simulateur Salarié** (`/simulator/employee`): 6 étapes, calcul SAM, Agirc-Arrco
-- **Simulateur Freelance** (`/simulator/freelance`): 6 étapes, régimes micro/classique, RCI
+- **Simulateur Salarié** (`/simulator/employee`): 7 étapes avec module épargne
+- **Simulateur Freelance** (`/simulator/freelance`): 4 étapes, régimes micro/classique, RCI
 - **Routeur Simulateur** (`/simulator`): Page de choix entre Salarié et Freelance
+
+### Tunnel Salarié (7 étapes)
+1. Profil & carrière
+2. Historique des salaires
+3. Trimestres & enfants
+4. Retraite complémentaire (Agirc-Arrco)
+5. **NOUVEAU** : Épargne & Besoin (objectif de revenu, capital existant)
+6. **NOUVEAU** : Profil de risque (3 questions, classification automatique)
+7. Scénarios de départ (choix des âges)
+→ Résultats avec projections d'épargne
 
 ### Calculs avancés
 - Valeur du point: `1,4386€`
 - +8 trimestres automatiques par enfant pour les femmes
 - Périodes d'inactivité en jours ou mois (chômage, congé parental, maladie)
 - Champ "Date de naissance" complet (jour/mois/année) au lieu de l'année seule
+- **NOUVEAU** : Calcul du taux de remplacement
+- **NOUVEAU** : Profils de risque (Prudent 1.5%, Équilibré 4%, Dynamique 7%)
+- **NOUVEAU** : Calcul de l'effort d'épargne mensuel par profil
 - Redirection finale vers `/onboarding`
 
 ### Design System

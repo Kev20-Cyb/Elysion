@@ -12,7 +12,7 @@ Elysion est une application de planification de retraite permettant aux utilisat
 
 ### Simulateurs de retraite
 - **Simulateur Salarié** (`/simulator/employee`): 7 étapes avec module épargne
-- **Simulateur Freelance** (`/simulator/freelance`): 4 étapes, régimes micro/classique, RCI
+- **Simulateur Freelance** (`/simulator/freelance`): 6 étapes avec module épargne
 - **Routeur Simulateur** (`/simulator`): Page de choix entre Salarié et Freelance
 
 ### Tunnel Salarié (7 étapes)
@@ -23,6 +23,15 @@ Elysion est une application de planification de retraite permettant aux utilisat
 5. **NOUVEAU** : Épargne & Besoin (objectif de revenu, capital existant)
 6. **NOUVEAU** : Profil de risque (3 questions, classification automatique)
 7. Scénarios de départ (choix des âges)
+→ Résultats avec projections d'épargne
+
+### Tunnel Freelance (6 étapes)
+1. Profil & statut
+2. Historique des revenus
+3. Trimestres assimilés
+4. Récapitulatif carrière
+5. **NOUVEAU** : Épargne & Besoin
+6. **NOUVEAU** : Profil de risque
 → Résultats avec projections d'épargne
 
 ### Calculs avancés

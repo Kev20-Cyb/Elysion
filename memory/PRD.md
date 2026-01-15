@@ -49,6 +49,19 @@ Elysion est une application de planification de retraite permettant aux utilisat
 - Classes utilitaires: `bg-elysion-*`, `text-elysion-*`, `border-elysion-*`
 - Style d'input léger et moderne (`.input-elysion`)
 - Système de boutons complet avec états
+- Checkboxes stylisées en primary
+
+### Tableau de bord
+- Section "Votre objectif retraite" avec écart à combler
+- Aperçu des axes d'investissement
+- Bouton "Atteindre cet objectif" → page `/investment-axes`
+
+### Page Axes d'investissement (NOUVEAU)
+- 4 blocs d'axes : Épargne sécurisée, Épargne retraite, Marchés financiers, Immobilier
+- Présentation neutre sans CTA vers produits spécifiques
+- Détails avec avantages/contraintes
+- Conseils pratiques (horizon, diversification, accompagnement)
+- Mention de prudence obligatoire
 
 ### Documentation
 - `CALCUL_RETRAITE_SALARIE.md` - Logique de calcul salarié

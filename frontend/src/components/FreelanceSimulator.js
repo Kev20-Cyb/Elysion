@@ -31,6 +31,20 @@ const FreelanceSimulator = () => {
     parentalLeaveDuration: 0,
     parentalLeaveUnit: 'months', // 'days' or 'months'
     
+    // NOUVEAU - Épargne & Besoin
+    currentMonthlyIncome: 0,
+    targetIncomeMode: 'percentage', // 'percentage' or 'amount'
+    targetIncomePercentage: 70,
+    targetIncomeAmount: 0,
+    currentSavings: 0,
+    wantsEpargneCalculation: true,
+    
+    // NOUVEAU - Profil de Risque
+    investmentHorizon: '', // 'short', 'medium', 'long'
+    lossToleranceLevel: '', // '5', '10', '20'
+    marketKnowledge: '', // 'beginner', 'intermediate', 'advanced'
+    riskProfile: '',
+    
     // Calculs intermédiaires
     totalQuarters: 0,
     averageRevenue: 0,

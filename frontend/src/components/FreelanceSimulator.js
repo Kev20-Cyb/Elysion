@@ -1555,7 +1555,7 @@ const FreelanceSimulator = () => {
                 onClick={nextStep}
                 className="btn-primary"
               >
-                {currentStep === 4 ? 'Calculer ma retraite' : 'Suivant →'}
+                {currentStep === 6 ? 'Calculer ma retraite' : 'Suivant →'}
               </button>
             </div>
           )}

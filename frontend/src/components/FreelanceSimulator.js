@@ -372,6 +372,30 @@ const FreelanceSimulator = () => {
     
     const replacementRate = lastRevenue > 0 ? (totalAnnual / lastRevenue) * 100 : 0;
     
+    // Calculer le profil de risque
+    const riskProfile = calculateRiskProfile();
+    handleInputChange('riskProfile', riskProfile);
+    
+    // Calculer les projections d'épargne
+    const targetIncome = formData.targetIncomeMode === 'percentage' 
+      ? formData.currentMonthlyIncome * (formData.targetIncomePercentage / 100)
+      : formData.targetIncomeAmount;
+    
+    const currentAge = new Date().getFullYear() - getBirthYear();
+    const yearsUntil62 = Math.max(0, 62 - currentAge);
+    const yearsUntil64 = Math.max(0, 64 - currentAge);
+    const yearsUntil67 = Math.max(0, 67 - currentAge);
+    
+    const savingsProjections = {};
+    ['prudent', 'equilibre', 'dynamique'].forEach(profile => {
+      savingsProjections[profile] = calculateRequiredSavings(
+        targetIncome,
+        totalMonthly,
+        yearsUntil64,
+        profile
+      );
+    });
+    
     const results = {
       totalQuarters,
       requiredQuarters: basePension.requiredQuarters,
@@ -381,17 +405,21 @@ const FreelanceSimulator = () => {
       totalMonthly: Math.round(totalMonthly),
       totalAnnual: Math.round(totalAnnual),
       replacementRate: Math.round(replacementRate),
-      currentAge: new Date().getFullYear() - getBirthYear()
+      currentAge,
+      targetIncome: Math.round(targetIncome),
+      currentIncome: formData.currentMonthlyIncome,
+      riskProfile,
+      savingsProjections
     };
     
     setResults(results);
-    setCurrentStep(5); // Résultats
+    setCurrentStep(7); // Résultats
   };
 
   const nextStep = () => {
-    if (currentStep < 4) {
+    if (currentStep < 6) {
       setCurrentStep(currentStep + 1);
-    } else if (currentStep === 4) {
+    } else if (currentStep === 6) {
       calculateFullRetirement();
     }
   };

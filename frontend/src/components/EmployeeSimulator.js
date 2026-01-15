@@ -51,6 +51,20 @@ const EmployeeSimulator = () => {
     knowsRAFP: false,
     rafpAmount: 0,
     
+    // NOUVEAU - Épargne & Besoin
+    currentMonthlyIncome: 0,
+    targetIncomeMode: 'percentage', // 'percentage' or 'amount'
+    targetIncomePercentage: 70, // % du revenu actuel
+    targetIncomeAmount: 0, // en euros
+    currentSavings: 0, // capital déjà épargné
+    wantsEpargneCalculation: true,
+    
+    // NOUVEAU - Profil de Risque
+    investmentHorizon: '', // 'short' (<10 ans), 'medium' (10-20), 'long' (>20)
+    lossToleranceLevel: '', // '5', '10', '20'
+    marketKnowledge: '', // 'beginner', 'intermediate', 'advanced'
+    riskProfile: '', // 'prudent', 'equilibre', 'dynamique' (calculé)
+    
     // Scénarios communs
     retirementAges: [62, 64, 67]
   });

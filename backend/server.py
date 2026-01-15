@@ -501,9 +501,6 @@ async def get_latest_simulation(current_user: User = Depends(get_current_user)):
 async def root():
     return {"message": "Elysion Retirement Platform API"}
 
-# Include the router in the main app
-app.include_router(api_router)
-
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,

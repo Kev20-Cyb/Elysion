@@ -166,6 +166,14 @@ function App() {
                 </ProtectedRoute>
               } 
             />
+            <Route 
+              path="/investment-axes" 
+              element={
+                <ProtectedRoute>
+                  <InvestmentAxes />
+                </ProtectedRoute>
+              } 
+            />
           </Routes>
         </BrowserRouter>
       </div>

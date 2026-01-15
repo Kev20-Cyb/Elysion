@@ -11,13 +11,12 @@ import OnboardingFlow from './components/OnboardingFlow';
 import Simulator from './components/Simulator';
 import ForgotPassword from './components/ForgotPassword';
 import ResetPassword from './components/ResetPassword';
-import ChatBubble from "./components/ChatBubble";
-// Nouveaux composants - Simulateurs détaillés
-import EmployeeSimulator from './components/EmployeeSimulator';
-import FreelanceSimulator from './components/FreelanceSimulator';
 import Documents from './components/Documents';
+import FreelanceSimulator from './components/FreelanceSimulator';
+import EmployeeSimulator from './components/EmployeeSimulator';
+import InvestmentAxes from './components/InvestmentAxes';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
 // Auth Context
@@ -50,8 +49,8 @@ const AuthProvider = ({ children }) => {
     const checkAuth = async () => {
       if (token) {
         try {
-          const response = await axios.get(`${API}/users/profile`);
-          setUser(response.data.user);
+          const response = await axios.get(`${API}/user/profile`);
+          setUser(response.data);
         } catch (error) {
           console.error('Token invalid:', error);
           logout();
@@ -60,34 +59,42 @@ const AuthProvider = ({ children }) => {
       setLoading(false);
     };
     checkAuth();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   const login = async (email, password) => {
     try {
-      const response = await axios.post(`${API}/auth/login`, { email, password });
-
-      const { token, user: userData } = response.data;
-      setToken(token);
+      const response = await axios.post(`${API}/auth/login`, {
+        email,
+        password
+      });
+      
+      const { access_token, user: userData } = response.data;
+      setToken(access_token);
       setUser(userData);
-      localStorage.setItem("elysion_token", token);
+      localStorage.setItem('elysion_token', access_token);
       return { success: true };
     } catch (error) {
-      return { success: false, error: error.response?.data?.detail || "Login failed" };
+      return {
+        success: false,
+        error: error.response?.data?.detail || 'Login failed'
+      };
     }
   };
 
   const register = async (userData) => {
     try {
       const response = await axios.post(`${API}/auth/register`, userData);
-
-      const { token, user: newUser } = response.data;
-      setToken(token);
+      
+      const { access_token, user: newUser } = response.data;
+      setToken(access_token);
       setUser(newUser);
-      localStorage.setItem("elysion_token", token);
+      localStorage.setItem('elysion_token', access_token);
       return { success: true };
     } catch (error) {
-      return { success: false, error: error.response?.data?.detail || "Registration failed" };
+      return {
+        success: false,
+        error: error.response?.data?.detail || 'Registration failed'
+      };
     }
   };
 
@@ -114,17 +121,10 @@ const AuthProvider = ({ children }) => {
   );
 };
 
-// ✅ Chat visible seulement si connecté (et pas pendant le loading)
-const ChatWhenAuthed = () => {
-  const { isAuthenticated, loading } = useAuth();
-  if (loading) return null;
-  return isAuthenticated ? <ChatBubble /> : null;
-};
-
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
-
+  
   if (loading) {
     return (
       <div className="min-h-screen bg-elysion-bg flex items-center justify-center">
@@ -132,7 +132,7 @@ const ProtectedRoute = ({ children }) => {
       </div>
     );
   }
-
+  
   return isAuthenticated ? children : <Navigate to="/auth" replace />;
 };
 
@@ -145,33 +145,36 @@ function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/simulator" element={<Simulator />} />
-            {/* Nouveaux simulateurs détaillés */}
-            <Route path="/simulator/employee" element={<EmployeeSimulator />} />
             <Route path="/simulator/freelance" element={<FreelanceSimulator />} />
+            <Route path="/simulator/employee" element={<EmployeeSimulator />} />
             <Route path="/onboarding" element={<OnboardingFlow />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />
-            <Route
-              path="/dashboard"
+            <Route 
+              path="/dashboard" 
               element={
                 <ProtectedRoute>
                   <Dashboard />
                 </ProtectedRoute>
-              }
+              } 
             />
-            {/* Nouvelle page Documents (protégée) */}
-            <Route
-              path="/documents"
+            <Route 
+              path="/documents" 
               element={
                 <ProtectedRoute>
                   <Documents />
                 </ProtectedRoute>
-              }
+              } 
+            />
+            <Route 
+              path="/investment-axes" 
+              element={
+                <ProtectedRoute>
+                  <InvestmentAxes />
+                </ProtectedRoute>
+              } 
             />
           </Routes>
-
-          {/* ✅ Le chatbot est disponible partout quand connecté */}
-          <ChatWhenAuthed />
         </BrowserRouter>
       </div>
     </AuthProvider>

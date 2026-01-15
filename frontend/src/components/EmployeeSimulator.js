@@ -1086,8 +1086,288 @@ const EmployeeSimulator = () => {
     </div>
   );
 
-  // BRANCHE PRIVÉ - Écran 5 : Scénarios d'âge
-  const renderPrivateStep5 = () => (
+  // BRANCHE PRIVÉ - Écran 5 : Épargne & Besoin
+  const renderPrivateStep5 = () => {
+    // Calculer une estimation rapide de la pension pour l'affichage
+    const estimatedPension = calculateScenarios()[0]?.totalMonthly || 0;
+    const replacementRate = formData.currentMonthlyIncome > 0 
+      ? Math.round((estimatedPension / formData.currentMonthlyIncome) * 100) 
+      : 0;
+    
+    return (
+      <div className="space-y-6">
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-bold text-elysion-primary mb-2">Épargne & Besoin</h2>
+          <p className="text-gray-600">Salarié - Étape 5/7</p>
+        </div>
+
+        <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
+          <p className="text-sm text-blue-800">
+            <strong>💡 Info :</strong> Cette étape vous permet de déterminer si vous aurez besoin d'une épargne complémentaire pour maintenir votre niveau de vie à la retraite.
+          </p>
+        </div>
+
+        {/* Revenu actuel */}
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 mb-2">
+            Votre revenu mensuel net actuel (€)
+          </label>
+          <input
+            type="number"
+            min="0"
+            value={formData.currentMonthlyIncome}
+            onChange={(e) => handleInputChange('currentMonthlyIncome', parseFloat(e.target.value) || 0)}
+            className="input-elysion"
+            placeholder="2500"
+          />
+        </div>
+
+        {/* Affichage du taux de remplacement estimé */}
+        {formData.currentMonthlyIncome > 0 && estimatedPension > 0 && (
+          <div className="bg-white p-6 rounded-lg border border-gray-200">
+            <h3 className="font-semibold text-gray-900 mb-4">Estimation préliminaire</h3>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="text-center p-4 bg-gray-50 rounded-lg">
+                <p className="text-sm text-gray-600">Revenu actuel</p>
+                <p className="text-2xl font-bold text-gray-900">{formData.currentMonthlyIncome.toLocaleString()} €</p>
+              </div>
+              <div className="text-center p-4 bg-elysion-primary-50 rounded-lg">
+                <p className="text-sm text-gray-600">Pension estimée</p>
+                <p className="text-2xl font-bold text-elysion-primary">{estimatedPension.toLocaleString()} €</p>
+              </div>
+            </div>
+            <div className="mt-4 text-center">
+              <p className="text-sm text-gray-600">Taux de remplacement estimé</p>
+              <p className={`text-3xl font-bold ${replacementRate >= 70 ? 'text-green-600' : replacementRate >= 50 ? 'text-orange-500' : 'text-red-500'}`}>
+                {replacementRate}%
+              </p>
+              <p className="text-xs text-gray-500 mt-1">
+                {replacementRate >= 70 ? 'Bon niveau de remplacement' : replacementRate >= 50 ? 'Niveau modéré - épargne recommandée' : 'Niveau faible - épargne conseillée'}
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Objectif de revenu */}
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 mb-2">
+            Quel revenu mensuel net souhaitez-vous à la retraite ?
+          </label>
+          <div className="flex gap-4 mb-3">
+            <label className="flex items-center gap-2">
+              <input
+                type="radio"
+                name="targetMode"
+                checked={formData.targetIncomeMode === 'percentage'}
+                onChange={() => handleInputChange('targetIncomeMode', 'percentage')}
+                className="checkbox-elysion"
+              />
+              <span className="text-sm">En % du revenu actuel</span>
+            </label>
+            <label className="flex items-center gap-2">
+              <input
+                type="radio"
+                name="targetMode"
+                checked={formData.targetIncomeMode === 'amount'}
+                onChange={() => handleInputChange('targetIncomeMode', 'amount')}
+                className="checkbox-elysion"
+              />
+              <span className="text-sm">En montant fixe (€)</span>
+            </label>
+          </div>
+          
+          {formData.targetIncomeMode === 'percentage' ? (
+            <div className="flex items-center gap-3">
+              <input
+                type="range"
+                min="50"
+                max="100"
+                value={formData.targetIncomePercentage}
+                onChange={(e) => handleInputChange('targetIncomePercentage', parseInt(e.target.value))}
+                className="flex-1"
+              />
+              <span className="font-bold text-elysion-primary w-16 text-right">{formData.targetIncomePercentage}%</span>
+            </div>
+          ) : (
+            <input
+              type="number"
+              min="0"
+              value={formData.targetIncomeAmount}
+              onChange={(e) => handleInputChange('targetIncomeAmount', parseFloat(e.target.value) || 0)}
+              className="input-elysion"
+              placeholder="2000"
+            />
+          )}
+          
+          {formData.currentMonthlyIncome > 0 && (
+            <p className="text-sm text-gray-500 mt-2">
+              Objectif : {formData.targetIncomeMode === 'percentage' 
+                ? `${Math.round(formData.currentMonthlyIncome * formData.targetIncomePercentage / 100).toLocaleString()} €/mois`
+                : `${formData.targetIncomeAmount.toLocaleString()} €/mois`}
+            </p>
+          )}
+        </div>
+
+        {/* Capital déjà épargné */}
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 mb-2">
+            Avez-vous déjà un capital épargné pour la retraite ? (€)
+          </label>
+          <input
+            type="number"
+            min="0"
+            value={formData.currentSavings}
+            onChange={(e) => handleInputChange('currentSavings', parseFloat(e.target.value) || 0)}
+            className="input-elysion"
+            placeholder="10000"
+          />
+          <p className="text-xs text-gray-500 mt-1">PER, assurance-vie, PEE, épargne personnelle...</p>
+        </div>
+
+        {/* Option calcul épargne */}
+        <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg">
+          <input
+            type="checkbox"
+            id="wantsCalculation"
+            checked={formData.wantsEpargneCalculation}
+            onChange={(e) => handleInputChange('wantsEpargneCalculation', e.target.checked)}
+            className="checkbox-elysion"
+          />
+          <label htmlFor="wantsCalculation" className="text-sm text-gray-700">
+            Je souhaite que le simulateur calcule l'épargne nécessaire pour combler l'écart
+          </label>
+        </div>
+      </div>
+    );
+  };
+
+  // BRANCHE PRIVÉ - Écran 6 : Profil de Risque
+  const renderPrivateStep6 = () => (
+    <div className="space-y-6">
+      <div className="text-center mb-8">
+        <h2 className="text-3xl font-bold text-elysion-primary mb-2">Votre relation au risque</h2>
+        <p className="text-gray-600">Salarié - Étape 6/7</p>
+      </div>
+
+      <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
+        <p className="text-sm text-blue-800">
+          <strong>💡 Important :</strong> Ces questions permettent de déterminer votre profil d'investisseur et d'adapter les recommandations d'épargne.
+        </p>
+      </div>
+
+      {/* Question 1 : Horizon */}
+      <div className="bg-white p-6 rounded-lg border border-gray-200">
+        <h3 className="font-semibold text-gray-900 mb-4">1. Votre horizon de placement</h3>
+        <p className="text-sm text-gray-600 mb-3">Dans combien de temps prendrez-vous votre retraite ?</p>
+        <div className="space-y-2">
+          {[
+            { value: 'short', label: 'Moins de 10 ans', desc: 'Horizon court - privilégier la sécurité' },
+            { value: 'medium', label: '10 à 20 ans', desc: 'Horizon moyen - équilibre rendement/risque' },
+            { value: 'long', label: 'Plus de 20 ans', desc: 'Horizon long - potentiel de croissance' }
+          ].map(option => (
+            <label key={option.value} className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${formData.investmentHorizon === option.value ? 'border-elysion-primary bg-elysion-primary-50' : 'border-gray-200 hover:bg-gray-50'}`}>
+              <input
+                type="radio"
+                name="horizon"
+                value={option.value}
+                checked={formData.investmentHorizon === option.value}
+                onChange={(e) => handleInputChange('investmentHorizon', e.target.value)}
+                className="checkbox-elysion"
+              />
+              <div>
+                <span className="font-medium">{option.label}</span>
+                <p className="text-xs text-gray-500">{option.desc}</p>
+              </div>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      {/* Question 2 : Tolérance aux pertes */}
+      <div className="bg-white p-6 rounded-lg border border-gray-200">
+        <h3 className="font-semibold text-gray-900 mb-4">2. Votre tolérance aux fluctuations</h3>
+        <p className="text-sm text-gray-600 mb-3">Quelle baisse temporaire de votre épargne accepteriez-vous sans paniquer ?</p>
+        <div className="space-y-2">
+          {[
+            { value: '5', label: 'Maximum 5%', desc: 'Très prudent - je préfère la stabilité' },
+            { value: '10', label: 'Jusqu\'à 10%', desc: 'Modéré - j\'accepte quelques fluctuations' },
+            { value: '20', label: 'Jusqu\'à 20% ou plus', desc: 'Tolérant - je vise le long terme' }
+          ].map(option => (
+            <label key={option.value} className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${formData.lossToleranceLevel === option.value ? 'border-elysion-primary bg-elysion-primary-50' : 'border-gray-200 hover:bg-gray-50'}`}>
+              <input
+                type="radio"
+                name="lossTolerance"
+                value={option.value}
+                checked={formData.lossToleranceLevel === option.value}
+                onChange={(e) => handleInputChange('lossToleranceLevel', e.target.value)}
+                className="checkbox-elysion"
+              />
+              <div>
+                <span className="font-medium">{option.label}</span>
+                <p className="text-xs text-gray-500">{option.desc}</p>
+              </div>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      {/* Question 3 : Connaissance des marchés */}
+      <div className="bg-white p-6 rounded-lg border border-gray-200">
+        <h3 className="font-semibold text-gray-900 mb-4">3. Votre connaissance des marchés financiers</h3>
+        <p className="text-sm text-gray-600 mb-3">Comment évaluez-vous votre expérience en matière d'investissement ?</p>
+        <div className="space-y-2">
+          {[
+            { value: 'beginner', label: 'Débutant', desc: 'Je découvre l\'épargne financière' },
+            { value: 'intermediate', label: 'Intermédiaire', desc: 'J\'ai déjà investi (assurance-vie, PEA...)' },
+            { value: 'advanced', label: 'Avancé', desc: 'Je suis à l\'aise avec les marchés financiers' }
+          ].map(option => (
+            <label key={option.value} className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${formData.marketKnowledge === option.value ? 'border-elysion-primary bg-elysion-primary-50' : 'border-gray-200 hover:bg-gray-50'}`}>
+              <input
+                type="radio"
+                name="knowledge"
+                value={option.value}
+                checked={formData.marketKnowledge === option.value}
+                onChange={(e) => handleInputChange('marketKnowledge', e.target.value)}
+                className="checkbox-elysion"
+              />
+              <div>
+                <span className="font-medium">{option.label}</span>
+                <p className="text-xs text-gray-500">{option.desc}</p>
+              </div>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      {/* Aperçu du profil */}
+      {formData.investmentHorizon && formData.lossToleranceLevel && formData.marketKnowledge && (
+        <div className="bg-gradient-to-r from-elysion-primary-50 to-elysion-accent-50 p-6 rounded-lg border border-elysion-primary-200">
+          <h3 className="font-semibold text-gray-900 mb-2">Votre profil de risque estimé</h3>
+          {(() => {
+            const profile = calculateRiskProfile();
+            const profileData = RISK_PROFILES[profile];
+            return (
+              <div className="flex items-center gap-4">
+                <div className={`w-16 h-16 rounded-full flex items-center justify-center text-white text-2xl font-bold ${
+                  profile === 'prudent' ? 'bg-green-500' : profile === 'equilibre' ? 'bg-blue-500' : 'bg-orange-500'
+                }`}>
+                  {profile === 'prudent' ? '🛡️' : profile === 'equilibre' ? '⚖️' : '🚀'}
+                </div>
+                <div>
+                  <p className="text-xl font-bold text-elysion-primary">{profileData.name}</p>
+                  <p className="text-sm text-gray-600">{profileData.description}</p>
+                  <p className="text-xs text-gray-500 mt-1">Rendement moyen attendu : {profileData.annualReturn * 100}% / an</p>
+                </div>
+              </div>
+            );
+          })()}
+        </div>
+      )}
+    </div>
+  );
+
+  // BRANCHE PRIVÉ - Écran 7 : Scénarios d'âge de départ
+  const renderPrivateStep7 = () => (
     <div className="space-y-6">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-elysion-primary mb-2">Scénarios de départ</h2>

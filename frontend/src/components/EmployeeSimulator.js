@@ -496,18 +496,44 @@ const EmployeeSimulator = () => {
   };
 
   const handleCalculate = () => {
+    // Calculer le profil de risque
+    const riskProfile = calculateRiskProfile();
+    handleInputChange('riskProfile', riskProfile);
+    
     const scenarios = calculateScenarios();
-    setResults({
-      branch,
-      scenarios,
-      currentAge: new Date().getFullYear() - getBirthYear()
+    
+    // Calculer les projections d'épargne pour chaque scénario
+    const targetIncome = formData.targetIncomeMode === 'percentage' 
+      ? formData.currentMonthlyIncome * (formData.targetIncomePercentage / 100)
+      : formData.targetIncomeAmount;
+    
+    const scenariosWithSavings = scenarios.map(scenario => {
+      const savingsProjections = {};
+      ['prudent', 'equilibre', 'dynamique'].forEach(profile => {
+        savingsProjections[profile] = calculateRequiredSavings(
+          targetIncome,
+          scenario.totalMonthly,
+          scenario.yearsUntil,
+          profile
+        );
+      });
+      return {
+        ...scenario,
+        targetIncome: Math.round(targetIncome),
+        savingsProjections
+      };
     });
     
-    if (branch === 'private') {
-      setCurrentStep(6); // Écran résultats privé
-    } else {
-      setCurrentStep(6); // Écran résultats public
-    }
+    setResults({
+      branch,
+      scenarios: scenariosWithSavings,
+      currentAge: new Date().getFullYear() - getBirthYear(),
+      riskProfile,
+      targetIncome: Math.round(targetIncome),
+      currentIncome: formData.currentMonthlyIncome
+    });
+    
+    setCurrentStep(8); // Écran résultats
   };
 
   const nextStep = () => {
@@ -515,9 +541,9 @@ const EmployeeSimulator = () => {
       // Automatiquement en mode Salarié du Privé
       setBranch('private');
       setCurrentStep(2);
-    } else if (currentStep < 5) {
+    } else if (currentStep < 7) {
       setCurrentStep(currentStep + 1);
-    } else if (currentStep === 5) {
+    } else if (currentStep === 7) {
       handleCalculate();
     }
   };

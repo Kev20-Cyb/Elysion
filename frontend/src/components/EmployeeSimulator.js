@@ -71,6 +71,94 @@ const EmployeeSimulator = () => {
   
   const [results, setResults] = useState(null);
 
+  // Configuration des profils de risque
+  const RISK_PROFILES = {
+    prudent: {
+      name: 'Prudent',
+      description: 'Faible tolérance à la baisse, horizon court',
+      annualReturn: 0.015, // 1.5% réel
+      color: 'green',
+      recommendation: 'Fonds euros, livrets réglementés, obligations'
+    },
+    equilibre: {
+      name: 'Équilibré',
+      description: 'Accepte une certaine volatilité, horizon moyen',
+      annualReturn: 0.04, // 4% réel
+      color: 'blue',
+      recommendation: 'Mix fonds euros/UC, PER équilibré, assurance-vie diversifiée'
+    },
+    dynamique: {
+      name: 'Dynamique',
+      description: 'Tolère de fortes variations pour plus de rendement',
+      annualReturn: 0.07, // 7% réel
+      color: 'orange',
+      recommendation: 'Actions, ETF, PER dynamique, PEA'
+    }
+  };
+
+  // Calcul du profil de risque automatique
+  const calculateRiskProfile = () => {
+    let score = 0;
+    
+    // Score basé sur l'horizon
+    if (formData.investmentHorizon === 'long') score += 3;
+    else if (formData.investmentHorizon === 'medium') score += 2;
+    else if (formData.investmentHorizon === 'short') score += 1;
+    
+    // Score basé sur la tolérance aux pertes
+    if (formData.lossToleranceLevel === '20') score += 3;
+    else if (formData.lossToleranceLevel === '10') score += 2;
+    else if (formData.lossToleranceLevel === '5') score += 1;
+    
+    // Score basé sur la connaissance des marchés
+    if (formData.marketKnowledge === 'advanced') score += 3;
+    else if (formData.marketKnowledge === 'intermediate') score += 2;
+    else if (formData.marketKnowledge === 'beginner') score += 1;
+    
+    // Classification
+    if (score <= 4) return 'prudent';
+    if (score <= 7) return 'equilibre';
+    return 'dynamique';
+  };
+
+  // Calcul de l'épargne nécessaire pour atteindre un objectif
+  const calculateRequiredSavings = (targetMonthlyIncome, currentPension, yearsUntilRetirement, profile) => {
+    const monthlyGap = targetMonthlyIncome - currentPension;
+    if (monthlyGap <= 0) return { monthlyContribution: 0, totalCapital: 0, message: 'Votre pension couvre déjà votre objectif' };
+    
+    const retirementDuration = 25; // Durée de consommation estimée (années)
+    const annualReturn = RISK_PROFILES[profile]?.annualReturn || 0.03;
+    const monthlyReturn = annualReturn / 12;
+    
+    // Capital nécessaire pour générer le revenu complémentaire pendant 25 ans
+    const requiredCapital = monthlyGap * 12 * retirementDuration * 0.85; // 0.85 pour inflation
+    
+    // Capital déjà épargné avec rendement projeté
+    const currentSavingsProjected = formData.currentSavings * Math.pow(1 + annualReturn, yearsUntilRetirement);
+    
+    // Capital restant à constituer
+    const capitalToAccumulate = Math.max(0, requiredCapital - currentSavingsProjected);
+    
+    // Versement mensuel nécessaire (formule d'annuité)
+    const n = yearsUntilRetirement * 12;
+    let monthlyContribution = 0;
+    
+    if (n > 0 && monthlyReturn > 0) {
+      monthlyContribution = capitalToAccumulate * monthlyReturn / (Math.pow(1 + monthlyReturn, n) - 1);
+    } else if (n > 0) {
+      monthlyContribution = capitalToAccumulate / n;
+    }
+    
+    return {
+      monthlyGap,
+      requiredCapital: Math.round(requiredCapital),
+      currentSavingsProjected: Math.round(currentSavingsProjected),
+      capitalToAccumulate: Math.round(capitalToAccumulate),
+      monthlyContribution: Math.round(monthlyContribution),
+      annualReturn: annualReturn * 100
+    };
+  };
+
   // Extraire l'année de naissance depuis la date
   const getBirthYear = () => {
     if (!formData.birthDate) return null;

@@ -451,6 +451,51 @@ async def get_dashboard(current_user: User = Depends(get_current_user)):
 async def get_user_profile(current_user: User = Depends(get_current_user)):
     return current_user
 
+# Save simulation results
+@api_router.post("/simulation/save")
+async def save_simulation(
+    simulation_data: dict,
+    current_user: User = Depends(get_current_user)
+):
+    """Save simulation results to user's retirement profile"""
+    try:
+        # Prepare data for storage
+        profile_data = {
+            "user_id": current_user.id,
+            "simulation_data": simulation_data,
+            "last_simulation_at": datetime.utcnow(),
+            "updated_at": datetime.utcnow()
+        }
+        
+        # Update or create retirement profile
+        existing = await db.retirement_profiles.find_one({"user_id": current_user.id})
+        
+        if existing:
+            await db.retirement_profiles.update_one(
+                {"user_id": current_user.id},
+                {"$set": profile_data}
+            )
+        else:
+            profile_data["created_at"] = datetime.utcnow()
+            await db.retirement_profiles.insert_one(profile_data)
+        
+        return {"message": "Simulation sauvegardée avec succès", "success": True}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/simulation/latest")
+async def get_latest_simulation(current_user: User = Depends(get_current_user)):
+    """Get user's latest simulation"""
+    profile = await db.retirement_profiles.find_one({"user_id": current_user.id})
+    
+    if not profile or "simulation_data" not in profile:
+        return {"simulation": None}
+    
+    return {
+        "simulation": profile.get("simulation_data"),
+        "saved_at": profile.get("last_simulation_at")
+    }
+
 # Basic Routes
 @api_router.get("/")
 async def root():

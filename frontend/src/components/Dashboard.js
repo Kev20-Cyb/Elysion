@@ -175,25 +175,73 @@ const Dashboard = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Recommendations Section */}
+          {/* Objectif & Axes Section */}
           <div className="card-elysion slide-up" data-testid="dashboard-recommendations-section">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-semibold text-elysion-text-dark">Recommandations personnalisées</h3>
-              <span className="text-2xl">💡</span>
+              <h3 className="text-xl font-semibold text-elysion-text-dark">Votre objectif retraite</h3>
+              <span className="text-2xl">🎯</span>
             </div>
-            <div className="space-y-4">
-              {dashboardData?.recommendations?.map((recommendation, index) => (
-                <div 
-                  key={index} 
-                  className="p-4 bg-elysion-bg rounded-lg border-l-4 border-elysion-accent"
-                  data-testid={`dashboard-recommendation-${index}`}
-                >
-                  <p className="text-elysion-text-dark">{recommendation}</p>
+            
+            {/* Écart à combler */}
+            <div className="bg-gradient-to-r from-elysion-primary-50 to-elysion-accent-50 p-6 rounded-xl mb-6">
+              <div className="text-center">
+                <p className="text-sm text-gray-600 mb-2">Écart mensuel à combler</p>
+                <p className="text-4xl font-bold text-elysion-primary mb-2">
+                  {dashboardData?.estimated_monthly_pension 
+                    ? Math.max(0, Math.round(dashboardData.estimated_monthly_pension * 0.3)).toLocaleString()
+                    : '400'} €
+                </p>
+                <p className="text-xs text-gray-500">
+                  pour atteindre votre objectif de revenus
+                </p>
+              </div>
+            </div>
+            
+            {/* Axes rapides */}
+            <div className="space-y-3 mb-6">
+              <p className="text-sm font-semibold text-gray-700">Axes à explorer :</p>
+              
+              <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg border border-green-100">
+                <span className="text-xl">🛡️</span>
+                <div className="flex-1">
+                  <p className="font-medium text-gray-900 text-sm">Épargne sécurisée</p>
+                  <p className="text-xs text-gray-500">Livrets, épargne logement</p>
                 </div>
-              ))}
+              </div>
+              
+              <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg border border-blue-100">
+                <span className="text-xl">🎯</span>
+                <div className="flex-1">
+                  <p className="font-medium text-gray-900 text-sm">Épargne retraite</p>
+                  <p className="text-xs text-gray-500">PER, Assurance-vie</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-3 p-3 bg-orange-50 rounded-lg border border-orange-100">
+                <span className="text-xl">📈</span>
+                <div className="flex-1">
+                  <p className="font-medium text-gray-900 text-sm">Marchés financiers</p>
+                  <p className="text-xs text-gray-500">PEA, Fonds diversifiés</p>
+                </div>
+              </div>
             </div>
-            <button className="w-full mt-6 btn-outline-elysion" data-testid="dashboard-view-all-recommendations-btn">
-              Voir toutes les recommandations
+            
+            <button 
+              onClick={() => navigate('/investment-axes', {
+                state: {
+                  targetGap: dashboardData?.estimated_monthly_pension 
+                    ? Math.max(0, Math.round(dashboardData.estimated_monthly_pension * 0.3))
+                    : 400,
+                  currentPension: dashboardData?.estimated_monthly_pension || 1800,
+                  targetIncome: dashboardData?.estimated_monthly_pension 
+                    ? Math.round(dashboardData.estimated_monthly_pension * 1.3)
+                    : 2200
+                }
+              })}
+              className="w-full btn-elysion-primary" 
+              data-testid="dashboard-view-all-recommendations-btn"
+            >
+              Atteindre cet objectif →
             </button>
           </div>
 

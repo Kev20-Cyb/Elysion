@@ -387,3 +387,98 @@ calculateScenarios()
 **Document Version** : 1.2  
 **Date** : Janvier 2025  
 **Valeur du point RCI** : 1,4386€
+
+---
+
+## 8. Module Épargne & Besoin TNS (NOUVEAU)
+
+### Spécificités des indépendants
+Les régimes TNS (Travailleurs Non Salariés) sont généralement **moins généreux** que ceux des salariés :
+- Taux de remplacement moyen : **30 à 50%** (contre 50-70% pour les salariés)
+- L'épargne complémentaire est donc **essentielle** pour maintenir le niveau de vie
+
+### Étape 5 : Épargne & Besoin (adapté TNS)
+
+#### Données collectées
+```javascript
+currentMonthlyIncome: 0,      // Revenu professionnel net moyen (3 dernières années)
+targetIncomeMode: 'percentage', // 'percentage' ou 'amount'
+targetIncomePercentage: 70,    // % du revenu moyen souhaité
+targetIncomeAmount: 0,         // Montant fixe en euros
+currentSavings: 0,             // PER, assurance-vie, trésorerie, immobilier
+wantsEpargneCalculation: true
+```
+
+#### Calcul du taux de remplacement TNS
+```javascript
+// Seuils adaptés aux TNS (plus bas que salariés)
+if (replacementRate >= 50) return 'Au-dessus de la moyenne TNS';
+if (replacementRate >= 35) return 'Dans la moyenne TNS - épargne recommandée';
+return 'En dessous de la moyenne - épargne indispensable';
+```
+
+### Conseil fiscal TNS
+> 💡 Les versements PER sont déductibles du revenu imposable, 
+> optimisant la fiscalité tout en préparant la retraite.
+
+---
+
+## 9. Profil de Risque TNS (NOUVEAU)
+
+### Particularités freelance
+- Revenus souvent **variables** → influence sur la tolérance au risque
+- Importance d'une **épargne de précaution** (6-12 mois de charges)
+- Possibilité d'**épargne irrégulière** (versements ponctuels quand CA favorable)
+
+### Questionnaire identique au salarié
+- Horizon : arrêt d'activité dans <10 / 10-20 / >20 ans
+- Tolérance aux pertes : 5% / 10% / 20%
+- Connaissance des marchés : débutant / intermédiaire / avancé
+
+### Classification
+Même mapping que salariés :
+- **Prudent** : 1.5%/an - Fonds euros, livrets
+- **Équilibré** : 4%/an - Mix UC, PER équilibré
+- **Dynamique** : 7%/an - Actions, ETF, PEA
+
+---
+
+## 10. Calcul de l'Effort d'Épargne TNS (NOUVEAU)
+
+### Formule identique au salarié
+```javascript
+const calculateRequiredSavings = (targetIncome, currentPension, yearsUntilRetirement, profile) => {
+  // Même logique que salarié
+  // Seules les entrées changent (pension TNS, revenu professionnel)
+};
+```
+
+### Restitution adaptée
+Pour chaque profil de risque, afficher :
+- Pension obligatoire TNS estimée (base + complémentaire indépendants)
+- Revenu cible (en % ou en €)
+- Épargne mensuelle indicative par profil
+
+### Mention obligatoire
+> ⚠️ Hypothèses de rendement non garanties, à adapter avec un conseiller 
+> en fonction des produits utilisés (PER individuel, Madelin, assurance vie, immobilier, etc.)
+
+---
+
+## 11. Synthèse du Tunnel Freelance (NOUVEAU)
+
+### Parcours utilisateur en 6 étapes
+1. **Profil & statut** - Micro/EI/Libéral, données personnelles
+2. **Revenus & historique** - CA ou bénéfices par année
+3. **Trimestres assimilés** - Chômage, maladie, maternité, congé parental
+4. **Récapitulatif** - Validation avant calcul
+5. **Épargne & Besoin** - Objectif de revenu et capital existant
+6. **Profil de risque** - 3 questions pour classification
+→ Résultats avec projections d'épargne
+
+### Module mutualisé
+Le module Épargne & Risque est **identique** entre salarié et freelance, avec :
+- Entrées différentes (pension TNS vs pension salarié)
+- Wording adapté (arrêt d'activité vs retraite)
+- Seuils ajustés (taux de remplacement moyen plus bas)
+

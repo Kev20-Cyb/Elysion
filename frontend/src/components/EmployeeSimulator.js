@@ -2015,13 +2015,13 @@ const EmployeeSimulator = () => {
       <div className="max-w-4xl mx-auto px-4 py-12">
         <div className="bg-white rounded-2xl shadow-xl p-8">
           {/* Progress bar */}
-          {currentStep <= 5 && (
+          {currentStep <= 7 && (
             <div className="mb-8">
               <div className="flex justify-between mb-2">
-                {[1, 2, 3, 4, 5].map((step) => (
+                {[1, 2, 3, 4, 5, 6, 7].map((step) => (
                   <div
                     key={step}
-                    className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold ${
+                    className={`w-9 h-9 rounded-full flex items-center justify-center font-semibold text-sm ${
                       step === currentStep
                         ? 'bg-elysion-primary text-white'
                         : step < currentStep
@@ -2036,7 +2036,7 @@ const EmployeeSimulator = () => {
               <div className="h-2 bg-gray-200 rounded-full">
                 <div
                   className="h-full bg-elysion-accent rounded-full transition-all"
-                  style={{ width: `${(currentStep / 5) * 100}%` }}
+                  style={{ width: `${(currentStep / 7) * 100}%` }}
                 />
               </div>
             </div>

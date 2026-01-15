@@ -181,33 +181,70 @@ def generate_mock_retirement_data(user: User, profile: Optional[RetirementProfil
     estimated_pension = 0
     savings_progress = 0
     
-    if user.user_type == UserType.EMPLOYEE:
-        projected_age = 62
-        estimated_pension = 1800
-        savings_progress = 65
-        recommendations = [
-            "Maximize your employer's 401(k) matching",
-            "Consider increasing contributions by 2% annually",
-            "Review your portfolio allocation quarterly"
-        ]
-    elif user.user_type == UserType.FREELANCER:
-        projected_age = 67
-        estimated_pension = 1200
-        savings_progress = 45
-        recommendations = [
-            "Set up a SEP-IRA for tax-advantaged savings",
-            "Build an emergency fund of 6-12 months expenses",
-            "Consider diversifying income streams"
-        ]
-    elif user.user_type == UserType.BUSINESS_OWNER:
-        projected_age = 60
-        estimated_pension = 2500
-        savings_progress = 80
-        recommendations = [
-            "Explore business succession planning options",
-            "Maximize tax-deferred retirement accounts",
-            "Consider establishing a defined benefit plan"
-        ]
+    # Use real data from profile if available
+    if profile and profile.simulation_data:
+        sim_data = profile.simulation_data
+        # Try to get real values from simulation
+        if 'results' in sim_data:
+            results = sim_data['results']
+            if 'scenarios' in results and len(results['scenarios']) > 0:
+                first_scenario = results['scenarios'][0]
+                projected_age = first_scenario.get('age', 65)
+                estimated_pension = first_scenario.get('totalMonthly', 0)
+            if 'currentIncome' in results and results['currentIncome'] > 0:
+                target = results.get('targetIncome', results['currentIncome'] * 0.7)
+                if estimated_pension > 0:
+                    savings_progress = min(100, int((estimated_pension / target) * 100))
+    
+    # Fallback to mock data based on user type
+    if estimated_pension == 0:
+        if user.user_type == UserType.EMPLOYEE:
+            projected_age = 62
+            estimated_pension = 1800
+            savings_progress = 65
+            recommendations = [
+                "Optimisez votre épargne retraite avec un PER",
+                "Augmentez vos cotisations de 2% par an",
+                "Revoyez votre allocation d'actifs trimestriellement"
+            ]
+        elif user.user_type == UserType.FREELANCER:
+            projected_age = 67
+            estimated_pension = 1200
+            savings_progress = 45
+            recommendations = [
+                "Ouvrez un PER pour optimiser votre fiscalité",
+                "Constituez une épargne de précaution de 6-12 mois",
+                "Diversifiez vos sources de revenus"
+            ]
+        elif user.user_type == UserType.BUSINESS_OWNER:
+            projected_age = 60
+            estimated_pension = 2500
+            savings_progress = 80
+            recommendations = [
+                "Planifiez la succession de votre entreprise",
+                "Maximisez vos placements à avantage fiscal",
+                "Envisagez un contrat Madelin"
+            ]
+    else:
+        # Generate personalized recommendations based on real data
+        if savings_progress < 50:
+            recommendations = [
+                "Votre taux de remplacement est faible - augmentez votre épargne mensuelle",
+                "Envisagez d'ouvrir un PER pour optimiser votre fiscalité",
+                "Consultez un conseiller pour une stratégie personnalisée"
+            ]
+        elif savings_progress < 70:
+            recommendations = [
+                "Bon niveau d'épargne - continuez vos efforts",
+                "Diversifiez vos placements pour optimiser le rendement",
+                "Revoyez votre allocation annuellement"
+            ]
+        else:
+            recommendations = [
+                "Excellent niveau de préparation retraite !",
+                "Maintenez votre stratégie actuelle",
+                "Pensez à la transmission de patrimoine"
+            ]
     
     return {
         "projected_retirement_age": projected_age,
@@ -215,9 +252,9 @@ def generate_mock_retirement_data(user: User, profile: Optional[RetirementProfil
         "savings_progress": savings_progress,
         "recommendations": recommendations,
         "recent_documents": [
-            {"name": "Tax Return 2023", "type": "tax", "date": "2024-03-15"},
-            {"name": "401k Statement", "type": "retirement", "date": "2024-09-01"},
-            {"name": "Pay Stub", "type": "income", "date": "2024-09-15"}
+            {"name": "Relevé de carrière 2024", "type": "career", "date": "2024-03-15"},
+            {"name": "Simulation retraite", "type": "retirement", "date": "2024-09-01"},
+            {"name": "Bulletin de salaire", "type": "income", "date": "2024-09-15"}
         ]
     }
 

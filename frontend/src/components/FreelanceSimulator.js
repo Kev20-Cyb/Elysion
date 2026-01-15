@@ -966,9 +966,9 @@ const FreelanceSimulator = () => {
     );
   };
 
-  // Rendu Étape 5 : Épargne & Besoin
+  // Rendu Étape 5 : Épargne & Besoin (adapté TNS)
   const renderStep5 = () => {
-    const estimatedPension = results?.totalMonthly || 1500; // Estimation par défaut
+    const estimatedPension = results?.totalMonthly || 1200; // Estimation plus basse pour TNS
     const replacementRate = formData.currentMonthlyIncome > 0 
       ? Math.round((estimatedPension / formData.currentMonthlyIncome) * 100) 
       : 0;
@@ -977,19 +977,22 @@ const FreelanceSimulator = () => {
       <div className="space-y-6">
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold text-elysion-primary mb-2">Épargne & Besoin</h2>
-          <p className="text-gray-600">Étape 5/6</p>
+          <p className="text-gray-600">Freelance - Étape 5/6</p>
         </div>
 
-        <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
-          <p className="text-sm text-blue-800">
-            <strong>💡 Info :</strong> En tant que freelance, votre taux de remplacement est généralement plus faible. L'épargne complémentaire est essentielle.
+        {/* Alerte spécifique TNS */}
+        <div className="bg-orange-50 border border-orange-200 p-4 rounded-lg">
+          <p className="text-sm text-orange-800">
+            <strong>⚠️ Important pour les indépendants :</strong> Les régimes TNS (Travailleurs Non Salariés) 
+            sont généralement <strong>moins généreux</strong> que ceux des salariés. Le taux de remplacement moyen 
+            est souvent de <strong>30 à 50%</strong> seulement. L'épargne complémentaire est donc essentielle pour maintenir votre niveau de vie.
           </p>
         </div>
 
-        {/* Revenu actuel */}
+        {/* Revenu professionnel moyen */}
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-2">
-            Votre revenu mensuel net moyen (€)
+            Votre revenu professionnel mensuel net moyen (€)
           </label>
           <input
             type="number"
@@ -997,32 +1000,40 @@ const FreelanceSimulator = () => {
             value={formData.currentMonthlyIncome}
             onChange={(e) => handleInputChange('currentMonthlyIncome', parseFloat(e.target.value) || 0)}
             className="input-elysion"
-            placeholder="3000"
+            placeholder="3500"
           />
-          <p className="text-xs text-gray-500 mt-1">Après charges et impôts</p>
+          <p className="text-xs text-gray-500 mt-1">
+            Moyenne des 3 dernières années, après charges sociales et impôts
+          </p>
         </div>
 
         {/* Taux de remplacement estimé */}
         {formData.currentMonthlyIncome > 0 && (
           <div className="bg-white p-6 rounded-lg border border-gray-200">
-            <h3 className="font-semibold text-gray-900 mb-4">Estimation préliminaire</h3>
-            <div className="grid grid-cols-2 gap-4">
+            <h3 className="font-semibold text-gray-900 mb-4">Estimation de votre situation</h3>
+            <div className="grid grid-cols-3 gap-4">
               <div className="text-center p-4 bg-gray-50 rounded-lg">
                 <p className="text-sm text-gray-600">Revenu actuel</p>
-                <p className="text-2xl font-bold text-gray-900">{formData.currentMonthlyIncome.toLocaleString()} €</p>
+                <p className="text-xl font-bold text-gray-900">{formData.currentMonthlyIncome.toLocaleString()} €</p>
               </div>
               <div className="text-center p-4 bg-elysion-primary-50 rounded-lg">
-                <p className="text-sm text-gray-600">Pension estimée</p>
-                <p className="text-2xl font-bold text-elysion-primary">~{estimatedPension.toLocaleString()} €</p>
+                <p className="text-sm text-gray-600">Pension TNS estimée</p>
+                <p className="text-xl font-bold text-elysion-primary">~{estimatedPension.toLocaleString()} €</p>
+              </div>
+              <div className="text-center p-4 bg-red-50 rounded-lg">
+                <p className="text-sm text-gray-600">Écart mensuel</p>
+                <p className="text-xl font-bold text-red-500">
+                  -{Math.max(0, formData.currentMonthlyIncome - estimatedPension).toLocaleString()} €
+                </p>
               </div>
             </div>
             <div className="mt-4 text-center">
               <p className="text-sm text-gray-600">Taux de remplacement estimé</p>
-              <p className={`text-3xl font-bold ${replacementRate >= 60 ? 'text-green-600' : replacementRate >= 40 ? 'text-orange-500' : 'text-red-500'}`}>
+              <p className={`text-3xl font-bold ${replacementRate >= 50 ? 'text-green-600' : replacementRate >= 35 ? 'text-orange-500' : 'text-red-500'}`}>
                 {replacementRate}%
               </p>
               <p className="text-xs text-gray-500 mt-1">
-                {replacementRate >= 60 ? 'Bon niveau pour un freelance' : replacementRate >= 40 ? 'Niveau modéré - épargne recommandée' : 'Niveau faible - épargne indispensable'}
+                {replacementRate >= 50 ? 'Au-dessus de la moyenne TNS' : replacementRate >= 35 ? 'Dans la moyenne TNS - épargne recommandée' : 'En dessous de la moyenne - épargne indispensable'}
               </p>
             </div>
           </div>
@@ -1031,7 +1042,7 @@ const FreelanceSimulator = () => {
         {/* Objectif de revenu */}
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-2">
-            Quel revenu mensuel net souhaitez-vous à la retraite ?
+            Quel revenu mensuel net souhaitez-vous conserver quand vous arrêterez votre activité ?
           </label>
           <div className="flex gap-4 mb-3">
             <label className="flex items-center gap-2">
@@ -1042,7 +1053,7 @@ const FreelanceSimulator = () => {
                 onChange={() => handleInputChange('targetIncomeMode', 'percentage')}
                 className="checkbox-elysion"
               />
-              <span className="text-sm">En % du revenu actuel</span>
+              <span className="text-sm">En % du revenu moyen actuel</span>
             </label>
             <label className="flex items-center gap-2">
               <input
@@ -1078,12 +1089,26 @@ const FreelanceSimulator = () => {
               placeholder="2500"
             />
           )}
+          
+          {formData.currentMonthlyIncome > 0 && (
+            <p className="text-sm text-gray-500 mt-2">
+              Objectif : <strong>{formData.targetIncomeMode === 'percentage' 
+                ? `${Math.round(formData.currentMonthlyIncome * formData.targetIncomePercentage / 100).toLocaleString()} €/mois`
+                : `${formData.targetIncomeAmount.toLocaleString()} €/mois`}</strong>
+              {' '} soit un besoin complémentaire de{' '}
+              <strong className="text-red-500">
+                {Math.max(0, (formData.targetIncomeMode === 'percentage' 
+                  ? Math.round(formData.currentMonthlyIncome * formData.targetIncomePercentage / 100) 
+                  : formData.targetIncomeAmount) - estimatedPension).toLocaleString()} €/mois
+              </strong>
+            </p>
+          )}
         </div>
 
         {/* Capital déjà épargné */}
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-2">
-            Avez-vous déjà un capital épargné pour la retraite ? (€)
+            Capital déjà épargné pour la retraite (€)
           </label>
           <input
             type="number"
@@ -1091,9 +1116,11 @@ const FreelanceSimulator = () => {
             value={formData.currentSavings}
             onChange={(e) => handleInputChange('currentSavings', parseFloat(e.target.value) || 0)}
             className="input-elysion"
-            placeholder="20000"
+            placeholder="30000"
           />
-          <p className="text-xs text-gray-500 mt-1">PER, assurance-vie, immobilier locatif, épargne personnelle...</p>
+          <p className="text-xs text-gray-500 mt-1">
+            PER individuel, assurance-vie, trésorerie disponible, immobilier locatif...
+          </p>
         </div>
 
         {/* Option calcul */}
@@ -1108,6 +1135,14 @@ const FreelanceSimulator = () => {
           <label htmlFor="wantsCalculation" className="text-sm text-gray-700">
             Je souhaite que le simulateur calcule l'épargne nécessaire pour combler l'écart
           </label>
+        </div>
+
+        {/* Info TNS */}
+        <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
+          <p className="text-sm text-blue-800">
+            <strong>💡 Bon à savoir :</strong> En tant qu'indépendant, vous pouvez déduire vos versements PER 
+            de votre revenu imposable, ce qui optimise votre fiscalité tout en préparant votre retraite.
+          </p>
         </div>
       </div>
     );

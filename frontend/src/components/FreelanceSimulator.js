@@ -1506,13 +1506,13 @@ const FreelanceSimulator = () => {
       <div className="max-w-4xl mx-auto px-4 py-12">
         <div className="bg-white rounded-2xl shadow-xl p-8">
           {/* Progress bar */}
-          {currentStep <= 4 && (
+          {currentStep <= 6 && (
             <div className="mb-8">
               <div className="flex justify-between mb-2">
-                {[1, 2, 3, 4].map((step) => (
+                {[1, 2, 3, 4, 5, 6].map((step) => (
                   <div
                     key={step}
-                    className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold ${
+                    className={`w-9 h-9 rounded-full flex items-center justify-center font-semibold text-sm ${
                       step === currentStep
                         ? 'bg-elysion-primary text-white'
                         : step < currentStep
@@ -1527,7 +1527,7 @@ const FreelanceSimulator = () => {
               <div className="h-2 bg-gray-200 rounded-full">
                 <div
                   className="h-full bg-elysion-accent rounded-full transition-all"
-                  style={{ width: `${(currentStep / 4) * 100}%` }}
+                  style={{ width: `${(currentStep / 6) * 100}%` }}
                 />
               </div>
             </div>
@@ -1538,10 +1538,12 @@ const FreelanceSimulator = () => {
           {currentStep === 2 && renderStep2()}
           {currentStep === 3 && renderStep3()}
           {currentStep === 4 && renderStep4()}
-          {currentStep === 5 && renderResults()}
+          {currentStep === 5 && renderStep5()}
+          {currentStep === 6 && renderStep6()}
+          {currentStep === 7 && renderResults()}
 
           {/* Navigation buttons */}
-          {currentStep <= 4 && (
+          {currentStep <= 6 && (
             <div className="flex justify-between mt-8">
               <button
                 onClick={prevStep}

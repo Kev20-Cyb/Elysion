@@ -270,33 +270,47 @@ const Dashboard = () => {
               <span className="text-2xl">📄</span>
             </div>
             <div className="space-y-3">
-              {dashboardData?.recent_documents?.map((doc, index) => (
-                <div 
-                  key={index} 
-                  className="flex items-center justify-between p-3 bg-elysion-bg rounded-lg hover:bg-gray-100 transition-colors cursor-pointer"
-                  data-testid={`dashboard-document-${index}`}
-                >
-                  <div className="flex items-center space-x-3">
-                    <span className="text-lg">
-                      {doc.type === 'tax' && '📊'}
-                      {doc.type === 'retirement' && '🏦'}
-                      {doc.type === 'income' && '💵'}
-                    </span>
-                    <div>
-                      <p className="font-medium text-elysion-text-dark">{doc.name}</p>
-                      <p className="text-sm text-elysion-text-light">{doc.date}</p>
+              {recentDocuments.length > 0 ? (
+                recentDocuments.map((doc, index) => (
+                  <div 
+                    key={doc.id || index} 
+                    className="flex items-center justify-between p-3 bg-elysion-bg rounded-lg hover:bg-gray-100 transition-colors cursor-pointer"
+                    onClick={() => navigate('/documents')}
+                    data-testid={`dashboard-document-${index}`}
+                  >
+                    <div className="flex items-center space-x-3">
+                      <span className="text-lg">
+                        {doc.category === 'salary_slip' && '💵'}
+                        {doc.category === 'career_statement' && '📋'}
+                        {doc.category === 'tax_declaration' && '📊'}
+                        {doc.category === 'retirement_contract' && '🏦'}
+                        {doc.category === 'other' && '📄'}
+                        {!doc.category && '📄'}
+                      </span>
+                      <div>
+                        <p className="font-medium text-elysion-text-dark truncate max-w-[200px]">{doc.filename}</p>
+                        <p className="text-sm text-elysion-text-light">
+                          {doc.uploaded_at ? new Date(doc.uploaded_at).toLocaleDateString('fr-FR') : '-'}
+                        </p>
+                      </div>
                     </div>
+                    <span className="text-elysion-primary">→</span>
                   </div>
-                  <span className="text-elysion-primary">→</span>
+                ))
+              ) : (
+                <div className="text-center py-6 text-elysion-text-light">
+                  <span className="text-3xl block mb-2">📁</span>
+                  <p>Aucun document téléchargé</p>
+                  <p className="text-sm mt-1">Ajoutez vos documents pour les retrouver ici</p>
                 </div>
-              ))}
+              )}
             </div>
             <button 
               onClick={() => navigate('/documents')} 
               className="w-full mt-6 btn-elysion-primary" 
               data-testid="dashboard-upload-document-btn"
             >
-              Gérer mes documents
+              {recentDocuments.length > 0 ? 'Gérer mes documents' : 'Ajouter un document'}
             </button>
           </div>
         </div>

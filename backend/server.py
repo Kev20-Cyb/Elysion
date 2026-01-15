@@ -798,30 +798,6 @@ async def delete_document(
     
     return {"message": "Document supprimé avec succès"}
 
-# Get document statistics
-@api_router.get("/documents/stats/summary")
-async def get_document_stats(current_user: User = Depends(get_current_user)):
-    """Get document statistics for current user"""
-    
-    documents = await db.documents.find({"user_id": current_user.id}).to_list(length=None)
-    
-    total_count = len(documents)
-    total_size = sum(doc["file_size"] for doc in documents)
-    
-    # Count by category
-    category_counts = {}
-    for doc in documents:
-        category = doc["category"]
-        category_counts[category] = category_counts.get(category, 0) + 1
-    
-    return {
-        "total_documents": total_count,
-        "total_size_bytes": total_size,
-        "total_size_mb": round(total_size / (1024 * 1024), 2),
-        "by_category": category_counts,
-        "recent_count": len([d for d in documents if (datetime.utcnow() - d["uploaded_at"]).days <= 7])
-    }
-
 
 @app.on_event("shutdown")
 async def shutdown_db_client():

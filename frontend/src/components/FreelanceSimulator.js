@@ -1148,29 +1148,30 @@ const FreelanceSimulator = () => {
     );
   };
 
-  // Rendu Étape 6 : Profil de Risque
+  // Rendu Étape 6 : Profil de Risque (adapté TNS)
   const renderStep6 = () => (
     <div className="space-y-6">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-elysion-primary mb-2">Votre relation au risque</h2>
-        <p className="text-gray-600">Étape 6/6</p>
+        <p className="text-gray-600">Freelance - Étape 6/6</p>
       </div>
 
       <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
         <p className="text-sm text-blue-800">
-          <strong>💡 Important :</strong> Ces questions permettent d'adapter les recommandations d'épargne à votre profil.
+          <strong>💡 Important :</strong> Ces questions permettent d'adapter les recommandations d'épargne à votre profil. 
+          En tant qu'indépendant, vos revenus peuvent être plus variables, ce qui peut influencer votre tolérance au risque.
         </p>
       </div>
 
       {/* Question 1 : Horizon */}
       <div className="bg-white p-6 rounded-lg border border-gray-200">
         <h3 className="font-semibold text-gray-900 mb-4">1. Votre horizon de placement</h3>
-        <p className="text-sm text-gray-600 mb-3">Dans combien de temps prendrez-vous votre retraite ?</p>
+        <p className="text-sm text-gray-600 mb-3">Dans combien de temps envisagez-vous d'arrêter votre activité ?</p>
         <div className="space-y-2">
           {[
-            { value: 'short', label: 'Moins de 10 ans', desc: 'Horizon court - privilégier la sécurité' },
-            { value: 'medium', label: '10 à 20 ans', desc: 'Horizon moyen - équilibre rendement/risque' },
-            { value: 'long', label: 'Plus de 20 ans', desc: 'Horizon long - potentiel de croissance' }
+            { value: 'short', label: 'Moins de 10 ans', desc: 'Horizon court - privilégier la sécurité et la liquidité' },
+            { value: 'medium', label: '10 à 20 ans', desc: 'Horizon moyen - équilibre rendement/risque possible' },
+            { value: 'long', label: 'Plus de 20 ans', desc: 'Horizon long - potentiel de croissance sur le long terme' }
           ].map(option => (
             <label key={option.value} className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${formData.investmentHorizon === option.value ? 'border-elysion-primary bg-elysion-primary-50' : 'border-gray-200 hover:bg-gray-50'}`}>
               <input
@@ -1193,12 +1194,14 @@ const FreelanceSimulator = () => {
       {/* Question 2 : Tolérance */}
       <div className="bg-white p-6 rounded-lg border border-gray-200">
         <h3 className="font-semibold text-gray-900 mb-4">2. Votre tolérance aux fluctuations</h3>
-        <p className="text-sm text-gray-600 mb-3">Quelle baisse temporaire de votre épargne accepteriez-vous ?</p>
+        <p className="text-sm text-gray-600 mb-3">
+          En cas de baisse des marchés, quelle perte temporaire sur votre épargne retraite accepteriez-vous ?
+        </p>
         <div className="space-y-2">
           {[
-            { value: '5', label: 'Maximum 5%', desc: 'Très prudent' },
-            { value: '10', label: 'Jusqu\'à 10%', desc: 'Modéré' },
-            { value: '20', label: 'Jusqu\'à 20% ou plus', desc: 'Tolérant' }
+            { value: '5', label: 'Maximum 5%', desc: 'Très prudent - je préfère la stabilité même avec moins de rendement' },
+            { value: '10', label: 'Jusqu\'à 10%', desc: 'Modéré - j\'accepte quelques fluctuations pour plus de potentiel' },
+            { value: '20', label: 'Jusqu\'à 20% ou plus', desc: 'Tolérant - je vise le long terme et accepte la volatilité' }
           ].map(option => (
             <label key={option.value} className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${formData.lossToleranceLevel === option.value ? 'border-elysion-primary bg-elysion-primary-50' : 'border-gray-200 hover:bg-gray-50'}`}>
               <input
@@ -1221,11 +1224,12 @@ const FreelanceSimulator = () => {
       {/* Question 3 : Connaissance */}
       <div className="bg-white p-6 rounded-lg border border-gray-200">
         <h3 className="font-semibold text-gray-900 mb-4">3. Votre connaissance des marchés</h3>
+        <p className="text-sm text-gray-600 mb-3">Comment évaluez-vous votre expérience en matière de placements financiers ?</p>
         <div className="space-y-2">
           {[
-            { value: 'beginner', label: 'Débutant', desc: 'Je découvre l\'épargne financière' },
-            { value: 'intermediate', label: 'Intermédiaire', desc: 'J\'ai déjà investi' },
-            { value: 'advanced', label: 'Avancé', desc: 'Je suis à l\'aise avec les marchés' }
+            { value: 'beginner', label: 'Débutant', desc: 'Je découvre l\'épargne financière, je préfère être guidé' },
+            { value: 'intermediate', label: 'Intermédiaire', desc: 'J\'ai déjà investi (assurance-vie, PER, PEA...)' },
+            { value: 'advanced', label: 'Avancé', desc: 'Je suis à l\'aise avec les marchés et je gère activement mes placements' }
           ].map(option => (
             <label key={option.value} className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${formData.marketKnowledge === option.value ? 'border-elysion-primary bg-elysion-primary-50' : 'border-gray-200 hover:bg-gray-50'}`}>
               <input
@@ -1269,6 +1273,14 @@ const FreelanceSimulator = () => {
           })()}
         </div>
       )}
+
+      {/* Info spécifique TNS */}
+      <div className="bg-orange-50 border border-orange-200 p-4 rounded-lg">
+        <p className="text-sm text-orange-800">
+          <strong>💡 Conseil pour les indépendants :</strong> Pensez à garder une épargne de précaution (6 à 12 mois de charges fixes) 
+          avant d'investir sur des supports risqués. Vos revenus étant variables, cette réserve est essentielle.
+        </p>
+      </div>
     </div>
   );
 

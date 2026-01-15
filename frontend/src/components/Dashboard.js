@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { useAuth } from '../App';
 import { useNavigate } from 'react-router-dom';
@@ -10,24 +10,42 @@ const Dashboard = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [dashboardData, setDashboardData] = useState(null);
+  const [recentDocuments, setRecentDocuments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    fetchDashboardData();
-  }, []);
-
-  const fetchDashboardData = async () => {
+  const fetchDashboardData = useCallback(async () => {
     try {
-      const response = await axios.get(`${API}/dashboard`);
-      setDashboardData(response.data);
+      setLoading(true);
+      setError('');
+      
+      // Fetch dashboard data and documents in parallel
+      const [dashboardResponse, documentsResponse] = await Promise.all([
+        axios.get(`${API}/dashboard`),
+        axios.get(`${API}/documents`).catch(() => ({ data: [] })) // Fallback to empty array if no documents
+      ]);
+      
+      setDashboardData(dashboardResponse.data);
+      
+      // Get the 3 most recent documents
+      const docs = documentsResponse.data || [];
+      setRecentDocuments(docs.slice(0, 3));
+      
     } catch (err) {
-      setError('Erreur lors du chargement du tableau de bord');
       console.error('Dashboard error:', err);
+      if (err.response?.status === 401) {
+        setError('Session expirée. Veuillez vous reconnecter.');
+      } else {
+        setError('Erreur lors du chargement du tableau de bord');
+      }
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchDashboardData();
+  }, [fetchDashboardData]);
 
   const getUserTypeInfo = (userType) => {
     const types = {

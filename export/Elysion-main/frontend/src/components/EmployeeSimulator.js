@@ -51,11 +51,113 @@ const EmployeeSimulator = () => {
     knowsRAFP: false,
     rafpAmount: 0,
     
+    // NOUVEAU - Épargne & Besoin
+    currentMonthlyIncome: 0,
+    targetIncomeMode: 'percentage', // 'percentage' or 'amount'
+    targetIncomePercentage: 70, // % du revenu actuel
+    targetIncomeAmount: 0, // en euros
+    currentSavings: 0, // capital déjà épargné
+    wantsEpargneCalculation: true,
+    
+    // NOUVEAU - Profil de Risque
+    investmentHorizon: '', // 'short' (<10 ans), 'medium' (10-20), 'long' (>20)
+    lossToleranceLevel: '', // '5', '10', '20'
+    marketKnowledge: '', // 'beginner', 'intermediate', 'advanced'
+    riskProfile: '', // 'prudent', 'equilibre', 'dynamique' (calculé)
+    
     // Scénarios communs
     retirementAges: [62, 64, 67]
   });
   
   const [results, setResults] = useState(null);
+
+  // Configuration des profils de risque
+  const RISK_PROFILES = {
+    prudent: {
+      name: 'Prudent',
+      description: 'Faible tolérance à la baisse, horizon court',
+      annualReturn: 0.015, // 1.5% réel
+      color: 'green',
+      recommendation: 'Fonds euros, livrets réglementés, obligations'
+    },
+    equilibre: {
+      name: 'Équilibré',
+      description: 'Accepte une certaine volatilité, horizon moyen',
+      annualReturn: 0.04, // 4% réel
+      color: 'blue',
+      recommendation: 'Mix fonds euros/UC, PER équilibré, assurance-vie diversifiée'
+    },
+    dynamique: {
+      name: 'Dynamique',
+      description: 'Tolère de fortes variations pour plus de rendement',
+      annualReturn: 0.07, // 7% réel
+      color: 'orange',
+      recommendation: 'Actions, ETF, PER dynamique, PEA'
+    }
+  };
+
+  // Calcul du profil de risque automatique
+  const calculateRiskProfile = () => {
+    let score = 0;
+    
+    // Score basé sur l'horizon
+    if (formData.investmentHorizon === 'long') score += 3;
+    else if (formData.investmentHorizon === 'medium') score += 2;
+    else if (formData.investmentHorizon === 'short') score += 1;
+    
+    // Score basé sur la tolérance aux pertes
+    if (formData.lossToleranceLevel === '20') score += 3;
+    else if (formData.lossToleranceLevel === '10') score += 2;
+    else if (formData.lossToleranceLevel === '5') score += 1;
+    
+    // Score basé sur la connaissance des marchés
+    if (formData.marketKnowledge === 'advanced') score += 3;
+    else if (formData.marketKnowledge === 'intermediate') score += 2;
+    else if (formData.marketKnowledge === 'beginner') score += 1;
+    
+    // Classification
+    if (score <= 4) return 'prudent';
+    if (score <= 7) return 'equilibre';
+    return 'dynamique';
+  };
+
+  // Calcul de l'épargne nécessaire pour atteindre un objectif
+  const calculateRequiredSavings = (targetMonthlyIncome, currentPension, yearsUntilRetirement, profile) => {
+    const monthlyGap = targetMonthlyIncome - currentPension;
+    if (monthlyGap <= 0) return { monthlyContribution: 0, totalCapital: 0, message: 'Votre pension couvre déjà votre objectif' };
+    
+    const retirementDuration = 25; // Durée de consommation estimée (années)
+    const annualReturn = RISK_PROFILES[profile]?.annualReturn || 0.03;
+    const monthlyReturn = annualReturn / 12;
+    
+    // Capital nécessaire pour générer le revenu complémentaire pendant 25 ans
+    const requiredCapital = monthlyGap * 12 * retirementDuration * 0.85; // 0.85 pour inflation
+    
+    // Capital déjà épargné avec rendement projeté
+    const currentSavingsProjected = formData.currentSavings * Math.pow(1 + annualReturn, yearsUntilRetirement);
+    
+    // Capital restant à constituer
+    const capitalToAccumulate = Math.max(0, requiredCapital - currentSavingsProjected);
+    
+    // Versement mensuel nécessaire (formule d'annuité)
+    const n = yearsUntilRetirement * 12;
+    let monthlyContribution = 0;
+    
+    if (n > 0 && monthlyReturn > 0) {
+      monthlyContribution = capitalToAccumulate * monthlyReturn / (Math.pow(1 + monthlyReturn, n) - 1);
+    } else if (n > 0) {
+      monthlyContribution = capitalToAccumulate / n;
+    }
+    
+    return {
+      monthlyGap,
+      requiredCapital: Math.round(requiredCapital),
+      currentSavingsProjected: Math.round(currentSavingsProjected),
+      capitalToAccumulate: Math.round(capitalToAccumulate),
+      monthlyContribution: Math.round(monthlyContribution),
+      annualReturn: annualReturn * 100
+    };
+  };
 
   // Extraire l'année de naissance depuis la date
   const getBirthYear = () => {
@@ -394,18 +496,44 @@ const EmployeeSimulator = () => {
   };
 
   const handleCalculate = () => {
+    // Calculer le profil de risque
+    const riskProfile = calculateRiskProfile();
+    handleInputChange('riskProfile', riskProfile);
+    
     const scenarios = calculateScenarios();
-    setResults({
-      branch,
-      scenarios,
-      currentAge: new Date().getFullYear() - getBirthYear()
+    
+    // Calculer les projections d'épargne pour chaque scénario
+    const targetIncome = formData.targetIncomeMode === 'percentage' 
+      ? formData.currentMonthlyIncome * (formData.targetIncomePercentage / 100)
+      : formData.targetIncomeAmount;
+    
+    const scenariosWithSavings = scenarios.map(scenario => {
+      const savingsProjections = {};
+      ['prudent', 'equilibre', 'dynamique'].forEach(profile => {
+        savingsProjections[profile] = calculateRequiredSavings(
+          targetIncome,
+          scenario.totalMonthly,
+          scenario.yearsUntil,
+          profile
+        );
+      });
+      return {
+        ...scenario,
+        targetIncome: Math.round(targetIncome),
+        savingsProjections
+      };
     });
     
-    if (branch === 'private') {
-      setCurrentStep(6); // Écran résultats privé
-    } else {
-      setCurrentStep(6); // Écran résultats public
-    }
+    setResults({
+      branch,
+      scenarios: scenariosWithSavings,
+      currentAge: new Date().getFullYear() - getBirthYear(),
+      riskProfile,
+      targetIncome: Math.round(targetIncome),
+      currentIncome: formData.currentMonthlyIncome
+    });
+    
+    setCurrentStep(8); // Écran résultats
   };
 
   const nextStep = () => {
@@ -413,9 +541,9 @@ const EmployeeSimulator = () => {
       // Automatiquement en mode Salarié du Privé
       setBranch('private');
       setCurrentStep(2);
-    } else if (currentStep < 5) {
+    } else if (currentStep < 7) {
       setCurrentStep(currentStep + 1);
-    } else if (currentStep === 5) {
+    } else if (currentStep === 7) {
       handleCalculate();
     }
   };
@@ -434,7 +562,7 @@ const EmployeeSimulator = () => {
     <div className="space-y-6">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-elysion-primary mb-2">Votre profil</h2>
-        <p className="text-gray-600">Salarié - Étape 1/5</p>
+        <p className="text-gray-600">Salarié - Étape 1/7</p>
       </div>
 
       <div className="grid md:grid-cols-2 gap-4">
@@ -640,7 +768,7 @@ const EmployeeSimulator = () => {
     <div className="space-y-6">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-elysion-primary mb-2">Vos salaires</h2>
-        <p className="text-gray-600">Salarié - Étape 2/5</p>
+        <p className="text-gray-600">Salarié - Étape 2/7</p>
       </div>
 
       <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
@@ -812,7 +940,7 @@ const EmployeeSimulator = () => {
     <div className="space-y-6">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-elysion-primary mb-2">Vos trimestres</h2>
-        <p className="text-gray-600">Salarié - Étape 3/5</p>
+        <p className="text-gray-600">Salarié - Étape 3/7</p>
       </div>
 
       <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
@@ -907,7 +1035,7 @@ const EmployeeSimulator = () => {
     <div className="space-y-6">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-elysion-primary mb-2">Retraite complémentaire</h2>
-        <p className="text-gray-600">Salarié - Étape 4/5</p>
+        <p className="text-gray-600">Salarié - Étape 4/7</p>
       </div>
 
       <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
@@ -958,12 +1086,292 @@ const EmployeeSimulator = () => {
     </div>
   );
 
-  // BRANCHE PRIVÉ - Écran 5 : Scénarios d'âge
-  const renderPrivateStep5 = () => (
+  // BRANCHE PRIVÉ - Écran 5 : Épargne & Besoin
+  const renderPrivateStep5 = () => {
+    // Calculer une estimation rapide de la pension pour l'affichage
+    const estimatedPension = calculateScenarios()[0]?.totalMonthly || 0;
+    const replacementRate = formData.currentMonthlyIncome > 0 
+      ? Math.round((estimatedPension / formData.currentMonthlyIncome) * 100) 
+      : 0;
+    
+    return (
+      <div className="space-y-6">
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-bold text-elysion-primary mb-2">Épargne & Besoin</h2>
+          <p className="text-gray-600">Salarié - Étape 5/7</p>
+        </div>
+
+        <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
+          <p className="text-sm text-blue-800">
+            <strong>💡 Info :</strong> Cette étape vous permet de déterminer si vous aurez besoin d'une épargne complémentaire pour maintenir votre niveau de vie à la retraite.
+          </p>
+        </div>
+
+        {/* Revenu actuel */}
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 mb-2">
+            Votre revenu mensuel net actuel (€)
+          </label>
+          <input
+            type="number"
+            min="0"
+            value={formData.currentMonthlyIncome}
+            onChange={(e) => handleInputChange('currentMonthlyIncome', parseFloat(e.target.value) || 0)}
+            className="input-elysion"
+            placeholder="2500"
+          />
+        </div>
+
+        {/* Affichage du taux de remplacement estimé */}
+        {formData.currentMonthlyIncome > 0 && estimatedPension > 0 && (
+          <div className="bg-white p-6 rounded-lg border border-gray-200">
+            <h3 className="font-semibold text-gray-900 mb-4">Estimation préliminaire</h3>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="text-center p-4 bg-gray-50 rounded-lg">
+                <p className="text-sm text-gray-600">Revenu actuel</p>
+                <p className="text-2xl font-bold text-gray-900">{formData.currentMonthlyIncome.toLocaleString()} €</p>
+              </div>
+              <div className="text-center p-4 bg-elysion-primary-50 rounded-lg">
+                <p className="text-sm text-gray-600">Pension estimée</p>
+                <p className="text-2xl font-bold text-elysion-primary">{estimatedPension.toLocaleString()} €</p>
+              </div>
+            </div>
+            <div className="mt-4 text-center">
+              <p className="text-sm text-gray-600">Taux de remplacement estimé</p>
+              <p className={`text-3xl font-bold ${replacementRate >= 70 ? 'text-green-600' : replacementRate >= 50 ? 'text-orange-500' : 'text-red-500'}`}>
+                {replacementRate}%
+              </p>
+              <p className="text-xs text-gray-500 mt-1">
+                {replacementRate >= 70 ? 'Bon niveau de remplacement' : replacementRate >= 50 ? 'Niveau modéré - épargne recommandée' : 'Niveau faible - épargne conseillée'}
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Objectif de revenu */}
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 mb-2">
+            Quel revenu mensuel net souhaitez-vous à la retraite ?
+          </label>
+          <div className="flex gap-4 mb-3">
+            <label className="flex items-center gap-2">
+              <input
+                type="radio"
+                name="targetMode"
+                checked={formData.targetIncomeMode === 'percentage'}
+                onChange={() => handleInputChange('targetIncomeMode', 'percentage')}
+                className="checkbox-elysion"
+              />
+              <span className="text-sm">En % du revenu actuel</span>
+            </label>
+            <label className="flex items-center gap-2">
+              <input
+                type="radio"
+                name="targetMode"
+                checked={formData.targetIncomeMode === 'amount'}
+                onChange={() => handleInputChange('targetIncomeMode', 'amount')}
+                className="checkbox-elysion"
+              />
+              <span className="text-sm">En montant fixe (€)</span>
+            </label>
+          </div>
+          
+          {formData.targetIncomeMode === 'percentage' ? (
+            <div className="flex items-center gap-3">
+              <input
+                type="range"
+                min="50"
+                max="100"
+                value={formData.targetIncomePercentage}
+                onChange={(e) => handleInputChange('targetIncomePercentage', parseInt(e.target.value))}
+                className="flex-1"
+              />
+              <span className="font-bold text-elysion-primary w-16 text-right">{formData.targetIncomePercentage}%</span>
+            </div>
+          ) : (
+            <input
+              type="number"
+              min="0"
+              value={formData.targetIncomeAmount}
+              onChange={(e) => handleInputChange('targetIncomeAmount', parseFloat(e.target.value) || 0)}
+              className="input-elysion"
+              placeholder="2000"
+            />
+          )}
+          
+          {formData.currentMonthlyIncome > 0 && (
+            <p className="text-sm text-gray-500 mt-2">
+              Objectif : {formData.targetIncomeMode === 'percentage' 
+                ? `${Math.round(formData.currentMonthlyIncome * formData.targetIncomePercentage / 100).toLocaleString()} €/mois`
+                : `${formData.targetIncomeAmount.toLocaleString()} €/mois`}
+            </p>
+          )}
+        </div>
+
+        {/* Capital déjà épargné */}
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 mb-2">
+            Avez-vous déjà un capital épargné pour la retraite ? (€)
+          </label>
+          <input
+            type="number"
+            min="0"
+            value={formData.currentSavings}
+            onChange={(e) => handleInputChange('currentSavings', parseFloat(e.target.value) || 0)}
+            className="input-elysion"
+            placeholder="10000"
+          />
+          <p className="text-xs text-gray-500 mt-1">PER, assurance-vie, PEE, épargne personnelle...</p>
+        </div>
+
+        {/* Option calcul épargne */}
+        <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg">
+          <input
+            type="checkbox"
+            id="wantsCalculation"
+            checked={formData.wantsEpargneCalculation}
+            onChange={(e) => handleInputChange('wantsEpargneCalculation', e.target.checked)}
+            className="checkbox-elysion"
+          />
+          <label htmlFor="wantsCalculation" className="text-sm text-gray-700">
+            Je souhaite que le simulateur calcule l'épargne nécessaire pour combler l'écart
+          </label>
+        </div>
+      </div>
+    );
+  };
+
+  // BRANCHE PRIVÉ - Écran 6 : Profil de Risque
+  const renderPrivateStep6 = () => (
+    <div className="space-y-6">
+      <div className="text-center mb-8">
+        <h2 className="text-3xl font-bold text-elysion-primary mb-2">Votre relation au risque</h2>
+        <p className="text-gray-600">Salarié - Étape 6/7</p>
+      </div>
+
+      <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
+        <p className="text-sm text-blue-800">
+          <strong>💡 Important :</strong> Ces questions permettent de déterminer votre profil d'investisseur et d'adapter les recommandations d'épargne.
+        </p>
+      </div>
+
+      {/* Question 1 : Horizon */}
+      <div className="bg-white p-6 rounded-lg border border-gray-200">
+        <h3 className="font-semibold text-gray-900 mb-4">1. Votre horizon de placement</h3>
+        <p className="text-sm text-gray-600 mb-3">Dans combien de temps prendrez-vous votre retraite ?</p>
+        <div className="space-y-2">
+          {[
+            { value: 'short', label: 'Moins de 10 ans', desc: 'Horizon court - privilégier la sécurité' },
+            { value: 'medium', label: '10 à 20 ans', desc: 'Horizon moyen - équilibre rendement/risque' },
+            { value: 'long', label: 'Plus de 20 ans', desc: 'Horizon long - potentiel de croissance' }
+          ].map(option => (
+            <label key={option.value} className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${formData.investmentHorizon === option.value ? 'border-elysion-primary bg-elysion-primary-50' : 'border-gray-200 hover:bg-gray-50'}`}>
+              <input
+                type="radio"
+                name="horizon"
+                value={option.value}
+                checked={formData.investmentHorizon === option.value}
+                onChange={(e) => handleInputChange('investmentHorizon', e.target.value)}
+                className="checkbox-elysion"
+              />
+              <div>
+                <span className="font-medium">{option.label}</span>
+                <p className="text-xs text-gray-500">{option.desc}</p>
+              </div>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      {/* Question 2 : Tolérance aux pertes */}
+      <div className="bg-white p-6 rounded-lg border border-gray-200">
+        <h3 className="font-semibold text-gray-900 mb-4">2. Votre tolérance aux fluctuations</h3>
+        <p className="text-sm text-gray-600 mb-3">Quelle baisse temporaire de votre épargne accepteriez-vous sans paniquer ?</p>
+        <div className="space-y-2">
+          {[
+            { value: '5', label: 'Maximum 5%', desc: 'Très prudent - je préfère la stabilité' },
+            { value: '10', label: 'Jusqu\'à 10%', desc: 'Modéré - j\'accepte quelques fluctuations' },
+            { value: '20', label: 'Jusqu\'à 20% ou plus', desc: 'Tolérant - je vise le long terme' }
+          ].map(option => (
+            <label key={option.value} className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${formData.lossToleranceLevel === option.value ? 'border-elysion-primary bg-elysion-primary-50' : 'border-gray-200 hover:bg-gray-50'}`}>
+              <input
+                type="radio"
+                name="lossTolerance"
+                value={option.value}
+                checked={formData.lossToleranceLevel === option.value}
+                onChange={(e) => handleInputChange('lossToleranceLevel', e.target.value)}
+                className="checkbox-elysion"
+              />
+              <div>
+                <span className="font-medium">{option.label}</span>
+                <p className="text-xs text-gray-500">{option.desc}</p>
+              </div>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      {/* Question 3 : Connaissance des marchés */}
+      <div className="bg-white p-6 rounded-lg border border-gray-200">
+        <h3 className="font-semibold text-gray-900 mb-4">3. Votre connaissance des marchés financiers</h3>
+        <p className="text-sm text-gray-600 mb-3">Comment évaluez-vous votre expérience en matière d'investissement ?</p>
+        <div className="space-y-2">
+          {[
+            { value: 'beginner', label: 'Débutant', desc: 'Je découvre l\'épargne financière' },
+            { value: 'intermediate', label: 'Intermédiaire', desc: 'J\'ai déjà investi (assurance-vie, PEA...)' },
+            { value: 'advanced', label: 'Avancé', desc: 'Je suis à l\'aise avec les marchés financiers' }
+          ].map(option => (
+            <label key={option.value} className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${formData.marketKnowledge === option.value ? 'border-elysion-primary bg-elysion-primary-50' : 'border-gray-200 hover:bg-gray-50'}`}>
+              <input
+                type="radio"
+                name="knowledge"
+                value={option.value}
+                checked={formData.marketKnowledge === option.value}
+                onChange={(e) => handleInputChange('marketKnowledge', e.target.value)}
+                className="checkbox-elysion"
+              />
+              <div>
+                <span className="font-medium">{option.label}</span>
+                <p className="text-xs text-gray-500">{option.desc}</p>
+              </div>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      {/* Aperçu du profil */}
+      {formData.investmentHorizon && formData.lossToleranceLevel && formData.marketKnowledge && (
+        <div className="bg-gradient-to-r from-elysion-primary-50 to-elysion-accent-50 p-6 rounded-lg border border-elysion-primary-200">
+          <h3 className="font-semibold text-gray-900 mb-2">Votre profil de risque estimé</h3>
+          {(() => {
+            const profile = calculateRiskProfile();
+            const profileData = RISK_PROFILES[profile];
+            return (
+              <div className="flex items-center gap-4">
+                <div className={`w-16 h-16 rounded-full flex items-center justify-center text-white text-2xl font-bold ${
+                  profile === 'prudent' ? 'bg-green-500' : profile === 'equilibre' ? 'bg-blue-500' : 'bg-orange-500'
+                }`}>
+                  {profile === 'prudent' ? '🛡️' : profile === 'equilibre' ? '⚖️' : '🚀'}
+                </div>
+                <div>
+                  <p className="text-xl font-bold text-elysion-primary">{profileData.name}</p>
+                  <p className="text-sm text-gray-600">{profileData.description}</p>
+                  <p className="text-xs text-gray-500 mt-1">Rendement moyen attendu : {profileData.annualReturn * 100}% / an</p>
+                </div>
+              </div>
+            );
+          })()}
+        </div>
+      )}
+    </div>
+  );
+
+  // BRANCHE PRIVÉ - Écran 7 : Scénarios d'âge de départ
+  const renderPrivateStep7 = () => (
     <div className="space-y-6">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-elysion-primary mb-2">Scénarios de départ</h2>
-        <p className="text-gray-600">Salarié - Étape 5/5</p>
+        <p className="text-gray-600">Salarié - Étape 7/7</p>
       </div>
 
       <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
@@ -1259,6 +1667,8 @@ const EmployeeSimulator = () => {
   const renderResults = () => {
     if (!results) return null;
 
+    const profileData = RISK_PROFILES[results.riskProfile];
+
     return (
       <div className="space-y-6">
         <div className="text-center mb-8">
@@ -1267,17 +1677,43 @@ const EmployeeSimulator = () => {
             Vos estimations de retraite
           </h2>
           <p className="text-gray-600">
-            Salarié
+            Salarié - Synthèse complète
           </p>
         </div>
 
-        {/* Tableau comparatif */}
+        {/* Récapitulatif objectif */}
+        {results.targetIncome > 0 && (
+          <div className="bg-gradient-to-r from-elysion-primary-50 to-elysion-secondary-50 p-6 rounded-xl border border-elysion-primary-200">
+            <h3 className="font-semibold text-gray-900 mb-4">🎯 Votre objectif</h3>
+            <div className="grid md:grid-cols-3 gap-4 text-center">
+              <div>
+                <p className="text-sm text-gray-600">Revenu actuel</p>
+                <p className="text-xl font-bold text-gray-900">{results.currentIncome?.toLocaleString()} €/mois</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-600">Objectif retraite</p>
+                <p className="text-xl font-bold text-elysion-primary">{results.targetIncome?.toLocaleString()} €/mois</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-600">Profil de risque</p>
+                <p className={`text-xl font-bold ${results.riskProfile === 'prudent' ? 'text-green-600' : results.riskProfile === 'equilibre' ? 'text-blue-600' : 'text-orange-500'}`}>
+                  {profileData?.name}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Tableau comparatif des pensions */}
         <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <div className="bg-elysion-primary-50 p-4 border-b">
+            <h3 className="font-semibold text-elysion-primary">📊 Pensions obligatoires estimées</h3>
+          </div>
           <table className="w-full">
-            <thead className="bg-elysion-primary-50">
+            <thead className="bg-gray-50">
               <tr>
                 <th className="p-4 text-left font-semibold">Âge de départ</th>
-                <th className="p-4 text-right font-semibold">Dans X ans</th>
+                <th className="p-4 text-right font-semibold">Dans</th>
                 <th className="p-4 text-right font-semibold">Pension mensuelle</th>
                 <th className="p-4 text-right font-semibold">Taux de remplacement</th>
               </tr>
@@ -1293,11 +1729,11 @@ const EmployeeSimulator = () => {
                   </td>
                   <td className="p-4 text-right">
                     <span className="text-xl font-bold text-elysion-accent">
-                      €{scenario.totalMonthly.toLocaleString()}
+                      {scenario.totalMonthly.toLocaleString()} €
                     </span>
                   </td>
                   <td className="p-4 text-right">
-                    <span className="text-lg font-semibold">
+                    <span className={`text-lg font-semibold ${scenario.replacementRate >= 70 ? 'text-green-600' : scenario.replacementRate >= 50 ? 'text-orange-500' : 'text-red-500'}`}>
                       {scenario.replacementRate}%
                     </span>
                   </td>
@@ -1306,6 +1742,105 @@ const EmployeeSimulator = () => {
             </tbody>
           </table>
         </div>
+
+        {/* Section Épargne complémentaire */}
+        {formData.wantsEpargneCalculation && results.targetIncome > 0 && (
+          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <div className="bg-elysion-accent-50 p-4 border-b">
+              <h3 className="font-semibold text-elysion-accent-700">💰 Épargne complémentaire nécessaire</h3>
+              <p className="text-sm text-gray-600">Pour atteindre votre objectif de {results.targetIncome?.toLocaleString()} €/mois</p>
+            </div>
+            
+            <div className="p-4 space-y-6">
+              {results.scenarios.map((scenario, index) => (
+                <div key={index} className="border-b border-gray-100 pb-6 last:border-0 last:pb-0">
+                  <h4 className="font-semibold text-gray-900 mb-4">
+                    Départ à {scenario.age} ans ({scenario.yearsUntil > 0 ? `dans ${scenario.yearsUntil} ans` : 'maintenant'})
+                  </h4>
+                  
+                  {scenario.savingsProjections && (
+                    <>
+                      {/* Écart à combler */}
+                      <div className="bg-gray-50 p-4 rounded-lg mb-4">
+                        <div className="grid grid-cols-3 gap-4 text-center">
+                          <div>
+                            <p className="text-xs text-gray-500">Objectif</p>
+                            <p className="font-semibold text-gray-900">{scenario.targetIncome?.toLocaleString()} €</p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-gray-500">Pension estimée</p>
+                            <p className="font-semibold text-elysion-primary">{scenario.totalMonthly?.toLocaleString()} €</p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-gray-500">Écart mensuel</p>
+                            <p className={`font-semibold ${scenario.savingsProjections[results.riskProfile]?.monthlyGap > 0 ? 'text-red-500' : 'text-green-600'}`}>
+                              {scenario.savingsProjections[results.riskProfile]?.monthlyGap > 0 
+                                ? `${scenario.savingsProjections[results.riskProfile]?.monthlyGap?.toLocaleString()} €`
+                                : '✓ Couvert'}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Projections par profil */}
+                      {scenario.savingsProjections[results.riskProfile]?.monthlyGap > 0 && (
+                        <div className="grid md:grid-cols-3 gap-4">
+                          {['prudent', 'equilibre', 'dynamique'].map((profile) => {
+                            const proj = scenario.savingsProjections[profile];
+                            const profileInfo = RISK_PROFILES[profile];
+                            const isSelected = profile === results.riskProfile;
+                            
+                            return (
+                              <div 
+                                key={profile} 
+                                className={`p-4 rounded-lg border-2 ${isSelected ? 'border-elysion-primary bg-elysion-primary-50' : 'border-gray-200'}`}
+                              >
+                                <div className="flex items-center gap-2 mb-2">
+                                  <span className={`w-8 h-8 rounded-full flex items-center justify-center text-white text-sm ${
+                                    profile === 'prudent' ? 'bg-green-500' : profile === 'equilibre' ? 'bg-blue-500' : 'bg-orange-500'
+                                  }`}>
+                                    {profile === 'prudent' ? '🛡️' : profile === 'equilibre' ? '⚖️' : '🚀'}
+                                  </span>
+                                  <span className="font-semibold text-sm">{profileInfo.name}</span>
+                                  {isSelected && <span className="text-xs bg-elysion-primary text-white px-2 py-0.5 rounded">Votre profil</span>}
+                                </div>
+                                <p className="text-xs text-gray-500 mb-3">Rendement : {proj?.annualReturn}%/an</p>
+                                
+                                <div className="space-y-2 text-sm">
+                                  <div className="flex justify-between">
+                                    <span className="text-gray-600">Capital nécessaire :</span>
+                                    <span className="font-semibold">{proj?.requiredCapital?.toLocaleString()} €</span>
+                                  </div>
+                                  <div className="flex justify-between">
+                                    <span className="text-gray-600">Épargne actuelle projetée :</span>
+                                    <span className="font-semibold text-green-600">-{proj?.currentSavingsProjected?.toLocaleString()} €</span>
+                                  </div>
+                                  <hr className="my-2" />
+                                  <div className="flex justify-between items-center">
+                                    <span className="text-gray-600">Versement mensuel :</span>
+                                    <span className={`text-lg font-bold ${isSelected ? 'text-elysion-primary' : 'text-gray-900'}`}>
+                                      {proj?.monthlyContribution?.toLocaleString()} €
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
+
+                      {scenario.savingsProjections[results.riskProfile]?.monthlyGap <= 0 && (
+                        <div className="bg-green-50 border border-green-200 p-4 rounded-lg text-center">
+                          <p className="text-green-800 font-semibold">✓ Votre pension couvre déjà votre objectif pour ce scénario</p>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Détails par scénario */}
         <div className="space-y-4">
@@ -1319,11 +1854,11 @@ const EmployeeSimulator = () => {
                   <div className="space-y-3 text-sm">
                     <div className="flex justify-between">
                       <span>Retraite de base :</span>
-                      <span className="font-semibold">€{Math.round(scenario.basePension).toLocaleString()}/mois</span>
+                      <span className="font-semibold">{Math.round(scenario.basePension).toLocaleString()} €/mois</span>
                     </div>
                     <div className="flex justify-between">
                       <span>Complémentaire Agirc-Arrco :</span>
-                      <span className="font-semibold">€{Math.round(scenario.complementary).toLocaleString()}/mois</span>
+                      <span className="font-semibold">{Math.round(scenario.complementary).toLocaleString()} €/mois</span>
                     </div>
                     <div className="flex justify-between">
                       <span>Trimestres totaux :</span>
@@ -1350,12 +1885,12 @@ const EmployeeSimulator = () => {
                   <div className="space-y-3 text-sm">
                     <div className="flex justify-between">
                       <span>Pension fonction publique :</span>
-                      <span className="font-semibold">€{Math.round(scenario.publicPension).toLocaleString()}/mois</span>
+                      <span className="font-semibold">{Math.round(scenario.publicPension).toLocaleString()} €/mois</span>
                     </div>
                     {scenario.rafp > 0 && (
                       <div className="flex justify-between">
                         <span>RAFP :</span>
-                        <span className="font-semibold">€{Math.round(scenario.rafp).toLocaleString()}/mois</span>
+                        <span className="font-semibold">{Math.round(scenario.rafp).toLocaleString()} €/mois</span>
                       </div>
                     )}
                     <div className="flex justify-between">
@@ -1391,7 +1926,7 @@ const EmployeeSimulator = () => {
           <ul className="space-y-2 text-sm">
             {results.scenarios.map((scenario, index) => (
               <li key={index}>
-                • À <strong>{scenario.age} ans</strong>, estimation de <strong>€{scenario.totalMonthly.toLocaleString()}/mois</strong>, 
+                • À <strong>{scenario.age} ans</strong>, estimation de <strong>{scenario.totalMonthly.toLocaleString()} €/mois</strong>, 
                 soit <strong>{scenario.replacementRate}%</strong> de votre revenu actuel
               </li>
             ))}
@@ -1407,11 +1942,23 @@ const EmployeeSimulator = () => {
           </ul>
         </div>
 
+        {/* Recommandations épargne */}
+        {profileData && (
+          <div className="bg-white rounded-xl border border-gray-200 p-6">
+            <h3 className="font-semibold text-gray-900 mb-4">📈 Recommandations pour votre profil {profileData.name}</h3>
+            <p className="text-sm text-gray-600 mb-4">{profileData.description}</p>
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <p className="text-sm font-semibold text-gray-700 mb-2">Supports d'épargne adaptés :</p>
+              <p className="text-sm text-gray-600">{profileData.recommendation}</p>
+            </div>
+          </div>
+        )}
+
         {/* Avertissement */}
         <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg">
           <p className="text-sm text-yellow-800">
-            <strong>⚠️ Avertissement :</strong> Ces estimations sont basées sur la législation 2024 et vos données actuelles. 
-            Pour un calcul exact et personnalisé, consultez votre caisse de retraite ou utilisez le simulateur officiel Info-Retraite.
+            <strong>⚠️ Avertissement :</strong> Ces estimations sont indicatives et basées sur des hypothèses de rendement non garanties. 
+            Les performances passées ne préjugent pas des performances futures. Consultez un conseiller financier pour une stratégie personnalisée.
           </p>
         </div>
 
@@ -1468,13 +2015,13 @@ const EmployeeSimulator = () => {
       <div className="max-w-4xl mx-auto px-4 py-12">
         <div className="bg-white rounded-2xl shadow-xl p-8">
           {/* Progress bar */}
-          {currentStep <= 5 && (
+          {currentStep <= 7 && (
             <div className="mb-8">
               <div className="flex justify-between mb-2">
-                {[1, 2, 3, 4, 5].map((step) => (
+                {[1, 2, 3, 4, 5, 6, 7].map((step) => (
                   <div
                     key={step}
-                    className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold ${
+                    className={`w-9 h-9 rounded-full flex items-center justify-center font-semibold text-sm ${
                       step === currentStep
                         ? 'bg-elysion-primary text-white'
                         : step < currentStep
@@ -1489,7 +2036,7 @@ const EmployeeSimulator = () => {
               <div className="h-2 bg-gray-200 rounded-full">
                 <div
                   className="h-full bg-elysion-accent rounded-full transition-all"
-                  style={{ width: `${(currentStep / 5) * 100}%` }}
+                  style={{ width: `${(currentStep / 7) * 100}%` }}
                 />
               </div>
             </div>
@@ -1501,11 +2048,13 @@ const EmployeeSimulator = () => {
           {branch === 'private' && currentStep === 3 && renderPrivateStep3()}
           {branch === 'private' && currentStep === 4 && renderPrivateStep4()}
           {branch === 'private' && currentStep === 5 && renderPrivateStep5()}
+          {branch === 'private' && currentStep === 6 && renderPrivateStep6()}
+          {branch === 'private' && currentStep === 7 && renderPrivateStep7()}
           
-          {currentStep === 6 && renderResults()}
+          {currentStep === 8 && renderResults()}
 
           {/* Navigation buttons */}
-          {currentStep <= 5 && (
+          {currentStep <= 7 && (
             <div className="flex justify-between mt-8">
               <button
                 onClick={prevStep}
@@ -1517,7 +2066,7 @@ const EmployeeSimulator = () => {
                 onClick={nextStep}
                 className="btn-primary disabled:opacity-50"
               >
-                {currentStep === 5 ? 'Calculer ma retraite' : 'Suivant →'}
+                {currentStep === 7 ? 'Calculer ma retraite' : 'Suivant →'}
               </button>
             </div>
           )}

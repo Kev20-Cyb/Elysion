@@ -44,6 +44,7 @@ const OnboardingFlow = () => {
     retirement_plans: [],
     
     // Account Setup (Step 5)
+    first_name: '',
     email: '',
     password: '',
     confirm_password: '',
@@ -78,7 +79,7 @@ const OnboardingFlow = () => {
       const response = await axios.post(`${API}/auth/register`, {
         email: profileData.email,
         password: profileData.password,
-        full_name: `${profileData.email.split('@')[0]}`, // Simple name from email
+        full_name: profileData.first_name || profileData.email.split('@')[0],
         user_type: professionalStatus
       });
       
@@ -111,17 +112,33 @@ const OnboardingFlow = () => {
         setError('Erreur lors de la création du compte - token manquant');
       }
     } catch (err) {
-      // Handle Pydantic validation errors (array of objects) or simple string errors
       const detail = err.response?.data?.detail;
-      let errorMessage = 'Erreur lors de la création du compte';
       
-      if (typeof detail === 'string') {
-        errorMessage = detail;
-      } else if (Array.isArray(detail) && detail.length > 0) {
-        errorMessage = detail.map(e => e.msg || e.message || JSON.stringify(e)).join(', ');
+      // If email already registered, try to login instead
+      if (typeof detail === 'string' && detail.toLowerCase().includes('already registered')) {
+        try {
+          const loginResult = await login(profileData.email, profileData.password);
+          if (loginResult.success) {
+            navigate('/dashboard');
+            return;
+          } else {
+            setError('Cet email est déjà utilisé. Vérifiez votre mot de passe ou connectez-vous.');
+          }
+        } catch (loginErr) {
+          setError('Cet email est déjà utilisé. Veuillez vous connecter avec votre mot de passe.');
+        }
+      } else {
+        // Handle other errors
+        let errorMessage = 'Erreur lors de la création du compte';
+        
+        if (typeof detail === 'string') {
+          errorMessage = detail;
+        } else if (Array.isArray(detail) && detail.length > 0) {
+          errorMessage = detail.map(e => e.msg || e.message || JSON.stringify(e)).join(', ');
+        }
+        
+        setError(errorMessage);
       }
-      
-      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -675,6 +692,21 @@ const OnboardingFlow = () => {
       <div className="space-y-6">
         <div>
           <label className="block text-sm font-medium text-elysion-text-dark mb-2">
+            Prénom
+          </label>
+          <input
+            type="text"
+            placeholder="Votre prénom"
+            value={profileData.first_name}
+            onChange={(e) => handleInputChange('first_name', e.target.value)}
+            className="input-elysion"
+            required
+            data-testid="onboarding-first-name"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-elysion-text-dark mb-2">
             Adresse email
           </label>
           <input
@@ -751,7 +783,7 @@ const OnboardingFlow = () => {
         </button>
         <button 
           onClick={handleComplete}
-          disabled={loading || !profileData.email || !profileData.password || !profileData.confirm_password || profileData.password !== profileData.confirm_password || !profileData.agree_terms}
+          disabled={loading || !profileData.first_name || !profileData.email || !profileData.password || !profileData.confirm_password || profileData.password !== profileData.confirm_password || !profileData.agree_terms}
           className="bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-6 py-3 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           data-testid="onboarding-create-account-btn"
         >

@@ -44,6 +44,7 @@ const OnboardingFlow = () => {
     retirement_plans: [],
     
     // Account Setup (Step 5)
+    first_name: '',
     email: '',
     password: '',
     confirm_password: '',

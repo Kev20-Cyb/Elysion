@@ -93,7 +93,17 @@ const OnboardingFlow = () => {
         setError(loginResult.error);
       }
     } catch (err) {
-      setError(err.response?.data?.detail || 'Erreur lors de la création du compte');
+      // Handle Pydantic validation errors (array of objects) or simple string errors
+      const detail = err.response?.data?.detail;
+      let errorMessage = 'Erreur lors de la création du compte';
+      
+      if (typeof detail === 'string') {
+        errorMessage = detail;
+      } else if (Array.isArray(detail) && detail.length > 0) {
+        errorMessage = detail.map(e => e.msg || e.message || JSON.stringify(e)).join(', ');
+      }
+      
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

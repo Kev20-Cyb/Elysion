@@ -82,15 +82,33 @@ const OnboardingFlow = () => {
         user_type: professionalStatus
       });
       
-      // Login the user automatically
-      const loginResult = await login(profileData.email, profileData.password);
+      // Get token from registration response
+      const { access_token, user } = response.data;
       
-      if (loginResult.success) {
-        // Save profile data
-        await axios.post(`${API}/profile/complete`, profileData);
+      if (access_token) {
+        // Store token in localStorage for persistence
+        localStorage.setItem('elysion_token', access_token);
+        
+        // Set axios default header for subsequent requests
+        axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
+        
+        // Save profile data with the token
+        try {
+          await axios.post(`${API}/profile/complete`, {
+            ...profileData,
+            user_id: user.id
+          });
+        } catch (profileErr) {
+          // Profile save failed but account created - continue to dashboard
+          console.warn('Profile save failed:', profileErr);
+        }
+        
+        // Login to update React state
+        await login(profileData.email, profileData.password);
+        
         navigate('/dashboard');
       } else {
-        setError(loginResult.error);
+        setError('Erreur lors de la création du compte - token manquant');
       }
     } catch (err) {
       // Handle Pydantic validation errors (array of objects) or simple string errors

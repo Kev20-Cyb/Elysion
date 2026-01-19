@@ -74,9 +74,19 @@ const AuthProvider = ({ children }) => {
       localStorage.setItem('elysion_token', access_token);
       return { success: true };
     } catch (error) {
+      // Handle Pydantic validation errors (array of objects) or simple string errors
+      const detail = error.response?.data?.detail;
+      let errorMessage = 'Échec de la connexion';
+      
+      if (typeof detail === 'string') {
+        errorMessage = detail;
+      } else if (Array.isArray(detail) && detail.length > 0) {
+        errorMessage = detail.map(err => err.msg || err.message || JSON.stringify(err)).join(', ');
+      }
+      
       return {
         success: false,
-        error: error.response?.data?.detail || 'Login failed'
+        error: errorMessage
       };
     }
   };

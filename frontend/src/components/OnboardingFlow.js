@@ -79,7 +79,7 @@ const OnboardingFlow = () => {
       const response = await axios.post(`${API}/auth/register`, {
         email: profileData.email,
         password: profileData.password,
-        full_name: `${profileData.email.split('@')[0]}`, // Simple name from email
+        full_name: profileData.first_name || profileData.email.split('@')[0],
         user_type: professionalStatus
       });
       
@@ -112,17 +112,33 @@ const OnboardingFlow = () => {
         setError('Erreur lors de la création du compte - token manquant');
       }
     } catch (err) {
-      // Handle Pydantic validation errors (array of objects) or simple string errors
       const detail = err.response?.data?.detail;
-      let errorMessage = 'Erreur lors de la création du compte';
       
-      if (typeof detail === 'string') {
-        errorMessage = detail;
-      } else if (Array.isArray(detail) && detail.length > 0) {
-        errorMessage = detail.map(e => e.msg || e.message || JSON.stringify(e)).join(', ');
+      // If email already registered, try to login instead
+      if (typeof detail === 'string' && detail.toLowerCase().includes('already registered')) {
+        try {
+          const loginResult = await login(profileData.email, profileData.password);
+          if (loginResult.success) {
+            navigate('/dashboard');
+            return;
+          } else {
+            setError('Cet email est déjà utilisé. Vérifiez votre mot de passe ou connectez-vous.');
+          }
+        } catch (loginErr) {
+          setError('Cet email est déjà utilisé. Veuillez vous connecter avec votre mot de passe.');
+        }
+      } else {
+        // Handle other errors
+        let errorMessage = 'Erreur lors de la création du compte';
+        
+        if (typeof detail === 'string') {
+          errorMessage = detail;
+        } else if (Array.isArray(detail) && detail.length > 0) {
+          errorMessage = detail.map(e => e.msg || e.message || JSON.stringify(e)).join(', ');
+        }
+        
+        setError(errorMessage);
       }
-      
-      setError(errorMessage);
     } finally {
       setLoading(false);
     }

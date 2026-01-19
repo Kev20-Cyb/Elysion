@@ -692,6 +692,21 @@ const OnboardingFlow = () => {
       <div className="space-y-6">
         <div>
           <label className="block text-sm font-medium text-elysion-text-dark mb-2">
+            Prénom
+          </label>
+          <input
+            type="text"
+            placeholder="Votre prénom"
+            value={profileData.first_name}
+            onChange={(e) => handleInputChange('first_name', e.target.value)}
+            className="input-elysion"
+            required
+            data-testid="onboarding-first-name"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-elysion-text-dark mb-2">
             Adresse email
           </label>
           <input
@@ -768,7 +783,7 @@ const OnboardingFlow = () => {
         </button>
         <button 
           onClick={handleComplete}
-          disabled={loading || !profileData.email || !profileData.password || !profileData.confirm_password || profileData.password !== profileData.confirm_password || !profileData.agree_terms}
+          disabled={loading || !profileData.first_name || !profileData.email || !profileData.password || !profileData.confirm_password || profileData.password !== profileData.confirm_password || !profileData.agree_terms}
           className="bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-6 py-3 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           data-testid="onboarding-create-account-btn"
         >

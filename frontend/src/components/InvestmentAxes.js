@@ -46,7 +46,9 @@ const InvestmentAxes = () => {
       color: 'green',
       examples: ['Livret A', 'LDDS', 'LEP', 'PEL', 'Compte sur livret'],
       pros: ['Capital garanti', 'Disponibilité immédiate', 'Fiscalité avantageuse'],
-      cons: ['Rendement limité', 'Plafonds de versement']
+      cons: ['Rendement limité', 'Plafonds de versement'],
+      percentage: allocation.secure,
+      monthlyAmount: calculateMonthlyAmount(allocation.secure)
     },
     {
       id: 'retirement',
@@ -57,7 +59,9 @@ const InvestmentAxes = () => {
       color: 'blue',
       examples: ['PER Individuel', 'PER Entreprise', 'Assurance-vie', 'PERP', 'Madelin'],
       pros: ['Avantages fiscaux à l\'entrée', 'Sortie en capital ou rente', 'Transmission facilitée'],
-      cons: ['Blocage jusqu\'à la retraite (PER)', 'Frais de gestion']
+      cons: ['Blocage jusqu\'à la retraite (PER)', 'Frais de gestion'],
+      percentage: allocation.retirement,
+      monthlyAmount: calculateMonthlyAmount(allocation.retirement)
     },
     {
       id: 'markets',
@@ -68,7 +72,9 @@ const InvestmentAxes = () => {
       color: 'orange',
       examples: ['PEA', 'Compte-titres', 'OPCVM', 'ETF', 'UC en assurance-vie'],
       pros: ['Potentiel de rendement élevé', 'Diversification possible', 'Fiscalité du PEA'],
-      cons: ['Risque de perte en capital', 'Volatilité des marchés', 'Nécessite un suivi']
+      cons: ['Risque de perte en capital', 'Volatilité des marchés', 'Nécessite un suivi'],
+      percentage: allocation.markets,
+      monthlyAmount: calculateMonthlyAmount(allocation.markets)
     },
     {
       id: 'realestate',
@@ -79,9 +85,14 @@ const InvestmentAxes = () => {
       color: 'purple',
       examples: ['SCPI', 'OPCI', 'Immobilier locatif', 'PEE', 'PERCO', 'Crowdfunding immobilier'],
       pros: ['Revenus réguliers', 'Effet de levier crédit', 'Abondement employeur (épargne salariale)'],
-      cons: ['Frais d\'entrée', 'Liquidité limitée', 'Gestion locative']
+      cons: ['Frais d\'entrée', 'Liquidité limitée', 'Gestion locative'],
+      percentage: allocation.realestate,
+      monthlyAmount: calculateMonthlyAmount(allocation.realestate)
     }
   ];
+
+  // Total mensuel
+  const totalMonthly = investmentAxes.reduce((sum, axis) => sum + axis.monthlyAmount, 0);
 
   const getColorClasses = (color) => {
     const colors = {

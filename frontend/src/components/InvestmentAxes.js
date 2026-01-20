@@ -337,11 +337,11 @@ const InvestmentAxes = () => {
         </div>
 
         {/* CTA */}
-        <div className="bg-gradient-to-r from-elysion-primary to-elysion-accent p-8 rounded-2xl text-center">
+        <div className="bg-elysion-primary p-8 rounded-2xl text-center">
           <h3 className="text-2xl font-bold mb-4 text-white">
             Prêt à passer à l'action ?
           </h3>
-          <p className="mb-6 text-white/90 bg-white/10 inline-block px-4 py-2 rounded-lg">
+          <p className="mb-6 bg-white/20 text-white px-4 py-2 rounded-lg inline-block">
             Consultez un professionnel pour établir une stratégie d'épargne adaptée à votre situation.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

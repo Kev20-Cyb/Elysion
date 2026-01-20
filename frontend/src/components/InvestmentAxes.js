@@ -171,22 +171,22 @@ const InvestmentAxes = () => {
           
           {/* Objectif affiché si disponible */}
           {targetGap && (
-            <div className="bg-gradient-to-r from-elysion-primary to-elysion-accent p-6 rounded-xl mb-6">
+            <div className="bg-elysion-primary p-6 rounded-xl mb-6">
               <div className="grid md:grid-cols-4 gap-4 text-center">
-                <div className="bg-white/20 rounded-lg p-3">
-                  <p className="text-white/90 text-sm">Pension actuelle estimée</p>
-                  <p className="text-2xl font-bold text-white">{currentPension?.toLocaleString()} €/mois</p>
+                <div className="bg-white rounded-lg p-4 shadow-sm">
+                  <p className="text-gray-600 text-sm">Pension actuelle estimée</p>
+                  <p className="text-2xl font-bold text-elysion-primary">{currentPension?.toLocaleString()} €/mois</p>
                 </div>
-                <div className="bg-white/20 rounded-lg p-3">
-                  <p className="text-white/90 text-sm">Votre objectif</p>
-                  <p className="text-2xl font-bold text-white">{targetIncome?.toLocaleString()} €/mois</p>
+                <div className="bg-white rounded-lg p-4 shadow-sm">
+                  <p className="text-gray-600 text-sm">Votre objectif</p>
+                  <p className="text-2xl font-bold text-elysion-primary">{targetIncome?.toLocaleString()} €/mois</p>
                 </div>
-                <div className="bg-white/20 rounded-lg p-3">
-                  <p className="text-white/90 text-sm">Écart à combler</p>
-                  <p className="text-2xl font-bold text-white">{targetGap?.toLocaleString()} €/mois</p>
+                <div className="bg-white rounded-lg p-4 shadow-sm">
+                  <p className="text-gray-600 text-sm">Écart à combler</p>
+                  <p className="text-2xl font-bold text-red-600">{targetGap?.toLocaleString()} €/mois</p>
                 </div>
-                <div className="bg-white/30 rounded-lg p-3">
-                  <p className="text-white/90 text-sm">Épargne mensuelle suggérée</p>
+                <div className="bg-elysion-accent rounded-lg p-4 shadow-sm">
+                  <p className="text-white text-sm">Épargne mensuelle suggérée</p>
                   <p className="text-2xl font-bold text-white">{totalMonthly?.toLocaleString()} €/mois</p>
                 </div>
               </div>

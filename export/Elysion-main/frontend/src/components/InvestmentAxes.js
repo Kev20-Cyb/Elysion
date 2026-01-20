@@ -8,7 +8,27 @@ const InvestmentAxes = () => {
   const { user, logout } = useAuth();
   
   // Récupérer les données passées depuis le Dashboard
-  const { targetGap, currentPension, targetIncome } = location.state || {};
+  const { targetGap = 400, currentPension = 1800, targetIncome = 2200 } = location.state || {};
+
+  // Calculer l'épargne mensuelle nécessaire pour combler l'écart
+  // Hypothèse : 20 ans d'épargne avant retraite, capital nécessaire = écart * 12 * 25 (règle des 4%)
+  const capitalNeeded = targetGap * 12 * 25; // Capital nécessaire pour générer le revenu
+  const yearsToRetirement = 20; // Hypothèse moyenne
+  const monthsToRetirement = yearsToRetirement * 12;
+  
+  // Répartition suggérée selon le profil équilibré
+  const allocation = {
+    secure: 0.15,      // 15% épargne sécurisée
+    retirement: 0.35,  // 35% épargne retraite dédiée
+    markets: 0.30,     // 30% marchés financiers
+    realestate: 0.20   // 20% immobilier
+  };
+
+  // Calcul du montant mensuel par axe
+  const calculateMonthlyAmount = (percentage) => {
+    const totalMonthly = Math.round(capitalNeeded / monthsToRetirement);
+    return Math.round(totalMonthly * percentage);
+  };
 
   const handleLogout = () => {
     logout();
@@ -26,7 +46,9 @@ const InvestmentAxes = () => {
       color: 'green',
       examples: ['Livret A', 'LDDS', 'LEP', 'PEL', 'Compte sur livret'],
       pros: ['Capital garanti', 'Disponibilité immédiate', 'Fiscalité avantageuse'],
-      cons: ['Rendement limité', 'Plafonds de versement']
+      cons: ['Rendement limité', 'Plafonds de versement'],
+      percentage: allocation.secure,
+      monthlyAmount: calculateMonthlyAmount(allocation.secure)
     },
     {
       id: 'retirement',
@@ -37,7 +59,9 @@ const InvestmentAxes = () => {
       color: 'blue',
       examples: ['PER Individuel', 'PER Entreprise', 'Assurance-vie', 'PERP', 'Madelin'],
       pros: ['Avantages fiscaux à l\'entrée', 'Sortie en capital ou rente', 'Transmission facilitée'],
-      cons: ['Blocage jusqu\'à la retraite (PER)', 'Frais de gestion']
+      cons: ['Blocage jusqu\'à la retraite (PER)', 'Frais de gestion'],
+      percentage: allocation.retirement,
+      monthlyAmount: calculateMonthlyAmount(allocation.retirement)
     },
     {
       id: 'markets',
@@ -48,7 +72,9 @@ const InvestmentAxes = () => {
       color: 'orange',
       examples: ['PEA', 'Compte-titres', 'OPCVM', 'ETF', 'UC en assurance-vie'],
       pros: ['Potentiel de rendement élevé', 'Diversification possible', 'Fiscalité du PEA'],
-      cons: ['Risque de perte en capital', 'Volatilité des marchés', 'Nécessite un suivi']
+      cons: ['Risque de perte en capital', 'Volatilité des marchés', 'Nécessite un suivi'],
+      percentage: allocation.markets,
+      monthlyAmount: calculateMonthlyAmount(allocation.markets)
     },
     {
       id: 'realestate',
@@ -59,9 +85,14 @@ const InvestmentAxes = () => {
       color: 'purple',
       examples: ['SCPI', 'OPCI', 'Immobilier locatif', 'PEE', 'PERCO', 'Crowdfunding immobilier'],
       pros: ['Revenus réguliers', 'Effet de levier crédit', 'Abondement employeur (épargne salariale)'],
-      cons: ['Frais d\'entrée', 'Liquidité limitée', 'Gestion locative']
+      cons: ['Frais d\'entrée', 'Liquidité limitée', 'Gestion locative'],
+      percentage: allocation.realestate,
+      monthlyAmount: calculateMonthlyAmount(allocation.realestate)
     }
   ];
+
+  // Total mensuel
+  const totalMonthly = investmentAxes.reduce((sum, axis) => sum + axis.monthlyAmount, 0);
 
   const getColorClasses = (color) => {
     const colors = {
@@ -140,29 +171,33 @@ const InvestmentAxes = () => {
           
           {/* Objectif affiché si disponible */}
           {targetGap && (
-            <div className="bg-gradient-to-r from-elysion-primary to-elysion-accent text-white p-6 rounded-xl mb-6">
-              <div className="grid md:grid-cols-3 gap-4 text-center">
-                <div>
-                  <p className="text-white/80 text-sm">Pension actuelle estimée</p>
-                  <p className="text-2xl font-bold">{currentPension?.toLocaleString()} €/mois</p>
+            <div className="bg-gradient-to-r from-elysion-primary to-elysion-accent p-6 rounded-xl mb-6">
+              <div className="grid md:grid-cols-4 gap-4 text-center">
+                <div className="bg-white/20 rounded-lg p-3">
+                  <p className="text-white/90 text-sm">Pension actuelle estimée</p>
+                  <p className="text-2xl font-bold text-white">{currentPension?.toLocaleString()} €/mois</p>
                 </div>
-                <div>
-                  <p className="text-white/80 text-sm">Votre objectif</p>
-                  <p className="text-2xl font-bold">{targetIncome?.toLocaleString()} €/mois</p>
+                <div className="bg-white/20 rounded-lg p-3">
+                  <p className="text-white/90 text-sm">Votre objectif</p>
+                  <p className="text-2xl font-bold text-white">{targetIncome?.toLocaleString()} €/mois</p>
                 </div>
-                <div>
-                  <p className="text-white/80 text-sm">Écart à combler</p>
-                  <p className="text-2xl font-bold">{targetGap?.toLocaleString()} €/mois</p>
+                <div className="bg-white/20 rounded-lg p-3">
+                  <p className="text-white/90 text-sm">Écart à combler</p>
+                  <p className="text-2xl font-bold text-white">{targetGap?.toLocaleString()} €/mois</p>
+                </div>
+                <div className="bg-white/30 rounded-lg p-3">
+                  <p className="text-white/90 text-sm">Épargne mensuelle suggérée</p>
+                  <p className="text-2xl font-bold text-white">{totalMonthly?.toLocaleString()} €/mois</p>
                 </div>
               </div>
             </div>
           )}
           
           {/* Introduction */}
-          <div className="bg-elysion-primary-50 border border-elysion-primary-200 p-6 rounded-xl">
-            <p className="text-elysion-primary-800 text-lg leading-relaxed">
+          <div className="bg-blue-50 border border-blue-200 p-6 rounded-xl">
+            <p className="text-blue-800 text-lg leading-relaxed">
               <strong>Pour atteindre cet objectif</strong>, différentes familles de solutions existent. 
-              Voici quelques axes possibles à explorer avec un professionnel ou votre banque.
+              Voici une répartition suggérée basée sur un profil équilibré. Consultez un professionnel pour l'adapter à votre situation.
             </p>
           </div>
         </div>
@@ -178,7 +213,7 @@ const InvestmentAxes = () => {
                 className={`${colorClasses.bg} ${colorClasses.border} border-2 rounded-xl p-6 hover:shadow-lg transition-shadow`}
                 data-testid={`investment-axis-${axis.id}`}
               >
-                {/* Header */}
+                {/* Header avec montant */}
                 <div className="flex items-start gap-4 mb-4">
                   <div className={`w-14 h-14 rounded-xl ${colorClasses.icon} flex items-center justify-center text-2xl`}>
                     {axis.icon}
@@ -186,6 +221,20 @@ const InvestmentAxes = () => {
                   <div className="flex-1">
                     <h3 className="text-lg font-bold text-gray-900 mb-1">{axis.title}</h3>
                     <p className="text-gray-600 text-sm">{axis.description}</p>
+                  </div>
+                </div>
+                
+                {/* Montant suggéré */}
+                <div className={`${colorClasses.badge} rounded-lg p-4 mb-4`}>
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <p className="text-xs font-semibold uppercase opacity-75">Épargne mensuelle suggérée</p>
+                      <p className="text-2xl font-bold">{axis.monthlyAmount?.toLocaleString()} €/mois</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-xs opacity-75">Répartition</p>
+                      <p className="text-lg font-bold">{Math.round(axis.percentage * 100)}%</p>
+                    </div>
                   </div>
                 </div>
                 
@@ -288,23 +337,23 @@ const InvestmentAxes = () => {
         </div>
 
         {/* CTA */}
-        <div className="bg-gradient-to-r from-elysion-primary to-elysion-secondary text-white p-8 rounded-2xl text-center">
-          <h3 className="text-2xl font-bold mb-4">
+        <div className="bg-gradient-to-r from-elysion-primary to-elysion-accent p-8 rounded-2xl text-center">
+          <h3 className="text-2xl font-bold mb-4 text-white">
             Prêt à passer à l'action ?
           </h3>
-          <p className="mb-6 text-white/90">
+          <p className="mb-6 text-white/90 bg-white/10 inline-block px-4 py-2 rounded-lg">
             Consultez un professionnel pour établir une stratégie d'épargne adaptée à votre situation.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
               onClick={() => navigate('/simulator')}
-              className="bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
+              className="bg-white text-elysion-primary hover:bg-gray-100 font-semibold px-6 py-3 rounded-lg transition-colors"
             >
               Refaire une simulation
             </button>
             <button
               onClick={() => navigate('/dashboard')}
-              className="border-2 border-white text-white hover:bg-white hover:text-elysion-primary font-semibold px-6 py-3 rounded-lg transition-colors"
+              className="bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
             >
               Retour au tableau de bord
             </button>

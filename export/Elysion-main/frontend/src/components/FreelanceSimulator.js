@@ -1501,11 +1501,11 @@ const FreelanceSimulator = () => {
         </div>
 
         {/* CTA */}
-        <div className="bg-gradient-to-r from-elysion-primary to-elysion-secondary text-white p-8 rounded-2xl">
-          <h3 className="text-2xl font-bold mb-4">
+        <div className="bg-gradient-to-r from-elysion-primary to-elysion-accent p-8 rounded-2xl">
+          <h3 className="text-2xl font-bold mb-4 text-white">
             Créez votre compte pour sauvegarder cette simulation
           </h3>
-          <p className="mb-6">
+          <p className="mb-6 text-white/90 bg-white/10 inline-block px-4 py-2 rounded-lg">
             Accédez à des recommandations personnalisées, gérez vos documents et suivez l'évolution de votre retraite.
           </p>
           <div className="flex gap-4">
@@ -1517,13 +1517,13 @@ const FreelanceSimulator = () => {
                   results: results
                 }
               })}
-              className="bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-6 py-3 rounded-lg"
+              className="bg-white text-elysion-primary hover:bg-gray-100 font-semibold px-6 py-3 rounded-lg"
             >
               Créer mon compte
             </button>
             <button
               onClick={() => navigate('/auth?mode=login')}
-              className="border-2 border-white text-white hover:bg-white hover:text-elysion-primary font-semibold px-6 py-3 rounded-lg"
+              className="bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-6 py-3 rounded-lg"
             >
               Se connecter
             </button>

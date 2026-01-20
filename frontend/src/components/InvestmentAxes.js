@@ -337,23 +337,23 @@ const InvestmentAxes = () => {
         </div>
 
         {/* CTA */}
-        <div className="bg-gradient-to-r from-elysion-primary to-elysion-secondary text-white p-8 rounded-2xl text-center">
-          <h3 className="text-2xl font-bold mb-4">
+        <div className="bg-gradient-to-r from-elysion-primary to-elysion-accent p-8 rounded-2xl text-center">
+          <h3 className="text-2xl font-bold mb-4 text-white">
             Prêt à passer à l'action ?
           </h3>
-          <p className="mb-6 text-white/90">
+          <p className="mb-6 text-white/90 bg-white/10 inline-block px-4 py-2 rounded-lg">
             Consultez un professionnel pour établir une stratégie d'épargne adaptée à votre situation.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
               onClick={() => navigate('/simulator')}
-              className="bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
+              className="bg-white text-elysion-primary hover:bg-gray-100 font-semibold px-6 py-3 rounded-lg transition-colors"
             >
               Refaire une simulation
             </button>
             <button
               onClick={() => navigate('/dashboard')}
-              className="border-2 border-white text-white hover:bg-white hover:text-elysion-primary font-semibold px-6 py-3 rounded-lg transition-colors"
+              className="bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
             >
               Retour au tableau de bord
             </button>

@@ -1921,21 +1921,21 @@ const EmployeeSimulator = () => {
         </div>
 
         {/* Messages clés */}
-        <div className="bg-gradient-to-r from-elysion-primary to-elysion-accent text-white p-6 rounded-xl">
-          <h3 className="text-xl font-bold mb-4">💡 Points clés</h3>
+        <div className="bg-elysion-primary p-6 rounded-xl">
+          <h3 className="text-xl font-bold mb-4 text-white">💡 Points clés</h3>
           <ul className="space-y-2 text-sm">
             {results.scenarios.map((scenario, index) => (
-              <li key={index}>
-                • À <strong>{scenario.age} ans</strong>, estimation de <strong>{scenario.totalMonthly.toLocaleString()} €/mois</strong>, 
-                soit <strong>{scenario.replacementRate}%</strong> de votre revenu actuel
+              <li key={index} className="bg-white/20 p-3 rounded-lg text-white">
+                • À <strong>{scenario.age} ans</strong>, estimation de <strong>{(scenario.totalMonthly || 0).toLocaleString()} €/mois</strong>, 
+                soit <strong>{scenario.replacementRate || 0}%</strong> de votre revenu actuel
               </li>
             ))}
-            {results.scenarios.length > 1 && (
-              <li className="mt-4 pt-4 border-t border-white/30">
+            {results.scenarios.length > 1 && results.scenarios[0].totalMonthly > 0 && (
+              <li className="mt-4 pt-4 border-t border-white/30 bg-white/20 p-3 rounded-lg text-white">
                 • Travailler jusqu'à <strong>{results.scenarios[results.scenarios.length - 1].age} ans</strong> au lieu de{' '}
                 <strong>{results.scenarios[0].age} ans</strong> vous ferait gagner environ{' '}
                 <strong>
-                  {Math.round(((results.scenarios[results.scenarios.length - 1].totalMonthly - results.scenarios[0].totalMonthly) / results.scenarios[0].totalMonthly) * 100)}%
+                  {Math.round(((results.scenarios[results.scenarios.length - 1].totalMonthly - results.scenarios[0].totalMonthly) / results.scenarios[0].totalMonthly) * 100) || 0}%
                 </strong> de pension
               </li>
             )}
@@ -1963,11 +1963,11 @@ const EmployeeSimulator = () => {
         </div>
 
         {/* CTA */}
-        <div className="bg-gradient-to-r from-elysion-primary to-elysion-accent p-8 rounded-2xl">
+        <div className="bg-elysion-primary p-8 rounded-2xl">
           <h3 className="text-2xl font-bold mb-4 text-white">
             Créez votre compte pour sauvegarder cette simulation
           </h3>
-          <p className="mb-6 text-white/90 bg-white/10 inline-block px-4 py-2 rounded-lg">
+          <p className="mb-6 bg-white/20 text-white px-4 py-2 rounded-lg">
             Accédez à des recommandations personnalisées et suivez l'évolution de votre retraite.
           </p>
           <div className="flex gap-4">

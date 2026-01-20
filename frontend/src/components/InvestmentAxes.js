@@ -8,7 +8,27 @@ const InvestmentAxes = () => {
   const { user, logout } = useAuth();
   
   // Récupérer les données passées depuis le Dashboard
-  const { targetGap, currentPension, targetIncome } = location.state || {};
+  const { targetGap = 400, currentPension = 1800, targetIncome = 2200 } = location.state || {};
+
+  // Calculer l'épargne mensuelle nécessaire pour combler l'écart
+  // Hypothèse : 20 ans d'épargne avant retraite, capital nécessaire = écart * 12 * 25 (règle des 4%)
+  const capitalNeeded = targetGap * 12 * 25; // Capital nécessaire pour générer le revenu
+  const yearsToRetirement = 20; // Hypothèse moyenne
+  const monthsToRetirement = yearsToRetirement * 12;
+  
+  // Répartition suggérée selon le profil équilibré
+  const allocation = {
+    secure: 0.15,      // 15% épargne sécurisée
+    retirement: 0.35,  // 35% épargne retraite dédiée
+    markets: 0.30,     // 30% marchés financiers
+    realestate: 0.20   // 20% immobilier
+  };
+
+  // Calcul du montant mensuel par axe
+  const calculateMonthlyAmount = (percentage) => {
+    const totalMonthly = Math.round(capitalNeeded / monthsToRetirement);
+    return Math.round(totalMonthly * percentage);
+  };
 
   const handleLogout = () => {
     logout();

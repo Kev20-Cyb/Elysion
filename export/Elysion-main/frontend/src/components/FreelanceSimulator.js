@@ -1322,13 +1322,13 @@ const FreelanceSimulator = () => {
         )}
 
         {/* Montant principal */}
-        <div className="bg-gradient-to-r from-elysion-primary to-elysion-accent text-white p-8 rounded-2xl text-center">
-          <h3 className="text-xl mb-4">Pension mensuelle estimée</h3>
-          <div className="text-5xl font-bold mb-2">
+        <div className="bg-elysion-primary p-8 rounded-2xl text-center">
+          <h3 className="text-xl mb-4 text-white">Pension mensuelle estimée</h3>
+          <div className="text-5xl font-bold mb-2 text-white">
             {results.totalMonthly.toLocaleString()} €
           </div>
           <p className="text-white/80">par mois (base + complémentaire)</p>
-          <p className="mt-2 text-sm">Taux de remplacement : <strong>{results.replacementRate}%</strong></p>
+          <p className="mt-2 text-sm text-white">Taux de remplacement : <strong>{results.replacementRate}%</strong></p>
         </div>
 
         {/* Détails */}
@@ -1501,11 +1501,11 @@ const FreelanceSimulator = () => {
         </div>
 
         {/* CTA */}
-        <div className="bg-gradient-to-r from-elysion-primary to-elysion-accent p-8 rounded-2xl">
+        <div className="bg-elysion-primary p-8 rounded-2xl">
           <h3 className="text-2xl font-bold mb-4 text-white">
             Créez votre compte pour sauvegarder cette simulation
           </h3>
-          <p className="mb-6 text-white/90 bg-white/10 inline-block px-4 py-2 rounded-lg">
+          <p className="mb-6 bg-white/20 text-white px-4 py-2 rounded-lg inline-block">
             Accédez à des recommandations personnalisées, gérez vos documents et suivez l'évolution de votre retraite.
           </p>
           <div className="flex gap-4">

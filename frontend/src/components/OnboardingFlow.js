@@ -17,6 +17,7 @@ const OnboardingFlow = () => {
   // Get data from simulator or defaults
   const professionalStatus = location.state?.professionalStatus || 'employee';
   const simulationData = location.state?.simulationData || {};
+  const simulationResults = location.state?.results || null;
 
   const [profileData, setProfileData] = useState({
     // Personal Info (Step 2)

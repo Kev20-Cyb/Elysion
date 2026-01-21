@@ -10,6 +10,7 @@ const Dashboard = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [dashboardData, setDashboardData] = useState(null);
+  const [simulationData, setSimulationData] = useState(null);
   const [recentDocuments, setRecentDocuments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -19,13 +20,15 @@ const Dashboard = () => {
       setLoading(true);
       setError('');
       
-      // Fetch dashboard data and documents in parallel
-      const [dashboardResponse, documentsResponse] = await Promise.all([
+      // Fetch dashboard data, simulation and documents in parallel
+      const [dashboardResponse, simulationResponse, documentsResponse] = await Promise.all([
         axios.get(`${API}/dashboard`),
-        axios.get(`${API}/documents`).catch(() => ({ data: [] })) // Fallback to empty array if no documents
+        axios.get(`${API}/simulation/latest`).catch(() => ({ data: { simulation: null } })),
+        axios.get(`${API}/documents`).catch(() => ({ data: [] }))
       ]);
       
       setDashboardData(dashboardResponse.data);
+      setSimulationData(simulationResponse.data?.simulation);
       
       // Get the 3 most recent documents
       const docs = documentsResponse.data || [];
@@ -46,6 +49,46 @@ const Dashboard = () => {
   useEffect(() => {
     fetchDashboardData();
   }, [fetchDashboardData]);
+
+  // Calculate investment data from simulation results
+  const getInvestmentData = () => {
+    if (simulationData?.results) {
+      const results = simulationData.results;
+      // Get the first scenario (earliest retirement age)
+      const scenario = results.scenarios?.[0] || results;
+      const currentPension = scenario.totalMonthly || results.totalMonthly || 0;
+      
+      // Get form data for income
+      const formData = simulationData.form_data || {};
+      const annualIncome = formData.annualIncome || formData.annualRevenue || 0;
+      const monthlyIncome = Math.round(annualIncome / 12);
+      
+      // Target: maintain 70% of current income
+      const targetIncome = Math.round(monthlyIncome * 0.7);
+      const targetGap = Math.max(0, targetIncome - currentPension);
+      
+      return {
+        currentPension,
+        targetIncome,
+        targetGap,
+        hasSimulation: true,
+        replacementRate: results.replacementRate || scenario.replacementRate || 0,
+        retirementAge: scenario.age || results.retirementAge || 64
+      };
+    }
+    
+    // Default values if no simulation
+    return {
+      currentPension: 0,
+      targetIncome: 0,
+      targetGap: 0,
+      hasSimulation: false,
+      replacementRate: 0,
+      retirementAge: 64
+    };
+  };
+
+  const investmentData = getInvestmentData();
 
   const getUserTypeInfo = (userType) => {
     const types = {

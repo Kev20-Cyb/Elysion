@@ -8,13 +8,24 @@ const InvestmentAxes = () => {
   const { user, logout } = useAuth();
   
   // Récupérer les données passées depuis le Dashboard
-  const { targetGap = 400, currentPension = 1800, targetIncome = 2200 } = location.state || {};
+  const { 
+    targetGap = 0, 
+    currentPension = 0, 
+    targetIncome = 0,
+    replacementRate = 0,
+    retirementAge = 64
+  } = location.state || {};
+
+  // Vérifier si on a des données valides
+  const hasValidData = targetGap > 0 && currentPension > 0;
 
   // Calculer l'épargne mensuelle nécessaire pour combler l'écart
-  // Hypothèse : 20 ans d'épargne avant retraite, capital nécessaire = écart * 12 * 25 (règle des 4%)
-  const capitalNeeded = targetGap * 12 * 25; // Capital nécessaire pour générer le revenu
-  const yearsToRetirement = 20; // Hypothèse moyenne
+  // Hypothèse : années restantes avant retraite basées sur l'âge actuel (supposé ~45 ans en moyenne)
+  // Capital nécessaire = écart mensuel * 12 mois * 25 ans (règle des 4%)
+  const estimatedCurrentAge = 45; // Estimation moyenne
+  const yearsToRetirement = Math.max(retirementAge - estimatedCurrentAge, 10);
   const monthsToRetirement = yearsToRetirement * 12;
+  const capitalNeeded = targetGap * 12 * 25; // Capital pour générer le revenu mensuel sur 25 ans
   
   // Répartition suggérée selon le profil équilibré
   const allocation = {
@@ -24,10 +35,11 @@ const InvestmentAxes = () => {
     realestate: 0.20   // 20% immobilier
   };
 
-  // Calcul du montant mensuel par axe
+  // Calcul du montant mensuel total et par axe
+  const totalMonthlySavings = monthsToRetirement > 0 ? Math.round(capitalNeeded / monthsToRetirement) : 0;
+  
   const calculateMonthlyAmount = (percentage) => {
-    const totalMonthly = Math.round(capitalNeeded / monthsToRetirement);
-    return Math.round(totalMonthly * percentage);
+    return Math.round(totalMonthlySavings * percentage);
   };
 
   const handleLogout = () => {

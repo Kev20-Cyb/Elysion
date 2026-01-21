@@ -181,16 +181,37 @@ const InvestmentAxes = () => {
             Atteindre votre objectif retraite
           </h1>
           
+          {/* Message si pas de simulation */}
+          {!hasValidData && (
+            <div className="bg-yellow-50 border border-yellow-200 p-6 rounded-xl mb-6">
+              <div className="flex items-center gap-4">
+                <span className="text-3xl">⚠️</span>
+                <div>
+                  <p className="text-yellow-800 font-semibold">Aucune simulation disponible</p>
+                  <p className="text-yellow-700 text-sm mt-1">
+                    Réalisez d'abord une simulation de retraite pour obtenir des recommandations personnalisées.
+                  </p>
+                  <button 
+                    onClick={() => navigate('/simulator')}
+                    className="mt-3 bg-yellow-600 hover:bg-yellow-700 text-white font-semibold px-4 py-2 rounded-lg text-sm"
+                  >
+                    Faire une simulation
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+          
           {/* Objectif affiché si disponible */}
-          {targetGap && (
+          {hasValidData && (
             <div className="bg-elysion-primary p-6 rounded-xl mb-6">
               <div className="grid md:grid-cols-4 gap-4 text-center">
                 <div className="bg-white rounded-lg p-4 shadow-sm">
-                  <p className="text-gray-600 text-sm">Pension actuelle estimée</p>
+                  <p className="text-gray-600 text-sm">Pension estimée</p>
                   <p className="text-2xl font-bold text-elysion-primary">{currentPension?.toLocaleString()} €/mois</p>
                 </div>
                 <div className="bg-white rounded-lg p-4 shadow-sm">
-                  <p className="text-gray-600 text-sm">Votre objectif</p>
+                  <p className="text-gray-600 text-sm">Objectif revenus</p>
                   <p className="text-2xl font-bold text-elysion-primary">{targetIncome?.toLocaleString()} €/mois</p>
                 </div>
                 <div className="bg-white rounded-lg p-4 shadow-sm">
@@ -198,10 +219,13 @@ const InvestmentAxes = () => {
                   <p className="text-2xl font-bold text-red-600">{targetGap?.toLocaleString()} €/mois</p>
                 </div>
                 <div className="bg-elysion-accent rounded-lg p-4 shadow-sm">
-                  <p className="text-white text-sm">Épargne mensuelle suggérée</p>
-                  <p className="text-2xl font-bold text-white">{totalMonthly?.toLocaleString()} €/mois</p>
+                  <p className="text-white text-sm">Épargne suggérée</p>
+                  <p className="text-2xl font-bold text-white">{totalMonthlySavings?.toLocaleString()} €/mois</p>
                 </div>
               </div>
+              <p className="text-white/80 text-xs text-center mt-4">
+                Calcul basé sur {yearsToRetirement} ans d'épargne jusqu'à la retraite à {retirementAge} ans
+              </p>
             </div>
           )}
           

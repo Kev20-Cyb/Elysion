@@ -105,6 +105,20 @@ const OnboardingFlow = () => {
           console.warn('Profile save failed:', profileErr);
         }
         
+        // Save simulation results if available
+        if (simulationResults) {
+          try {
+            await axios.post(`${API}/simulation/save`, {
+              simulator_type: professionalStatus,
+              form_data: simulationData,
+              results: simulationResults,
+              saved_at: new Date().toISOString()
+            });
+          } catch (simErr) {
+            console.warn('Simulation save failed:', simErr);
+          }
+        }
+        
         // Login to update React state
         await login(profileData.email, profileData.password);
         
@@ -120,6 +134,19 @@ const OnboardingFlow = () => {
         try {
           const loginResult = await login(profileData.email, profileData.password);
           if (loginResult.success) {
+            // Also save simulation if login succeeded
+            if (simulationResults) {
+              try {
+                await axios.post(`${API}/simulation/save`, {
+                  simulator_type: professionalStatus,
+                  form_data: simulationData,
+                  results: simulationResults,
+                  saved_at: new Date().toISOString()
+                });
+              } catch (simErr) {
+                console.warn('Simulation save failed:', simErr);
+              }
+            }
             navigate('/dashboard');
             return;
           } else {

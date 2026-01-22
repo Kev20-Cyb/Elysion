@@ -152,10 +152,14 @@ const Dashboard = () => {
               <span className="text-elysion-text-dark font-medium">Tableau de bord</span>
             </div>
             <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
+              <button 
+                onClick={() => navigate('/profile')}
+                className="flex items-center space-x-2 hover:bg-gray-100 px-3 py-2 rounded-lg transition-colors"
+                data-testid="dashboard-profile-link"
+              >
                 <span className="text-lg">{userTypeInfo.icon}</span>
                 <span className="text-elysion-text-dark font-medium">{user?.full_name}</span>
-              </div>
+              </button>
               <button 
                 onClick={handleLogout}
                 className="text-elysion-text-light hover:text-elysion-primary transition-colors"

@@ -302,11 +302,19 @@ const Dashboard = () => {
                       {investmentData.targetGap.toLocaleString()} €
                     </p>
                   </div>
+                  {investmentData.totalMonthlySavings > 0 && (
+                    <div className="mt-3 bg-elysion-accent rounded-lg p-3 text-center">
+                      <p className="text-white text-sm">Épargne mensuelle suggérée</p>
+                      <p className="text-2xl font-bold text-white">
+                        {investmentData.totalMonthlySavings.toLocaleString()} €/mois
+                      </p>
+                    </div>
+                  )}
                 </div>
                 
-                {/* Axes rapides */}
+                {/* Axes rapides avec montants */}
                 <div className="space-y-3 mb-6">
-                  <p className="text-sm font-semibold text-gray-700">Axes d'investissement suggérés :</p>
+                  <p className="text-sm font-semibold text-gray-700">Répartition suggérée :</p>
                   
                   <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg border border-green-100">
                     <span className="text-xl">🛡️</span>
@@ -314,7 +322,12 @@ const Dashboard = () => {
                       <p className="font-medium text-gray-900 text-sm">Épargne sécurisée</p>
                       <p className="text-xs text-gray-500">Livrets, épargne logement</p>
                     </div>
-                    <span className="text-sm font-semibold text-green-600">15%</span>
+                    <div className="text-right">
+                      <p className="text-sm font-bold text-green-700">
+                        {(investmentData.savingsAllocation?.secure || 0).toLocaleString()} €
+                      </p>
+                      <p className="text-xs text-green-600">15%</p>
+                    </div>
                   </div>
                   
                   <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg border border-blue-100">
@@ -323,7 +336,12 @@ const Dashboard = () => {
                       <p className="font-medium text-gray-900 text-sm">Épargne retraite</p>
                       <p className="text-xs text-gray-500">PER, Assurance-vie</p>
                     </div>
-                    <span className="text-sm font-semibold text-blue-600">35%</span>
+                    <div className="text-right">
+                      <p className="text-sm font-bold text-blue-700">
+                        {(investmentData.savingsAllocation?.retirement || 0).toLocaleString()} €
+                      </p>
+                      <p className="text-xs text-blue-600">35%</p>
+                    </div>
                   </div>
                   
                   <div className="flex items-center gap-3 p-3 bg-orange-50 rounded-lg border border-orange-100">

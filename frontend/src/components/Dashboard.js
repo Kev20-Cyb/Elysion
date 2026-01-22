@@ -54,23 +54,50 @@ const Dashboard = () => {
   const getInvestmentData = () => {
     if (simulationData?.results) {
       const results = simulationData.results;
-      // Get the first scenario (earliest retirement age)
+      
+      // Use pre-calculated values if available
+      if (results.currentPension !== undefined) {
+        return {
+          currentPension: results.currentPension || 0,
+          targetIncome: results.targetIncome || 0,
+          targetGap: results.targetGap || 0,
+          totalMonthlySavings: results.totalMonthlySavings || 0,
+          savingsAllocation: results.savingsAllocation || {},
+          hasSimulation: true,
+          replacementRate: results.replacementRate || 0,
+          retirementAge: results.scenarios?.[0]?.age || 64
+        };
+      }
+      
+      // Fallback: calculate from scenarios
       const scenario = results.scenarios?.[0] || results;
       const currentPension = scenario.totalMonthly || results.totalMonthly || 0;
       
       // Get form data for income
       const formData = simulationData.form_data || {};
-      const annualIncome = formData.annualIncome || formData.annualRevenue || 0;
+      const annualIncome = formData.annualIncome || formData.annualRevenue || formData.currentMonthlyIncome * 12 || 0;
       const monthlyIncome = Math.round(annualIncome / 12);
       
       // Target: maintain 70% of current income
       const targetIncome = Math.round(monthlyIncome * 0.7);
       const targetGap = Math.max(0, targetIncome - currentPension);
       
+      // Calculate savings
+      const capitalNeeded = targetGap * 12 * 25;
+      const monthsToRetirement = 20 * 12;
+      const totalMonthlySavings = Math.round(capitalNeeded / monthsToRetirement);
+      
       return {
         currentPension,
         targetIncome,
         targetGap,
+        totalMonthlySavings,
+        savingsAllocation: {
+          secure: Math.round(totalMonthlySavings * 0.15),
+          retirement: Math.round(totalMonthlySavings * 0.35),
+          markets: Math.round(totalMonthlySavings * 0.30),
+          realestate: Math.round(totalMonthlySavings * 0.20)
+        },
         hasSimulation: true,
         replacementRate: results.replacementRate || scenario.replacementRate || 0,
         retirementAge: scenario.age || results.retirementAge || 64
@@ -82,6 +109,8 @@ const Dashboard = () => {
       currentPension: 0,
       targetIncome: 0,
       targetGap: 0,
+      totalMonthlySavings: 0,
+      savingsAllocation: {},
       hasSimulation: false,
       replacementRate: 0,
       retirementAge: 64

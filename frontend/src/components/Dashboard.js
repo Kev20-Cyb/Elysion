@@ -387,6 +387,8 @@ const Dashboard = () => {
                     targetGap: investmentData.targetGap,
                     currentPension: investmentData.currentPension,
                     targetIncome: investmentData.targetIncome,
+                    totalMonthlySavings: investmentData.totalMonthlySavings,
+                    savingsAllocation: investmentData.savingsAllocation,
                     replacementRate: investmentData.replacementRate,
                     retirementAge: investmentData.retirementAge
                   }

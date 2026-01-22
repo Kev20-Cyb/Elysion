@@ -66,7 +66,7 @@ const InvestmentAxes = () => {
       pros: ['Capital garanti', 'Disponibilité immédiate', 'Fiscalité avantageuse'],
       cons: ['Rendement limité', 'Plafonds de versement'],
       percentage: allocation.secure,
-      monthlyAmount: calculateMonthlyAmount(allocation.secure)
+      monthlyAmount: calculateMonthlyAmount('secure')
     },
     {
       id: 'retirement',
@@ -79,7 +79,7 @@ const InvestmentAxes = () => {
       pros: ['Avantages fiscaux à l\'entrée', 'Sortie en capital ou rente', 'Transmission facilitée'],
       cons: ['Blocage jusqu\'à la retraite (PER)', 'Frais de gestion'],
       percentage: allocation.retirement,
-      monthlyAmount: calculateMonthlyAmount(allocation.retirement)
+      monthlyAmount: calculateMonthlyAmount('retirement')
     },
     {
       id: 'markets',
@@ -92,7 +92,7 @@ const InvestmentAxes = () => {
       pros: ['Potentiel de rendement élevé', 'Diversification possible', 'Fiscalité du PEA'],
       cons: ['Risque de perte en capital', 'Volatilité des marchés', 'Nécessite un suivi'],
       percentage: allocation.markets,
-      monthlyAmount: calculateMonthlyAmount(allocation.markets)
+      monthlyAmount: calculateMonthlyAmount('markets')
     },
     {
       id: 'realestate',
@@ -105,12 +105,9 @@ const InvestmentAxes = () => {
       pros: ['Revenus réguliers', 'Effet de levier crédit', 'Abondement employeur (épargne salariale)'],
       cons: ['Frais d\'entrée', 'Liquidité limitée', 'Gestion locative'],
       percentage: allocation.realestate,
-      monthlyAmount: calculateMonthlyAmount(allocation.realestate)
+      monthlyAmount: calculateMonthlyAmount('realestate')
     }
   ];
-
-  // Total mensuel
-  const totalMonthly = investmentAxes.reduce((sum, axis) => sum + axis.monthlyAmount, 0);
 
   const getColorClasses = (color) => {
     const colors = {

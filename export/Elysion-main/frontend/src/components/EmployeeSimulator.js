@@ -1,10 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../App';
+import axios from 'axios';
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const API = `${BACKEND_URL}/api`;
 
 const EmployeeSimulator = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
   const [branch, setBranch] = useState(null); // 'private' or 'public'
+  const [savingResults, setSavingResults] = useState(false);
   
   const [formData, setFormData] = useState({
     // Écran 1 - Profil
@@ -70,6 +77,59 @@ const EmployeeSimulator = () => {
   });
   
   const [results, setResults] = useState(null);
+
+  // Sauvegarder les résultats automatiquement quand l'utilisateur est connecté
+  useEffect(() => {
+    const saveResultsToBackend = async () => {
+      if (user && results) {
+        setSavingResults(true);
+        try {
+          // Calculer les données d'épargne pour la sauvegarde
+          const firstScenario = results.scenarios?.[0] || {};
+          const currentPension = firstScenario.totalMonthly || 0;
+          const annualIncome = formData.annualIncome || formData.currentMonthlyIncome * 12 || 0;
+          const monthlyIncome = annualIncome / 12;
+          const targetIncome = Math.round(monthlyIncome * 0.7); // 70% du revenu actuel
+          const targetGap = Math.max(0, targetIncome - currentPension);
+          
+          // Calcul épargne mensuelle suggérée (règle des 4%, 20 ans)
+          const capitalNeeded = targetGap * 12 * 25;
+          const monthsToRetirement = 20 * 12;
+          const totalMonthlySavings = Math.round(capitalNeeded / monthsToRetirement);
+          
+          // Répartition par axe
+          const savingsAllocation = {
+            secure: Math.round(totalMonthlySavings * 0.15),
+            retirement: Math.round(totalMonthlySavings * 0.35),
+            markets: Math.round(totalMonthlySavings * 0.30),
+            realestate: Math.round(totalMonthlySavings * 0.20)
+          };
+
+          await axios.post(`${API}/simulation/save`, {
+            simulator_type: 'employee',
+            form_data: formData,
+            results: {
+              ...results,
+              currentPension,
+              targetIncome,
+              targetGap,
+              totalMonthlySavings,
+              savingsAllocation,
+              monthlyIncome
+            },
+            saved_at: new Date().toISOString()
+          });
+          console.log('Résultats de simulation sauvegardés');
+        } catch (err) {
+          console.error('Erreur sauvegarde simulation:', err);
+        } finally {
+          setSavingResults(false);
+        }
+      }
+    };
+
+    saveResultsToBackend();
+  }, [results, user, formData]);
 
   // Configuration des profils de risque
   const RISK_PROFILES = {

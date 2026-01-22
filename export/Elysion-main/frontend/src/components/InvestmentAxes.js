@@ -12,34 +12,40 @@ const InvestmentAxes = () => {
     targetGap = 0, 
     currentPension = 0, 
     targetIncome = 0,
+    totalMonthlySavings: passedTotalMonthlySavings = 0,
+    savingsAllocation: passedSavingsAllocation = null,
     replacementRate = 0,
     retirementAge = 64
   } = location.state || {};
 
   // Vérifier si on a des données valides
-  const hasValidData = targetGap > 0 && currentPension > 0;
+  const hasValidData = targetGap > 0 || currentPension > 0;
 
-  // Calculer l'épargne mensuelle nécessaire pour combler l'écart
-  // Hypothèse : années restantes avant retraite basées sur l'âge actuel (supposé ~45 ans en moyenne)
-  // Capital nécessaire = écart mensuel * 12 mois * 25 ans (règle des 4%)
-  const estimatedCurrentAge = 45; // Estimation moyenne
+  // Calculer l'épargne mensuelle si pas déjà passée
+  const estimatedCurrentAge = 45;
   const yearsToRetirement = Math.max(retirementAge - estimatedCurrentAge, 10);
   const monthsToRetirement = yearsToRetirement * 12;
-  const capitalNeeded = targetGap * 12 * 25; // Capital pour générer le revenu mensuel sur 25 ans
+  const capitalNeeded = targetGap * 12 * 25;
+  
+  // Utiliser les données passées ou calculer
+  const totalMonthlySavings = passedTotalMonthlySavings > 0 
+    ? passedTotalMonthlySavings 
+    : (monthsToRetirement > 0 ? Math.round(capitalNeeded / monthsToRetirement) : 0);
   
   // Répartition suggérée selon le profil équilibré
   const allocation = {
-    secure: 0.15,      // 15% épargne sécurisée
-    retirement: 0.35,  // 35% épargne retraite dédiée
-    markets: 0.30,     // 30% marchés financiers
-    realestate: 0.20   // 20% immobilier
+    secure: 0.15,
+    retirement: 0.35,
+    markets: 0.30,
+    realestate: 0.20
   };
 
-  // Calcul du montant mensuel total et par axe
-  const totalMonthlySavings = monthsToRetirement > 0 ? Math.round(capitalNeeded / monthsToRetirement) : 0;
-  
-  const calculateMonthlyAmount = (percentage) => {
-    return Math.round(totalMonthlySavings * percentage);
+  // Utiliser les allocations passées ou calculer
+  const calculateMonthlyAmount = (key) => {
+    if (passedSavingsAllocation && passedSavingsAllocation[key] !== undefined) {
+      return passedSavingsAllocation[key];
+    }
+    return Math.round(totalMonthlySavings * allocation[key]);
   };
 
   const handleLogout = () => {
@@ -60,7 +66,7 @@ const InvestmentAxes = () => {
       pros: ['Capital garanti', 'Disponibilité immédiate', 'Fiscalité avantageuse'],
       cons: ['Rendement limité', 'Plafonds de versement'],
       percentage: allocation.secure,
-      monthlyAmount: calculateMonthlyAmount(allocation.secure)
+      monthlyAmount: calculateMonthlyAmount('secure')
     },
     {
       id: 'retirement',
@@ -73,7 +79,7 @@ const InvestmentAxes = () => {
       pros: ['Avantages fiscaux à l\'entrée', 'Sortie en capital ou rente', 'Transmission facilitée'],
       cons: ['Blocage jusqu\'à la retraite (PER)', 'Frais de gestion'],
       percentage: allocation.retirement,
-      monthlyAmount: calculateMonthlyAmount(allocation.retirement)
+      monthlyAmount: calculateMonthlyAmount('retirement')
     },
     {
       id: 'markets',
@@ -86,7 +92,7 @@ const InvestmentAxes = () => {
       pros: ['Potentiel de rendement élevé', 'Diversification possible', 'Fiscalité du PEA'],
       cons: ['Risque de perte en capital', 'Volatilité des marchés', 'Nécessite un suivi'],
       percentage: allocation.markets,
-      monthlyAmount: calculateMonthlyAmount(allocation.markets)
+      monthlyAmount: calculateMonthlyAmount('markets')
     },
     {
       id: 'realestate',
@@ -99,12 +105,9 @@ const InvestmentAxes = () => {
       pros: ['Revenus réguliers', 'Effet de levier crédit', 'Abondement employeur (épargne salariale)'],
       cons: ['Frais d\'entrée', 'Liquidité limitée', 'Gestion locative'],
       percentage: allocation.realestate,
-      monthlyAmount: calculateMonthlyAmount(allocation.realestate)
+      monthlyAmount: calculateMonthlyAmount('realestate')
     }
   ];
-
-  // Total mensuel
-  const totalMonthly = investmentAxes.reduce((sum, axis) => sum + axis.monthlyAmount, 0);
 
   const getColorClasses = (color) => {
     const colors = {

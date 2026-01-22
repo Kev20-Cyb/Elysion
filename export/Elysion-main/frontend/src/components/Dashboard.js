@@ -54,23 +54,50 @@ const Dashboard = () => {
   const getInvestmentData = () => {
     if (simulationData?.results) {
       const results = simulationData.results;
-      // Get the first scenario (earliest retirement age)
+      
+      // Use pre-calculated values if available
+      if (results.currentPension !== undefined) {
+        return {
+          currentPension: results.currentPension || 0,
+          targetIncome: results.targetIncome || 0,
+          targetGap: results.targetGap || 0,
+          totalMonthlySavings: results.totalMonthlySavings || 0,
+          savingsAllocation: results.savingsAllocation || {},
+          hasSimulation: true,
+          replacementRate: results.replacementRate || 0,
+          retirementAge: results.scenarios?.[0]?.age || 64
+        };
+      }
+      
+      // Fallback: calculate from scenarios
       const scenario = results.scenarios?.[0] || results;
       const currentPension = scenario.totalMonthly || results.totalMonthly || 0;
       
       // Get form data for income
       const formData = simulationData.form_data || {};
-      const annualIncome = formData.annualIncome || formData.annualRevenue || 0;
+      const annualIncome = formData.annualIncome || formData.annualRevenue || formData.currentMonthlyIncome * 12 || 0;
       const monthlyIncome = Math.round(annualIncome / 12);
       
       // Target: maintain 70% of current income
       const targetIncome = Math.round(monthlyIncome * 0.7);
       const targetGap = Math.max(0, targetIncome - currentPension);
       
+      // Calculate savings
+      const capitalNeeded = targetGap * 12 * 25;
+      const monthsToRetirement = 20 * 12;
+      const totalMonthlySavings = Math.round(capitalNeeded / monthsToRetirement);
+      
       return {
         currentPension,
         targetIncome,
         targetGap,
+        totalMonthlySavings,
+        savingsAllocation: {
+          secure: Math.round(totalMonthlySavings * 0.15),
+          retirement: Math.round(totalMonthlySavings * 0.35),
+          markets: Math.round(totalMonthlySavings * 0.30),
+          realestate: Math.round(totalMonthlySavings * 0.20)
+        },
         hasSimulation: true,
         replacementRate: results.replacementRate || scenario.replacementRate || 0,
         retirementAge: scenario.age || results.retirementAge || 64
@@ -82,6 +109,8 @@ const Dashboard = () => {
       currentPension: 0,
       targetIncome: 0,
       targetGap: 0,
+      totalMonthlySavings: 0,
+      savingsAllocation: {},
       hasSimulation: false,
       replacementRate: 0,
       retirementAge: 64
@@ -273,11 +302,19 @@ const Dashboard = () => {
                       {investmentData.targetGap.toLocaleString()} €
                     </p>
                   </div>
+                  {investmentData.totalMonthlySavings > 0 && (
+                    <div className="mt-3 bg-elysion-accent rounded-lg p-3 text-center">
+                      <p className="text-white text-sm">Épargne mensuelle suggérée</p>
+                      <p className="text-2xl font-bold text-white">
+                        {investmentData.totalMonthlySavings.toLocaleString()} €/mois
+                      </p>
+                    </div>
+                  )}
                 </div>
                 
-                {/* Axes rapides */}
+                {/* Axes rapides avec montants */}
                 <div className="space-y-3 mb-6">
-                  <p className="text-sm font-semibold text-gray-700">Axes d'investissement suggérés :</p>
+                  <p className="text-sm font-semibold text-gray-700">Répartition suggérée :</p>
                   
                   <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg border border-green-100">
                     <span className="text-xl">🛡️</span>
@@ -285,7 +322,12 @@ const Dashboard = () => {
                       <p className="font-medium text-gray-900 text-sm">Épargne sécurisée</p>
                       <p className="text-xs text-gray-500">Livrets, épargne logement</p>
                     </div>
-                    <span className="text-sm font-semibold text-green-600">15%</span>
+                    <div className="text-right">
+                      <p className="text-sm font-bold text-green-700">
+                        {(investmentData.savingsAllocation?.secure || 0).toLocaleString()} €
+                      </p>
+                      <p className="text-xs text-green-600">15%</p>
+                    </div>
                   </div>
                   
                   <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg border border-blue-100">
@@ -294,7 +336,12 @@ const Dashboard = () => {
                       <p className="font-medium text-gray-900 text-sm">Épargne retraite</p>
                       <p className="text-xs text-gray-500">PER, Assurance-vie</p>
                     </div>
-                    <span className="text-sm font-semibold text-blue-600">35%</span>
+                    <div className="text-right">
+                      <p className="text-sm font-bold text-blue-700">
+                        {(investmentData.savingsAllocation?.retirement || 0).toLocaleString()} €
+                      </p>
+                      <p className="text-xs text-blue-600">35%</p>
+                    </div>
                   </div>
                   
                   <div className="flex items-center gap-3 p-3 bg-orange-50 rounded-lg border border-orange-100">
@@ -303,7 +350,12 @@ const Dashboard = () => {
                       <p className="font-medium text-gray-900 text-sm">Marchés financiers</p>
                       <p className="text-xs text-gray-500">PEA, Fonds diversifiés</p>
                     </div>
-                    <span className="text-sm font-semibold text-orange-600">30%</span>
+                    <div className="text-right">
+                      <p className="text-sm font-bold text-orange-700">
+                        {(investmentData.savingsAllocation?.markets || 0).toLocaleString()} €
+                      </p>
+                      <p className="text-xs text-orange-600">30%</p>
+                    </div>
                   </div>
                 </div>
               </>
@@ -335,6 +387,8 @@ const Dashboard = () => {
                     targetGap: investmentData.targetGap,
                     currentPension: investmentData.currentPension,
                     targetIncome: investmentData.targetIncome,
+                    totalMonthlySavings: investmentData.totalMonthlySavings,
+                    savingsAllocation: investmentData.savingsAllocation,
                     replacementRate: investmentData.replacementRate,
                     retirementAge: investmentData.retirementAge
                   }

@@ -15,6 +15,7 @@ import Documents from './components/Documents';
 import FreelanceSimulator from './components/FreelanceSimulator';
 import EmployeeSimulator from './components/EmployeeSimulator';
 import InvestmentAxes from './components/InvestmentAxes';
+import ProfilePage from './components/ProfilePage';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;

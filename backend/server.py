@@ -459,6 +459,55 @@ async def get_dashboard(current_user: User = Depends(get_current_user)):
 async def get_user_profile(current_user: User = Depends(get_current_user)):
     return current_user
 
+@api_router.put("/user/profile")
+async def update_user_profile(
+    profile_update: dict,
+    current_user: User = Depends(get_current_user)
+):
+    """Update user profile information"""
+    # Fields that can be updated
+    allowed_fields = ['full_name', 'phone', 'date_of_birth', 'address']
+    update_data = {k: v for k, v in profile_update.items() if k in allowed_fields and v is not None}
+    
+    if not update_data:
+        return {"message": "Aucune modification effectuée"}
+    
+    update_data['updated_at'] = datetime.utcnow()
+    
+    # Update user
+    await db.users.update_one(
+        {"id": current_user.id},
+        {"$set": update_data}
+    )
+    
+    return {"message": "Profil mis à jour avec succès"}
+
+@api_router.put("/user/password")
+async def change_password(
+    password_data: dict,
+    current_user: User = Depends(get_current_user)
+):
+    """Change user password"""
+    current_password = password_data.get('current_password')
+    new_password = password_data.get('new_password')
+    
+    if not current_password or not new_password:
+        raise HTTPException(status_code=400, detail="Mot de passe requis")
+    
+    # Verify current password
+    user = await db.users.find_one({"id": current_user.id})
+    if not user or not verify_password(current_password, user['hashed_password']):
+        raise HTTPException(status_code=400, detail="Mot de passe actuel incorrect")
+    
+    # Update password
+    new_hashed = get_password_hash(new_password)
+    await db.users.update_one(
+        {"id": current_user.id},
+        {"$set": {"hashed_password": new_hashed, "updated_at": datetime.utcnow()}}
+    )
+    
+    return {"message": "Mot de passe modifié avec succès"}
+
 # Save simulation results
 @api_router.post("/simulation/save")
 async def save_simulation(

@@ -181,9 +181,9 @@ def generate_mock_retirement_data(user: User, profile: Optional[RetirementProfil
     estimated_pension = 0
     savings_progress = 0
     
-    # Use real data from profile if available
-    if profile and profile.simulation_data:
-        sim_data = profile.simulation_data
+    # Use real data from profile if available (profile is a dict from MongoDB)
+    if profile and profile.get('simulation_data'):
+        sim_data = profile.get('simulation_data')
         # Try to get real values from simulation
         if 'results' in sim_data:
             results = sim_data['results']
@@ -191,6 +191,8 @@ def generate_mock_retirement_data(user: User, profile: Optional[RetirementProfil
                 first_scenario = results['scenarios'][0]
                 projected_age = first_scenario.get('age', 65)
                 estimated_pension = first_scenario.get('totalMonthly', 0)
+            elif 'totalMonthly' in results:
+                estimated_pension = results.get('totalMonthly', 0)
             if 'currentIncome' in results and results['currentIncome'] > 0:
                 target = results.get('targetIncome', results['currentIncome'] * 0.7)
                 if estimated_pension > 0:

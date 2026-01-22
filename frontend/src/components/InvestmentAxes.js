@@ -12,34 +12,40 @@ const InvestmentAxes = () => {
     targetGap = 0, 
     currentPension = 0, 
     targetIncome = 0,
+    totalMonthlySavings: passedTotalMonthlySavings = 0,
+    savingsAllocation: passedSavingsAllocation = null,
     replacementRate = 0,
     retirementAge = 64
   } = location.state || {};
 
   // Vérifier si on a des données valides
-  const hasValidData = targetGap > 0 && currentPension > 0;
+  const hasValidData = targetGap > 0 || currentPension > 0;
 
-  // Calculer l'épargne mensuelle nécessaire pour combler l'écart
-  // Hypothèse : années restantes avant retraite basées sur l'âge actuel (supposé ~45 ans en moyenne)
-  // Capital nécessaire = écart mensuel * 12 mois * 25 ans (règle des 4%)
-  const estimatedCurrentAge = 45; // Estimation moyenne
+  // Calculer l'épargne mensuelle si pas déjà passée
+  const estimatedCurrentAge = 45;
   const yearsToRetirement = Math.max(retirementAge - estimatedCurrentAge, 10);
   const monthsToRetirement = yearsToRetirement * 12;
-  const capitalNeeded = targetGap * 12 * 25; // Capital pour générer le revenu mensuel sur 25 ans
+  const capitalNeeded = targetGap * 12 * 25;
+  
+  // Utiliser les données passées ou calculer
+  const totalMonthlySavings = passedTotalMonthlySavings > 0 
+    ? passedTotalMonthlySavings 
+    : (monthsToRetirement > 0 ? Math.round(capitalNeeded / monthsToRetirement) : 0);
   
   // Répartition suggérée selon le profil équilibré
   const allocation = {
-    secure: 0.15,      // 15% épargne sécurisée
-    retirement: 0.35,  // 35% épargne retraite dédiée
-    markets: 0.30,     // 30% marchés financiers
-    realestate: 0.20   // 20% immobilier
+    secure: 0.15,
+    retirement: 0.35,
+    markets: 0.30,
+    realestate: 0.20
   };
 
-  // Calcul du montant mensuel total et par axe
-  const totalMonthlySavings = monthsToRetirement > 0 ? Math.round(capitalNeeded / monthsToRetirement) : 0;
-  
-  const calculateMonthlyAmount = (percentage) => {
-    return Math.round(totalMonthlySavings * percentage);
+  // Utiliser les allocations passées ou calculer
+  const calculateMonthlyAmount = (key) => {
+    if (passedSavingsAllocation && passedSavingsAllocation[key] !== undefined) {
+      return passedSavingsAllocation[key];
+    }
+    return Math.round(totalMonthlySavings * allocation[key]);
   };
 
   const handleLogout = () => {

@@ -350,7 +350,12 @@ const Dashboard = () => {
                       <p className="font-medium text-gray-900 text-sm">Marchés financiers</p>
                       <p className="text-xs text-gray-500">PEA, Fonds diversifiés</p>
                     </div>
-                    <span className="text-sm font-semibold text-orange-600">30%</span>
+                    <div className="text-right">
+                      <p className="text-sm font-bold text-orange-700">
+                        {(investmentData.savingsAllocation?.markets || 0).toLocaleString()} €
+                      </p>
+                      <p className="text-xs text-orange-600">30%</p>
+                    </div>
                   </div>
                 </div>
               </>

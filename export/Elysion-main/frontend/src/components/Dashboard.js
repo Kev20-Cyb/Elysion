@@ -152,10 +152,14 @@ const Dashboard = () => {
               <span className="text-elysion-text-dark font-medium">Tableau de bord</span>
             </div>
             <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
+              <button 
+                onClick={() => navigate('/profile')}
+                className="flex items-center space-x-2 hover:bg-gray-100 px-3 py-2 rounded-lg transition-colors"
+                data-testid="dashboard-profile-link"
+              >
                 <span className="text-lg">{userTypeInfo.icon}</span>
                 <span className="text-elysion-text-dark font-medium">{user?.full_name}</span>
-              </div>
+              </button>
               <button 
                 onClick={handleLogout}
                 className="text-elysion-text-light hover:text-elysion-primary transition-colors"
@@ -413,13 +417,13 @@ const Dashboard = () => {
             </button>
             
             <button 
-              onClick={() => navigate('/onboarding')}
+              onClick={() => navigate('/profile')}
               className="p-6 bg-elysion-bg rounded-lg border border-elysion-secondary hover:bg-elysion-secondary/20 transition-all text-left"
               data-testid="dashboard-update-profile-btn"
             >
               <div className="text-2xl mb-2">⚙️</div>
               <h4 className="font-semibold text-elysion-text-dark mb-1">Mettre à jour profil</h4>
-              <p className="text-sm text-elysion-text-light">Ajustez vos informations financières</p>
+              <p className="text-sm text-elysion-text-light">Gérez vos informations personnelles</p>
             </button>
             
             <button 

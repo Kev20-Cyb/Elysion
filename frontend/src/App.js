@@ -73,9 +73,8 @@ const AuthProvider = ({ children }) => {
       localStorage.setItem("elysion_token", token);
       return { success: true };
     } catch (error) {
-<<<<<<< HEAD
+
       return { success: false, error: error.response?.data?.detail || "Login failed" };
-=======
       // Handle Pydantic validation errors (array of objects) or simple string errors
       const detail = error.response?.data?.detail;
       let errorMessage = 'Échec de la connexion';
@@ -90,7 +89,7 @@ const AuthProvider = ({ children }) => {
         success: false,
         error: errorMessage
       };
->>>>>>> conflict_271125_1608
+
     }
   };
 
@@ -104,9 +103,9 @@ const AuthProvider = ({ children }) => {
       localStorage.setItem("elysion_token", token);
       return { success: true };
     } catch (error) {
-<<<<<<< HEAD
+
       return { success: false, error: error.response?.data?.detail || "Registration failed" };
-=======
+
       // Handle Pydantic validation errors (array of objects) or simple string errors
       const detail = error.response?.data?.detail;
       let errorMessage = 'Échec de l\'inscription';
@@ -122,7 +121,6 @@ const AuthProvider = ({ children }) => {
         success: false,
         error: errorMessage
       };
->>>>>>> conflict_271125_1608
     }
   };
 

@@ -433,7 +433,7 @@ const LandingPage = () => {
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-white mb-6 font-montserrat">Prêt à prendre le contrôle de votre avenir ?</h2>
-            <p className="text-xl text-elysion-text-light max-w-2xl mx-auto py-5">
+            <p className="text-xl text-white text-elysion-text-light max-w-2xl mx-auto py-5">
               Rejoignez des milliers d'utilisateurs qui font déjà confiance à Elysion !
             </p>
             <button 

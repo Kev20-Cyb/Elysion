@@ -14,6 +14,8 @@ import ResetPassword from './components/ResetPassword';
 import Documents from './components/Documents';
 import FreelanceSimulator from './components/FreelanceSimulator';
 import EmployeeSimulator from './components/EmployeeSimulator';
+import InvestmentAxes from './components/InvestmentAxes';
+import ProfilePage from './components/ProfilePage';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
 const API = `${BACKEND_URL}/api`;
@@ -71,7 +73,24 @@ const AuthProvider = ({ children }) => {
       localStorage.setItem("elysion_token", token);
       return { success: true };
     } catch (error) {
+<<<<<<< HEAD
       return { success: false, error: error.response?.data?.detail || "Login failed" };
+=======
+      // Handle Pydantic validation errors (array of objects) or simple string errors
+      const detail = error.response?.data?.detail;
+      let errorMessage = 'Échec de la connexion';
+      
+      if (typeof detail === 'string') {
+        errorMessage = detail;
+      } else if (Array.isArray(detail) && detail.length > 0) {
+        errorMessage = detail.map(err => err.msg || err.message || JSON.stringify(err)).join(', ');
+      }
+      
+      return {
+        success: false,
+        error: errorMessage
+      };
+>>>>>>> conflict_271125_1608
     }
   };
 
@@ -85,7 +104,25 @@ const AuthProvider = ({ children }) => {
       localStorage.setItem("elysion_token", token);
       return { success: true };
     } catch (error) {
+<<<<<<< HEAD
       return { success: false, error: error.response?.data?.detail || "Registration failed" };
+=======
+      // Handle Pydantic validation errors (array of objects) or simple string errors
+      const detail = error.response?.data?.detail;
+      let errorMessage = 'Échec de l\'inscription';
+      
+      if (typeof detail === 'string') {
+        errorMessage = detail;
+      } else if (Array.isArray(detail) && detail.length > 0) {
+        // Pydantic validation error - extract the message
+        errorMessage = detail.map(err => err.msg || err.message || JSON.stringify(err)).join(', ');
+      }
+      
+      return {
+        success: false,
+        error: errorMessage
+      };
+>>>>>>> conflict_271125_1608
     }
   };
 
@@ -155,6 +192,22 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Documents />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/investment-axes" 
+              element={
+                <ProtectedRoute>
+                  <InvestmentAxes />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/profile" 
+              element={
+                <ProtectedRoute>
+                  <ProfilePage />
                 </ProtectedRoute>
               } 
             />

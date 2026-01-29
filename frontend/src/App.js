@@ -11,7 +11,9 @@ import OnboardingFlow from './components/OnboardingFlow';
 import Simulator from './components/Simulator';
 import ForgotPassword from './components/ForgotPassword';
 import ResetPassword from './components/ResetPassword';
-import ChatBubble from "./components/ChatBubble";
+import Documents from './components/Documents';
+import FreelanceSimulator from './components/FreelanceSimulator';
+import EmployeeSimulator from './components/EmployeeSimulator';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
 const API = `${BACKEND_URL}/api`;
@@ -140,17 +142,21 @@ function App() {
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/auth" element={<AuthPage />} />
-            <Route path="/simulator" element={<Simulator />} />
-            <Route path="/onboarding" element={<OnboardingFlow />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
-            <Route
-              path="/dashboard"
+            <Route 
+              path="/dashboard" 
               element={
                 <ProtectedRoute>
                   <Dashboard />
                 </ProtectedRoute>
               }
+            />
+            <Route 
+              path="/documents" 
+              element={
+                <ProtectedRoute>
+                  <Documents />
+                </ProtectedRoute>
+              } 
             />
           </Routes>
 

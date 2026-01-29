@@ -225,8 +225,12 @@ const Dashboard = () => {
                 </div>
               ))}
             </div>
-            <button className="w-full mt-6 btn-elysion-primary" data-testid="dashboard-upload-document-btn">
-              Télécharger un document
+            <button 
+              onClick={() => navigate('/documents')} 
+              className="w-full mt-6 btn-elysion-primary" 
+              data-testid="dashboard-upload-document-btn"
+            >
+              Gérer mes documents
             </button>
           </div>
         </div>

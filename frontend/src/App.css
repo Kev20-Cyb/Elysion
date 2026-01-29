@@ -11,87 +11,6 @@
   --elysion-white: #FFFFFF;
   --elysion-text-dark: #1a1a1a;
   --elysion-text-light: #666666;
-
-  /* Primary Blue Scale */
-  --elysion-primary-50: #f5f7fa;
-  --elysion-primary-100: #eaeff5;
-  --elysion-primary-200: #cddbef;
-  --elysion-primary-300: #97bbec;
-  --elysion-primary-400: #4a90f2;
-  --elysion-primary-500: #0a418e;
-  --elysion-primary-600: #0c4ca7;
-  --elysion-primary-700: #083777;
-  --elysion-primary-800: #022250;
-  --elysion-primary-900: #011532;
-  --elysion-primary-950: #010b19;
-
-  /* Secondary Light Blue Scale */
-  --elysion-secondary-50: #f0f7ff;
-  --elysion-secondary-100: #e0efff;
-  --elysion-secondary-200: #bae0ff;
-  --elysion-secondary-300: #A8C3E7;
-  --elysion-secondary-400: #60a5fa;
-  --elysion-secondary-500: #3b82f6;
-  --elysion-secondary-600: #2563eb;
-  --elysion-secondary-700: #1d4ed8;
-  --elysion-secondary-800: #1e40af;
-  --elysion-secondary-900: #1e3a8a;
-  --elysion-secondary-950: #172554;
-
-  /* Accent Orange Scale */
-  --elysion-accent-50: #faf8f4;
-  --elysion-accent-100: #f6f1ea;
-  --elysion-accent-200: #f1e2cb;
-  --elysion-accent-300: #f1cc93;
-  --elysion-accent-400: #fbb241;
-  --elysion-accent-500: #fbb03b;
-  --elysion-accent-600: #fa9c09;
-  --elysion-accent-700: #d68404;
-  --elysion-accent-800: #b16c00;
-  --elysion-accent-900: #935900;
-  --elysion-accent-950: #744700;
-
-  /* Background Scale */
-  --elysion-bg-50: #F6F9FD;
-  --elysion-bg-100: #f1f5f9;
-  --elysion-bg-200: #e2e8f0;
-  --elysion-bg-300: #cbd5e1;
-  --elysion-bg-400: #94a3b8;
-  --elysion-bg-500: #64748b;
-  --elysion-bg-600: #475569;
-  --elysion-bg-700: #334155;
-  --elysion-bg-800: #1e293b;
-  --elysion-bg-900: #0f172a;
-  --elysion-bg-950: #020617;
-
-  /* Neutral Grays */
-  --elysion-gray-50: #f8fafc;
-  --elysion-gray-100: #f1f5f9;
-  --elysion-gray-200: #e2e8f0;
-  --elysion-gray-300: #cbd5e1;
-  --elysion-gray-400: #94a3b8;
-  --elysion-gray-500: #64748b;
-  --elysion-gray-600: #475569;
-  --elysion-gray-700: #334155;
-  --elysion-gray-800: #1e293b;
-  --elysion-gray-900: #0f172a;
-  --elysion-gray-950: #020617;
-
-  /* Semantic Colors */
-  --elysion-success-50: #f0fdf4;
-  --elysion-success-500: #22c55e;
-  --elysion-success-600: #16a34a;
-  --elysion-success-700: #15803d;
-
-  --elysion-warning-50: #fff7ed;
-  --elysion-warning-500: #f97316;
-  --elysion-warning-600: #ea580c;
-  --elysion-warning-700: #c2410c;
-
-  --elysion-error-50: #fef2f2;
-  --elysion-error-500: #ef4444;
-  --elysion-error-600: #dc2626;
-  --elysion-error-700: #b91c1c;
 }
 
 /* Global Styles */
@@ -117,41 +36,187 @@ body {
   font-family: 'Montserrat', sans-serif;
 }
 
-.bg-elysion-primary {
-  background-color: var(--elysion-primary);
-}
+/* ============================================
+   BACKGROUND COLOR UTILITIES
+   ============================================ */
 
-.bg-elysion-bg {
-  background-color: var(--elysion-bg);
-}
+/* Primary Blue Backgrounds */
+.bg-elysion-primary { background-color: var(--elysion-primary); }
+.bg-elysion-primary-50 { background-color: var(--elysion-primary-50); }
+.bg-elysion-primary-100 { background-color: var(--elysion-primary-100); }
+.bg-elysion-primary-200 { background-color: var(--elysion-primary-200); }
+.bg-elysion-primary-300 { background-color: var(--elysion-primary-300); }
+.bg-elysion-primary-400 { background-color: var(--elysion-primary-400); }
+.bg-elysion-primary-500 { background-color: var(--elysion-primary-500); }
+.bg-elysion-primary-600 { background-color: var(--elysion-primary-600); }
+.bg-elysion-primary-700 { background-color: var(--elysion-primary-700); }
+.bg-elysion-primary-800 { background-color: var(--elysion-primary-800); }
+.bg-elysion-primary-900 { background-color: var(--elysion-primary-900); }
+.bg-elysion-primary-950 { background-color: var(--elysion-primary-950); }
 
-.bg-elysion-accent {
-  background-color: var(--elysion-accent);
-}
+/* Secondary Blue Backgrounds */
+.bg-elysion-secondary { background-color: var(--elysion-secondary); }
+.bg-elysion-secondary-50 { background-color: var(--elysion-secondary-50); }
+.bg-elysion-secondary-100 { background-color: var(--elysion-secondary-100); }
+.bg-elysion-secondary-200 { background-color: var(--elysion-secondary-200); }
+.bg-elysion-secondary-300 { background-color: var(--elysion-secondary-300); }
+.bg-elysion-secondary-400 { background-color: var(--elysion-secondary-400); }
+.bg-elysion-secondary-500 { background-color: var(--elysion-secondary-500); }
+.bg-elysion-secondary-600 { background-color: var(--elysion-secondary-600); }
+.bg-elysion-secondary-700 { background-color: var(--elysion-secondary-700); }
+.bg-elysion-secondary-800 { background-color: var(--elysion-secondary-800); }
+.bg-elysion-secondary-900 { background-color: var(--elysion-secondary-900); }
+.bg-elysion-secondary-950 { background-color: var(--elysion-secondary-950); }
 
-.bg-elysion-secondary {
-  background-color: var(--elysion-secondary);
-}
+/* Accent Orange Backgrounds */
+.bg-elysion-accent { background-color: var(--elysion-accent); }
+.bg-elysion-accent-50 { background-color: var(--elysion-accent-50); }
+.bg-elysion-accent-100 { background-color: var(--elysion-accent-100); }
+.bg-elysion-accent-200 { background-color: var(--elysion-accent-200); }
+.bg-elysion-accent-300 { background-color: var(--elysion-accent-300); }
+.bg-elysion-accent-400 { background-color: var(--elysion-accent-400); }
+.bg-elysion-accent-500 { background-color: var(--elysion-accent-500); }
+.bg-elysion-accent-600 { background-color: var(--elysion-accent-600); }
+.bg-elysion-accent-700 { background-color: var(--elysion-accent-700); }
+.bg-elysion-accent-800 { background-color: var(--elysion-accent-800); }
+.bg-elysion-accent-900 { background-color: var(--elysion-accent-900); }
+.bg-elysion-accent-950 { background-color: var(--elysion-accent-950); }
 
-.text-elysion-primary {
-  color: var(--elysion-primary);
-}
+/* Background Scale */
+.bg-elysion-bg { background-color: var(--elysion-bg); }
+.bg-elysion-bg-50 { background-color: var(--elysion-bg-50); }
+.bg-elysion-bg-100 { background-color: var(--elysion-bg-100); }
+.bg-elysion-bg-200 { background-color: var(--elysion-bg-200); }
+.bg-elysion-bg-300 { background-color: var(--elysion-bg-300); }
+.bg-elysion-bg-400 { background-color: var(--elysion-bg-400); }
+.bg-elysion-bg-500 { background-color: var(--elysion-bg-500); }
+.bg-elysion-bg-600 { background-color: var(--elysion-bg-600); }
+.bg-elysion-bg-700 { background-color: var(--elysion-bg-700); }
+.bg-elysion-bg-800 { background-color: var(--elysion-bg-800); }
+.bg-elysion-bg-900 { background-color: var(--elysion-bg-900); }
+.bg-elysion-bg-950 { background-color: var(--elysion-bg-950); }
 
-.text-elysion-accent {
-  color: var(--elysion-accent);
-}
+/* Gray Backgrounds */
+.bg-elysion-gray-50 { background-color: var(--elysion-gray-50); }
+.bg-elysion-gray-100 { background-color: var(--elysion-gray-100); }
+.bg-elysion-gray-200 { background-color: var(--elysion-gray-200); }
+.bg-elysion-gray-300 { background-color: var(--elysion-gray-300); }
+.bg-elysion-gray-400 { background-color: var(--elysion-gray-400); }
+.bg-elysion-gray-500 { background-color: var(--elysion-gray-500); }
+.bg-elysion-gray-600 { background-color: var(--elysion-gray-600); }
+.bg-elysion-gray-700 { background-color: var(--elysion-gray-700); }
+.bg-elysion-gray-800 { background-color: var(--elysion-gray-800); }
+.bg-elysion-gray-900 { background-color: var(--elysion-gray-900); }
+.bg-elysion-gray-950 { background-color: var(--elysion-gray-950); }
 
-.text-elysion-secondary {
-  color: var(--elysion-secondary);
-}
+/* Semantic Backgrounds */
+.bg-elysion-success-50 { background-color: var(--elysion-success-50); }
+.bg-elysion-success-500 { background-color: var(--elysion-success-500); }
+.bg-elysion-success-600 { background-color: var(--elysion-success-600); }
+.bg-elysion-success-700 { background-color: var(--elysion-success-700); }
 
-.border-elysion-primary {
-  border-color: var(--elysion-primary);
-}
+.bg-elysion-warning-50 { background-color: var(--elysion-warning-50); }
+.bg-elysion-warning-500 { background-color: var(--elysion-warning-500); }
+.bg-elysion-warning-600 { background-color: var(--elysion-warning-600); }
+.bg-elysion-warning-700 { background-color: var(--elysion-warning-700); }
 
-.border-elysion-accent {
-  border-color: var(--elysion-accent);
-}
+.bg-elysion-error-50 { background-color: var(--elysion-error-50); }
+.bg-elysion-error-500 { background-color: var(--elysion-error-500); }
+.bg-elysion-error-600 { background-color: var(--elysion-error-600); }
+.bg-elysion-error-700 { background-color: var(--elysion-error-700); }
+
+/* ============================================
+   TEXT COLOR UTILITIES
+   ============================================ */
+
+/* Primary Blue Text */
+.text-elysion-primary { color: var(--elysion-primary); }
+.text-elysion-primary-50 { color: var(--elysion-primary-50); }
+.text-elysion-primary-100 { color: var(--elysion-primary-100); }
+.text-elysion-primary-200 { color: var(--elysion-primary-200); }
+.text-elysion-primary-300 { color: var(--elysion-primary-300); }
+.text-elysion-primary-400 { color: var(--elysion-primary-400); }
+.text-elysion-primary-500 { color: var(--elysion-primary-500); }
+.text-elysion-primary-600 { color: var(--elysion-primary-600); }
+.text-elysion-primary-700 { color: var(--elysion-primary-700); }
+.text-elysion-primary-800 { color: var(--elysion-primary-800); }
+.text-elysion-primary-900 { color: var(--elysion-primary-900); }
+.text-elysion-primary-950 { color: var(--elysion-primary-950); }
+
+/* Secondary Blue Text */
+.text-elysion-secondary { color: var(--elysion-secondary); }
+.text-elysion-secondary-50 { color: var(--elysion-secondary-50); }
+.text-elysion-secondary-100 { color: var(--elysion-secondary-100); }
+.text-elysion-secondary-200 { color: var(--elysion-secondary-200); }
+.text-elysion-secondary-300 { color: var(--elysion-secondary-300); }
+.text-elysion-secondary-400 { color: var(--elysion-secondary-400); }
+.text-elysion-secondary-500 { color: var(--elysion-secondary-500); }
+.text-elysion-secondary-600 { color: var(--elysion-secondary-600); }
+.text-elysion-secondary-700 { color: var(--elysion-secondary-700); }
+.text-elysion-secondary-800 { color: var(--elysion-secondary-800); }
+.text-elysion-secondary-900 { color: var(--elysion-secondary-900); }
+.text-elysion-secondary-950 { color: var(--elysion-secondary-950); }
+
+/* Accent Orange Text */
+.text-elysion-accent { color: var(--elysion-accent); }
+.text-elysion-accent-50 { color: var(--elysion-accent-50); }
+.text-elysion-accent-100 { color: var(--elysion-accent-100); }
+.text-elysion-accent-200 { color: var(--elysion-accent-200); }
+.text-elysion-accent-300 { color: var(--elysion-accent-300); }
+.text-elysion-accent-400 { color: var(--elysion-accent-400); }
+.text-elysion-accent-500 { color: var(--elysion-accent-500); }
+.text-elysion-accent-600 { color: var(--elysion-accent-600); }
+.text-elysion-accent-700 { color: var(--elysion-accent-700); }
+.text-elysion-accent-800 { color: var(--elysion-accent-800); }
+.text-elysion-accent-900 { color: var(--elysion-accent-900); }
+.text-elysion-accent-950 { color: var(--elysion-accent-950); }
+
+/* Gray Text */
+.text-elysion-gray-50 { color: var(--elysion-gray-50); }
+.text-elysion-gray-100 { color: var(--elysion-gray-100); }
+.text-elysion-gray-200 { color: var(--elysion-gray-200); }
+.text-elysion-gray-300 { color: var(--elysion-gray-300); }
+.text-elysion-gray-400 { color: var(--elysion-gray-400); }
+.text-elysion-gray-500 { color: var(--elysion-gray-500); }
+.text-elysion-gray-600 { color: var(--elysion-gray-600); }
+.text-elysion-gray-700 { color: var(--elysion-gray-700); }
+.text-elysion-gray-800 { color: var(--elysion-gray-800); }
+.text-elysion-gray-900 { color: var(--elysion-gray-900); }
+.text-elysion-gray-950 { color: var(--elysion-gray-950); }
+
+/* Semantic Text */
+.text-elysion-success-500 { color: var(--elysion-success-500); }
+.text-elysion-success-600 { color: var(--elysion-success-600); }
+.text-elysion-success-700 { color: var(--elysion-success-700); }
+
+.text-elysion-warning-500 { color: var(--elysion-warning-500); }
+.text-elysion-warning-600 { color: var(--elysion-warning-600); }
+.text-elysion-warning-700 { color: var(--elysion-warning-700); }
+
+.text-elysion-error-500 { color: var(--elysion-error-500); }
+.text-elysion-error-600 { color: var(--elysion-error-600); }
+.text-elysion-error-700 { color: var(--elysion-error-700); }
+
+/* Legacy Text Colors */
+.text-elysion-text-dark { color: var(--elysion-text-dark); }
+.text-elysion-text-light { color: var(--elysion-text-light); }
+
+/* ============================================
+   BORDER COLOR UTILITIES
+   ============================================ */
+.border-elysion-primary { border-color: var(--elysion-primary); }
+.border-elysion-primary-200 { border-color: var(--elysion-primary-200); }
+.border-elysion-primary-300 { border-color: var(--elysion-primary-300); }
+.border-elysion-primary-400 { border-color: var(--elysion-primary-400); }
+
+.border-elysion-accent { border-color: var(--elysion-accent); }
+.border-elysion-accent-200 { border-color: var(--elysion-accent-200); }
+.border-elysion-accent-300 { border-color: var(--elysion-accent-300); }
+.border-elysion-accent-400 { border-color: var(--elysion-accent-400); }
+
+.border-elysion-secondary { border-color: var(--elysion-secondary); }
+.border-elysion-gray-200 { border-color: var(--elysion-gray-200); }
+.border-elysion-gray-300 { border-color: var(--elysion-gray-300); }
 
 /* Button Styles */
 .btn-elysion-primary {
@@ -224,19 +289,40 @@ body {
 /* Input Styles */
 .input-elysion {
   width: 100%;
-  padding: 16px 20px;
-  border: 2px solid #e5e7eb;
-  border-radius: 12px;
-  font-size: 16px;
+  padding: 14px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 15px;
   font-family: 'Montserrat', sans-serif;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   background-color: white;
+  color: var(--elysion-text-dark);
 }
 
 .input-elysion:focus {
   outline: none;
   border-color: var(--elysion-primary);
-  box-shadow: 0 0 0 3px rgba(10, 65, 142, 0.1);
+  box-shadow: 0 0 0 2px rgba(10, 65, 142, 0.08);
+}
+
+.input-elysion::placeholder {
+  color: #9ca3af;
+}
+
+/* Select specific styles */
+select.input-elysion {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 40px;
+}
+
+/* Textarea styles */
+textarea.input-elysion {
+  min-height: 100px;
+  resize: vertical;
 }
 
 /* Card Styles */
@@ -327,3 +413,292 @@ body {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+/* ========================================
+   COMPLETE BUTTON STATE SYSTEM
+   All buttons with 4 states: default, hover, pressed, disabled
+   ======================================== */
+
+/* PRIMARY BUTTON - Main actions */
+.btn-primary {
+  background-color: var(--elysion-primary-500);
+  color: #FFFFFF;
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(10, 65, 142, 0.2);
+  font-family: 'Montserrat', sans-serif;
+}
+
+.btn-primary:hover {
+  background-color: var(--elysion-primary-600);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(10, 65, 142, 0.3);
+}
+
+.btn-primary:active {
+  background-color: var(--elysion-primary-700);
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(10, 65, 142, 0.3);
+}
+
+.btn-primary:disabled {
+  background-color: var(--elysion-gray-300);
+  color: var(--elysion-gray-500);
+  cursor: not-allowed;
+  opacity: 0.6;
+  box-shadow: none;
+  transform: none;
+}
+
+/* ACCENT BUTTON - CTAs */
+.btn-accent {
+  background-color: var(--elysion-accent-500);
+  color: var(--elysion-primary-900);
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(251, 176, 59, 0.25);
+  font-family: 'Montserrat', sans-serif;
+}
+
+.btn-accent:hover {
+  background-color: var(--elysion-accent-600);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(251, 176, 59, 0.4);
+}
+
+.btn-accent:active {
+  background-color: var(--elysion-accent-700);
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(251, 176, 59, 0.3);
+}
+
+.btn-accent:disabled {
+  background-color: var(--elysion-gray-300);
+  color: var(--elysion-gray-500);
+  cursor: not-allowed;
+  opacity: 0.6;
+  box-shadow: none;
+  transform: none;
+}
+
+/* OUTLINE BUTTON - Secondary actions */
+.btn-outline {
+  background-color: transparent;
+  color: var(--elysion-primary-500);
+  border: 2px solid var(--elysion-primary-500);
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.btn-outline:hover {
+  background-color: var(--elysion-primary-50);
+  color: var(--elysion-primary-600);
+  border-color: var(--elysion-primary-600);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(10, 65, 142, 0.15);
+}
+
+.btn-outline:active {
+  background-color: var(--elysion-primary-100);
+  color: var(--elysion-primary-700);
+  border-color: var(--elysion-primary-700);
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.btn-outline:disabled {
+  background-color: transparent;
+  color: var(--elysion-gray-400);
+  border-color: var(--elysion-gray-300);
+  cursor: not-allowed;
+  opacity: 0.6;
+  box-shadow: none;
+  transform: none;
+}
+
+/* GHOST BUTTON - Tertiary actions */
+.btn-ghost {
+  background-color: transparent;
+  color: var(--elysion-primary-500);
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.btn-ghost:hover {
+  background-color: var(--elysion-primary-50);
+  color: var(--elysion-primary-600);
+}
+
+.btn-ghost:active {
+  background-color: var(--elysion-primary-100);
+  color: var(--elysion-primary-700);
+}
+
+.btn-ghost:disabled {
+  background-color: transparent;
+  color: var(--elysion-gray-400);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* SECONDARY BUTTON - Alternative actions */
+.btn-secondary {
+  background-color: var(--elysion-secondary-300);
+  color: var(--elysion-primary-800);
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(168, 195, 231, 0.25);
+  font-family: 'Montserrat', sans-serif;
+}
+
+.btn-secondary:hover {
+  background-color: var(--elysion-secondary-400);
+  color: #FFFFFF;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(168, 195, 231, 0.35);
+}
+
+.btn-secondary:active {
+  background-color: var(--elysion-secondary-500);
+  color: #FFFFFF;
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(168, 195, 231, 0.3);
+}
+
+.btn-secondary:disabled {
+  background-color: var(--elysion-gray-300);
+  color: var(--elysion-gray-500);
+  cursor: not-allowed;
+  opacity: 0.6;
+  box-shadow: none;
+  transform: none;
+}
+
+/* DANGER BUTTON - Destructive actions */
+.btn-danger {
+  background-color: var(--elysion-error-500);
+  color: #FFFFFF;
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(239, 68, 68, 0.25);
+  font-family: 'Montserrat', sans-serif;
+}
+
+.btn-danger:hover {
+  background-color: var(--elysion-error-600);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.35);
+}
+
+.btn-danger:active {
+  background-color: var(--elysion-error-700);
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(239, 68, 68, 0.3);
+}
+
+.btn-danger:disabled {
+  background-color: var(--elysion-gray-300);
+  color: var(--elysion-gray-500);
+  cursor: not-allowed;
+  opacity: 0.6;
+  box-shadow: none;
+  transform: none;
+}
+
+/* BUTTON SIZES */
+.btn-sm {
+  padding: 8px 16px;
+  font-size: 14px;
+  border-radius: 6px;
+}
+
+.btn-md {
+  padding: 12px 24px;
+  font-size: 16px;
+  border-radius: 8px;
+}
+
+.btn-lg {
+  padding: 16px 32px;
+  font-size: 18px;
+  border-radius: 10px;
+}
+
+/* FOCUS STATE FOR ACCESSIBILITY */
+.btn-primary:focus-visible,
+.btn-accent:focus-visible,
+.btn-outline:focus-visible,
+.btn-ghost:focus-visible,
+.btn-secondary:focus-visible,
+.btn-danger:focus-visible {
+  outline: 3px solid var(--elysion-accent-400);
+  outline-offset: 2px;
+}
+
+/* LOADING STATE */
+.btn-loading {
+  position: relative;
+  color: transparent;
+  pointer-events: none;
+}
+
+.btn-loading::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 50%;
+  left: 50%;
+  margin-left: -8px;
+  margin-top: -8px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+/* Icon Buttons */
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-icon-only {
+  padding: 12px;
+  width: 44px;
+  height: 44px;
+}
+

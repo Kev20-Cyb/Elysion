@@ -326,7 +326,7 @@ async def forgot_password(request: ForgotPasswordRequest):
     reset_token = create_reset_token(request.email)
     
     # In production, send email here. For MVP, we'll return the reset link
-    reset_link = f"https://future-nest-1.preview.emergentagent.com/reset-password?token={reset_token}"
+    reset_link = f"https://retire-planner-13.preview.emergentagent.com/reset-password?token={reset_token}"
     
     # Store reset token in database (optional for tracking)
     await db.password_resets.insert_one({

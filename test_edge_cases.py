@@ -8,7 +8,7 @@ import json
 import re
 from datetime import datetime
 
-BASE_URL = "https://future-nest-1.preview.emergentagent.com/api"
+BASE_URL = "https://retire-planner-13.preview.emergentagent.com/api"
 
 def test_token_reuse():
     """Test that reset tokens cannot be reused"""

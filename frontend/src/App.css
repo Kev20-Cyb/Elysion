@@ -105,12 +105,241 @@ body {
   font-family: 'Montserrat', sans-serif;
   background-color: var(--elysion-bg);
   color: var(--elysion-text-dark);
+  font-size: 16px;
+  font-weight: 400;
   line-height: 1.6;
+  -webkit-text-size-adjust: 100%;
 }
 
 .App {
   min-height: 100vh;
 }
+
+/* ============================================
+   BASE TYPOGRAPHY - Complete Properties
+   ============================================ */
+
+/* Headings */
+h1, .h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: inherit;
+}
+
+h2, .h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: inherit;
+}
+
+h3, .h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: inherit;
+}
+
+h4, .h4 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: inherit;
+}
+
+h5, .h5 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: inherit;
+}
+
+h6, .h6 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5;
+  color: inherit;
+}
+
+/* Paragraphs and Body Text */
+p {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.6;
+  color: inherit;
+}
+
+/* Small Text */
+small, .text-small {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.text-xs {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+/* Labels */
+label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.5;
+  color: inherit;
+}
+
+/* Links */
+a {
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  color: var(--elysion-primary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--elysion-primary-600);
+}
+
+/* Span inherits from parent */
+span {
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  color: inherit;
+}
+
+/* Strong/Bold */
+strong, b {
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 700;
+  line-height: inherit;
+  color: inherit;
+}
+
+/* Emphasis/Italic */
+em, i {
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  font-style: italic;
+  line-height: inherit;
+  color: inherit;
+}
+
+/* Lists */
+ul, ol {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+li {
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+}
+
+/* Blockquote */
+blockquote {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.125rem;
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.7;
+  color: var(--elysion-gray-600);
+}
+
+/* Code */
+code, pre {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+/* Form Elements Base Typography */
+input, textarea, select, button {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+/* Placeholder Text */
+::placeholder {
+  font-family: 'Montserrat', sans-serif;
+  font-size: inherit;
+  font-weight: 400;
+  line-height: inherit;
+  color: var(--elysion-gray-400);
+}
+
+/* ============================================
+   TYPOGRAPHY UTILITY CLASSES
+   ============================================ */
+
+/* Font Weights */
+.font-thin { font-weight: 100; }
+.font-extralight { font-weight: 200; }
+.font-light { font-weight: 300; }
+.font-normal { font-weight: 400; }
+.font-medium { font-weight: 500; }
+.font-semibold { font-weight: 600; }
+.font-bold { font-weight: 700; }
+.font-extrabold { font-weight: 800; }
+.font-black { font-weight: 900; }
+
+/* Font Sizes */
+.text-2xs { font-size: 0.625rem; line-height: 1.4; }
+.text-xs { font-size: 0.75rem; line-height: 1.4; }
+.text-sm { font-size: 0.875rem; line-height: 1.5; }
+.text-base { font-size: 1rem; line-height: 1.6; }
+.text-lg { font-size: 1.125rem; line-height: 1.6; }
+.text-xl { font-size: 1.25rem; line-height: 1.5; }
+.text-2xl { font-size: 1.5rem; line-height: 1.4; }
+.text-3xl { font-size: 1.875rem; line-height: 1.3; }
+.text-4xl { font-size: 2.25rem; line-height: 1.25; }
+.text-5xl { font-size: 3rem; line-height: 1.2; }
+.text-6xl { font-size: 3.75rem; line-height: 1.1; }
+
+/* Line Heights */
+.leading-none { line-height: 1; }
+.leading-tight { line-height: 1.25; }
+.leading-snug { line-height: 1.375; }
+.leading-normal { line-height: 1.5; }
+.leading-relaxed { line-height: 1.625; }
+.leading-loose { line-height: 2; }
+
+/* Letter Spacing */
+.tracking-tighter { letter-spacing: -0.05em; }
+.tracking-tight { letter-spacing: -0.025em; }
+.tracking-normal { letter-spacing: 0; }
+.tracking-wide { letter-spacing: 0.025em; }
+.tracking-wider { letter-spacing: 0.05em; }
+.tracking-widest { letter-spacing: 0.1em; }
 
 /* Utility Classes */
 .font-montserrat {

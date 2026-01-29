@@ -1325,7 +1325,7 @@ const EmployeeSimulator = () => {
             { value: 'medium', label: '10 à 20 ans', desc: 'Horizon moyen - équilibre rendement/risque' },
             { value: 'long', label: 'Plus de 20 ans', desc: 'Horizon long - potentiel de croissance' }
           ].map(option => (
-            <label key={option.value} className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${formData.investmentHorizon === option.value ? 'border-elysion-primary bg-elysion-primary-50' : 'border-gray-200 hover:bg-gray-50'}`}>
+            <label key={option.value} className={`flex items-center gap-3 p-3 rounded-lg border-2 cursor-pointer transition-colors ${formData.investmentHorizon === option.value ? 'border-elysion-primary' : 'border-gray-200 hover:bg-gray-50'}`}>
               <input
                 type="radio"
                 name="horizon"
@@ -1353,7 +1353,7 @@ const EmployeeSimulator = () => {
             { value: '10', label: 'Jusqu\'à 10%', desc: 'Modéré - j\'accepte quelques fluctuations' },
             { value: '20', label: 'Jusqu\'à 20% ou plus', desc: 'Tolérant - je vise le long terme' }
           ].map(option => (
-            <label key={option.value} className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${formData.lossToleranceLevel === option.value ? 'border-elysion-primary bg-elysion-primary-50' : 'border-gray-200 hover:bg-gray-50'}`}>
+            <label key={option.value} className={`flex items-center gap-3 p-3 rounded-lg border-2 cursor-pointer transition-colors ${formData.lossToleranceLevel === option.value ? 'border-elysion-primary' : 'border-gray-200 hover:bg-gray-50'}`}>
               <input
                 type="radio"
                 name="lossTolerance"
@@ -1381,7 +1381,7 @@ const EmployeeSimulator = () => {
             { value: 'intermediate', label: 'Intermédiaire', desc: 'J\'ai déjà investi (assurance-vie, PEA...)' },
             { value: 'advanced', label: 'Avancé', desc: 'Je suis à l\'aise avec les marchés financiers' }
           ].map(option => (
-            <label key={option.value} className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${formData.marketKnowledge === option.value ? 'border-elysion-primary bg-elysion-primary-50' : 'border-gray-200 hover:bg-gray-50'}`}>
+            <label key={option.value} className={`flex items-center gap-3 p-3 rounded-lg border-2 cursor-pointer transition-colors ${formData.marketKnowledge === option.value ? 'border-elysion-primary' : 'border-gray-200 hover:bg-gray-50'}`}>
               <input
                 type="radio"
                 name="knowledge"

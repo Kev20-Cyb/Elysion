@@ -1,109 +1,87 @@
-# Elysion - Simulateur de Retraite
+# Elysion - Product Requirements Document
 
-## Description du projet
-Elysion est une application de planification de retraite permettant aux utilisateurs français de simuler leur pension de retraite selon leur statut professionnel (Salarié ou Freelance).
+## 📌 Original Problem Statement
+Build and enhance "Elysion," a comprehensive retirement planning and simulation tool for the French market. The application helps users understand their retirement prospects, simulate scenarios, and make informed decisions.
 
-## Stack Technique
-- **Frontend**: React + TailwindCSS + Shadcn UI
-- **Backend**: FastAPI (Python) / Option Node.js+Express disponible
-- **Base de données**: MongoDB
+## 👥 User Personas
+- **Salariés (Employees)**: Workers with CDI/CDD contracts who need to plan for retirement
+- **Freelances/Indépendants**: Self-employed professionals who need to manage their own retirement planning
 
-## Fonctionnalités implémentées
+## 🎯 Core Requirements
+1. Two simulation flows: Employee and Freelance
+2. User authentication and account management
+3. Dashboard with real-time data
+4. Investment axes recommendations
+5. Profile management
+6. Automatic saving of simulation results
 
-### Simulateurs de retraite
-- **Simulateur Salarié** (`/simulator/employee`): 7 étapes avec module épargne
-- **Simulateur Freelance** (`/simulator/freelance`): 6 étapes avec module épargne
-- **Routeur Simulateur** (`/simulator`): Page de choix entre Salarié et Freelance
+## ✅ What's Been Implemented
 
-### Tunnel Salarié (7 étapes)
-1. Profil & carrière
-2. Historique des salaires
-3. Trimestres & enfants
-4. Retraite complémentaire (Agirc-Arrco)
-5. **NOUVEAU** : Épargne & Besoin (objectif de revenu, capital existant)
-6. **NOUVEAU** : Profil de risque (3 questions, classification automatique)
-7. Scénarios de départ (choix des âges)
-→ Résultats avec projections d'épargne
+### Session - January 2026
 
-### Tunnel Freelance (6 étapes)
-1. Profil & statut
-2. Historique des revenus
-3. Trimestres assimilés
-4. Récapitulatif carrière
-5. **NOUVEAU** : Épargne & Besoin
-6. **NOUVEAU** : Profil de risque
-→ Résultats avec projections d'épargne
+#### UI/UX Improvements
+- [x] Removed blue background on selected risk tolerance options (step 6) - Jan 29, 2026
+- [x] Replaced gradient backgrounds with solid colors for better text readability
+- [x] Profile page with tabs for personal info, security, preferences
 
-### Calculs avancés
-- Valeur du point: `1,4386€`
-- +8 trimestres automatiques par enfant pour les femmes
-- Périodes d'inactivité en jours ou mois (chômage, congé parental, maladie)
-- Champ "Date de naissance" complet (jour/mois/année) au lieu de l'année seule
-- **NOUVEAU** : Calcul du taux de remplacement
-- **NOUVEAU** : Profils de risque (Prudent 1.5%, Équilibré 4%, Dynamique 7%)
-- **NOUVEAU** : Calcul de l'effort d'épargne mensuel par profil
-- Redirection finale vers `/onboarding`
+#### Core Features
+- [x] Dashboard connected to live backend data
+- [x] Dynamic Investment Axes page based on user simulation data
+- [x] Automatic simulation saving for logged-in users
+- [x] Onboarding flow with "Prénom" (First Name) field
+- [x] Auto-login for existing email during registration
 
-### Design System
-- Variables CSS complètes avec échelles de couleurs
-- Classes utilitaires: `bg-elysion-*`, `text-elysion-*`, `border-elysion-*`
-- Style d'input léger et moderne (`.input-elysion`)
-- Système de boutons complet avec états
-- Checkboxes stylisées en primary
+#### Bug Fixes
+- [x] Backend routing issues for `/api/documents/*`
+- [x] Frontend race condition causing "Not authenticated" errors
+- [x] Pydantic validation error rendering in frontend
+- [x] Dashboard ValidationError fix (pending verification)
 
-### Tableau de bord
-- Section "Votre objectif retraite" avec écart à combler
-- Aperçu des axes d'investissement
-- Bouton "Atteindre cet objectif" → page `/investment-axes`
+## 🔴 Priority Tasks (P0)
+1. **Dashboard Loading Bug** - Verify fix for ValidationError when loading dashboard after simulation + account creation
+2. **Automatic Simulation Saving** - Verify feature works end-to-end
 
-### Page Axes d'investissement (NOUVEAU)
-- 4 blocs d'axes : Épargne sécurisée, Épargne retraite, Marchés financiers, Immobilier
-- Présentation neutre sans CTA vers produits spécifiques
-- Détails avec avantages/contraintes
-- Conseils pratiques (horizon, diversification, accompagnement)
-- Mention de prudence obligatoire
+## 🟡 Upcoming Tasks (P1)
+- **PDF Export** - Generate and download PDF summary of simulation results
 
-### Documentation
-- `CALCUL_RETRAITE_SALARIE.md` - Logique de calcul salarié
-- `CALCUL_RETRAITE_FREELANCE.md` - Logique de calcul freelance
-- `DATABASE_SCHEMA.md` - Schéma MongoDB
-- `DATABASE_SCHEMA.sql` - Schéma PostgreSQL hypothétique
-- `ELYSION_DESIGN_SYSTEM_COMPLETE.md` - Design system complet
+## 🟢 Future Tasks (P2/P3)
+- Interactive Investment Comparator
+- Unsaved Changes Warning modal
+- Age validation (min/max) for date of birth input
+- UI Consistency - Radio button styling
+- Code Quality - Fix unescaped apostrophes in JSX
 
-## Exports disponibles
-- `/app/export/elysion-nodejs-postgresql.zip` - Version Node.js/Express/PostgreSQL
-- `/app/export/Elysion-main-merged.zip` - Codebase fusionné avec toutes les modifications
+## 🏗 Architecture
 
-## Tâches complétées (Session actuelle - Janvier 2025)
-- [x] Fusion des fonctionnalités dans `/app/export/Elysion-main/`
-- [x] Mise à jour complète de `App.css` avec toutes les classes utilitaires
-- [x] Copie des fichiers de documentation
-- [x] Création de l'archive `Elysion-main-merged.zip`
-
-## Tâches en backlog
-
-### P1 - Priorité haute
-- [ ] Compléter le composant `Documents.js` (actuellement placeholder)
-  - Upload de fichiers
-  - Liste et gestion des documents
-  - Téléchargement et suppression
-
-### P2 - Priorité moyenne
-- [ ] Connecter le Dashboard aux vraies données backend (utilise données mockées)
-- [ ] Tests automatisés pour les simulateurs
-
-## Architecture des fichiers clés
 ```
-/app/export/Elysion-main/
-├── frontend/src/
-│   ├── App.js (routes configurées)
-│   ├── App.css (classes utilitaires complètes)
-│   └── components/
-│       ├── Simulator.js (routeur)
-│       ├── EmployeeSimulator.js (6 étapes)
-│       ├── FreelanceSimulator.js (6 étapes)
-│       └── Documents.js (placeholder)
-├── CALCUL_RETRAITE_*.md
-├── DATABASE_SCHEMA.*
-└── ELYSION_DESIGN_SYSTEM_COMPLETE.md
+/app/
+├── backend/
+│   └── server.py           # FastAPI backend
+├── frontend/
+│   ├── src/
+│   │   ├── App.js          # Routes and auth context
+│   │   └── components/
+│   │       ├── EmployeeSimulator.js
+│   │       ├── FreelanceSimulator.js
+│   │       ├── Dashboard.js
+│   │       ├── InvestmentAxes.js
+│   │       ├── ProfilePage.js
+│   │       └── OnboardingFlow.js
+└── export/
+    └── Elysion-main/       # Synchronized export folder
 ```
+
+## 🔑 Key API Endpoints
+- `GET /api/dashboard` - Fetch user dashboard data
+- `POST /api/simulation/save` - Save simulation results
+- `GET /api/simulation/latest` - Get most recent simulation
+- `PUT /api/user/profile` - Update personal information
+- `POST /api/user/password` - Change password
+
+## 📊 Database Schema (MongoDB)
+- **users**: User accounts and profiles
+- **simulation_results**: Comprehensive simulation data including investment breakdown
+
+## ⚠️ Known Issues
+- Dashboard loading may fail due to ValidationError (fix pending verification)
+- Linter warnings for unescaped apostrophes in JSX files

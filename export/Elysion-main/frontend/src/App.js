@@ -16,8 +16,9 @@ import FreelanceSimulator from './components/FreelanceSimulator';
 import EmployeeSimulator from './components/EmployeeSimulator';
 import InvestmentAxes from './components/InvestmentAxes';
 import ProfilePage from './components/ProfilePage';
+import ChatBubble from './components/ChatBubble';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
 const API = `${BACKEND_URL}/api`;
 
 // Auth Context
@@ -158,6 +159,13 @@ const ProtectedRoute = ({ children }) => {
   return isAuthenticated ? children : <Navigate to="/auth" replace />;
 };
 
+// Chat visible seulement si connecté
+const ChatWhenAuthed = () => {
+  const { isAuthenticated, loading } = useAuth();
+  if (loading) return null;
+  return isAuthenticated ? <ChatBubble /> : null;
+};
+
 function App() {
   return (
     <AuthProvider>
@@ -205,6 +213,9 @@ function App() {
               } 
             />
           </Routes>
+          
+          {/* Le chatbot est disponible partout quand connecté */}
+          <ChatWhenAuthed />
         </BrowserRouter>
       </div>
     </AuthProvider>

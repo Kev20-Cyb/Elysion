@@ -20,6 +20,7 @@ const PORT = process.env.PORT || 5000;
 const allowedOrigins = [
   "http://localhost:3000",
   "http://localhost:3001",
+  "https://elysion-france.fr",
   process.env.FRONTEND_ORIGIN, // pour la prod
 ].filter(Boolean);
 

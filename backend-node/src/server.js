@@ -1,4 +1,4 @@
-require('dotenv').config();
+require("dotenv").config();
 
 console.log("ORISHAI_API_BASE_URL =", process.env.ORISHAI_API_BASE_URL);
 
@@ -14,35 +14,66 @@ const chatConfigRoutes = require("./routes/chatConfig.routes");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware global
-app.use(express.json());
+/* =========================
+   CORS CONFIG (FIX)
+========================= */
+const allowedOrigins = [
+  "http://localhost:3000",
+  "http://localhost:3001",
+  process.env.FRONTEND_ORIGIN, // pour la prod
+].filter(Boolean);
 
 app.use(
   cors({
-    origin: process.env.FRONTEND_ORIGIN || "http://localhost:3000",
+    origin: (origin, cb) => {
+      // Autorise Postman / curl / SSR
+      if (!origin) return cb(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        return cb(null, true);
+      }
+
+      return cb(new Error(`CORS blocked: ${origin}`));
+    },
     credentials: true,
   })
 );
 
-// Health check
+// 🔥 IMPORTANT pour les preflight requests
+app.options("*", cors());
+
+/* =========================
+   MIDDLEWARES
+========================= */
+app.use(express.json());
+
+/* =========================
+   HEALTH CHECK
+========================= */
 app.get("/api/health", (req, res) => {
   res.json({ ok: true, backend: "elysion-node" });
 });
 
-// Routes
+/* =========================
+   ROUTES
+========================= */
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/chat/config", chatConfigRoutes);
 
-// Gestion erreurs basiques
+/* =========================
+   ERROR HANDLER
+========================= */
 app.use((err, req, res, next) => {
-  console.error("Unhandled error:", err);
+  console.error("Unhandled error:", err.message || err);
   res.status(500).json({ detail: "Internal server error" });
 });
 
-// Start server
+/* =========================
+   START SERVER
+========================= */
 app.listen(PORT, async () => {
   try {
     await connectDB();

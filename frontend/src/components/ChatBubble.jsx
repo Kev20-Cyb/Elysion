@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useAuth } from '../App';
-import { sendMessage } from '../lib/chatClient';
+import React, { useState, useEffect, useRef } from "react";
+import { useAuth } from "../App";
+import { sendMessage } from "../lib/chatClient";
 
 // Petite bulle de chat en bas à droite + panneau minimal
 export default function ChatBubble() {
@@ -23,19 +23,26 @@ export default function ChatBubble() {
     }
   }, [isAuthenticated]);
 
+  // Auto-scroll quand on ouvre ou quand un nouveau message arrive
   useEffect(() => {
     if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [messages, open]);
+  }, [messages.length, open]);
 
-  // Ajouter un message d'accueil/proposition quand on ouvre la bulle pour la première fois
+  // Message d’accueil quand on ouvre la bulle la 1ère fois
   useEffect(() => {
     if (open && messages.length === 0) {
-      const welcomeText = `Bonjour ! Je suis l'assistant Elysion.\nVoici quelques propositions :\n• Voir votre dashboard\n• Poser une question sur votre compte\n• Demander de l'aide pour un projet`;
-      setMessages([{ from: 'bot', text: welcomeText }]);
+      const welcomeText =
+        `Bonjour ! Je suis l'assistant Elysion.\n` +
+        `Voici quelques propositions :\n` +
+        `• Voir votre dashboard\n` +
+        `• Poser une question sur votre compte\n` +
+        `• Demander de l'aide pour un projet`;
+
+      setMessages([{ from: "bot", text: welcomeText }]);
     }
-  }, [open]);
+  }, [open, messages.length]);
 
   const suggestions = [
     'Voir votre dashboard',

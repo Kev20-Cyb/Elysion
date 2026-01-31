@@ -1,13 +1,17 @@
 -- ============================================
 -- ELYSION - Schéma de Base de Données SQL
 -- ============================================
--- Version : 1.0
--- Date : Janvier 2025
+-- Version : 2.0
+-- Date : Janvier 2026
 -- Application : Elysion - Plateforme de Retraite
 -- Note : Adaptation SQL du schéma MongoDB
+-- Mise à jour : Ajout simulation_results, first_name, profil risque
 -- ============================================
 
 -- Supprimer les tables existantes (ordre inverse des dépendances)
+DROP TABLE IF EXISTS ref_quarter_thresholds;
+DROP TABLE IF EXISTS simulation_results;
+DROP TABLE IF EXISTS simulation_scenarios;
 DROP TABLE IF EXISTS password_resets;
 DROP TABLE IF EXISTS documents;
 DROP TABLE IF EXISTS retirement_profiles;
@@ -18,6 +22,9 @@ DROP TABLE IF EXISTS users;
 DROP TYPE IF EXISTS user_type;
 DROP TYPE IF EXISTS document_category;
 DROP TYPE IF EXISTS gender_type;
+DROP TYPE IF EXISTS risk_profile_type;
+DROP TYPE IF EXISTS investment_horizon_type;
+DROP TYPE IF EXISTS market_knowledge_type;
 
 -- ============================================
 -- TYPES ÉNUMÉRÉS
@@ -45,6 +52,27 @@ CREATE TYPE gender_type AS ENUM (
     'F'   -- Femme
 );
 
+-- Profil de risque
+CREATE TYPE risk_profile_type AS ENUM (
+    'prudent',    -- Profil prudent
+    'equilibre',  -- Profil équilibré
+    'dynamique'   -- Profil dynamique
+);
+
+-- Horizon d'investissement
+CREATE TYPE investment_horizon_type AS ENUM (
+    'short',   -- Moins de 10 ans
+    'medium',  -- 10 à 20 ans
+    'long'     -- Plus de 20 ans
+);
+
+-- Connaissance des marchés
+CREATE TYPE market_knowledge_type AS ENUM (
+    'beginner',      -- Débutant
+    'intermediate',  -- Intermédiaire
+    'advanced'       -- Avancé
+);
+
 -- ============================================
 -- TABLE : users
 -- Description : Comptes utilisateurs et authentification
@@ -54,8 +82,10 @@ CREATE TABLE users (
     email VARCHAR(255) NOT NULL UNIQUE,
     hashed_password VARCHAR(255) NOT NULL,
     full_name VARCHAR(255) NOT NULL,
+    first_name VARCHAR(100),
     user_type user_type NOT NULL DEFAULT 'employee',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     is_active BOOLEAN DEFAULT TRUE,
     
     -- Contraintes
@@ -67,8 +97,10 @@ COMMENT ON COLUMN users.id IS 'Identifiant unique UUID';
 COMMENT ON COLUMN users.email IS 'Adresse email unique de l''utilisateur';
 COMMENT ON COLUMN users.hashed_password IS 'Mot de passe hashé (SHA-256)';
 COMMENT ON COLUMN users.full_name IS 'Nom complet de l''utilisateur';
+COMMENT ON COLUMN users.first_name IS 'Prénom de l''utilisateur';
 COMMENT ON COLUMN users.user_type IS 'Type de profil : employee, freelancer, business_owner';
 COMMENT ON COLUMN users.created_at IS 'Date de création du compte';
+COMMENT ON COLUMN users.updated_at IS 'Date de dernière modification';
 COMMENT ON COLUMN users.is_active IS 'Indique si le compte est actif';
 
 -- ============================================
@@ -168,6 +200,12 @@ CREATE TABLE retirement_profiles (
     agirc_arrco_points INTEGER DEFAULT 0,
     rci_points INTEGER DEFAULT 0,
     
+    -- Profil de risque
+    risk_profile risk_profile_type DEFAULT 'equilibre',
+    investment_horizon investment_horizon_type DEFAULT 'medium',
+    loss_tolerance_level VARCHAR(10) DEFAULT '10',
+    market_knowledge market_knowledge_type DEFAULT 'beginner',
+    
     -- Métadonnées
     last_updated TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     
@@ -191,6 +229,77 @@ COMMENT ON COLUMN retirement_profiles.estimated_pension IS 'Pension mensuelle es
 COMMENT ON COLUMN retirement_profiles.replacement_rate IS 'Taux de remplacement en pourcentage';
 COMMENT ON COLUMN retirement_profiles.agirc_arrco_points IS 'Points Agirc-Arrco (salariés)';
 COMMENT ON COLUMN retirement_profiles.rci_points IS 'Points RCI (indépendants)';
+COMMENT ON COLUMN retirement_profiles.risk_profile IS 'Profil de risque : prudent, equilibre, dynamique';
+COMMENT ON COLUMN retirement_profiles.investment_horizon IS 'Horizon d''investissement : short, medium, long';
+COMMENT ON COLUMN retirement_profiles.loss_tolerance_level IS 'Niveau de tolérance aux pertes : 5, 10, 20';
+COMMENT ON COLUMN retirement_profiles.market_knowledge IS 'Connaissance des marchés : beginner, intermediate, advanced';
+
+-- ============================================
+-- TABLE : simulation_results
+-- Description : Résultats de simulation sauvegardés
+-- ============================================
+CREATE TABLE simulation_results (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL,
+    
+    -- Type de simulation
+    simulation_type VARCHAR(20) NOT NULL DEFAULT 'employee',
+    
+    -- Données d'entrée
+    birth_date DATE,
+    current_age INTEGER,
+    retirement_age INTEGER,
+    monthly_income DECIMAL(12, 2),
+    current_savings DECIMAL(12, 2),
+    desired_income_percent DECIMAL(5, 2),
+    desired_income_fixed DECIMAL(12, 2),
+    
+    -- Résultats principaux
+    estimated_pension DECIMAL(12, 2),
+    base_pension DECIMAL(12, 2),
+    complementary_pension DECIMAL(12, 2),
+    replacement_rate DECIMAL(5, 2),
+    monthly_gap DECIMAL(12, 2),
+    required_monthly_savings DECIMAL(12, 2),
+    
+    -- Profil de risque
+    risk_profile risk_profile_type,
+    investment_horizon investment_horizon_type,
+    loss_tolerance_level VARCHAR(10),
+    market_knowledge market_knowledge_type,
+    
+    -- Axes d'investissement suggérés (montants mensuels)
+    secure_savings DECIMAL(12, 2) DEFAULT 0,
+    retirement_savings DECIMAL(12, 2) DEFAULT 0,
+    per_savings DECIMAL(12, 2) DEFAULT 0,
+    real_estate_savings DECIMAL(12, 2) DEFAULT 0,
+    stock_savings DECIMAL(12, 2) DEFAULT 0,
+    
+    -- Scénarios multiples (JSON pour flexibilité)
+    scenarios JSONB,
+    
+    -- Métadonnées
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    
+    -- Clé étrangère
+    CONSTRAINT fk_simulation_results_user 
+        FOREIGN KEY (user_id) 
+        REFERENCES users(id) 
+        ON DELETE CASCADE
+);
+
+COMMENT ON TABLE simulation_results IS 'Résultats de simulation de retraite sauvegardés automatiquement';
+COMMENT ON COLUMN simulation_results.simulation_type IS 'Type : employee ou freelance';
+COMMENT ON COLUMN simulation_results.estimated_pension IS 'Pension mensuelle estimée totale';
+COMMENT ON COLUMN simulation_results.monthly_gap IS 'Écart mensuel entre revenu souhaité et pension estimée';
+COMMENT ON COLUMN simulation_results.required_monthly_savings IS 'Épargne mensuelle nécessaire pour combler l''écart';
+COMMENT ON COLUMN simulation_results.secure_savings IS 'Montant suggéré pour livrets sécurisés';
+COMMENT ON COLUMN simulation_results.retirement_savings IS 'Montant suggéré pour assurance-vie';
+COMMENT ON COLUMN simulation_results.per_savings IS 'Montant suggéré pour PER';
+COMMENT ON COLUMN simulation_results.real_estate_savings IS 'Montant suggéré pour SCPI/immobilier';
+COMMENT ON COLUMN simulation_results.stock_savings IS 'Montant suggéré pour PEA/actions';
+COMMENT ON COLUMN simulation_results.scenarios IS 'Scénarios multiples au format JSON';
 
 -- ============================================
 -- TABLE : documents
@@ -242,7 +351,7 @@ CREATE TABLE password_resets (
     expires_at TIMESTAMP WITH TIME ZONE DEFAULT (CURRENT_TIMESTAMP + INTERVAL '1 hour'),
     used BOOLEAN DEFAULT FALSE,
     
-    -- Index pour recherche rapide
+    -- Contrainte
     CONSTRAINT password_resets_email_check 
         CHECK (email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$')
 );
@@ -292,6 +401,45 @@ COMMENT ON COLUMN simulation_scenarios.decote_rate IS 'Taux de décote appliqué
 COMMENT ON COLUMN simulation_scenarios.surcote_rate IS 'Taux de surcote appliqué';
 
 -- ============================================
+-- TABLE : ref_quarter_thresholds
+-- Description : Valeurs de référence pour calcul trimestres
+-- ============================================
+CREATE TABLE ref_quarter_thresholds (
+    id SERIAL PRIMARY KEY,
+    year INTEGER NOT NULL UNIQUE,
+    threshold_1_quarter DECIMAL(10, 2),
+    threshold_2_quarters DECIMAL(10, 2),
+    threshold_3_quarters DECIMAL(10, 2),
+    threshold_4_quarters DECIMAL(10, 2),
+    point_value_agirc_arrco DECIMAL(6, 4),
+    point_value_rci DECIMAL(6, 4),
+    smic_hourly DECIMAL(6, 4),
+    plafond_ss DECIMAL(12, 2)
+);
+
+COMMENT ON TABLE ref_quarter_thresholds IS 'Valeurs de référence pour le calcul des trimestres et points';
+COMMENT ON COLUMN ref_quarter_thresholds.smic_hourly IS 'SMIC horaire brut';
+COMMENT ON COLUMN ref_quarter_thresholds.plafond_ss IS 'Plafond annuel de la Sécurité Sociale';
+
+-- Valeurs 2024
+INSERT INTO ref_quarter_thresholds 
+(year, threshold_1_quarter, threshold_2_quarters, threshold_3_quarters, threshold_4_quarters, point_value_agirc_arrco, point_value_rci, smic_hourly, plafond_ss)
+VALUES 
+(2024, 1747.50, 3495.00, 5242.50, 6990.00, 1.4386, 1.4386, 11.65, 46368.00);
+
+-- Valeurs 2025
+INSERT INTO ref_quarter_thresholds 
+(year, threshold_1_quarter, threshold_2_quarters, threshold_3_quarters, threshold_4_quarters, point_value_agirc_arrco, point_value_rci, smic_hourly, plafond_ss)
+VALUES 
+(2025, 1782.00, 3564.00, 5346.00, 7128.00, 1.4681, 1.4681, 11.88, 47292.00);
+
+-- Valeurs 2026 (estimées)
+INSERT INTO ref_quarter_thresholds 
+(year, threshold_1_quarter, threshold_2_quarters, threshold_3_quarters, threshold_4_quarters, point_value_agirc_arrco, point_value_rci, smic_hourly, plafond_ss)
+VALUES 
+(2026, 1820.00, 3640.00, 5460.00, 7280.00, 1.4975, 1.4975, 12.12, 48240.00);
+
+-- ============================================
 -- INDEX
 -- ============================================
 
@@ -299,12 +447,20 @@ COMMENT ON COLUMN simulation_scenarios.surcote_rate IS 'Taux de surcote appliqu�
 CREATE INDEX idx_users_email ON users(email);
 CREATE INDEX idx_users_user_type ON users(user_type);
 CREATE INDEX idx_users_created_at ON users(created_at);
+CREATE INDEX idx_users_is_active ON users(is_active);
 
 -- Index user_profiles
 CREATE INDEX idx_user_profiles_user_id ON user_profiles(user_id);
 
 -- Index retirement_profiles
 CREATE INDEX idx_retirement_profiles_user_id ON retirement_profiles(user_id);
+CREATE INDEX idx_retirement_profiles_risk_profile ON retirement_profiles(risk_profile);
+
+-- Index simulation_results
+CREATE INDEX idx_simulation_results_user_id ON simulation_results(user_id);
+CREATE INDEX idx_simulation_results_type ON simulation_results(simulation_type);
+CREATE INDEX idx_simulation_results_created_at ON simulation_results(created_at DESC);
+CREATE INDEX idx_simulation_results_user_latest ON simulation_results(user_id, created_at DESC);
 
 -- Index documents
 CREATE INDEX idx_documents_user_id ON documents(user_id);
@@ -320,6 +476,9 @@ CREATE INDEX idx_password_resets_expires_at ON password_resets(expires_at);
 -- Index simulation_scenarios
 CREATE INDEX idx_simulation_scenarios_user_id ON simulation_scenarios(user_id);
 
+-- Index ref_quarter_thresholds
+CREATE INDEX idx_ref_quarter_thresholds_year ON ref_quarter_thresholds(year);
+
 -- ============================================
 -- TRIGGERS
 -- ============================================
@@ -333,6 +492,12 @@ BEGIN
 END;
 $$ language 'plpgsql';
 
+-- Trigger sur users
+CREATE TRIGGER update_users_updated_at
+    BEFORE UPDATE ON users
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();
+
 -- Trigger sur user_profiles
 CREATE TRIGGER update_user_profiles_updated_at
     BEFORE UPDATE ON user_profiles
@@ -345,9 +510,23 @@ CREATE TRIGGER update_documents_updated_at
     FOR EACH ROW
     EXECUTE FUNCTION update_updated_at_column();
 
--- Trigger sur retirement_profiles
+-- Trigger sur retirement_profiles (utilise last_updated)
+CREATE OR REPLACE FUNCTION update_last_updated_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.last_updated = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$ language 'plpgsql';
+
 CREATE TRIGGER update_retirement_profiles_last_updated
     BEFORE UPDATE ON retirement_profiles
+    FOR EACH ROW
+    EXECUTE FUNCTION update_last_updated_column();
+
+-- Trigger sur simulation_results
+CREATE TRIGGER update_simulation_results_updated_at
+    BEFORE UPDATE ON simulation_results
     FOR EACH ROW
     EXECUTE FUNCTION update_updated_at_column();
 
@@ -361,6 +540,7 @@ SELECT
     u.id AS user_id,
     u.email,
     u.full_name,
+    u.first_name,
     u.user_type,
     u.created_at AS account_created,
     u.is_active,
@@ -373,11 +553,14 @@ SELECT
     rp.target_retirement_age,
     rp.estimated_pension,
     rp.replacement_rate,
-    COUNT(d.id) AS document_count
+    rp.risk_profile,
+    COUNT(d.id) AS document_count,
+    COUNT(sr.id) AS simulation_count
 FROM users u
 LEFT JOIN user_profiles up ON u.id = up.user_id
 LEFT JOIN retirement_profiles rp ON u.id = rp.user_id
 LEFT JOIN documents d ON u.id = d.user_id
+LEFT JOIN simulation_results sr ON u.id = sr.user_id
 GROUP BY u.id, up.id, rp.id;
 
 COMMENT ON VIEW v_user_summary IS 'Vue résumée de toutes les informations utilisateur';
@@ -395,37 +578,78 @@ GROUP BY user_id, category;
 
 COMMENT ON VIEW v_documents_by_category IS 'Statistiques des documents par utilisateur et catégorie';
 
+-- Vue : Dernière simulation par utilisateur
+CREATE OR REPLACE VIEW v_latest_simulation AS
+SELECT DISTINCT ON (user_id)
+    id,
+    user_id,
+    simulation_type,
+    estimated_pension,
+    replacement_rate,
+    monthly_gap,
+    risk_profile,
+    secure_savings,
+    retirement_savings,
+    per_savings,
+    real_estate_savings,
+    stock_savings,
+    created_at
+FROM simulation_results
+ORDER BY user_id, created_at DESC;
+
+COMMENT ON VIEW v_latest_simulation IS 'Dernière simulation de chaque utilisateur';
+
+-- Vue : Statistiques globales
+CREATE OR REPLACE VIEW v_global_stats AS
+SELECT 
+    COUNT(DISTINCT u.id) AS total_users,
+    COUNT(DISTINCT CASE WHEN u.user_type = 'employee' THEN u.id END) AS employee_users,
+    COUNT(DISTINCT CASE WHEN u.user_type = 'freelancer' THEN u.id END) AS freelancer_users,
+    COUNT(DISTINCT sr.id) AS total_simulations,
+    AVG(sr.estimated_pension) AS avg_estimated_pension,
+    AVG(sr.replacement_rate) AS avg_replacement_rate,
+    COUNT(DISTINCT d.id) AS total_documents
+FROM users u
+LEFT JOIN simulation_results sr ON u.id = sr.user_id
+LEFT JOIN documents d ON u.id = d.user_id;
+
+COMMENT ON VIEW v_global_stats IS 'Statistiques globales de la plateforme';
+
 -- ============================================
--- DONNÉES DE TEST (Optionnel)
+-- FONCTIONS UTILITAIRES
 -- ============================================
 
--- Utilisateur de test
--- INSERT INTO users (email, hashed_password, full_name, user_type)
--- VALUES ('test@elysion.fr', 'hashed_password_here', 'Utilisateur Test', 'employee');
+-- Fonction : Calculer l'âge à partir de la date de naissance
+CREATE OR REPLACE FUNCTION calculate_age(birth_date DATE)
+RETURNS INTEGER AS $$
+BEGIN
+    RETURN EXTRACT(YEAR FROM age(CURRENT_DATE, birth_date));
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+COMMENT ON FUNCTION calculate_age IS 'Calcule l''âge en années à partir de la date de naissance';
+
+-- Fonction : Calculer les trimestres restants
+CREATE OR REPLACE FUNCTION calculate_remaining_quarters(current_quarters INTEGER, required_quarters INTEGER DEFAULT 172)
+RETURNS INTEGER AS $$
+BEGIN
+    RETURN GREATEST(0, required_quarters - current_quarters);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+COMMENT ON FUNCTION calculate_remaining_quarters IS 'Calcule le nombre de trimestres restants pour le taux plein';
 
 -- ============================================
--- VALEURS DE RÉFÉRENCE
+-- DONNÉES DE TEST (Optionnel - décommenter si nécessaire)
 -- ============================================
 
--- Table des seuils de trimestres (informative)
-CREATE TABLE IF NOT EXISTS ref_quarter_thresholds (
-    id SERIAL PRIMARY KEY,
-    year INTEGER NOT NULL,
-    threshold_1_quarter DECIMAL(10, 2),
-    threshold_2_quarters DECIMAL(10, 2),
-    threshold_3_quarters DECIMAL(10, 2),
-    threshold_4_quarters DECIMAL(10, 2),
-    point_value_agirc_arrco DECIMAL(6, 4),
-    point_value_rci DECIMAL(6, 4)
-);
+-- Utilisateur de test salarié
+-- INSERT INTO users (email, hashed_password, full_name, first_name, user_type)
+-- VALUES ('test.salarie@elysion.fr', '$2b$12$test_hash_here', 'Jean Dupont', 'Jean', 'employee');
 
-COMMENT ON TABLE ref_quarter_thresholds IS 'Valeurs de référence pour le calcul des trimestres';
-
--- Valeurs 2024
-INSERT INTO ref_quarter_thresholds 
-(year, threshold_1_quarter, threshold_2_quarters, threshold_3_quarters, threshold_4_quarters, point_value_agirc_arrco, point_value_rci)
-VALUES 
-(2024, 4020.00, 8040.00, 12060.00, 16080.00, 1.4386, 1.4386);
+-- Utilisateur de test freelance
+-- INSERT INTO users (email, hashed_password, full_name, first_name, user_type)
+-- VALUES ('test.freelance@elysion.fr', '$2b$12$test_hash_here', 'Marie Martin', 'Marie', 'freelancer');
 
 -- ============================================
 -- FIN DU SCRIPT
@@ -436,3 +660,6 @@ VALUES
 
 -- Afficher les vues créées
 -- \dv
+
+-- Afficher les fonctions créées
+-- \df

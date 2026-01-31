@@ -16,8 +16,9 @@ import FreelanceSimulator from './components/FreelanceSimulator';
 import EmployeeSimulator from './components/EmployeeSimulator';
 import InvestmentAxes from './components/InvestmentAxes';
 import ProfilePage from './components/ProfilePage';
+import ChatBubble from './components/ChatBubble';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
 const API = `${BACKEND_URL}/api`;
 
 // Auth Context

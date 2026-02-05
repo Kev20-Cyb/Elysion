@@ -323,7 +323,7 @@ const LandingPage = () => {
                 <img
                   src={user.icon}
                   alt={user.title}
-                  className="w-12 h-15 mb-4 object-contain"
+                  className="mb-4 object-contain"
                 />
 
                 <h3 className="text-lg font-semibold text-elysion-primary mb-2">

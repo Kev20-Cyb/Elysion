@@ -50,8 +50,8 @@ const AuthProvider = ({ children }) => {
     const checkAuth = async () => {
       if (token) {
         try {
-          const response = await axios.get(`${API}/user/profile`);
-          setUser(response.data);
+          const response = await axios.get(`${API}/auth/me`);
+          setUser(response.data.user);
         } catch (error) {
           console.error('Token invalid:', error);
           logout();
@@ -69,7 +69,17 @@ const AuthProvider = ({ children }) => {
         password
       });
       
-      const { access_token, user: userData } = response.data;
+      const token = response.data.access_token || response.data.token;
+      const userData = response.data.user;
+
+      if (!token) {
+        return { success: false, error: "Token manquant dans la réponse serveur" };
+      }
+
+      setToken(token);
+      setUser(userData);
+      localStorage.setItem('elysion_token', token);
+
       setToken(access_token);
       setUser(userData);
       localStorage.setItem('elysion_token', access_token);
@@ -96,7 +106,17 @@ const AuthProvider = ({ children }) => {
     try {
       const response = await axios.post(`${API}/auth/register`, userData);
       
-      const { access_token, user: newUser } = response.data;
+      const token = response.data.access_token || response.data.token;
+      const userData = response.data.user;
+
+      if (!token) {
+        return { success: false, error: "Token manquant dans la réponse serveur" };
+      }
+
+      setToken(token);
+      setUser(userData);
+      localStorage.setItem('elysion_token', token);
+
       setToken(access_token);
       setUser(newUser);
       localStorage.setItem('elysion_token', access_token);

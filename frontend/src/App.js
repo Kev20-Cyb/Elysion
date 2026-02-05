@@ -188,33 +188,6 @@ function App() {
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />
 
-<<<<<<< HEAD
-=======
-            {/* Simulator (protégé) */}
-            <Route
-              path="/simulator"
-              element={
-                  <Simulator />
-              }
-            />
-            <Route
-              path="/simulator/freelance"
-              element={
-                <ProtectedRoute>
-                  <FreelanceSimulator />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/simulator/employee"
-              element={
-                <ProtectedRoute>
-                  <EmployeeSimulator />
-                </ProtectedRoute>
-              }
-            />
-
->>>>>>> 4a271ae41d8237738a54ce302e2dc3661c323bc6
             {/* Pages protégées */}
             <Route
               path="/dashboard"

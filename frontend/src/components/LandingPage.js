@@ -305,21 +305,6 @@ const LandingPage = () => {
               </div>
             ))}
           </div>
-          
-          {/* <div className="text-center">
-            <button 
-              onClick={handleTestSimulator}
-              className="bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-8 py-4 rounded-xl text-lg transition-all hover:scale-105 hover:shadow-xl mb-4"
-              data-testid="process-test-simulator-btn"
-            >
-              Tester notre simulateur
-            </button>
-            <div>
-              <a href="#" className="text-elysion-primary hover:text-elysion-accent text-sm underline transition-colors">
-                En savoir plus sur notre technologie
-              </a>
-            </div>
-          </div> */}
         </div>
       </section>
 

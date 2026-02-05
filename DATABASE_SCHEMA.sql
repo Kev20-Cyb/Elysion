@@ -436,3 +436,32 @@ VALUES
 
 -- Afficher les vues créées
 -- \dv
+
+/*-- ============================================
+-- TABLE : newsletter_subscribers
+-- Description : Abonnés à la newsletter
+-- ============================================
+CREATE TABLE newsletter_subscribers (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    email VARCHAR(255) NOT NULL UNIQUE,
+    subscribed_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    unsubscribed_at TIMESTAMP WITH TIME ZONE,
+    is_active BOOLEAN DEFAULT TRUE,
+    source VARCHAR(50) DEFAULT 'landing_page',
+    
+    -- Contrainte
+    CONSTRAINT newsletter_email_check 
+        CHECK (email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$')
+);
+
+COMMENT ON TABLE newsletter_subscribers IS 'Abonnés à la newsletter Elysion';
+COMMENT ON COLUMN newsletter_subscribers.email IS 'Adresse email de l''abonné';
+COMMENT ON COLUMN newsletter_subscribers.subscribed_at IS 'Date d''inscription';
+COMMENT ON COLUMN newsletter_subscribers.unsubscribed_at IS 'Date de désinscription';
+COMMENT ON COLUMN newsletter_subscribers.is_active IS 'Indique si l''abonnement est actif';
+COMMENT ON COLUMN newsletter_subscribers.source IS 'Source de l''inscription (landing_page, footer, etc.)';
+
+-- Index
+CREATE INDEX idx_newsletter_email ON newsletter_subscribers(email);
+CREATE INDEX idx_newsletter_active ON newsletter_subscribers(is_active);
+CREATE INDEX idx_newsletter_subscribed_at ON newsletter_subscribers(subscribed_at DESC);*/

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../App';
 import axios from 'axios';
+import IllustrationHome from "@/assets/IllustrationHome.png";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
 const API = BACKEND_URL.replace(/\/$/, '') + '/api';
@@ -299,7 +300,7 @@ const LandingPage = () => {
                 <div className="w-80 h-80 bg-white/30 rounded-3xl flex items-center justify-center backdrop-blur-sm border border-white/20">
                   <div className="text-center">
                     <img
-                      src="\frontend\src\asset\Illustration Home.png"
+                      src={IllustrationHome}
                       alt="Illustration tableau de bord"
                       className="w-40 mx-auto mb-4"
                     />

@@ -51,7 +51,8 @@ const AuthProvider = ({ children }) => {
       if (token) {
         try {
           const response = await axios.get(`${API}/auth/me`);
-          setUser(response.data.user);
+          setUser(response.data.user || response.data);
+
         } catch (error) {
           console.error('Token invalid:', error);
           logout();
@@ -80,9 +81,6 @@ const AuthProvider = ({ children }) => {
       setUser(userData);
       localStorage.setItem('elysion_token', token);
 
-      setToken(access_token);
-      setUser(userData);
-      localStorage.setItem('elysion_token', access_token);
       return { success: true };
     } catch (error) {
       // Handle Pydantic validation errors (array of objects) or simple string errors
@@ -105,21 +103,18 @@ const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     try {
       const response = await axios.post(`${API}/auth/register`, userData);
-      
+
       const token = response.data.access_token || response.data.token;
-      const userData = response.data.user;
+      const newUser = response.data.user;
 
       if (!token) {
         return { success: false, error: "Token manquant dans la réponse serveur" };
       }
 
       setToken(token);
-      setUser(userData);
+      setUser(newUser || null);
       localStorage.setItem('elysion_token', token);
 
-      setToken(access_token);
-      setUser(newUser);
-      localStorage.setItem('elysion_token', access_token);
       return { success: true };
     } catch (error) {
       // Handle Pydantic validation errors (array of objects) or simple string errors

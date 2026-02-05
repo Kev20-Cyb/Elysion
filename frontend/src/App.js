@@ -166,72 +166,74 @@ function App() {
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/auth" element={<AuthPage />} />
-            <Route path="/simulator" element={<Simulator />} />
-            <Route path="/simulator/freelance" element={<FreelanceSimulator />} />
-            <Route path="/simulator/employee" element={<EmployeeSimulator />} />
+
             <Route path="/onboarding" element={<OnboardingFlow />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />
-            <Route 
-              path="/dashboard" 
+
+            {/* Simulator (protégé) */}
+            <Route
+              path="/simulator"
+              element={
+                <ProtectedRoute>
+                  <Simulator />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/simulator/freelance"
+              element={
+                <ProtectedRoute>
+                  <FreelanceSimulator />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/simulator/employee"
+              element={
+                <ProtectedRoute>
+                  <EmployeeSimulator />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Pages protégées */}
+            <Route
+              path="/dashboard"
               element={
                 <ProtectedRoute>
                   <Dashboard />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/documents" 
+            <Route
+              path="/documents"
               element={
                 <ProtectedRoute>
                   <Documents />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/investment-axes" 
+            <Route
+              path="/investment-axes"
               element={
                 <ProtectedRoute>
                   <InvestmentAxes />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/profile" 
+            <Route
+              path="/profile"
               element={
                 <ProtectedRoute>
                   <ProfilePage />
                 </ProtectedRoute>
-              } 
+              }
             />
+
+            {/* Fallback */}
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
-          <Route
-            path="/simulator"
-            element={
-              <ProtectedRoute>
-                <Simulator />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/simulator/freelance"
-            element={
-              <ProtectedRoute>
-                <FreelanceSimulator />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/simulator/employee"
-            element={
-              <ProtectedRoute>
-                <EmployeeSimulator />
-              </ProtectedRoute>
-            }
-          />
-
         </BrowserRouter>
       </div>
     </AuthProvider>

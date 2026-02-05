@@ -45,7 +45,6 @@ router.post("/subscribe", async (req, res) => {
     return res.status(500).json({ detail: "Erreur lors de l'inscription." });
   }
 });
-
 /**
  * POST /api/newsletter/unsubscribe
  * Désinscrit un email de la newsletter

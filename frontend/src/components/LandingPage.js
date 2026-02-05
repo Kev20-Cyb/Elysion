@@ -299,7 +299,7 @@ const LandingPage = () => {
                 <img
                   src="./asset/IllustrationHome.png" 
                   alt="Illustration tableau de bord"
-                  className="w-40 mx-auto mb-4"
+                  className="mx-auto mb-4"
                 />
               </div>
             </div>

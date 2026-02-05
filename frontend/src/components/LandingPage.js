@@ -296,15 +296,11 @@ const LandingPage = () => {
             {/* Hero Illustration */}
             <div className="flex justify-center lg:justify-end">
               <div className="relative">
-                <div className="w-80 h-80 bg-white/30 rounded-3xl flex items-center justify-center backdrop-blur-sm border border-white/20">
-                  <div className="text-center">
-                    <img
-                      src="./asset/IllustrationHome.png" 
-                      alt="Illustration tableau de bord"
-                      className="w-40 mx-auto mb-4"
-                    />
-                  </div>
-                </div>
+                <img
+                  src="./asset/IllustrationHome.png" 
+                  alt="Illustration tableau de bord"
+                  className="w-40 mx-auto mb-4"
+                />
               </div>
             </div>
           </div>

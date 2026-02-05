@@ -190,9 +190,7 @@ function App() {
             <Route
               path="/simulator"
               element={
-                <ProtectedRoute>
                   <Simulator />
-                </ProtectedRoute>
               }
             />
             <Route

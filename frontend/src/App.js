@@ -181,36 +181,12 @@ function App() {
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/auth" element={<AuthPage />} />
-
+            <Route path="/simulator" element={<Simulator />} />
+            <Route path="/simulator/freelance" element={<FreelanceSimulator />} />
+            <Route path="/simulator/employee" element={<EmployeeSimulator />} />
             <Route path="/onboarding" element={<OnboardingFlow />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />
-
-            {/* Simulator (protégé) */}
-            <Route
-              path="/simulator"
-              element={
-                <ProtectedRoute>
-                  <Simulator />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/simulator/freelance"
-              element={
-                <ProtectedRoute>
-                  <FreelanceSimulator />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/simulator/employee"
-              element={
-                <ProtectedRoute>
-                  <EmployeeSimulator />
-                </ProtectedRoute>
-              }
-            />
 
             {/* Pages protégées */}
             <Route

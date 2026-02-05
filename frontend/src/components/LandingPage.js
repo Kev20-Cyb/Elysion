@@ -4,7 +4,8 @@ import { useAuth } from '../App';
 import axios from 'axios';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
-const API = `${BACKEND_URL}/api`;
+const API = BACKEND_URL.replace(/\/$/, '') + '/api';
+
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -164,6 +165,69 @@ const LandingPage = () => {
   // This old data has been replaced by the new structure above
 
   return (
+  <>
+    {/* Newsletter Modal */}
+    {showNewsletterModal && (
+      <div
+        className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 px-4"
+        onClick={handleCloseNewsletter}
+      >
+        <div
+          className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="flex items-start justify-between">
+            <h3 className="text-xl font-bold text-elysion-primary font-montserrat">
+              Newsletter Elysion
+            </h3>
+            <button
+              onClick={handleCloseNewsletter}
+              className="ml-4 rounded-lg px-2 py-1 text-gray-500 hover:bg-gray-100"
+              aria-label="Fermer"
+              type="button"
+            >
+              ✕
+            </button>
+          </div>
+
+          <p className="mt-2 text-sm text-gray-600">
+            Reçois les actus + tips retraite, sans spam (promis juré).
+          </p>
+
+          <form className="mt-4 space-y-3" onSubmit={handleNewsletterSubmit}>
+            <input
+              type="email"
+              value={newsletterEmail}
+              onChange={(e) => setNewsletterEmail(e.target.value)}
+              placeholder="ton.email@exemple.com"
+              className="w-full rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-elysion-accent"
+              required
+            />
+
+            {newsletterError && (
+              <div className="rounded-xl bg-red-50 px-4 py-2 text-sm text-red-700">
+                {newsletterError}
+              </div>
+            )}
+
+            {newsletterSuccess && (
+              <div className="rounded-xl bg-green-50 px-4 py-2 text-sm text-green-700">
+                Inscription OK ✅ Check ta boîte mail (et les spams au cas où 👀)
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={newsletterLoading}
+              className="w-full rounded-xl bg-elysion-accent px-6 py-3 font-semibold text-white hover:bg-elysion-accent/90 disabled:opacity-60"
+            >
+              {newsletterLoading ? "Inscription..." : "S'inscrire"}
+            </button>
+          </form>
+        </div>
+      </div>
+    )}
+
     <div className="min-h-screen bg-elysion-bg font-montserrat">
       {/* Navigation */}
       <nav className="bg-white/95 backdrop-blur-md border-b border-gray-100 sticky top-0 z-50">
@@ -328,28 +392,15 @@ const LandingPage = () => {
               Rejoignez des milliers d'utilisateurs qui font déjà confiance à Elysion !
             </p>
             <button 
-              // onClick={handleTestSimulator} <-- Lien newsletter
+              onClick={handleOpenNewsletter}
                 className="bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-8 py-4 rounded-xl text-lg transition-all hover:scale-105 hover:shadow-xl"
-                data-testid="hero-test-simulator-btn"
+                data-testid="newsletter-section-btn"
             >
             Abonnez vous à notre newsletter
             </button>
           </div>
         </div>
       </section>
-
-      {/* Simple Footer
-      <footer className="bg-elysion-primary text-white py-8">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <div className="mb-4">
-            <h3 className="text-xl font-bold font-montserrat">Elysion</h3>
-            <p className="text-white/80">Planification retraite intelligente</p>
-          </div>
-          <div className="border-t border-white/20 pt-4">
-            <p className="text-white/60 text-sm">&copy; 2024 Elysion. Tous droits réservés.</p>
-          </div>
-        </div>
-      </footer> */}
 
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-12">
@@ -366,6 +417,7 @@ const LandingPage = () => {
         </div>
       </footer>
     </div>
-  );
-};
+  </>
+);
+}
 export default LandingPage;

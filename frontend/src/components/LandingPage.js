@@ -299,7 +299,7 @@ const LandingPage = () => {
                 <div className="w-80 h-80 bg-white/30 rounded-3xl flex items-center justify-center backdrop-blur-sm border border-white/20">
                   <div className="text-center">
                     <img
-                      src="C:\Users\kevin\OneDrive\Bureau\Elysion\Elysion\frontend\src\asset\Illustration Home.svg"
+                      src="C:\Users\kevin\OneDrive\Bureau\Elysion\Elysion\frontend\src\asset\Illustration Home.png"
                       alt="Illustration tableau de bord"
                       className="w-40 mx-auto mb-4"
                     />

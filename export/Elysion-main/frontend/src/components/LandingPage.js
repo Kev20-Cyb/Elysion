@@ -187,12 +187,6 @@ const LandingPage = () => {
                       alt="Illustration tableau de bord"
                       className="w-40 mx-auto mb-4"
                     />
-                    <div className="text-elysion-primary font-semibold text-lg">
-                      Tableau de bord
-                    </div>
-                    <div className="text-elysion-text-light text-sm">
-                      Projections personnalisées
-                    </div>
                   </div>
                 </div>
               </div>

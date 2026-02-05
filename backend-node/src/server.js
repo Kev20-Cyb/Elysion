@@ -10,6 +10,7 @@ const userRoutes = require("./routes/user.routes");
 const dashboardRoutes = require("./routes/dashboard.routes");
 const chatRoutes = require("./routes/chat.routes");
 const chatConfigRoutes = require("./routes/chatConfig.routes");
+const newsletterRoutes = require("./routes/newsletter.routes");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -62,6 +63,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/chat/config", chatConfigRoutes);
+app.use("/api/newsletter", newsletterRoutes);
 
 /* =========================
    ERROR HANDLER

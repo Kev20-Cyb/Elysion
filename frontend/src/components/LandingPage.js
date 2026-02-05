@@ -1,11 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../App';
+import axios from 'axios';
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
+const API = `${BACKEND_URL}/api`;
 
 const LandingPage = () => {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
+
+    // Newsletter modal state
+  const [showNewsletterModal, setShowNewsletterModal] = useState(false);
+  const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [newsletterLoading, setNewsletterLoading] = useState(false);
+  const [newsletterSuccess, setNewsletterSuccess] = useState(false);
+  const [newsletterError, setNewsletterError] = useState('');
 
   const handleTestSimulator = () => {
     navigate('/simulator');
@@ -17,6 +28,47 @@ const LandingPage = () => {
 
   const handleLogin = () => {
     navigate('/auth?mode=login');
+  };
+
+  const handleOpenNewsletter = () => {
+    setShowNewsletterModal(true);
+    setNewsletterEmail('');
+    setNewsletterSuccess(false);
+    setNewsletterError('');
+  };
+
+  const handleCloseNewsletter = () => {
+    setShowNewsletterModal(false);
+    setNewsletterEmail('');
+    setNewsletterSuccess(false);
+    setNewsletterError('');
+  };
+
+  const handleNewsletterSubmit = async (e) => {
+    e.preventDefault();
+    setNewsletterError('');
+    
+    // Validation email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(newsletterEmail)) {
+      setNewsletterError('Veuillez entrer une adresse email valide.');
+      return;
+    }
+
+    setNewsletterLoading(true);
+    try {
+      await axios.post(`${API}/newsletter/subscribe`, { email: newsletterEmail });
+      setNewsletterSuccess(true);
+      setNewsletterEmail('');
+    } catch (error) {
+      if (error.response?.status === 409) {
+        setNewsletterError('Cette adresse email est déjà inscrite.');
+      } else {
+        setNewsletterError('Une erreur est survenue. Veuillez réessayer.');
+      }
+    } finally {
+      setNewsletterLoading(false);
+    }
   };
 
   // Target user types
@@ -161,26 +213,19 @@ const LandingPage = () => {
               
               <div className="flex flex-col sm:flex-row gap-4 fade-in">
                 <button 
-                  // onClick={handleTestSimulator} <-- Lien newsletter
+                  onClick={handleOpenNewsletter}
                   className="bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-8 py-4 rounded-xl text-lg transition-all hover:scale-105 hover:shadow-xl"
-                  data-testid="hero-test-simulator-btn"
+                  data-testid="hero-newsletter-btn"
                 >
                   Abonnez vous à notre newsletter
                 </button>
-                {<button 
+                <button 
                   onClick={handleTestSimulator}
                   className="bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-8 py-4 rounded-xl text-lg transition-all hover:scale-105 hover:shadow-xl"
                   data-testid="hero-test-simulator-btn"
                 >
                   Testez notre simulateur
                 </button>
-                /*<button 
-                  onClick={handleCreateAccount}
-                  className="border-2 border-elysion-primary text-elysion-primary hover:bg-elysion-primary hover:text-white font-semibold px-8 py-4 rounded-xl text-lg transition-all"
-                  data-testid="hero-create-account-btn"
-                >
-                  Créer mon compte
-                </button> */}
               </div>
             </div>
             

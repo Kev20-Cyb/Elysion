@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import axios from 'axios';
 import './App.css';
-import ChatBubble from "./components/ChatBubble";
 
 // Import components
 import LandingPage from './components/LandingPage';
@@ -18,7 +17,7 @@ import EmployeeSimulator from './components/EmployeeSimulator';
 import InvestmentAxes from './components/InvestmentAxes';
 import ProfilePage from './components/ProfilePage';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 const API = `${BACKEND_URL}/api`;
 
 // Auth Context
@@ -51,8 +50,9 @@ const AuthProvider = ({ children }) => {
     const checkAuth = async () => {
       if (token) {
         try {
-          const response = await axios.get(`${API}/users/profile`);
-          setUser(response.data.user);
+          const response = await axios.get(`${API}/auth/me`);
+          setUser(response.data.user || response.data);
+
         } catch (error) {
           console.error('Token invalid:', error);
           logout();
@@ -61,21 +61,28 @@ const AuthProvider = ({ children }) => {
       setLoading(false);
     };
     checkAuth();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   const login = async (email, password) => {
     try {
-      const response = await axios.post(`${API}/auth/login`, { email, password });
+      const response = await axios.post(`${API}/auth/login`, {
+        email,
+        password
+      });
+      
+      const token = response.data.access_token || response.data.token;
+      const userData = response.data.user;
 
-      const { token, user: userData } = response.data;
+      if (!token) {
+        return { success: false, error: "Token manquant dans la réponse serveur" };
+      }
+
       setToken(token);
       setUser(userData);
-      localStorage.setItem("elysion_token", token);
+      localStorage.setItem('elysion_token', token);
+
       return { success: true };
     } catch (error) {
-
-      return { success: false, error: error.response?.data?.detail || "Login failed" };
       // Handle Pydantic validation errors (array of objects) or simple string errors
       const detail = error.response?.data?.detail;
       let errorMessage = 'Échec de la connexion';
@@ -90,7 +97,6 @@ const AuthProvider = ({ children }) => {
         success: false,
         error: errorMessage
       };
-
     }
   };
 
@@ -98,15 +104,19 @@ const AuthProvider = ({ children }) => {
     try {
       const response = await axios.post(`${API}/auth/register`, userData);
 
-      const { token, user: newUser } = response.data;
+      const token = response.data.access_token || response.data.token;
+      const newUser = response.data.user;
+
+      if (!token) {
+        return { success: false, error: "Token manquant dans la réponse serveur" };
+      }
+
       setToken(token);
-      setUser(newUser);
-      localStorage.setItem("elysion_token", token);
+      setUser(newUser || null);
+      localStorage.setItem('elysion_token', token);
+
       return { success: true };
     } catch (error) {
-
-      return { success: false, error: error.response?.data?.detail || "Registration failed" };
-
       // Handle Pydantic validation errors (array of objects) or simple string errors
       const detail = error.response?.data?.detail;
       let errorMessage = 'Échec de l\'inscription';
@@ -148,17 +158,10 @@ const AuthProvider = ({ children }) => {
   );
 };
 
-// ✅ Chat visible seulement si connecté (et pas pendant le loading)
-const ChatWhenAuthed = () => {
-  const { isAuthenticated, loading } = useAuth();
-  if (loading) return null;
-  return isAuthenticated ? <ChatBubble /> : null;
-};
-
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
-
+  
   if (loading) {
     return (
       <div className="min-h-screen bg-elysion-bg flex items-center justify-center">
@@ -166,7 +169,7 @@ const ProtectedRoute = ({ children }) => {
       </div>
     );
   }
-
+  
   return isAuthenticated ? children : <Navigate to="/auth" replace />;
 };
 
@@ -178,42 +181,74 @@ function App() {
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/auth" element={<AuthPage />} />
-            <Route 
-              path="/dashboard" 
+
+            <Route path="/onboarding" element={<OnboardingFlow />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+
+            {/* Simulator (protégé) */}
+            <Route
+              path="/simulator"
+              element={
+                <ProtectedRoute>
+                  <Simulator />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/simulator/freelance"
+              element={
+                <ProtectedRoute>
+                  <FreelanceSimulator />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/simulator/employee"
+              element={
+                <ProtectedRoute>
+                  <EmployeeSimulator />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Pages protégées */}
+            <Route
+              path="/dashboard"
               element={
                 <ProtectedRoute>
                   <Dashboard />
                 </ProtectedRoute>
               }
             />
-            <Route 
-              path="/documents" 
+            <Route
+              path="/documents"
               element={
                 <ProtectedRoute>
                   <Documents />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/investment-axes" 
+            <Route
+              path="/investment-axes"
               element={
                 <ProtectedRoute>
                   <InvestmentAxes />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/profile" 
+            <Route
+              path="/profile"
               element={
                 <ProtectedRoute>
                   <ProfilePage />
                 </ProtectedRoute>
-              } 
+              }
             />
-          </Routes>
 
-          {/* ✅ Le chatbot est disponible partout quand connecté */}
-          <ChatWhenAuthed />
+            {/* Fallback */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
         </BrowserRouter>
       </div>
     </AuthProvider>

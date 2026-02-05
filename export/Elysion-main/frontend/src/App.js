@@ -17,7 +17,7 @@ import EmployeeSimulator from './components/EmployeeSimulator';
 import InvestmentAxes from './components/InvestmentAxes';
 import ProfilePage from './components/ProfilePage';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 const API = `${BACKEND_URL}/api`;
 
 // Auth Context
@@ -205,6 +205,33 @@ function App() {
               } 
             />
           </Routes>
+          <Route
+            path="/simulator"
+            element={
+              <ProtectedRoute>
+                <Simulator />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/simulator/freelance"
+            element={
+              <ProtectedRoute>
+                <FreelanceSimulator />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/simulator/employee"
+            element={
+              <ProtectedRoute>
+                <EmployeeSimulator />
+              </ProtectedRoute>
+            }
+          />
+
         </BrowserRouter>
       </div>
     </AuthProvider>

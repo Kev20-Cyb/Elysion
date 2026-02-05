@@ -1,6 +1,15 @@
 const express = require("express");
+const { pool } = require("../db");
+
 const router = express.Router();
-const { getDB } = require("../db");
+
+function normalizeEmail(email) {
+  return String(email || "").trim().toLowerCase();
+}
+
+function isValidEmail(email) {
+  return /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(email);
+}
 
 /**
  * POST /api/newsletter/subscribe
@@ -8,112 +17,86 @@ const { getDB } = require("../db");
  */
 router.post("/subscribe", async (req, res) => {
   try {
-    const { email } = req.body;
+    const email = normalizeEmail(req.body.email);
+    const source = String(req.body.source || "landing_page").trim().slice(0, 50);
 
-    // Validation
-    if (!email) {
-      return res.status(400).json({ detail: "L'email est requis." });
-    }
+    if (!email) return res.status(400).json({ detail: "L'email est requis." });
+    if (!isValidEmail(email)) return res.status(400).json({ detail: "Format d'email invalide." });
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return res.status(400).json({ detail: "Format d'email invalide." });
-    }
+    // Upsert : si déjà inscrit, on réactive (UX plus smooth)
+    const q = `
+      INSERT INTO newsletter_subscribers (email, source, is_active, subscribed_at, unsubscribed_at)
+      VALUES ($1, $2, TRUE, CURRENT_TIMESTAMP, NULL)
+      ON CONFLICT (email) DO UPDATE SET
+        is_active = TRUE,
+        source = EXCLUDED.source,
+        subscribed_at = CURRENT_TIMESTAMP,
+        unsubscribed_at = NULL
+      RETURNING id, email, subscribed_at, is_active, source
+    `;
+    const r = await pool.query(q, [email, source]);
 
-    const db = getDB();
-    const newsletterCollection = db.collection("newsletter_subscribers");
-
-    // Vérifier si l'email existe déjà
-    const existingSubscriber = await newsletterCollection.findOne({ 
-      email: email.toLowerCase() 
-    });
-
-    if (existingSubscriber) {
-      return res.status(409).json({ detail: "Cette adresse email est déjà inscrite." });
-    }
-
-    // Insérer le nouvel abonné
-    await newsletterCollection.insertOne({
-      email: email.toLowerCase(),
-      subscribed_at: new Date(),
-      is_active: true,
-      source: "landing_page"
-    });
-
-    res.status(201).json({ 
+    return res.status(201).json({
       message: "Inscription réussie !",
-      email: email.toLowerCase()
+      subscriber: r.rows[0],
     });
-
   } catch (error) {
     console.error("Newsletter subscribe error:", error);
-    res.status(500).json({ detail: "Erreur lors de l'inscription." });
+    return res.status(500).json({ detail: "Erreur lors de l'inscription." });
   }
 });
 
 /**
- * DELETE /api/newsletter/unsubscribe
+ * POST /api/newsletter/unsubscribe
  * Désinscrit un email de la newsletter
  */
-router.delete("/unsubscribe", async (req, res) => {
+router.post("/unsubscribe", async (req, res) => {
   try {
-    const { email } = req.body;
+    const email = normalizeEmail(req.body.email);
 
-    if (!email) {
-      return res.status(400).json({ detail: "L'email est requis." });
-    }
+    if (!email) return res.status(400).json({ detail: "L'email est requis." });
+    if (!isValidEmail(email)) return res.status(400).json({ detail: "Format d'email invalide." });
 
-    const db = getDB();
-    const newsletterCollection = db.collection("newsletter_subscribers");
-
-    const result = await newsletterCollection.updateOne(
-      { email: email.toLowerCase() },
-      { 
-        $set: { 
-          is_active: false,
-          unsubscribed_at: new Date()
-        } 
-      }
+    const r = await pool.query(
+      `UPDATE newsletter_subscribers
+       SET is_active = FALSE,
+           unsubscribed_at = CURRENT_TIMESTAMP
+       WHERE email = $1
+       RETURNING id, email, unsubscribed_at, is_active`,
+      [email]
     );
 
-    if (result.matchedCount === 0) {
+    if (r.rowCount === 0) {
       return res.status(404).json({ detail: "Email non trouvé." });
     }
 
-    res.json({ message: "Désinscription réussie." });
-
+    return res.json({ message: "Désinscription réussie.", subscriber: r.rows[0] });
   } catch (error) {
     console.error("Newsletter unsubscribe error:", error);
-    res.status(500).json({ detail: "Erreur lors de la désinscription." });
+    return res.status(500).json({ detail: "Erreur lors de la désinscription." });
   }
 });
 
 /**
  * GET /api/newsletter/subscribers
- * Liste tous les abonnés (admin only - à protéger)
+ * Liste tous les abonnés actifs (à protéger si besoin)
  */
 router.get("/subscribers", async (req, res) => {
   try {
-    const db = getDB();
-    const newsletterCollection = db.collection("newsletter_subscribers");
+    const r = await pool.query(
+      `SELECT id, email, subscribed_at, unsubscribed_at, is_active, source
+       FROM newsletter_subscribers
+       WHERE is_active = TRUE
+       ORDER BY subscribed_at DESC
+       LIMIT 1000`
+    );
 
-    const subscribers = await newsletterCollection
-      .find({ is_active: true })
-      .sort({ subscribed_at: -1 })
-      .toArray();
-
-    // Exclure _id pour éviter les problèmes de sérialisation
-    const cleanedSubscribers = subscribers.map(({ _id, ...rest }) => rest);
-
-    res.json({ 
-      count: cleanedSubscribers.length,
-      subscribers: cleanedSubscribers 
-    });
-
+    return res.json({ count: r.rowCount, subscribers: r.rows });
   } catch (error) {
     console.error("Newsletter list error:", error);
-    res.status(500).json({ detail: "Erreur lors de la récupération des abonnés." });
+    return res.status(500).json({ detail: "Erreur lors de la récupération des abonnés." });
   }
 });
 
 module.exports = router;
+EOF

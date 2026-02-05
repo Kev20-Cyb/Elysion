@@ -152,7 +152,7 @@ const LandingPage = () => {
                 <br />
                 <span className="text-elysion-text-dark">ne devrait pas être</span>
                 <br />
-                <span className="text-elysion-primary">compliqué.</span>
+                <span className="text-elysion-accent">compliqué.</span>
               </h1>
               
               <p className="text-xl text-elysion-text-light mb-8 fade-in leading-relaxed">

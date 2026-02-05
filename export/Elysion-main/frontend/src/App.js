@@ -205,6 +205,33 @@ function App() {
               } 
             />
           </Routes>
+          <Route
+            path="/simulator"
+            element={
+              <ProtectedRoute>
+                <Simulator />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/simulator/freelance"
+            element={
+              <ProtectedRoute>
+                <FreelanceSimulator />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/simulator/employee"
+            element={
+              <ProtectedRoute>
+                <EmployeeSimulator />
+              </ProtectedRoute>
+            }
+          />
+
         </BrowserRouter>
       </div>
     </AuthProvider>

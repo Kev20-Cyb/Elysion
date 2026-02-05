@@ -298,21 +298,12 @@ const LandingPage = () => {
               <div className="relative">
                 <div className="w-80 h-80 bg-white/30 rounded-3xl flex items-center justify-center backdrop-blur-sm border border-white/20">
                   <div className="text-center">
-                    <div className="text-6xl mb-4">📊</div>
-                    <div className="text-elysion-primary font-semibold text-lg">Tableau de bord</div>
-                    <div className="text-elysion-text-light text-sm">Projections personnalisées</div>
+                    <img
+                      src="frontend\src\asset\Illustration Home.svg"
+                      alt="Illustration tableau de bord"
+                      className="w-40 mx-auto mb-4"
+                    />
                   </div>
-                </div>
-                
-                {/* Floating elements */}
-                <div className="absolute -top-4 -right-4 w-16 h-16 bg-elysion-accent/20 rounded-2xl flex items-center justify-center animate-bounce">
-                  <span className="text-2xl">📈</span>
-                </div>
-                <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-elysion-primary/20 rounded-xl flex items-center justify-center animate-pulse">
-                  <span className="text-lg">💰</span>
-                </div>
-                <div className="absolute top-1/2 -left-8 w-14 h-14 bg-white/40 rounded-full flex items-center justify-center backdrop-blur-sm">
-                  <span className="text-xl">⚡</span>
                 </div>
               </div>
             </div>

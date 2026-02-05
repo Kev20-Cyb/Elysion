@@ -2077,30 +2077,74 @@ const EmployeeSimulator = () => {
           {/* Progress bar */}
           {currentStep <= 7 && (
             <div className="mb-8">
-              <div className="flex justify-between mb-2">
-                {[1, 2, 3, 4, 5, 6, 7].map((step) => (
-                  <div
-                    key={step}
-                    className={`w-9 h-9 rounded-full flex items-center justify-center font-semibold text-sm ${
-                      step === currentStep
-                        ? 'bg-elysion-primary text-white'
-                        : step < currentStep
-                        ? 'bg-elysion-accent text-white'
-                        : 'bg-gray-200 text-gray-500'
-                    }`}
-                  >
-                    {step}
+              {/* Step Indicator - Circle Design */}
+              <div className="flex items-center justify-center gap-1 py-4">
+                {[1, 2, 3, 4, 5, 6, 7].map((step, index) => (
+                  <div key={step} className="flex items-center">
+                    {/* Circle Step */}
+                    <div className="relative flex flex-col items-center">
+                      <svg
+                        width="40"
+                        height="40"
+                        viewBox="0 0 40 40"
+                        className={`transition-all duration-300 ${
+                          step < currentStep
+                            ? 'text-elysion-primary'
+                            : step === currentStep
+                            ? 'text-elysion-accent'
+                            : 'text-gray-300'
+                        }`}
+                      >
+                        <circle
+                          cx="20"
+                          cy="20"
+                          r="18"
+                          fill="currentColor"
+                        />
+                        {/* Checkmark for completed steps */}
+                        {step < currentStep && (
+                          <path
+                            d="M12 20 L17 25 L28 14"
+                            stroke="white"
+                            strokeWidth="2.5"
+                            fill="none"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        )}
+                        {/* Number for current and future steps */}
+                        {step >= currentStep && (
+                          <text
+                            x="20"
+                            y="25"
+                            textAnchor="middle"
+                            fill="white"
+                            fontSize="16"
+                            fontWeight="600"
+                            fontFamily="Montserrat, sans-serif"
+                          >
+                            {step}
+                          </text>
+                        )}
+                      </svg>
+                    </div>
+                    
+                    {/* Connector line between steps */}
+                    {index < 6 && (
+                      <div
+                        className={`w-8 h-1 mx-1 transition-all duration-300 ${
+                          step < currentStep
+                            ? 'bg-elysion-primary'
+                            : 'bg-gray-300'
+                        }`}
+                      />
+                    )}
                   </div>
                 ))}
               </div>
-              <div className="h-2 bg-gray-200 rounded-full">
-                <div
-                  className="h-full bg-elysion-accent rounded-full transition-all"
-                  style={{ width: `${(currentStep / 7) * 100}%` }}
-                />
-              </div>
             </div>
           )}
+          
 
           {/* Steps */}
           {currentStep === 1 && renderStep1()}

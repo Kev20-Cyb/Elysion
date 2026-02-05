@@ -77,17 +77,17 @@ const LandingPage = () => {
     {
       title: "Salariés",
       description: "Estimez votre future retraite en fonction de votre salaire et trimestres validés.",
-      icon: "/asset/salarie.svg"
+      icon: "./asset/salarie.svg"
     },
     {
       title: "Freelances",
       description: "Simulez votre pension à travers les régimes indépendants.",
-      icon: "/asset/freelance.svg"
+      icon: "./asset/freelance.svg"
     },
     {
       title: "Chefs d'entreprise",
       description: "Visualisez l'impact de votre rémunération et dividendes sur votre retraite.",
-      icon: "/asset/patron.svg"
+      icon: "./asset/patron.svg"
     }
   ];
 

@@ -2143,8 +2143,7 @@ const EmployeeSimulator = () => {
                 ))}
               </div>
             </div>
-          )}
-          
+          )}          
 
           {/* Steps */}
           {currentStep === 1 && renderStep1()}

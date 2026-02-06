@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Utilise la même base que l'app
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 const API = `${BACKEND_URL}/api`;
 
 // Petit wrapper pour les appels vers le chatbot

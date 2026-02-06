@@ -269,28 +269,14 @@ const AuthPage = () => {
           </div>
         </div>
 
-        {/* Right Side - Illustration */}
-        <div className="hidden lg:flex flex-1 bg-gradient-to-br from-elysion-primary to-elysion-secondary items-center justify-center p-8">
-          <div className="text-center text-white">
-            <div className="text-8xl mb-6">🏦</div>
-            <h2 className="text-3xl font-bold mb-4">Votre avenir financier en toute sérénité</h2>
-            <p className="text-xl opacity-90 mb-6">
-              Rejoignez des milliers d'utilisateurs qui planifient déjà leur retraite avec Elysion
-            </p>
-            <div className="grid grid-cols-3 gap-6 mt-8">
-              <div className="text-center">
-                <div className="text-3xl mb-2">📊</div>
-                <div className="text-sm font-medium">Simulations précises</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl mb-2">🔒</div>
-                <div className="text-sm font-medium">Sécurité maximale</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl mb-2">💡</div>
-                <div className="text-sm font-medium">Conseils personnalisés</div>
-              </div>
-            </div>
+        {/* Hero Illustration */}
+        <div className="hidden lg:flex flex-1 items-center justify-center p-8">
+          <div className="relative">
+            <img
+              src="/asset/IllustrationHome.png"
+              alt="Illustration tableau de bord"
+              className="mx-auto max-w-md"
+            />
           </div>
         </div>
       </div>

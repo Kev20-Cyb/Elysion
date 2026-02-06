@@ -273,9 +273,14 @@ const AuthPage = () => {
         <div className="hidden lg:flex flex-1 items-center justify-center p-8">
           <div className="relative">
             <img
-              src="/asset/IllustrationHome.png"
-              alt="Illustration tableau de bord"
-              className="mx-auto max-w-md"
+              key={isLogin ? "login" : "register"}
+              src={
+                isLogin
+                  ? "/asset/IllustrationConnexion.png"
+                  : "/asset/IllustrationInscription.png"
+              }
+              alt={isLogin ? "Illustration connexion" : "Illustration inscription"}
+              className="mx-auto max-w-md fade-image fade-image-enter fade-image-enter-active"
             />
           </div>
         </div>

@@ -280,7 +280,7 @@ const AuthPage = () => {
                   : "/asset/IllustrationInscription.png"
               }
               alt={isLogin ? "Illustration connexion" : "Illustration inscription"}
-              className="mx-auto max-w-md fade-image fade-image-enter fade-image-enter-active"
+              className="fade-image fade-image-enter fade-image-enter-active"
             />
           </div>
         </div>

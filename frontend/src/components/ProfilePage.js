@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../App';
 import axios from 'axios';
+import MobileTabBar, { PageHeader } from './MobileTabBar';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 const API = `${BACKEND_URL}/api`;
@@ -118,59 +119,28 @@ const ProfilePage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-elysion-bg font-montserrat">
+    <div className="min-h-screen bg-elysion-bg font-montserrat pb-20 md:pb-0">
       {/* Navigation */}
-      <nav className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex items-center">
-              <button 
-                onClick={() => navigate('/dashboard')}
-                className="text-2xl font-bold text-elysion-primary"
-              >
-                Elysion
-              </button>
-            </div>
-            <div className="flex items-center space-x-4">
-              <span className="text-elysion-text-dark font-medium">
-                {user?.full_name}
-              </span>
-              <button
-                onClick={handleLogout}
-                className="text-elysion-text-light hover:text-elysion-primary transition-colors"
-                data-testid="profile-logout-btn"
-              >
-                Déconnexion
-              </button>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <PageHeader title="Mon compte" />
 
-      <div className="max-w-4xl mx-auto px-4 py-8">
+      <div className="max-w-4xl mx-auto px-4 py-6 sm:py-8">
         {/* Header */}
-        <div className="mb-8">
-          <button
-            onClick={() => navigate('/dashboard')}
-            className="flex items-center text-elysion-primary hover:text-elysion-accent mb-4 transition-colors"
-          >
-            ← Retour au tableau de bord
-          </button>
-          <h1 className="text-3xl font-bold text-elysion-primary">Mon compte</h1>
-          <p className="text-elysion-text-light mt-2">Gérez vos informations personnelles et vos préférences</p>
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-elysion-primary">Mon compte</h1>
+          <p className="text-elysion-text-light mt-2 text-sm sm:text-base">Gérez vos informations personnelles et vos préférences</p>
         </div>
 
         {/* Profile Card */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-8">
-          <div className="bg-gradient-to-r from-elysion-primary to-elysion-accent p-6">
-            <div className="flex items-center gap-4">
-              <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center text-3xl">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-6 sm:mb-8">
+          <div className="bg-gradient-to-r from-elysion-primary to-elysion-accent p-4 sm:p-6">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white rounded-full flex items-center justify-center text-2xl sm:text-3xl">
                 {user?.full_name?.charAt(0)?.toUpperCase() || '👤'}
               </div>
               <div className="text-white">
-                <h2 className="text-2xl font-bold">{user?.full_name || 'Utilisateur'}</h2>
-                <p className="text-white/80">{user?.email}</p>
-                <span className="inline-block mt-2 px-3 py-1 bg-white/20 rounded-full text-sm">
+                <h2 className="text-xl sm:text-2xl font-bold">{user?.full_name || 'Utilisateur'}</h2>
+                <p className="text-white/80 text-sm sm:text-base">{user?.email}</p>
+                <span className="inline-block mt-2 px-3 py-1 bg-white/20 rounded-full text-xs sm:text-sm">
                   {getUserTypeLabel(user?.user_type)}
                 </span>
               </div>
@@ -433,6 +403,9 @@ const ProfilePage = () => {
           </div>
         </div>
       </div>
+
+      {/* Mobile Tab Bar */}
+      <MobileTabBar />
     </div>
   );
 };

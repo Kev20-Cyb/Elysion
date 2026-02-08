@@ -11,8 +11,9 @@ const LandingPage = () => {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
-
-    // Newsletter modal state
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  
+  // Newsletter modal state
   const [showNewsletterModal, setShowNewsletterModal] = useState(false);
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [newsletterLoading, setNewsletterLoading] = useState(false);
@@ -234,10 +235,11 @@ const LandingPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <h1 className="text-2xl font-bold text-elysion-primary font-montserrat">Elysion</h1>
+              <h1 className="text-xl sm:text-2xl font-bold text-elysion-primary font-montserrat">Elysion</h1>
             </div>
 
-            <div className="flex items-center space-x-4">
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-4">
               <button 
                 onClick={() => navigate('/auth?mode=login')}
                 className="text-elysion-primary hover:text-elysion-accent font-medium transition-colors"
@@ -253,8 +255,58 @@ const LandingPage = () => {
                 Créer un compte
               </button>
             </div>
+
+            {/* Mobile Menu Button */}
+            <div className="md:hidden">
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                data-testid="landing-mobile-menu-toggle"
+              >
+                {mobileMenuOpen ? (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                ) : (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  </svg>
+                )}
+              </button>
+            </div>
           </div>
         </div>
+
+        {/* Mobile Dropdown Menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden bg-white border-t border-gray-100 shadow-lg">
+            <div className="px-4 py-3 space-y-2">
+              <button
+                onClick={() => { navigate('/simulator'); setMobileMenuOpen(false); }}
+                className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                <span className="text-xl">🔮</span>
+                <span className="font-medium text-elysion-text-dark">Simulateur</span>
+              </button>
+              
+              <button
+                onClick={() => { navigate('/auth?mode=login'); setMobileMenuOpen(false); }}
+                className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                <span className="text-xl">🔑</span>
+                <span className="font-medium text-elysion-text-dark">Se connecter</span>
+              </button>
+              
+              <button
+                onClick={() => { navigate('/auth?mode=register'); setMobileMenuOpen(false); }}
+                className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg bg-elysion-accent text-white hover:bg-elysion-accent/90 transition-colors"
+              >
+                <span className="text-xl">✨</span>
+                <span className="font-medium">Créer un compte</span>
+              </button>
+            </div>
+          </div>
+        )}
       </nav>
 
       {/* Hero Section - Problem & Solution */}
@@ -314,9 +366,9 @@ const LandingPage = () => {
             <h2 className="text-4xl font-bold text-elysion-primary mb-6 font-montserrat">Conçu pour chaque parcours professionnel</h2>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-3 gap-8">
             {targetUsers.map((user, index) => (
-              <div
+              <div 
                 key={index}
                 className="flex flex-col items-center text-center p-6 rounded-2xl bg-white/60 backdrop-blur-sm border border-white/20"
               >
@@ -365,6 +417,21 @@ const LandingPage = () => {
               </div>
             ))}
           </div>
+          
+          {/* <div className="text-center">
+            <button 
+              onClick={handleTestSimulator}
+              className="bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-8 py-4 rounded-xl text-lg transition-all hover:scale-105 hover:shadow-xl mb-4"
+              data-testid="process-test-simulator-btn"
+            >
+              Tester notre simulateur
+            </button>
+            <div>
+              <a href="#" className="text-elysion-primary hover:text-elysion-accent text-sm underline transition-colors">
+                En savoir plus sur notre technologie
+              </a>
+            </div>
+          </div> */}
         </div>
       </section>
 
@@ -393,15 +460,15 @@ const LandingPage = () => {
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-white mb-6 font-montserrat">Prêt à prendre le contrôle de votre avenir ?</h2>
-            <p className="text-xl text-white max-w-2xl mx-auto py-5">
+            <p className="text-xl text-elysion-text-light max-w-2xl mx-auto py-5">
               Rejoignez des milliers d'utilisateurs qui font déjà confiance à Elysion !
             </p>
             <button 
               onClick={handleOpenNewsletter}
-                className="bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-8 py-4 rounded-xl text-lg transition-all hover:scale-105 hover:shadow-xl"
-                data-testid="newsletter-section-btn"
+              className="bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-8 py-4 rounded-xl text-lg transition-all hover:scale-105 hover:shadow-xl"
+              data-testid="footer-newsletter-btn"
             >
-            Abonnez vous à notre newsletter
+              Abonnez vous à notre newsletter
             </button>
           </div>
         </div>
@@ -422,7 +489,8 @@ const LandingPage = () => {
         </div>
       </footer>
     </div>
-  </>
-);
-}
+    </>
+  );
+};
+
 export default LandingPage;

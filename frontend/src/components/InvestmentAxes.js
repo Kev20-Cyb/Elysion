@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../App';
+import MobileTabBar, { PageHeader } from './MobileTabBar';
 
 const InvestmentAxes = () => {
   const navigate = useNavigate();
@@ -140,58 +141,26 @@ const InvestmentAxes = () => {
   };
 
   return (
-    <div className="min-h-screen bg-elysion-bg font-montserrat">
+    <div className="min-h-screen bg-elysion-bg font-montserrat pb-20 md:pb-0">
       {/* Navigation */}
-      <nav className="bg-white/90 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-4">
-              <button 
-                onClick={() => navigate('/dashboard')}
-                className="text-2xl font-bold text-elysion-primary hover:text-elysion-accent transition-colors"
-              >
-                Elysion
-              </button>
-              <span className="text-elysion-text-light">|</span>
-              <span className="text-elysion-text-dark font-medium">Axes d'investissement</span>
-            </div>
-            <div className="flex items-center space-x-4">
-              <span className="text-elysion-text-dark font-medium">{user?.full_name}</span>
-              <button 
-                onClick={handleLogout}
-                className="text-elysion-text-light hover:text-elysion-primary transition-colors"
-                data-testid="logout-btn"
-              >
-                Déconnexion
-              </button>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <PageHeader title="Axes d'investissement" />
 
       {/* Content */}
-      <div className="max-w-6xl mx-auto px-4 py-8">
+      <div className="max-w-6xl mx-auto px-4 py-6 sm:py-8">
         {/* Header */}
-        <div className="mb-8">
-          <button 
-            onClick={() => navigate('/dashboard')}
-            className="flex items-center text-elysion-primary hover:text-elysion-accent mb-4 transition-colors"
-          >
-            ← Retour au tableau de bord
-          </button>
-          
-          <h1 className="text-3xl font-bold text-elysion-primary mb-4">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-elysion-primary mb-4">
             Atteindre votre objectif retraite
           </h1>
           
           {/* Message si pas de simulation */}
           {!hasValidData && (
-            <div className="bg-yellow-50 border border-yellow-200 p-6 rounded-xl mb-6">
-              <div className="flex items-center gap-4">
-                <span className="text-3xl">⚠️</span>
+            <div className="bg-yellow-50 border border-yellow-200 p-4 sm:p-6 rounded-xl mb-6">
+              <div className="flex items-center gap-3 sm:gap-4">
+                <span className="text-2xl sm:text-3xl">⚠️</span>
                 <div>
-                  <p className="text-yellow-800 font-semibold">Aucune simulation disponible</p>
-                  <p className="text-yellow-700 text-sm mt-1">
+                  <p className="text-yellow-800 font-semibold text-sm sm:text-base">Aucune simulation disponible</p>
+                  <p className="text-yellow-700 text-xs sm:text-sm mt-1">
                     Réalisez d'abord une simulation de retraite pour obtenir des recommandations personnalisées.
                   </p>
                   <button 
@@ -376,29 +345,32 @@ const InvestmentAxes = () => {
         </div>
 
         {/* CTA */}
-        <div className="bg-elysion-primary p-8 rounded-2xl text-center">
-          <h3 className="text-2xl font-bold mb-4 text-white">
+        <div className="bg-elysion-primary p-6 sm:p-8 rounded-2xl text-center">
+          <h3 className="text-xl sm:text-2xl font-bold mb-4 text-white">
             Prêt à passer à l'action ?
           </h3>
-          <p className="mb-6 bg-white/20 text-white px-4 py-2 rounded-lg inline-block">
+          <p className="mb-6 bg-white/20 text-white px-4 py-2 rounded-lg inline-block text-sm sm:text-base">
             Consultez un professionnel pour établir une stratégie d'épargne adaptée à votre situation.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
               onClick={() => navigate('/simulator')}
-              className="bg-white text-elysion-primary hover:bg-gray-100 font-semibold px-6 py-3 rounded-lg transition-colors"
+              className="bg-white text-elysion-primary hover:bg-gray-100 font-semibold px-6 py-3 rounded-lg transition-colors text-sm sm:text-base"
             >
               Refaire une simulation
             </button>
             <button
               onClick={() => navigate('/dashboard')}
-              className="bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
+              className="hidden md:block bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-6 py-3 rounded-lg transition-colors text-sm sm:text-base"
             >
               Retour au tableau de bord
             </button>
           </div>
         </div>
       </div>
+
+      {/* Mobile Tab Bar */}
+      <MobileTabBar />
     </div>
   );
 };

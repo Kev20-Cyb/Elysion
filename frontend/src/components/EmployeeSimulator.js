@@ -1325,7 +1325,7 @@ const EmployeeSimulator = () => {
             { value: 'medium', label: '10 à 20 ans', desc: 'Horizon moyen - équilibre rendement/risque' },
             { value: 'long', label: 'Plus de 20 ans', desc: 'Horizon long - potentiel de croissance' }
           ].map(option => (
-            <label key={option.value} className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${formData.investmentHorizon === option.value ? 'border-elysion-primary bg-elysion-primary-50' : 'border-gray-200 hover:bg-gray-50'}`}>
+            <label key={option.value} className={`flex items-center gap-3 p-3 rounded-lg border-2 cursor-pointer transition-colors ${formData.investmentHorizon === option.value ? 'border-elysion-primary' : 'border-gray-200 hover:bg-gray-50'}`}>
               <input
                 type="radio"
                 name="horizon"
@@ -1353,7 +1353,7 @@ const EmployeeSimulator = () => {
             { value: '10', label: 'Jusqu\'à 10%', desc: 'Modéré - j\'accepte quelques fluctuations' },
             { value: '20', label: 'Jusqu\'à 20% ou plus', desc: 'Tolérant - je vise le long terme' }
           ].map(option => (
-            <label key={option.value} className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${formData.lossToleranceLevel === option.value ? 'border-elysion-primary bg-elysion-primary-50' : 'border-gray-200 hover:bg-gray-50'}`}>
+            <label key={option.value} className={`flex items-center gap-3 p-3 rounded-lg border-2 cursor-pointer transition-colors ${formData.lossToleranceLevel === option.value ? 'border-elysion-primary' : 'border-gray-200 hover:bg-gray-50'}`}>
               <input
                 type="radio"
                 name="lossTolerance"
@@ -1381,7 +1381,7 @@ const EmployeeSimulator = () => {
             { value: 'intermediate', label: 'Intermédiaire', desc: 'J\'ai déjà investi (assurance-vie, PEA...)' },
             { value: 'advanced', label: 'Avancé', desc: 'Je suis à l\'aise avec les marchés financiers' }
           ].map(option => (
-            <label key={option.value} className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${formData.marketKnowledge === option.value ? 'border-elysion-primary bg-elysion-primary-50' : 'border-gray-200 hover:bg-gray-50'}`}>
+            <label key={option.value} className={`flex items-center gap-3 p-3 rounded-lg border-2 cursor-pointer transition-colors ${formData.marketKnowledge === option.value ? 'border-elysion-primary' : 'border-gray-200 hover:bg-gray-50'}`}>
               <input
                 type="radio"
                 name="knowledge"
@@ -2076,63 +2076,37 @@ const EmployeeSimulator = () => {
         <div className="bg-white rounded-2xl shadow-xl p-8">
           {/* Progress bar */}
           {currentStep <= 7 && (
-            <div className="mb-8">
-              {/* Step Indicator - Circle Design */}
-              <div className="flex items-center justify-center gap-1 py-4">
+            <div className="mb-6 sm:mb-8">
+              {/* Step Indicator - Circle Design - Responsive */}
+              <div className="flex items-center justify-center gap-0.5 sm:gap-1 py-4 px-4 sm:px-2">
                 {[1, 2, 3, 4, 5, 6, 7].map((step, index) => (
-                  <div key={step} className="flex items-center">
+                  <div key={step} className="flex items-center flex-shrink-0">
                     {/* Circle Step */}
                     <div className="relative flex flex-col items-center">
-                      <svg
-                        width="40"
-                        height="40"
-                        viewBox="0 0 40 40"
-                        className={`transition-all duration-300 ${
+                      <div
+                        className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
                           step < currentStep
-                            ? 'text-elysion-primary'
+                            ? 'bg-elysion-primary'
                             : step === currentStep
-                            ? 'text-elysion-accent'
-                            : 'text-gray-300'
+                            ? 'bg-elysion-accent'
+                            : 'bg-gray-300'
                         }`}
                       >
-                        <circle
-                          cx="20"
-                          cy="20"
-                          r="18"
-                          fill="currentColor"
-                        />
                         {/* Checkmark for completed steps */}
-                        {step < currentStep && (
-                          <path
-                            d="M12 20 L17 25 L28 14"
-                            stroke="white"
-                            strokeWidth="2.5"
-                            fill="none"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
+                        {step < currentStep ? (
+                          <svg className="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                          </svg>
+                        ) : (
+                          <span className="text-white text-sm sm:text-base font-semibold">{step}</span>
                         )}
-                        {/* Number for current and future steps */}
-                        {step >= currentStep && (
-                          <text
-                            x="20"
-                            y="25"
-                            textAnchor="middle"
-                            fill="white"
-                            fontSize="16"
-                            fontWeight="600"
-                            fontFamily="Montserrat, sans-serif"
-                          >
-                            {step}
-                          </text>
-                        )}
-                      </svg>
+                      </div>
                     </div>
                     
                     {/* Connector line between steps */}
                     {index < 6 && (
                       <div
-                        className={`w-8 h-1 mx-1 transition-all duration-300 ${
+                        className={`w-3 sm:w-6 h-1 mx-0.5 sm:mx-1 transition-all duration-300 ${
                           step < currentStep
                             ? 'bg-elysion-primary'
                             : 'bg-gray-300'
@@ -2143,7 +2117,7 @@ const EmployeeSimulator = () => {
                 ))}
               </div>
             </div>
-          )}          
+          )}
 
           {/* Steps */}
           {currentStep === 1 && renderStep1()}

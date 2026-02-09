@@ -2022,35 +2022,77 @@ const EmployeeSimulator = () => {
           </p>
         </div>
 
-        {/* CTA */}
-        <div className="bg-elysion-primary p-8 rounded-2xl">
-          <h3 className="text-2xl font-bold mb-4 text-white">
-            Créez votre compte pour sauvegarder cette simulation
-          </h3>
-          <p className="mb-6 bg-white/20 text-white px-4 py-2 rounded-lg">
-            Accédez à des recommandations personnalisées et suivez l'évolution de votre retraite.
-          </p>
-          <div className="flex gap-4">
-            <button
-              onClick={() => navigate('/onboarding', { 
-                state: { 
-                  professionalStatus: branch === 'private' ? 'employee' : 'civil_servant',
-                  simulationData: formData,
-                  results: results
-                }
-              })}
-              className="bg-white text-elysion-primary hover:bg-gray-100 font-semibold px-6 py-3 rounded-lg"
-            >
-              Créer mon compte
-            </button>
-            <button
-              onClick={() => navigate('/auth?mode=login')}
-              className="bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-6 py-3 rounded-lg"
-            >
-              Se connecter
-            </button>
+        {/* CTA - Different for logged in vs not logged in users */}
+        {user ? (
+          /* Logged in user - Show save confirmation and dashboard link */
+          <div className="bg-elysion-primary p-6 sm:p-8 rounded-2xl">
+            <div className="flex items-center gap-3 mb-4">
+              {savingResults ? (
+                <div className="w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>
+              ) : (
+                <div className="w-8 h-8 bg-green-400 rounded-full flex items-center justify-center">
+                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+              )}
+              <h3 className="text-xl sm:text-2xl font-bold text-white">
+                {savingResults ? 'Sauvegarde en cours...' : 'Simulation sauvegardée !'}
+              </h3>
+            </div>
+            <p className="mb-6 bg-white/20 text-white px-4 py-2 rounded-lg text-sm sm:text-base">
+              Vos résultats ont été enregistrés dans votre tableau de bord. Vous pouvez y accéder à tout moment.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+              <button
+                onClick={() => navigate('/dashboard')}
+                className="bg-white text-elysion-primary hover:bg-gray-100 font-semibold px-6 py-3 rounded-lg transition-colors"
+                data-testid="go-to-dashboard-btn"
+              >
+                Voir mon tableau de bord
+              </button>
+              <button
+                onClick={() => navigate('/investment-axes', { state: { simulationData: { results, form_data: formData } } })}
+                className="bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
+                data-testid="view-investment-axes-btn"
+              >
+                Voir mes axes d&apos;investissement
+              </button>
+            </div>
           </div>
-        </div>
+        ) : (
+          /* Not logged in - Show account creation CTA */
+          <div className="bg-elysion-primary p-6 sm:p-8 rounded-2xl">
+            <h3 className="text-xl sm:text-2xl font-bold mb-4 text-white">
+              Créez votre compte pour sauvegarder cette simulation
+            </h3>
+            <p className="mb-6 bg-white/20 text-white px-4 py-2 rounded-lg text-sm sm:text-base">
+              Accédez à des recommandations personnalisées et suivez l&apos;évolution de votre retraite.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+              <button
+                onClick={() => navigate('/onboarding', { 
+                  state: { 
+                    professionalStatus: branch === 'private' ? 'employee' : 'civil_servant',
+                    simulationData: formData,
+                    results: results
+                  }
+                })}
+                className="bg-white text-elysion-primary hover:bg-gray-100 font-semibold px-6 py-3 rounded-lg transition-colors"
+                data-testid="create-account-btn"
+              >
+                Créer mon compte
+              </button>
+              <button
+                onClick={() => navigate('/auth?mode=login')}
+                className="bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
+                data-testid="login-btn"
+              >
+                Se connecter
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     );
   };
@@ -2063,10 +2105,47 @@ const EmployeeSimulator = () => {
           <div className="flex justify-between items-center h-16">
             <button 
               onClick={() => navigate('/')}
-              className="text-2xl font-bold text-elysion-primary hover:text-elysion-accent transition-colors"
+              className="text-xl sm:text-2xl font-bold text-elysion-primary hover:text-elysion-accent transition-colors"
             >
               Elysion
             </button>
+            
+            {/* Right side - Show user info if logged in, or login buttons if not */}
+            <div className="flex items-center space-x-3 sm:space-x-4">
+              {user ? (
+                /* Logged in */
+                <>
+                  <button
+                    onClick={() => navigate('/dashboard')}
+                    className="hidden sm:flex items-center space-x-2 text-elysion-text-dark hover:text-elysion-primary transition-colors"
+                  >
+                    <span className="text-sm font-medium">Tableau de bord</span>
+                  </button>
+                  <div className="flex items-center space-x-2 bg-elysion-primary/10 px-3 py-1.5 rounded-full">
+                    <span className="text-lg">👤</span>
+                    <span className="text-sm font-medium text-elysion-primary hidden sm:inline">
+                      {user.first_name || user.full_name?.split(' ')[0]}
+                    </span>
+                  </div>
+                </>
+              ) : (
+                /* Not logged in */
+                <>
+                  <button
+                    onClick={() => navigate('/auth?mode=login')}
+                    className="text-sm text-elysion-primary hover:text-elysion-accent font-medium transition-colors"
+                  >
+                    Se connecter
+                  </button>
+                  <button
+                    onClick={() => navigate('/auth?mode=register')}
+                    className="hidden sm:block bg-elysion-accent hover:bg-elysion-accent/90 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+                  >
+                    Créer un compte
+                  </button>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </nav>

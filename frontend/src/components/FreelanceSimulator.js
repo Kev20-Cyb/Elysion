@@ -1232,7 +1232,7 @@ const FreelanceSimulator = () => {
             { value: 'medium', label: '10 à 20 ans', desc: 'Horizon moyen - équilibre rendement/risque possible' },
             { value: 'long', label: 'Plus de 20 ans', desc: 'Horizon long - potentiel de croissance sur le long terme' }
           ].map(option => (
-            <label key={option.value} className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${formData.investmentHorizon === option.value ? 'border-elysion-primary bg-elysion-primary-50' : 'border-gray-200 hover:bg-gray-50'}`}>
+            <label key={option.value} className={`flex items-center gap-3 p-3 rounded-lg border-2 cursor-pointer transition-colors ${formData.investmentHorizon === option.value ? 'border-elysion-primary' : 'border-gray-200 hover:bg-gray-50'}`}>
               <input
                 type="radio"
                 name="horizon"
@@ -1262,7 +1262,7 @@ const FreelanceSimulator = () => {
             { value: '10', label: 'Jusqu\'à 10%', desc: 'Modéré - j\'accepte quelques fluctuations pour plus de potentiel' },
             { value: '20', label: 'Jusqu\'à 20% ou plus', desc: 'Tolérant - je vise le long terme et accepte la volatilité' }
           ].map(option => (
-            <label key={option.value} className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${formData.lossToleranceLevel === option.value ? 'border-elysion-primary bg-elysion-primary-50' : 'border-gray-200 hover:bg-gray-50'}`}>
+            <label key={option.value} className={`flex items-center gap-3 p-3 rounded-lg border-2 cursor-pointer transition-colors ${formData.lossToleranceLevel === option.value ? 'border-elysion-primary' : 'border-gray-200 hover:bg-gray-50'}`}>
               <input
                 type="radio"
                 name="lossTolerance"
@@ -1290,7 +1290,7 @@ const FreelanceSimulator = () => {
             { value: 'intermediate', label: 'Intermédiaire', desc: 'J\'ai déjà investi (assurance-vie, PER, PEA...)' },
             { value: 'advanced', label: 'Avancé', desc: 'Je suis à l\'aise avec les marchés et je gère activement mes placements' }
           ].map(option => (
-            <label key={option.value} className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${formData.marketKnowledge === option.value ? 'border-elysion-primary bg-elysion-primary-50' : 'border-gray-200 hover:bg-gray-50'}`}>
+            <label key={option.value} className={`flex items-center gap-3 p-3 rounded-lg border-2 cursor-pointer transition-colors ${formData.marketKnowledge === option.value ? 'border-elysion-primary' : 'border-gray-200 hover:bg-gray-50'}`}>
               <input
                 type="radio"
                 name="knowledge"
@@ -1559,35 +1559,77 @@ const FreelanceSimulator = () => {
           </p>
         </div>
 
-        {/* CTA */}
-        <div className="bg-elysion-primary p-8 rounded-2xl">
-          <h3 className="text-2xl font-bold mb-4 text-white">
-            Créez votre compte pour sauvegarder cette simulation
-          </h3>
-          <p className="mb-6 bg-white/20 text-white px-4 py-2 rounded-lg inline-block">
-            Accédez à des recommandations personnalisées, gérez vos documents et suivez l'évolution de votre retraite.
-          </p>
-          <div className="flex gap-4">
-            <button
-              onClick={() => navigate('/onboarding', { 
-                state: { 
-                  professionalStatus: 'freelance',
-                  simulationData: formData,
-                  results: results
-                }
-              })}
-              className="bg-white text-elysion-primary hover:bg-gray-100 font-semibold px-6 py-3 rounded-lg"
-            >
-              Créer mon compte
-            </button>
-            <button
-              onClick={() => navigate('/auth?mode=login')}
-              className="bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-6 py-3 rounded-lg"
-            >
-              Se connecter
-            </button>
+        {/* CTA - Different for logged in vs not logged in users */}
+        {user ? (
+          /* Logged in user - Show save confirmation and dashboard link */
+          <div className="bg-elysion-primary p-6 sm:p-8 rounded-2xl">
+            <div className="flex items-center gap-3 mb-4">
+              {savingResults ? (
+                <div className="w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>
+              ) : (
+                <div className="w-8 h-8 bg-green-400 rounded-full flex items-center justify-center">
+                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+              )}
+              <h3 className="text-xl sm:text-2xl font-bold text-white">
+                {savingResults ? 'Sauvegarde en cours...' : 'Simulation sauvegardée !'}
+              </h3>
+            </div>
+            <p className="mb-6 bg-white/20 text-white px-4 py-2 rounded-lg text-sm sm:text-base">
+              Vos résultats ont été enregistrés dans votre tableau de bord. Vous pouvez y accéder à tout moment.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+              <button
+                onClick={() => navigate('/dashboard')}
+                className="bg-white text-elysion-primary hover:bg-gray-100 font-semibold px-6 py-3 rounded-lg transition-colors"
+                data-testid="go-to-dashboard-btn"
+              >
+                Voir mon tableau de bord
+              </button>
+              <button
+                onClick={() => navigate('/investment-axes', { state: { simulationData: { results, form_data: formData } } })}
+                className="bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
+                data-testid="view-investment-axes-btn"
+              >
+                Voir mes axes d&apos;investissement
+              </button>
+            </div>
           </div>
-        </div>
+        ) : (
+          /* Not logged in - Show account creation CTA */
+          <div className="bg-elysion-primary p-6 sm:p-8 rounded-2xl">
+            <h3 className="text-xl sm:text-2xl font-bold mb-4 text-white">
+              Créez votre compte pour sauvegarder cette simulation
+            </h3>
+            <p className="mb-6 bg-white/20 text-white px-4 py-2 rounded-lg text-sm sm:text-base">
+              Accédez à des recommandations personnalisées, gérez vos documents et suivez l&apos;évolution de votre retraite.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+              <button
+                onClick={() => navigate('/onboarding', { 
+                  state: { 
+                    professionalStatus: 'freelance',
+                    simulationData: formData,
+                    results: results
+                  }
+                })}
+                className="bg-white text-elysion-primary hover:bg-gray-100 font-semibold px-6 py-3 rounded-lg transition-colors"
+                data-testid="create-account-btn"
+              >
+                Créer mon compte
+              </button>
+              <button
+                onClick={() => navigate('/auth?mode=login')}
+                className="bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
+                data-testid="login-btn"
+              >
+                Se connecter
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     );
   };
@@ -1600,10 +1642,47 @@ const FreelanceSimulator = () => {
           <div className="flex justify-between items-center h-16">
             <button 
               onClick={() => navigate('/')}
-              className="text-2xl font-bold text-elysion-primary hover:text-elysion-accent transition-colors"
+              className="text-xl sm:text-2xl font-bold text-elysion-primary hover:text-elysion-accent transition-colors"
             >
               Elysion
             </button>
+            
+            {/* Right side - Show user info if logged in, or login buttons if not */}
+            <div className="flex items-center space-x-3 sm:space-x-4">
+              {user ? (
+                /* Logged in */
+                <>
+                  <button
+                    onClick={() => navigate('/dashboard')}
+                    className="hidden sm:flex items-center space-x-2 text-elysion-text-dark hover:text-elysion-primary transition-colors"
+                  >
+                    <span className="text-sm font-medium">Tableau de bord</span>
+                  </button>
+                  <div className="flex items-center space-x-2 bg-elysion-primary/10 px-3 py-1.5 rounded-full">
+                    <span className="text-lg">👤</span>
+                    <span className="text-sm font-medium text-elysion-primary hidden sm:inline">
+                      {user.first_name || user.full_name?.split(' ')[0]}
+                    </span>
+                  </div>
+                </>
+              ) : (
+                /* Not logged in */
+                <>
+                  <button
+                    onClick={() => navigate('/auth?mode=login')}
+                    className="text-sm text-elysion-primary hover:text-elysion-accent font-medium transition-colors"
+                  >
+                    Se connecter
+                  </button>
+                  <button
+                    onClick={() => navigate('/auth?mode=register')}
+                    className="hidden sm:block bg-elysion-accent hover:bg-elysion-accent/90 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+                  >
+                    Créer un compte
+                  </button>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </nav>
@@ -1613,28 +1692,45 @@ const FreelanceSimulator = () => {
         <div className="bg-white rounded-2xl shadow-xl p-8">
           {/* Progress bar */}
           {currentStep <= 6 && (
-            <div className="mb-8">
-              <div className="flex justify-between mb-2">
-                {[1, 2, 3, 4, 5, 6].map((step) => (
-                  <div
-                    key={step}
-                    className={`w-9 h-9 rounded-full flex items-center justify-center font-semibold text-sm ${
-                      step === currentStep
-                        ? 'bg-elysion-primary text-white'
-                        : step < currentStep
-                        ? 'bg-elysion-accent text-white'
-                        : 'bg-gray-200 text-gray-500'
-                    }`}
-                  >
-                    {step}
+            <div className="mb-6 sm:mb-8">
+              {/* Step Indicator - Circle Design - Responsive */}
+              <div className="flex items-center justify-center gap-0.5 sm:gap-1 py-4 px-4 sm:px-2">
+                {[1, 2, 3, 4, 5, 6].map((step, index) => (
+                  <div key={step} className="flex items-center flex-shrink-0">
+                    {/* Circle Step */}
+                    <div className="relative flex flex-col items-center">
+                      <div
+                        className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
+                          step < currentStep
+                            ? 'bg-elysion-primary'
+                            : step === currentStep
+                            ? 'bg-elysion-accent'
+                            : 'bg-gray-300'
+                        }`}
+                      >
+                        {/* Checkmark for completed steps */}
+                        {step < currentStep ? (
+                          <svg className="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                          </svg>
+                        ) : (
+                          <span className="text-white text-sm sm:text-base font-semibold">{step}</span>
+                        )}
+                      </div>
+                    </div>
+                    
+                    {/* Connector line between steps */}
+                    {index < 5 && (
+                      <div
+                        className={`w-4 sm:w-6 h-1 mx-0.5 sm:mx-1 transition-all duration-300 ${
+                          step < currentStep
+                            ? 'bg-elysion-primary'
+                            : 'bg-gray-300'
+                        }`}
+                      />
+                    )}
                   </div>
                 ))}
-              </div>
-              <div className="h-2 bg-gray-200 rounded-full">
-                <div
-                  className="h-full bg-elysion-accent rounded-full transition-all"
-                  style={{ width: `${(currentStep / 6) * 100}%` }}
-                />
               </div>
             </div>
           )}

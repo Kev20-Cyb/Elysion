@@ -17,6 +17,10 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [selectedRetirementAge, setSelectedRetirementAge] = useState(null);
+
+  // Available retirement ages for selection
+  const retirementAgeOptions = [62, 63, 64, 65, 66, 67];
 
   const fetchDashboardData = useCallback(async () => {
     try {
@@ -53,57 +57,107 @@ const Dashboard = () => {
     fetchDashboardData();
   }, [fetchDashboardData]);
 
-  // Calculate investment data from simulation results
-  const getInvestmentData = () => {
+  // Calculate investment data from simulation results based on selected retirement age
+  const getInvestmentData = useCallback(() => {
     if (simulationData?.results) {
       const results = simulationData.results;
+      const formData = simulationData.form_data || {};
       
-      // Use pre-calculated values if available
-      if (results.currentPension !== undefined) {
-        return {
-          currentPension: results.currentPension || 0,
-          targetIncome: results.targetIncome || 0,
-          targetGap: results.targetGap || 0,
-          totalMonthlySavings: results.totalMonthlySavings || 0,
-          savingsAllocation: results.savingsAllocation || {},
-          hasSimulation: true,
-          replacementRate: results.replacementRate || 0,
-          retirementAge: results.scenarios?.[0]?.age || 64
-        };
+      // Get base retirement age from simulation or default
+      const baseRetirementAge = results.scenarios?.[0]?.age || results.retirementAge || 64;
+      const effectiveAge = selectedRetirementAge || baseRetirementAge;
+      
+      // Set initial selected age if not set
+      if (selectedRetirementAge === null && baseRetirementAge) {
+        setSelectedRetirementAge(baseRetirementAge);
       }
       
-      // Fallback: calculate from scenarios
-      const scenario = results.scenarios?.[0] || results;
-      const currentPension = scenario.totalMonthly || results.totalMonthly || 0;
+      // Calculate user's current age
+      const birthDate = formData.birthDate ? new Date(formData.birthDate) : null;
+      const currentAge = birthDate 
+        ? Math.floor((new Date() - birthDate) / (365.25 * 24 * 60 * 60 * 1000))
+        : 40;
       
-      // Get form data for income
-      const formData = simulationData.form_data || {};
+      // Years until retirement
+      const yearsToRetirement = Math.max(1, effectiveAge - currentAge);
+      
+      // Find scenario matching selected age if available
+      const matchingScenario = results.scenarios?.find(s => s.age === effectiveAge);
+      
+      // Get annual income
       const annualIncome = formData.annualIncome || formData.annualRevenue || formData.currentMonthlyIncome * 12 || 0;
       const monthlyIncome = Math.round(annualIncome / 12);
       
+      // Calculate pension based on age (simplified model)
+      // Earlier retirement = lower pension, later = higher
+      const ageDifference = effectiveAge - 64; // 64 as reference age
+      const pensionAdjustmentFactor = 1 + (ageDifference * 0.05); // ±5% per year
+      
+      let basePension = 0;
+      if (matchingScenario) {
+        basePension = matchingScenario.totalMonthly || 0;
+      } else if (results.currentPension !== undefined) {
+        basePension = Math.round(results.currentPension * pensionAdjustmentFactor);
+      } else {
+        const scenario = results.scenarios?.[0] || results;
+        basePension = Math.round((scenario.totalMonthly || results.totalMonthly || 0) * pensionAdjustmentFactor);
+      }
+      
+      // Calculate replacement rate based on age
+      let replacementRate = results.replacementRate || 0;
+      if (replacementRate > 0) {
+        replacementRate = Math.round(replacementRate * pensionAdjustmentFactor);
+        replacementRate = Math.min(100, Math.max(30, replacementRate)); // Cap between 30-100%
+      }
+      
       // Target: maintain 70% of current income
       const targetIncome = Math.round(monthlyIncome * 0.7);
-      const targetGap = Math.max(0, targetIncome - currentPension);
+      const targetGap = Math.max(0, targetIncome - basePension);
       
-      // Calculate savings
-      const capitalNeeded = targetGap * 12 * 25;
-      const monthsToRetirement = 20 * 12;
-      const totalMonthlySavings = Math.round(capitalNeeded / monthsToRetirement);
+      // Calculate required savings based on years to retirement
+      const capitalNeeded = targetGap * 12 * 25; // 25 years of retirement
+      const monthsToRetirement = yearsToRetirement * 12;
+      const totalMonthlySavings = monthsToRetirement > 0 ? Math.round(capitalNeeded / monthsToRetirement) : 0;
       
-      return {
-        currentPension,
-        targetIncome,
-        targetGap,
-        totalMonthlySavings,
-        savingsAllocation: {
+      // Savings allocation based on time horizon
+      let allocation = {};
+      if (yearsToRetirement > 15) {
+        // Long horizon - more aggressive
+        allocation = {
+          secure: Math.round(totalMonthlySavings * 0.10),
+          retirement: Math.round(totalMonthlySavings * 0.30),
+          markets: Math.round(totalMonthlySavings * 0.40),
+          realestate: Math.round(totalMonthlySavings * 0.20)
+        };
+      } else if (yearsToRetirement > 8) {
+        // Medium horizon - balanced
+        allocation = {
           secure: Math.round(totalMonthlySavings * 0.15),
           retirement: Math.round(totalMonthlySavings * 0.35),
           markets: Math.round(totalMonthlySavings * 0.30),
           realestate: Math.round(totalMonthlySavings * 0.20)
-        },
+        };
+      } else {
+        // Short horizon - more secure
+        allocation = {
+          secure: Math.round(totalMonthlySavings * 0.30),
+          retirement: Math.round(totalMonthlySavings * 0.40),
+          markets: Math.round(totalMonthlySavings * 0.15),
+          realestate: Math.round(totalMonthlySavings * 0.15)
+        };
+      }
+      
+      return {
+        currentPension: basePension,
+        targetIncome,
+        targetGap,
+        totalMonthlySavings,
+        savingsAllocation: allocation,
         hasSimulation: true,
-        replacementRate: results.replacementRate || scenario.replacementRate || 0,
-        retirementAge: scenario.age || results.retirementAge || 64
+        replacementRate,
+        retirementAge: effectiveAge,
+        yearsToRetirement,
+        currentAge
       };
     }
     
@@ -116,9 +170,11 @@ const Dashboard = () => {
       savingsAllocation: {},
       hasSimulation: false,
       replacementRate: 0,
-      retirementAge: 64
+      retirementAge: selectedRetirementAge || 64,
+      yearsToRetirement: 20,
+      currentAge: 40
     };
-  };
+  }, [simulationData, selectedRetirementAge]);
 
   const investmentData = getInvestmentData();
 
@@ -265,55 +321,106 @@ const Dashboard = () => {
 
         {/* Key Metrics Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8" data-testid="dashboard-metrics-section">
-          {/* Retirement Age Card */}
+          {/* Retirement Age Card - Interactive */}
           <div className="card-elysion slide-up p-4 sm:p-6">
             <div className="flex items-center justify-between mb-2 sm:mb-4">
-              <h3 className="text-base sm:text-lg font-semibold text-elysion-text-dark">Âge de retraite projeté</h3>
+              <h3 className="text-base sm:text-lg font-semibold text-elysion-text-dark">Âge de retraite souhaité</h3>
               <span className="text-xl sm:text-2xl">🎯</span>
             </div>
-            <div className="text-2xl sm:text-3xl font-bold text-elysion-primary mb-1 sm:mb-2" data-testid="dashboard-retirement-age">
-              {dashboardData?.projected_retirement_age} ans
+            
+            {/* Age Selector */}
+            <div className="mb-3">
+              <div className="flex items-center justify-center gap-1 sm:gap-2 flex-wrap">
+                {retirementAgeOptions.map((age) => (
+                  <button
+                    key={age}
+                    onClick={() => setSelectedRetirementAge(age)}
+                    className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full font-bold text-sm sm:text-base transition-all ${
+                      (selectedRetirementAge || investmentData.retirementAge) === age
+                        ? 'bg-elysion-primary text-white shadow-lg scale-110'
+                        : 'bg-gray-100 text-gray-600 hover:bg-elysion-primary/20 hover:text-elysion-primary'
+                    }`}
+                    data-testid={`retirement-age-${age}`}
+                  >
+                    {age}
+                  </button>
+                ))}
+              </div>
             </div>
-            <p className="text-xs sm:text-sm text-elysion-text-light">
-              Basé sur votre profil {userTypeInfo.label.toLowerCase()}
-            </p>
+            
+            <div className="text-center">
+              <div className="text-2xl sm:text-3xl font-bold text-elysion-primary mb-1" data-testid="dashboard-retirement-age">
+                {selectedRetirementAge || investmentData.retirementAge || dashboardData?.projected_retirement_age} ans
+              </div>
+              <p className="text-xs sm:text-sm text-elysion-text-light">
+                {investmentData.yearsToRetirement > 0 
+                  ? `Dans ${investmentData.yearsToRetirement} ans`
+                  : 'Basé sur votre profil'}
+              </p>
+            </div>
+            
+            {/* Impact indicator */}
+            {selectedRetirementAge && selectedRetirementAge !== 64 && (
+              <div className={`mt-3 text-xs text-center p-2 rounded-lg ${
+                selectedRetirementAge > 64 
+                  ? 'bg-green-50 text-green-700' 
+                  : 'bg-orange-50 text-orange-700'
+              }`}>
+                {selectedRetirementAge > 64 
+                  ? `+${(selectedRetirementAge - 64) * 5}% de pension estimée`
+                  : `${(selectedRetirementAge - 64) * 5}% de pension estimée`}
+              </div>
+            )}
           </div>
 
           {/* Monthly Pension Card */}
-          <div className="card-elysion slide-up" style={{animationDelay: '0.1s'}}>
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-elysion-text-dark">Pension mensuelle estimée</h3>
-              <span className="text-2xl">💰</span>
+          <div className="card-elysion slide-up p-4 sm:p-6" style={{animationDelay: '0.1s'}}>
+            <div className="flex items-center justify-between mb-2 sm:mb-4">
+              <h3 className="text-base sm:text-lg font-semibold text-elysion-text-dark">Pension mensuelle estimée</h3>
+              <span className="text-xl sm:text-2xl">💰</span>
             </div>
-            <div className="text-3xl font-bold text-elysion-accent mb-2" data-testid="dashboard-monthly-pension">
-              €{dashboardData?.estimated_monthly_pension?.toLocaleString()}
+            <div className="text-2xl sm:text-3xl font-bold text-elysion-accent mb-1 sm:mb-2" data-testid="dashboard-monthly-pension">
+              {investmentData.hasSimulation 
+                ? `${investmentData.currentPension.toLocaleString()} €`
+                : `€${dashboardData?.estimated_monthly_pension?.toLocaleString() || 0}`}
             </div>
-            <p className="text-sm text-elysion-text-light">
-              Projection basée sur vos cotisations
+            <p className="text-xs sm:text-sm text-elysion-text-light">
+              {investmentData.hasSimulation && investmentData.replacementRate > 0
+                ? `Taux de remplacement: ${investmentData.replacementRate}%`
+                : 'Projection basée sur vos cotisations'}
             </p>
           </div>
 
           {/* Savings Progress Card */}
-          <div className="card-elysion slide-up" style={{animationDelay: '0.2s'}}>
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-elysion-text-dark">Progrès épargne</h3>
-              <span className="text-2xl">📈</span>
+          <div className="card-elysion slide-up p-4 sm:p-6" style={{animationDelay: '0.2s'}}>
+            <div className="flex items-center justify-between mb-2 sm:mb-4">
+              <h3 className="text-base sm:text-lg font-semibold text-elysion-text-dark">Épargne suggérée</h3>
+              <span className="text-xl sm:text-2xl">📈</span>
             </div>
-            <div className="mb-4">
+            <div className="mb-3 sm:mb-4">
               <div className="flex justify-between items-center mb-2">
-                <span className="text-2xl font-bold text-elysion-primary" data-testid="dashboard-savings-progress">
-                  {dashboardData?.savings_progress}%
+                <span className="text-2xl sm:text-3xl font-bold text-elysion-primary" data-testid="dashboard-savings-progress">
+                  {investmentData.hasSimulation 
+                    ? `${investmentData.totalMonthlySavings.toLocaleString()} €`
+                    : `${dashboardData?.savings_progress || 0}%`}
                 </span>
+                {investmentData.hasSimulation && (
+                  <span className="text-xs sm:text-sm text-elysion-text-light">/mois</span>
+                )}
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-3">
-                <div 
-                  className={`h-3 rounded-full transition-all duration-1000 ${getProgressColor(dashboardData?.savings_progress)}`}
-                  style={{width: `${dashboardData?.savings_progress}%`}}
-                ></div>
-              </div>
+              {!investmentData.hasSimulation && (
+                <div className="w-full bg-gray-200 rounded-full h-3">
+                  <div 
+                    className={`h-3 rounded-full transition-all duration-1000 ${getProgressColor(dashboardData?.savings_progress)}`}
+                    style={{width: `${dashboardData?.savings_progress}%`}}
+                  ></div>
+                </div>
+              )}
             </div>
-            <p className="text-sm text-elysion-text-light">
-              De votre objectif retraite
+            <p className="text-xs sm:text-sm text-elysion-text-light">
+              {investmentData.hasSimulation 
+                ? `Pour combler l'écart de ${investmentData.targetGap.toLocaleString()} €/mois`
+                : 'De votre objectif retraite'}
             </p>
           </div>
         </div>

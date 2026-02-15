@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../App';
-import MobileTabBar, { PageHeader } from './MobileTabBar';
+import DashboardLayout from './DashboardLayout';
 
 const InvestmentAxes = () => {
   const navigate = useNavigate();
@@ -141,12 +141,9 @@ const InvestmentAxes = () => {
   };
 
   return (
-    <div className="min-h-screen bg-elysion-bg font-montserrat pb-20 md:pb-0">
-      {/* Navigation */}
-      <PageHeader title="Axes d'investissement" />
-
+    <DashboardLayout title="Axes d'investissement">
       {/* Content */}
-      <div className="max-w-6xl mx-auto px-4 py-6 sm:py-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
         {/* Header */}
         <div className="mb-6 sm:mb-8">
           <h1 className="text-2xl sm:text-3xl font-bold text-elysion-primary mb-4">
@@ -361,17 +358,14 @@ const InvestmentAxes = () => {
             </button>
             <button
               onClick={() => navigate('/dashboard')}
-              className="hidden md:block bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-6 py-3 rounded-lg transition-colors text-sm sm:text-base"
+              className="hidden lg:block bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-6 py-3 rounded-lg transition-colors text-sm sm:text-base"
             >
               Retour au tableau de bord
             </button>
           </div>
         </div>
       </div>
-
-      {/* Mobile Tab Bar */}
-      <MobileTabBar />
-    </div>
+    </DashboardLayout>
   );
 };
 

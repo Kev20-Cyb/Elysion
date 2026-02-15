@@ -2,13 +2,13 @@ import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { useAuth } from '../App';
 import { useNavigate, useLocation } from 'react-router-dom';
-import MobileTabBar from './MobileTabBar';
+import DashboardLayout from './DashboardLayout';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 const API = `${BACKEND_URL}/api`;
 
 const Dashboard = () => {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [dashboardData, setDashboardData] = useState(null);
@@ -16,7 +16,6 @@ const Dashboard = () => {
   const [recentDocuments, setRecentDocuments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [selectedRetirementAge, setSelectedRetirementAge] = useState(null);
 
   // Available retirement ages for selection
@@ -193,11 +192,6 @@ const Dashboard = () => {
     return 'bg-red-500';
   };
 
-  const handleLogout = () => {
-    logout();
-    navigate('/');
-  };
-
   if (loading) {
     return (
       <div className="min-h-screen bg-elysion-bg flex items-center justify-center">
@@ -229,85 +223,8 @@ const Dashboard = () => {
   const userTypeInfo = getUserTypeInfo(user?.user_type);
 
   return (
-    <div className="min-h-screen bg-elysion-bg font-montserrat pb-20 md:pb-0">
-      {/* Navigation */}
-      <nav className="bg-white/90 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            {/* Logo */}
-            <div className="flex items-center space-x-2 sm:space-x-4">
-              <h1 className="text-xl sm:text-2xl font-bold text-elysion-primary">Elysion</h1>
-              <span className="text-elysion-text-light hidden sm:inline">|</span>
-              <span className="text-elysion-text-dark font-medium hidden sm:inline">Tableau de bord</span>
-            </div>
-            
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-4">
-              <button 
-                onClick={() => navigate('/profile')}
-                className="flex items-center space-x-2 hover:bg-gray-100 px-3 py-2 rounded-lg transition-colors"
-                data-testid="dashboard-profile-link"
-              >
-                <span className="text-lg">{userTypeInfo.icon}</span>
-                <span className="text-elysion-text-dark font-medium">{user?.full_name}</span>
-              </button>
-              <button 
-                onClick={handleLogout}
-                className="text-elysion-text-light hover:text-elysion-primary transition-colors"
-                data-testid="dashboard-logout-btn"
-              >
-                Déconnexion
-              </button>
-            </div>
-
-            {/* Mobile Menu Button */}
-            <div className="md:hidden flex items-center space-x-3">
-              <span className="text-sm font-medium text-elysion-text-dark truncate max-w-[120px]">
-                {user?.full_name}
-              </span>
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
-                data-testid="mobile-menu-toggle"
-              >
-                {mobileMenuOpen ? (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                ) : (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                  </svg>
-                )}
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Mobile Dropdown Menu */}
-        {mobileMenuOpen && (
-          <div className="md:hidden bg-white border-t border-gray-100 shadow-lg">
-            <div className="px-4 py-3 space-y-2">
-              <button
-                onClick={() => { navigate('/profile'); setMobileMenuOpen(false); }}
-                className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                <span className="text-xl">{userTypeInfo.icon}</span>
-                <span className="font-medium text-elysion-text-dark">Mon profil</span>
-              </button>
-              <button
-                onClick={() => { handleLogout(); setMobileMenuOpen(false); }}
-                className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-red-50 text-red-600 transition-colors"
-              >
-                <span className="text-xl">🚪</span>
-                <span className="font-medium">Déconnexion</span>
-              </button>
-            </div>
-          </div>
-        )}
-      </nav>
-
-      <div className="max-w-7xl mx-auto px-4 py-6 sm:py-8">
+    <DashboardLayout title="Tableau de bord">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
         {/* Welcome Section */}
         <div className="mb-6 sm:mb-8 fade-in" data-testid="dashboard-welcome-section">
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-elysion-primary mb-2">
@@ -611,7 +528,7 @@ const Dashboard = () => {
         </div>
 
         {/* Quick Actions - Hidden on mobile (replaced by tab bar) */}
-        <div className="hidden md:block mt-6 sm:mt-8 card-elysion slide-up" data-testid="dashboard-quick-actions-section">
+        <div className="hidden lg:block mt-6 sm:mt-8 card-elysion slide-up" data-testid="dashboard-quick-actions-section">
           <h3 className="text-lg sm:text-xl font-semibold text-elysion-text-dark mb-4 sm:mb-6 flex items-center">
             <span className="mr-2">⚡</span>
             Actions rapides
@@ -649,10 +566,7 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-
-      {/* Mobile Tab Bar */}
-      <MobileTabBar />
-    </div>
+    </DashboardLayout>
   );
 };
 

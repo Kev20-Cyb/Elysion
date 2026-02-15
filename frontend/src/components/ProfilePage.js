@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../App';
 import axios from 'axios';
-import MobileTabBar, { PageHeader } from './MobileTabBar';
+import DashboardLayout from './DashboardLayout';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 const API = `${BACKEND_URL}/api`;
@@ -119,11 +119,8 @@ const ProfilePage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-elysion-bg font-montserrat pb-20 md:pb-0">
-      {/* Navigation */}
-      <PageHeader title="Mon compte" />
-
-      <div className="max-w-4xl mx-auto px-4 py-6 sm:py-8">
+    <DashboardLayout title="Mon compte">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
         {/* Header */}
         <div className="mb-6 sm:mb-8">
           <h1 className="text-2xl sm:text-3xl font-bold text-elysion-primary">Mon compte</h1>
@@ -403,10 +400,7 @@ const ProfilePage = () => {
           </div>
         </div>
       </div>
-
-      {/* Mobile Tab Bar */}
-      <MobileTabBar />
-    </div>
+    </DashboardLayout>
   );
 };
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../App';
 import axios from 'axios';
-import MobileTabBar, { PageHeader } from './MobileTabBar';
+import DashboardLayout from './DashboardLayout';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 const API = `${BACKEND_URL}/api`;
@@ -254,12 +254,9 @@ const Documents = () => {
   };
 
   return (
-    <div className="min-h-screen bg-elysion-bg font-montserrat pb-20 md:pb-0">
-      {/* Navigation */}
-      <PageHeader title="Mes Documents" />
-
+    <DashboardLayout title="Mes Documents">
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
         {/* Header */}
         <div className="mb-6 sm:mb-8">
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-elysion-primary mb-2">
@@ -508,10 +505,7 @@ const Documents = () => {
           </div>
         </div>
       )}
-
-      {/* Mobile Tab Bar */}
-      <MobileTabBar />
-    </div>
+    </DashboardLayout>
   );
 };
 

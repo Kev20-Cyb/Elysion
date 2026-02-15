@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../App';
 
 const Simulator = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [currentStep, setCurrentStep] = useState('intro'); // 'intro', 'choice'
   const [selectedStatus, setSelectedStatus] = useState('');
 
@@ -130,18 +132,39 @@ const Simulator = () => {
               Elysion
             </button>
             <div className="flex items-center space-x-4">
-              <button 
-                onClick={() => navigate('/auth?mode=login')}
-                className="text-elysion-primary hover:text-elysion-accent font-medium transition-colors"
-              >
-                Se connecter
-              </button>
-              <button 
-                onClick={() => navigate('/auth?mode=register')}
-                className="btn-elysion-accent"
-              >
-                Créer un compte
-              </button>
+              {user ? (
+                /* Logged in */
+                <>
+                  <button
+                    onClick={() => navigate('/dashboard')}
+                    className="text-elysion-text-dark hover:text-elysion-primary font-medium transition-colors"
+                  >
+                    Tableau de bord
+                  </button>
+                  <div className="flex items-center space-x-2 bg-elysion-primary/10 px-3 py-1.5 rounded-full">
+                    <span className="text-lg">👤</span>
+                    <span className="text-sm font-medium text-elysion-primary">
+                      {user.first_name || user.full_name?.split(' ')[0]}
+                    </span>
+                  </div>
+                </>
+              ) : (
+                /* Not logged in */
+                <>
+                  <button 
+                    onClick={() => navigate('/auth?mode=login')}
+                    className="text-elysion-primary hover:text-elysion-accent font-medium transition-colors"
+                  >
+                    Se connecter
+                  </button>
+                  <button 
+                    onClick={() => navigate('/auth?mode=register')}
+                    className="btn-elysion-accent"
+                  >
+                    Créer un compte
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>

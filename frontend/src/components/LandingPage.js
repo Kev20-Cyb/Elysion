@@ -239,17 +239,17 @@ const LandingPage = () => {
             </div>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-4">
+            <div className="hidden md:flex items-center space-x-3">
               <button 
                 onClick={() => navigate('/auth?mode=login')}
-                className="text-elysion-primary hover:text-elysion-accent font-medium transition-colors"
+                className="btn-outline"
                 data-testid="nav-login-btn"
               >
                 Se connecter
               </button>
               <button 
                 onClick={() => navigate('/auth?mode=register')}
-                className="btn-elysion-accent"
+                className="btn-accent"
                 data-testid="nav-create-account-btn"
               >
                 Créer un compte
@@ -280,29 +280,26 @@ const LandingPage = () => {
         {/* Mobile Dropdown Menu */}
         {mobileMenuOpen && (
           <div className="md:hidden bg-white border-t border-gray-100 shadow-lg">
-            <div className="px-4 py-3 space-y-2">
+            <div className="px-4 py-4 space-y-3">
               <button
                 onClick={() => { navigate('/simulator'); setMobileMenuOpen(false); }}
-                className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-gray-50 transition-colors"
+                className="btn-secondary w-full"
               >
-                <span className="text-xl">🔮</span>
-                <span className="font-medium text-elysion-text-dark">Simulateur</span>
+                Simulateur
               </button>
               
               <button
                 onClick={() => { navigate('/auth?mode=login'); setMobileMenuOpen(false); }}
-                className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-gray-50 transition-colors"
+                className="btn-outline w-full"
               >
-                <span className="text-xl">🔑</span>
-                <span className="font-medium text-elysion-text-dark">Se connecter</span>
+                Se connecter
               </button>
               
               <button
                 onClick={() => { navigate('/auth?mode=register'); setMobileMenuOpen(false); }}
-                className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg bg-elysion-accent text-white hover:bg-elysion-accent/90 transition-colors"
+                className="btn-accent w-full"
               >
-                <span className="text-xl">✨</span>
-                <span className="font-medium">Créer un compte</span>
+                Créer un compte
               </button>
             </div>
           </div>

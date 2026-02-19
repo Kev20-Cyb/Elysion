@@ -345,23 +345,27 @@ const Documents = () => {
           </div>
         </div>
 
-        {/* Category Filter */}
+        {/* Category Filter - Tabs */}
         <div className="mb-6">
-          <div className="flex flex-wrap gap-2">
+          <div className="border-b border-gray-200">
+            <nav className="flex space-x-0 overflow-x-auto" aria-label="Catégories">
             {categories.map((category) => (
               <button
                 key={category.value}
                 onClick={() => setSelectedCategory(category.value)}
-                className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                  className={`relative px-4 sm:px-6 py-3 text-sm font-medium whitespace-nowrap transition-colors ${
                   selectedCategory === category.value
-                    ? 'bg-elysion-primary text-white'
-                    : 'bg-white text-gray-700 hover:bg-elysion-primary-50 border border-gray-300'
+                      ? 'text-elysion-primary border-b-2 border-elysion-primary'
+                      : 'text-gray-500 hover:text-gray-700 hover:border-b-2 hover:border-gray-300'
                 }`}
               >
-                <span className="mr-2">{category.icon}</span>
                 {category.label}
+                  {selectedCategory === category.value && (
+                    <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-elysion-primary"></span>
+                  )}
               </button>
             ))}
+            </nav>
           </div>
         </div>
 

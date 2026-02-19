@@ -12,6 +12,7 @@ const EmployeeSimulator = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [branch, setBranch] = useState(null); // 'private' or 'public'
   const [savingResults, setSavingResults] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
   const [formData, setFormData] = useState({
     // Écran 1 - Profil
@@ -2110,36 +2111,96 @@ const EmployeeSimulator = () => {
               Elysion
             </button>
             
-            {/* Right side - Show user info if logged in, or login buttons if not */}
-            <div className="flex items-center space-x-3 sm:space-x-4">
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-3">
               {user ? (
-                /* Logged in */
                 <>
                   <button
                     onClick={() => navigate('/dashboard')}
-                    className="hidden sm:flex items-center space-x-2 text-elysion-text-dark hover:text-elysion-primary transition-colors"
+                    className="btn-secondary"
                   >
-                    <span className="text-sm font-medium">Tableau de bord</span>
+                    Tableau de bord
                   </button>
                   <div className="flex items-center space-x-2 bg-elysion-primary/10 px-3 py-1.5 rounded-full">
                     <span className="text-lg">👤</span>
-                    <span className="text-sm font-medium text-elysion-primary hidden sm:inline">
+                    <span className="text-sm font-medium text-elysion-primary">
                       {user.first_name || user.full_name?.split(' ')[0]}
                     </span>
                   </div>
                 </>
               ) : (
-                /* Not logged in */
                 <>
                   <button
                     onClick={() => navigate('/auth?mode=login')}
-                    className="text-sm text-elysion-primary hover:text-elysion-accent font-medium transition-colors"
+                    className="btn-outline"
                   >
                     Se connecter
                   </button>
                   <button
                     onClick={() => navigate('/auth?mode=register')}
-                    className="hidden sm:block bg-elysion-accent hover:bg-elysion-accent/90 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+                    className="btn-accent"
+                  >
+                    Créer un compte
+                  </button>
+                </>
+              )}
+            </div>
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              data-testid="employee-sim-mobile-menu-btn"
+            >
+              {mobileMenuOpen ? (
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              )}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Dropdown Menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden bg-white border-t border-gray-100 shadow-lg">
+            <div className="px-4 py-4 space-y-3">
+              <button
+                onClick={() => { navigate('/'); setMobileMenuOpen(false); }}
+                className="btn-ghost w-full text-left"
+              >
+                Accueil
+              </button>
+              {user ? (
+                <>
+                  <button
+                    onClick={() => { navigate('/dashboard'); setMobileMenuOpen(false); }}
+                    className="btn-secondary w-full"
+                  >
+                    Tableau de bord
+                  </button>
+                  <button
+                    onClick={() => { navigate('/profile'); setMobileMenuOpen(false); }}
+                    className="btn-outline w-full"
+                  >
+                    Mon profil
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={() => { navigate('/auth?mode=login'); setMobileMenuOpen(false); }}
+                    className="btn-outline w-full"
+                  >
+                    Se connecter
+                  </button>
+                  <button
+                    onClick={() => { navigate('/auth?mode=register'); setMobileMenuOpen(false); }}
+                    className="btn-accent w-full"
                   >
                     Créer un compte
                   </button>
@@ -2147,7 +2208,7 @@ const EmployeeSimulator = () => {
               )}
             </div>
           </div>
-        </div>
+        )}
       </nav>
 
       {/* Content */}

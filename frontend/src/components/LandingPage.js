@@ -25,7 +25,7 @@ const LandingPage = () => {
   };
 
   const handleCreateAccount = () => {
-    navigate('/auth?mode=register');
+    navigate('/onboarding');
   };
 
   const handleLogin = () => {
@@ -306,68 +306,74 @@ const LandingPage = () => {
         )}
       </nav>
 
-      {/* Hero Section - Problem & Solution */}
-      <section className="bg-gradient-to-br from-elysion-bg to-elysion-secondary/30 py-24 px-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="text-left">
-              
-              <h1 className="text-5xl md:text-6xl font-bold text-elysion-primary mb-6 slide-up font-montserrat">
-                Planifier sa retraite
-                <br />
-                <span className="text-elysion-text-dark">ne devrait pas être</span>
-                <br />
-                <span className="text-elysion-accent">compliqué.</span>
-              </h1>
-              
-              <p className="text-xl text-elysion-text-light mb-8 fade-in leading-relaxed">
-                Elysion vous aide à comprendre vos perspectives de retraite, simuler des scénarios et prendre des décisions éclairées — le tout sur une plateforme sécurisée.
-              </p>
-              
-              <div className="flex flex-col sm:flex-row gap-4 fade-in">
-                <button 
-                  onClick={handleOpenNewsletter}
-                  className="bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-8 py-4 rounded-xl text-lg transition-all hover:scale-105 hover:shadow-xl"
-                  data-testid="hero-newsletter-btn"
-                >
-                  Abonnez vous à notre newsletter
-                </button>
-                <button 
-                  onClick={handleTestSimulator}
-                  className="bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-8 py-4 rounded-xl text-lg transition-all hover:scale-105 hover:shadow-xl"
-                  data-testid="hero-test-simulator-btn"
-                >
-                  Testez notre simulateur
-                </button>
-              </div>
-            </div>
-            
-            {/* Hero Illustration */}
-            <div className="flex justify-center lg:justify-end">
-              <div className="relative">
-                <img
-                  src="./asset/IllustrationHome.png" 
-                  alt="Illustration tableau de bord"
-                  className="mx-auto mb-3"
-                />
-              </div>
+      {/* Hero Section */}
+      <section className="relative overflow-hidden py-12 md:py-20">
+        <div className="absolute inset-0 bg-gradient-to-br from-elysion-primary/5 via-transparent to-elysion-accent/5" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <div className="text-center max-w-4xl mx-auto">
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-elysion-primary mb-6 leading-tight">
+              Votre retraite,
+              <span className="text-elysion-accent"> calculée simplement</span>
+            </h2>
+            <p className="text-lg sm:text-xl text-elysion-text-light mb-8 max-w-2xl mx-auto">
+              Calculez facilement et précisément votre future pension de retraite. 
+              Simulez différents scénarios pour mieux préparer votre avenir.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button
+                onClick={handleTestSimulator}
+                className="btn-primary text-lg px-8 py-4"
+                data-testid="hero-test-simulator-btn"
+              >
+                Tester le simulateur
+              </button>
+              <button
+                onClick={handleCreateAccount}
+                className="btn-outline text-lg px-8 py-4"
+                data-testid="hero-create-account-btn"
+              >
+                Créer un compte
+              </button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Who is it for? Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-elysion-primary mb-6 font-montserrat">Conçu pour chaque parcours professionnel</h2>
+      {/* Key Stats Section */}
+      <section className="py-12 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {keyStats.map((stat, index) => (
+              <div key={index} className="text-center p-4">
+                <div className="text-3xl md:text-4xl font-bold text-elysion-primary mb-2">
+                  {stat.number}
+                </div>
+                <div className="text-sm text-elysion-text-light">
+                  {stat.label}
+                </div>
+              </div>
+            ))}
           </div>
-          
+        </div>
+      </section>
+
+      {/* Target Users Section */}
+      <section className="py-16 bg-elysion-bg">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h3 className="text-3xl font-bold text-elysion-primary mb-4">
+              Pour qui est Elysion ?
+            </h3>
+            <p className="text-elysion-text-light max-w-2xl mx-auto">
+              Que vous soyez salarié, indépendant ou chef d'entreprise, 
+              nous vous aidons à y voir plus clair.
+            </p>
+          </div>
           <div className="grid md:grid-cols-3 gap-8">
             {targetUsers.map((user, index) => (
-              <div 
+              <div
                 key={index}
-                className="flex flex-col items-center text-center p-6 rounded-2xl bg-white/60 backdrop-blur-sm border border-white/20"
+                className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow"
               >
                 <img
                   src={user.icon}
@@ -388,47 +394,32 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* How it Works Section */}
-      <section className="py-20 bg-elysion-bg">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-elysion-primary mb-4 font-montserrat">Comment fonctionne Elysion ?</h2>
-            <p className="text-xl text-elysion-text-light max-w-2xl mx-auto">
-              Un processus simple pour prendre le contrôle de votre avenir.
+      {/* How It Works Section */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h3 className="text-3xl font-bold text-elysion-primary mb-4">
+              Comment ça marche ?
+            </h3>
+            <p className="text-elysion-text-light max-w-2xl mx-auto">
+              En 3 étapes simples, obtenez une estimation précise de votre retraite.
             </p>
           </div>
-          
-          <div className="grid md:grid-cols-3 gap-12 mb-12">
+          <div className="grid md:grid-cols-3 gap-8">
             {processSteps.map((step, index) => (
-              <div key={step.step} className="text-center slide-up" style={{animationDelay: `${index * 0.2}s`}}>
-                <div className="relative mb-8">
-                  <div className="w-20 h-20 bg-elysion-primary text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-                    {step.step}
-                  </div>
-                  {index < processSteps.length - 1 && (
-                    <div className="hidden md:block absolute top-10 left-1/2 w-32 h-0.5 bg-elysion-secondary transform translate-x-full"></div>
-                  )}
+              <div key={index} className="text-center">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-elysion-primary text-white text-2xl font-bold mb-4">
+                  {step.step}
                 </div>
-                <h3 className="text-xl font-bold text-elysion-primary mb-4 font-montserrat">{step.title}</h3>
-                <p className="text-elysion-text-light">{step.description}</p>
+                <h4 className="text-xl font-bold text-elysion-primary mb-3">
+                  {step.title}
+                </h4>
+                <p className="text-elysion-text-light">
+                  {step.description}
+                </p>
               </div>
             ))}
           </div>
-          
-          {/* <div className="text-center">
-            <button 
-              onClick={handleTestSimulator}
-              className="bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-8 py-4 rounded-xl text-lg transition-all hover:scale-105 hover:shadow-xl mb-4"
-              data-testid="process-test-simulator-btn"
-            >
-              Tester notre simulateur
-            </button>
-            <div>
-              <a href="#" className="text-elysion-primary hover:text-elysion-accent text-sm underline transition-colors">
-                En savoir plus sur notre technologie
-              </a>
-            </div>
-          </div> */}
         </div>
       </section>
 

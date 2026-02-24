@@ -31,6 +31,7 @@ const AuthPage = () => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
   const { login, register, isAuthenticated } = useAuth();
   const navigate = useNavigate();
@@ -93,8 +94,73 @@ const AuthPage = () => {
             >
               Elysion
             </button>
+            
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-3">
+              <button 
+                onClick={() => navigate('/auth?mode=login')}
+                className={isLogin ? 'btn-primary' : 'btn-outline'}
+              >
+                Se connecter
+              </button>
+              <button 
+                onClick={() => navigate('/auth?mode=register')}
+                className={!isLogin ? 'btn-accent' : 'btn-outline'}
+              >
+                Créer un compte
+              </button>
+            </div>
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              data-testid="auth-mobile-menu-btn"
+            >
+              {mobileMenuOpen ? (
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              )}
+            </button>
           </div>
         </div>
+
+        {/* Mobile Dropdown Menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden bg-white border-t border-gray-100 shadow-lg">
+            <div className="px-4 py-4 space-y-3">
+              <button
+                onClick={() => { navigate('/'); setMobileMenuOpen(false); }}
+                className="btn-ghost w-full text-left"
+              >
+                Accueil
+              </button>
+              <button
+                onClick={() => { navigate('/simulator'); setMobileMenuOpen(false); }}
+                className="btn-secondary w-full"
+              >
+                Simulateur
+              </button>
+              <button
+                onClick={() => { setIsLogin(true); setMobileMenuOpen(false); }}
+                className={`w-full ${isLogin ? 'btn-primary' : 'btn-outline'}`}
+              >
+                Se connecter
+              </button>
+              <button
+                onClick={() => { setIsLogin(false); setMobileMenuOpen(false); }}
+                className={`w-full ${!isLogin ? 'btn-accent' : 'btn-outline'}`}
+              >
+                Créer un compte
+              </button>
+            </div>
+          </div>
+        )}
       </nav>
 
       {/* Split Screen Layout */}
@@ -269,28 +335,19 @@ const AuthPage = () => {
           </div>
         </div>
 
-        {/* Right Side - Illustration */}
-        <div className="hidden lg:flex flex-1 bg-gradient-to-br from-elysion-primary to-elysion-secondary items-center justify-center p-8">
-          <div className="text-center text-white">
-            <div className="text-8xl mb-6">🏦</div>
-            <h2 className="text-3xl font-bold mb-4">Votre avenir financier en toute sérénité</h2>
-            <p className="text-xl opacity-90 mb-6">
-              Rejoignez des milliers d'utilisateurs qui planifient déjà leur retraite avec Elysion
-            </p>
-            <div className="grid grid-cols-3 gap-6 mt-8">
-              <div className="text-center">
-                <div className="text-3xl mb-2">📊</div>
-                <div className="text-sm font-medium">Simulations précises</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl mb-2">🔒</div>
-                <div className="text-sm font-medium">Sécurité maximale</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl mb-2">💡</div>
-                <div className="text-sm font-medium">Conseils personnalisés</div>
-              </div>
-            </div>
+        {/* Hero Illustration */}
+        <div className="hidden lg:flex flex-1 items-center justify-center p-8">
+          <div className="relative">
+            <img
+              key={isLogin ? "login" : "register"}
+              src={
+                isLogin
+                  ? "/asset/IllustrationConnexion.png"
+                  : "/asset/IllustrationInscription.png"
+              }
+              alt={isLogin ? "Illustration connexion" : "Illustration inscription"}
+              className="fade-image fade-image-enter fade-image-enter-active"
+            />
           </div>
         </div>
       </div>

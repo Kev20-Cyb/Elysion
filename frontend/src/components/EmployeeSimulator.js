@@ -12,6 +12,7 @@ const EmployeeSimulator = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [branch, setBranch] = useState(null); // 'private' or 'public'
   const [savingResults, setSavingResults] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
   const [formData, setFormData] = useState({
     // Écran 1 - Profil
@@ -1325,7 +1326,7 @@ const EmployeeSimulator = () => {
             { value: 'medium', label: '10 à 20 ans', desc: 'Horizon moyen - équilibre rendement/risque' },
             { value: 'long', label: 'Plus de 20 ans', desc: 'Horizon long - potentiel de croissance' }
           ].map(option => (
-            <label key={option.value} className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${formData.investmentHorizon === option.value ? 'border-elysion-primary bg-elysion-primary-50' : 'border-gray-200 hover:bg-gray-50'}`}>
+            <label key={option.value} className={`flex items-center gap-3 p-3 rounded-lg border-2 cursor-pointer transition-colors ${formData.investmentHorizon === option.value ? 'border-elysion-primary' : 'border-gray-200 hover:bg-gray-50'}`}>
               <input
                 type="radio"
                 name="horizon"
@@ -1353,7 +1354,7 @@ const EmployeeSimulator = () => {
             { value: '10', label: 'Jusqu\'à 10%', desc: 'Modéré - j\'accepte quelques fluctuations' },
             { value: '20', label: 'Jusqu\'à 20% ou plus', desc: 'Tolérant - je vise le long terme' }
           ].map(option => (
-            <label key={option.value} className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${formData.lossToleranceLevel === option.value ? 'border-elysion-primary bg-elysion-primary-50' : 'border-gray-200 hover:bg-gray-50'}`}>
+            <label key={option.value} className={`flex items-center gap-3 p-3 rounded-lg border-2 cursor-pointer transition-colors ${formData.lossToleranceLevel === option.value ? 'border-elysion-primary' : 'border-gray-200 hover:bg-gray-50'}`}>
               <input
                 type="radio"
                 name="lossTolerance"
@@ -1381,7 +1382,7 @@ const EmployeeSimulator = () => {
             { value: 'intermediate', label: 'Intermédiaire', desc: 'J\'ai déjà investi (assurance-vie, PEA...)' },
             { value: 'advanced', label: 'Avancé', desc: 'Je suis à l\'aise avec les marchés financiers' }
           ].map(option => (
-            <label key={option.value} className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${formData.marketKnowledge === option.value ? 'border-elysion-primary bg-elysion-primary-50' : 'border-gray-200 hover:bg-gray-50'}`}>
+            <label key={option.value} className={`flex items-center gap-3 p-3 rounded-lg border-2 cursor-pointer transition-colors ${formData.marketKnowledge === option.value ? 'border-elysion-primary' : 'border-gray-200 hover:bg-gray-50'}`}>
               <input
                 type="radio"
                 name="knowledge"
@@ -2022,35 +2023,77 @@ const EmployeeSimulator = () => {
           </p>
         </div>
 
-        {/* CTA */}
-        <div className="bg-elysion-primary p-8 rounded-2xl">
-          <h3 className="text-2xl font-bold mb-4 text-white">
-            Créez votre compte pour sauvegarder cette simulation
-          </h3>
-          <p className="mb-6 bg-white/20 text-white px-4 py-2 rounded-lg">
-            Accédez à des recommandations personnalisées et suivez l'évolution de votre retraite.
-          </p>
-          <div className="flex gap-4">
-            <button
-              onClick={() => navigate('/onboarding', { 
-                state: { 
-                  professionalStatus: branch === 'private' ? 'employee' : 'civil_servant',
-                  simulationData: formData,
-                  results: results
-                }
-              })}
-              className="bg-white text-elysion-primary hover:bg-gray-100 font-semibold px-6 py-3 rounded-lg"
-            >
-              Créer mon compte
-            </button>
-            <button
-              onClick={() => navigate('/auth?mode=login')}
-              className="bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-6 py-3 rounded-lg"
-            >
-              Se connecter
-            </button>
+        {/* CTA - Different for logged in vs not logged in users */}
+        {user ? (
+          /* Logged in user - Show save confirmation and dashboard link */
+          <div className="bg-elysion-primary p-6 sm:p-8 rounded-2xl">
+            <div className="flex items-center gap-3 mb-4">
+              {savingResults ? (
+                <div className="w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>
+              ) : (
+                <div className="w-8 h-8 bg-green-400 rounded-full flex items-center justify-center">
+                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+              )}
+              <h3 className="text-xl sm:text-2xl font-bold text-white">
+                {savingResults ? 'Sauvegarde en cours...' : 'Simulation sauvegardée !'}
+              </h3>
+            </div>
+            <p className="mb-6 bg-white/20 text-white px-4 py-2 rounded-lg text-sm sm:text-base">
+              Vos résultats ont été enregistrés dans votre tableau de bord. Vous pouvez y accéder à tout moment.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+              <button
+                onClick={() => navigate('/dashboard')}
+                className="bg-white text-elysion-primary hover:bg-gray-100 font-semibold px-6 py-3 rounded-lg transition-colors"
+                data-testid="go-to-dashboard-btn"
+              >
+                Voir mon tableau de bord
+              </button>
+              <button
+                onClick={() => navigate('/investment-axes', { state: { simulationData: { results, form_data: formData } } })}
+                className="bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
+                data-testid="view-investment-axes-btn"
+              >
+                Voir mes axes d&apos;investissement
+              </button>
+            </div>
           </div>
-        </div>
+        ) : (
+          /* Not logged in - Show account creation CTA */
+          <div className="bg-elysion-primary p-6 sm:p-8 rounded-2xl">
+            <h3 className="text-xl sm:text-2xl font-bold mb-4 text-white">
+              Créez votre compte pour sauvegarder cette simulation
+            </h3>
+            <p className="mb-6 bg-white/20 text-white px-4 py-2 rounded-lg text-sm sm:text-base">
+              Accédez à des recommandations personnalisées et suivez l&apos;évolution de votre retraite.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+              <button
+                onClick={() => navigate('/onboarding', { 
+                  state: { 
+                    professionalStatus: branch === 'private' ? 'employee' : 'civil_servant',
+                    simulationData: formData,
+                    results: results
+                  }
+                })}
+                className="bg-white text-elysion-primary hover:bg-gray-100 font-semibold px-6 py-3 rounded-lg transition-colors"
+                data-testid="create-account-btn"
+              >
+                Créer mon compte
+              </button>
+              <button
+                onClick={() => navigate('/auth?mode=login')}
+                className="bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
+                data-testid="login-btn"
+              >
+                Se connecter
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     );
   };
@@ -2063,12 +2106,109 @@ const EmployeeSimulator = () => {
           <div className="flex justify-between items-center h-16">
             <button 
               onClick={() => navigate('/')}
-              className="text-2xl font-bold text-elysion-primary hover:text-elysion-accent transition-colors"
+              className="text-xl sm:text-2xl font-bold text-elysion-primary hover:text-elysion-accent transition-colors"
             >
               Elysion
             </button>
+            
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-3">
+              {user ? (
+                <>
+                  <button
+                    onClick={() => navigate('/dashboard')}
+                    className="btn-secondary"
+                  >
+                    Tableau de bord
+                  </button>
+                  <div className="flex items-center space-x-2 bg-elysion-primary/10 px-3 py-1.5 rounded-full">
+                    <span className="text-lg">👤</span>
+                    <span className="text-sm font-medium text-elysion-primary">
+                      {user.first_name || user.full_name?.split(' ')[0]}
+                    </span>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={() => navigate('/auth?mode=login')}
+                    className="btn-outline"
+                  >
+                    Se connecter
+                  </button>
+                  <button
+                    onClick={() => navigate('/auth?mode=register')}
+                    className="btn-accent"
+                  >
+                    Créer un compte
+                  </button>
+                </>
+              )}
+            </div>
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              data-testid="employee-sim-mobile-menu-btn"
+            >
+              {mobileMenuOpen ? (
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              )}
+            </button>
           </div>
         </div>
+
+        {/* Mobile Dropdown Menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden bg-white border-t border-gray-100 shadow-lg">
+            <div className="px-4 py-4 space-y-3">
+              <button
+                onClick={() => { navigate('/'); setMobileMenuOpen(false); }}
+                className="btn-ghost w-full text-left"
+              >
+                Accueil
+              </button>
+              {user ? (
+                <>
+                  <button
+                    onClick={() => { navigate('/dashboard'); setMobileMenuOpen(false); }}
+                    className="btn-secondary w-full"
+                  >
+                    Tableau de bord
+                  </button>
+                  <button
+                    onClick={() => { navigate('/profile'); setMobileMenuOpen(false); }}
+                    className="btn-outline w-full"
+                  >
+                    Mon profil
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={() => { navigate('/auth?mode=login'); setMobileMenuOpen(false); }}
+                    className="btn-outline w-full"
+                  >
+                    Se connecter
+                  </button>
+                  <button
+                    onClick={() => { navigate('/auth?mode=register'); setMobileMenuOpen(false); }}
+                    className="btn-accent w-full"
+                  >
+                    Créer un compte
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+        )}
       </nav>
 
       {/* Content */}
@@ -2076,63 +2216,37 @@ const EmployeeSimulator = () => {
         <div className="bg-white rounded-2xl shadow-xl p-8">
           {/* Progress bar */}
           {currentStep <= 7 && (
-            <div className="mb-8">
-              {/* Step Indicator - Circle Design */}
-              <div className="flex items-center justify-center gap-1 py-4">
+            <div className="mb-6 sm:mb-8">
+              {/* Step Indicator - Circle Design - Responsive */}
+              <div className="flex items-center justify-center gap-0.5 sm:gap-1 py-4 px-4 sm:px-2">
                 {[1, 2, 3, 4, 5, 6, 7].map((step, index) => (
-                  <div key={step} className="flex items-center">
+                  <div key={step} className="flex items-center flex-shrink-0">
                     {/* Circle Step */}
                     <div className="relative flex flex-col items-center">
-                      <svg
-                        width="40"
-                        height="40"
-                        viewBox="0 0 40 40"
-                        className={`transition-all duration-300 ${
+                      <div
+                        className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
                           step < currentStep
-                            ? 'text-elysion-primary'
+                            ? 'bg-elysion-primary'
                             : step === currentStep
-                            ? 'text-elysion-accent'
-                            : 'text-gray-300'
+                            ? 'bg-elysion-accent'
+                            : 'bg-gray-300'
                         }`}
                       >
-                        <circle
-                          cx="20"
-                          cy="20"
-                          r="18"
-                          fill="currentColor"
-                        />
                         {/* Checkmark for completed steps */}
-                        {step < currentStep && (
-                          <path
-                            d="M12 20 L17 25 L28 14"
-                            stroke="white"
-                            strokeWidth="2.5"
-                            fill="none"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
+                        {step < currentStep ? (
+                          <svg className="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                          </svg>
+                        ) : (
+                          <span className="text-white text-sm sm:text-base font-semibold">{step}</span>
                         )}
-                        {/* Number for current and future steps */}
-                        {step >= currentStep && (
-                          <text
-                            x="20"
-                            y="25"
-                            textAnchor="middle"
-                            fill="white"
-                            fontSize="16"
-                            fontWeight="600"
-                            fontFamily="Montserrat, sans-serif"
-                          >
-                            {step}
-                          </text>
-                        )}
-                      </svg>
+                      </div>
                     </div>
                     
                     {/* Connector line between steps */}
                     {index < 6 && (
                       <div
-                        className={`w-8 h-1 mx-1 transition-all duration-300 ${
+                        className={`w-3 sm:w-6 h-1 mx-0.5 sm:mx-1 transition-all duration-300 ${
                           step < currentStep
                             ? 'bg-elysion-primary'
                             : 'bg-gray-300'
@@ -2143,7 +2257,7 @@ const EmployeeSimulator = () => {
                 ))}
               </div>
             </div>
-          )}          
+          )}
 
           {/* Steps */}
           {currentStep === 1 && renderStep1()}

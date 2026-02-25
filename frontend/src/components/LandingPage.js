@@ -342,7 +342,7 @@ const LandingPage = () => {
                 style={{ animationDelay: `${index * 0.2}s` }}
               >
                 <div className='text-5xl mb-6 group-hover:scale-110 transition-transform'>
-                  {user.icon}
+                  <img src={user.icon} alt={user.title} className='w-16 h-16' />
                 </div>
                 <h3 className='text-xl font-bold text-elysion-primary mb-4 font-montserrat'>
                   {user.title}

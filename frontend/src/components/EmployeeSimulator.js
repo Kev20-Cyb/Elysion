@@ -8,7 +8,7 @@ const API = `${BACKEND_URL}/api`;
 
 const EmployeeSimulator = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
   const [branch, setBranch] = useState(null); // 'private' or 'public'
   const [savingResults, setSavingResults] = useState(false);
@@ -663,7 +663,7 @@ const EmployeeSimulator = () => {
             Nombre d'enfants
           </label>
           <input
-            type="number"
+            type="number" onFocus={(e) => e.target.select()}
             min="0"
             max="10"
             value={formData.children}
@@ -677,7 +677,7 @@ const EmployeeSimulator = () => {
             Début de carrière
           </label>
           <input
-            type="number"
+            type="number" onFocus={(e) => e.target.select()}
             placeholder="2005"
             min="1980"
             max={new Date().getFullYear()}
@@ -710,7 +710,7 @@ const EmployeeSimulator = () => {
                   Durée totale
                 </label>
                 <input
-                  type="number"
+                  type="number" onFocus={(e) => e.target.select()}
                   min="0"
                   value={formData.unemploymentDuration}
                   onChange={(e) => handleInputChange('unemploymentDuration', parseInt(e.target.value) || 0)}
@@ -754,7 +754,7 @@ const EmployeeSimulator = () => {
                   Durée totale
                 </label>
                 <input
-                  type="number"
+                  type="number" onFocus={(e) => e.target.select()}
                   min="0"
                   value={formData.parentalLeaveDuration}
                   onChange={(e) => handleInputChange('parentalLeaveDuration', parseInt(e.target.value) || 0)}
@@ -798,7 +798,7 @@ const EmployeeSimulator = () => {
                   Durée totale
                 </label>
                 <input
-                  type="number"
+                  type="number" onFocus={(e) => e.target.select()}
                   min="0"
                   value={formData.sickLeaveDuration}
                   onChange={(e) => handleInputChange('sickLeaveDuration', parseInt(e.target.value) || 0)}
@@ -901,7 +901,7 @@ const EmployeeSimulator = () => {
                     Année début
                   </label>
                   <input
-                    type="number"
+                    type="number" onFocus={(e) => e.target.select()}
                     value={period.startYear}
                     onChange={(e) => handleArrayUpdate('salaryPeriods', index, {
                       ...period,
@@ -916,7 +916,7 @@ const EmployeeSimulator = () => {
                     Année fin
                   </label>
                   <input
-                    type="number"
+                    type="number" onFocus={(e) => e.target.select()}
                     value={period.endYear}
                     onChange={(e) => handleArrayUpdate('salaryPeriods', index, {
                       ...period,
@@ -931,7 +931,7 @@ const EmployeeSimulator = () => {
                     Salaire annuel brut moyen (€)
                   </label>
                   <input
-                    type="number"
+                    type="number" onFocus={(e) => e.target.select()}
                     value={period.averageSalary}
                     onChange={(e) => handleArrayUpdate('salaryPeriods', index, {
                       ...period,
@@ -969,7 +969,7 @@ const EmployeeSimulator = () => {
                 <div className="flex items-center gap-3">
                   <span className="font-semibold min-w-[60px]">{yearData.year}</span>
                   <input
-                    type="number"
+                    type="number" onFocus={(e) => e.target.select()}
                     value={yearData.salary}
                     onChange={(e) => handleArrayUpdate('detailedSalaries', index, {
                       ...yearData,
@@ -1017,7 +1017,7 @@ const EmployeeSimulator = () => {
             Années travaillées à temps plein
           </label>
           <input
-            type="number"
+            type="number" onFocus={(e) => e.target.select()}
             min="0"
             max="50"
             value={formData.fullTimeYears}
@@ -1032,7 +1032,7 @@ const EmployeeSimulator = () => {
             Années travaillées à temps partiel
           </label>
           <input
-            type="number"
+            type="number" onFocus={(e) => e.target.select()}
             min="0"
             max="50"
             value={formData.partTimeYears}
@@ -1124,7 +1124,7 @@ const EmployeeSimulator = () => {
               Nombre de points Agirc-Arrco
             </label>
             <input
-              type="number"
+              type="number" onFocus={(e) => e.target.select()}
               min="0"
               value={formData.agircArrcoPoints}
               onChange={(e) => handleInputChange('agircArrcoPoints', parseFloat(e.target.value) || 0)}
@@ -1174,7 +1174,7 @@ const EmployeeSimulator = () => {
             Votre revenu mensuel net actuel (€)
           </label>
           <input
-            type="number"
+            type="number" onFocus={(e) => e.target.select()}
             min="0"
             value={formData.currentMonthlyIncome}
             onChange={(e) => handleInputChange('currentMonthlyIncome', parseFloat(e.target.value) || 0)}
@@ -1251,7 +1251,7 @@ const EmployeeSimulator = () => {
             </div>
           ) : (
             <input
-              type="number"
+              type="number" onFocus={(e) => e.target.select()}
               min="0"
               value={formData.targetIncomeAmount}
               onChange={(e) => handleInputChange('targetIncomeAmount', parseFloat(e.target.value) || 0)}
@@ -1275,7 +1275,7 @@ const EmployeeSimulator = () => {
             Avez-vous déjà un capital épargné pour la retraite ? (€)
           </label>
           <input
-            type="number"
+            type="number" onFocus={(e) => e.target.select()}
             min="0"
             value={formData.currentSavings}
             onChange={(e) => handleInputChange('currentSavings', parseFloat(e.target.value) || 0)}
@@ -1518,7 +1518,7 @@ const EmployeeSimulator = () => {
             Année de titularisation
           </label>
           <input
-            type="number"
+            type="number" onFocus={(e) => e.target.select()}
             min="1980"
             max={new Date().getFullYear()}
             value={formData.permanentSinceYear}
@@ -1548,7 +1548,7 @@ const EmployeeSimulator = () => {
           Dernier traitement indiciaire brut mensuel (€)
         </label>
         <input
-          type="number"
+          type="number" onFocus={(e) => e.target.select()}
           min="0"
           value={formData.lastIndexedSalary}
           onChange={(e) => handleInputChange('lastIndexedSalary', e.target.value)}
@@ -1575,7 +1575,7 @@ const EmployeeSimulator = () => {
           Années de service effectif comme fonctionnaire
         </label>
         <input
-          type="number"
+          type="number" onFocus={(e) => e.target.select()}
           min="0"
           max="50"
           value={formData.publicServiceYears}
@@ -1593,7 +1593,7 @@ const EmployeeSimulator = () => {
           Trimestres de bonification (enfants, services actifs, etc.)
         </label>
         <input
-          type="number"
+          type="number" onFocus={(e) => e.target.select()}
           min="0"
           max="40"
           value={formData.bonusQuarters}
@@ -1611,7 +1611,7 @@ const EmployeeSimulator = () => {
           Trimestres dans d'autres régimes (privé avant/après)
         </label>
         <input
-          type="number"
+          type="number" onFocus={(e) => e.target.select()}
           min="0"
           max="172"
           value={formData.otherRegimeQuarters}
@@ -1701,7 +1701,7 @@ const EmployeeSimulator = () => {
               Montant mensuel estimé du RAFP (€)
             </label>
             <input
-              type="number"
+              type="number" onFocus={(e) => e.target.select()}
               min="0"
               value={formData.rafpAmount}
               onChange={(e) => handleInputChange('rafpAmount', parseFloat(e.target.value) || 0)}
@@ -2146,22 +2146,29 @@ const EmployeeSimulator = () => {
               )}
             </div>
 
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
-              data-testid="employee-sim-mobile-menu-btn"
-            >
-              {mobileMenuOpen ? (
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
+            {/* Mobile: User name + Menu Button */}
+            <div className="md:hidden flex items-center gap-2">
+              {user && (
+                <span className="text-sm font-medium text-elysion-primary">
+                  {user.first_name || user.full_name?.split(' ')[0]}
+                </span>
               )}
-            </button>
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                data-testid="employee-sim-mobile-menu-btn"
+              >
+                {mobileMenuOpen ? (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                ) : (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  </svg>
+                )}
+              </button>
+            </div>
           </div>
         </div>
 
@@ -2188,6 +2195,12 @@ const EmployeeSimulator = () => {
                     className="btn-outline w-full"
                   >
                     Mon profil
+                  </button>
+                  <button
+                    onClick={() => { logout(); setMobileMenuOpen(false); navigate('/'); }}
+                    className="w-full py-2 px-4 rounded-lg text-red-600 font-medium bg-red-50 hover:bg-red-100 transition-colors"
+                  >
+                    Déconnexion
                   </button>
                 </>
               ) : (

@@ -345,9 +345,9 @@ const LandingPage = () => {
             <h2 className="text-4xl font-bold text-elysion-primary mb-6 font-montserrat">Conçu pour chaque parcours professionnel</h2>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-3 gap-8">
             {targetUsers.map((user, index) => (
-              <div
+              <div 
                 key={index}
                 className="flex flex-col items-center text-center p-6 rounded-2xl bg-white/60 backdrop-blur-sm border border-white/20"
               >

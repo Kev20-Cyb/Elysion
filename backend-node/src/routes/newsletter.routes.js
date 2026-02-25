@@ -14,6 +14,7 @@ function isValidEmail(email) {
 /**
  * POST /api/newsletter/subscribe
  * Inscrit un email à la newsletter
+ * Upsert : si déjà inscrit, réactive silencieusement (meilleur UX)
  */
 router.post("/subscribe", async (req, res) => {
   try {
@@ -45,6 +46,7 @@ router.post("/subscribe", async (req, res) => {
     return res.status(500).json({ detail: "Erreur lors de l'inscription." });
   }
 });
+
 /**
  * POST /api/newsletter/unsubscribe
  * Désinscrit un email de la newsletter

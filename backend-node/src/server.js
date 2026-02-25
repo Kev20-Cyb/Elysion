@@ -40,7 +40,7 @@ app.use(
   })
 );
 
-// 🔥 IMPORTANT pour les preflight requests
+// IMPORTANT pour les preflight requests
 app.options("*", cors());
 
 /* =========================
@@ -61,6 +61,7 @@ app.get("/api/health", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api", dashboardRoutes); // Pour /api/simulation/save et /api/simulation/latest
 app.use("/api/chat", chatRoutes);
 app.use("/api/chat/config", chatConfigRoutes);
 app.use("/api/newsletter", newsletterRoutes);
@@ -79,7 +80,7 @@ app.use((err, req, res, next) => {
 app.listen(PORT, async () => {
   try {
     await connectDB();
-    console.log(`🚀 Backend Elysion Node running on http://localhost:${PORT}`);
+    console.log(`Backend Elysion Node running on http://localhost:${PORT}`);
   } catch (err) {
     console.error("Failed to connect to DB:", err);
     process.exit(1);

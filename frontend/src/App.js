@@ -51,8 +51,8 @@ const AuthProvider = ({ children }) => {
     const checkAuth = async () => {
       if (token) {
         try {
-          const response = await axios.get(`${API}/user/profile`);
-          setUser(response.data);
+          const response = await axios.get(`${API}/auth/me`);
+          setUser(response.data.user || response.data);
         } catch (error) {
           console.error('Token invalid:', error);
           logout();
@@ -73,7 +73,11 @@ const AuthProvider = ({ children }) => {
       // Support both 'token' (Node.js) and 'access_token' (Python) formats
       const tokenValue = response.data.token || response.data.access_token;
       const userData = response.data.user;
-      
+
+      if (!tokenValue) {
+        return { success: false, error: "Token manquant dans la réponse serveur" };
+      }
+
       setToken(tokenValue);
       setUser(userData);
       localStorage.setItem('elysion_token', tokenValue);
@@ -82,13 +86,13 @@ const AuthProvider = ({ children }) => {
       // Handle Pydantic validation errors (array of objects) or simple string errors
       const detail = error.response?.data?.detail;
       let errorMessage = 'Échec de la connexion';
-      
+
       if (typeof detail === 'string') {
         errorMessage = detail;
       } else if (Array.isArray(detail) && detail.length > 0) {
         errorMessage = detail.map(err => err.msg || err.message || JSON.stringify(err)).join(', ');
       }
-      
+
       return {
         success: false,
         error: errorMessage
@@ -103,23 +107,27 @@ const AuthProvider = ({ children }) => {
       // Support both 'token' (Node.js) and 'access_token' (Python) formats
       const tokenValue = response.data.token || response.data.access_token;
       const newUser = response.data.user;
-      
+
+      if (!tokenValue) {
+        return { success: false, error: "Token manquant dans la réponse serveur" };
+      }
+
       setToken(tokenValue);
-      setUser(newUser);
+      setUser(newUser || null);
       localStorage.setItem('elysion_token', tokenValue);
       return { success: true };
     } catch (error) {
       // Handle Pydantic validation errors (array of objects) or simple string errors
       const detail = error.response?.data?.detail;
       let errorMessage = 'Échec de l\'inscription';
-      
+
       if (typeof detail === 'string') {
         errorMessage = detail;
       } else if (Array.isArray(detail) && detail.length > 0) {
         // Pydantic validation error - extract the message
         errorMessage = detail.map(err => err.msg || err.message || JSON.stringify(err)).join(', ');
       }
-      
+
       return {
         success: false,
         error: errorMessage
@@ -153,7 +161,7 @@ const AuthProvider = ({ children }) => {
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
-  
+
   if (loading) {
     return (
       <div className="min-h-screen bg-elysion-bg flex items-center justify-center">
@@ -161,7 +169,7 @@ const ProtectedRoute = ({ children }) => {
       </div>
     );
   }
-  
+
   return isAuthenticated ? children : <Navigate to="/auth" replace />;
 };
 
@@ -186,40 +194,43 @@ function App() {
             <Route path="/onboarding" element={<OnboardingFlow />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />
-            <Route 
-              path="/dashboard" 
+            <Route
+              path="/dashboard"
               element={
                 <ProtectedRoute>
                   <Dashboard />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/documents" 
+            <Route
+              path="/documents"
               element={
                 <ProtectedRoute>
                   <Documents />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/investment-axes" 
+            <Route
+              path="/investment-axes"
               element={
                 <ProtectedRoute>
                   <InvestmentAxes />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/profile" 
+            <Route
+              path="/profile"
               element={
                 <ProtectedRoute>
                   <ProfilePage />
                 </ProtectedRoute>
-              } 
+              }
             />
+
+            {/* Fallback */}
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
-          
+
           {/* Le chatbot est disponible partout quand connecté */}
           <ChatWhenAuthed />
         </BrowserRouter>

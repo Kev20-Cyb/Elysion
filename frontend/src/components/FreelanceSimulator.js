@@ -2305,63 +2305,79 @@ const FreelanceSimulator = () => {
         )}
       </nav>
 
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        {/* Stepper */}
-        {!results && (
-          <div className="mb-8">
-            <div className="flex items-center justify-center">
-              {Array.from({ length: getTotalStepsDisplay() }, (_, i) => i + 1).map((step, index) => (
-                <React.Fragment key={step}>
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold ${
-                    currentStep >= step
-                      ? 'bg-elysion-primary text-white'
-                      : 'bg-gray-200 text-gray-500'
-                  }`}>
-                    {step}
+      <div className="max-w-4xl mx-auto px-4 py-12">
+        <div className="bg-white rounded-2xl shadow-xl p-8">
+          {/* Progress bar */}
+          {!results && (
+            <div className="mb-6 sm:mb-8">
+              <div className="flex items-center justify-center gap-0.5 sm:gap-1 py-4 px-4 sm:px-2">
+                {Array.from({ length: getTotalStepsDisplay() }, (_, i) => i + 1).map((step, index) => (
+                  <div key={step} className="flex items-center flex-shrink-0">
+                    <div className="relative flex flex-col items-center">
+                      <div
+                        className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
+                          step < currentStep
+                            ? 'bg-elysion-primary'
+                            : step === currentStep
+                            ? 'bg-elysion-accent'
+                            : 'bg-gray-300'
+                        }`}
+                      >
+                        {step < currentStep ? (
+                          <svg className="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                          </svg>
+                        ) : (
+                          <span className="text-white text-sm sm:text-base font-semibold">{step}</span>
+                        )}
+                      </div>
+                    </div>
+                    {index < getTotalStepsDisplay() - 1 && (
+                      <div
+                        className={`w-3 sm:w-6 h-1 mx-0.5 sm:mx-1 transition-all duration-300 ${
+                          step < currentStep
+                            ? 'bg-elysion-primary'
+                            : 'bg-gray-300'
+                        }`}
+                      />
+                    )}
                   </div>
-                  {index < getTotalStepsDisplay() - 1 && (
-                    <div className={`w-8 md:w-16 h-1 ${
-                      currentStep > step ? 'bg-elysion-primary' : 'bg-gray-200'
-                    }`} />
-                  )}
-                </React.Fragment>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* Contenu */}
-        <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8">
+          {/* Contenu */}
           {getCurrentStepContent()}
-        </div>
 
-        {/* Navigation buttons */}
-        {!results && (
-          <div className="flex justify-between mt-6">
-            <button
-              onClick={prevStep}
-              className="btn-outline"
-              data-testid="freelance-back-btn"
-            >
-              ← Retour
-            </button>
-            
-            <button
-              onClick={nextStep}
-              className="btn-primary"
-              disabled={
-                (currentStep === 1 && !formData.freelanceStatus) ||
-                (formData.retirementAges.length === 0 && 
-                  ((formData.hadSalariedPeriods && currentStep === 7) || (!formData.hadSalariedPeriods && currentStep === 6)))
-              }
-              data-testid="freelance-next-btn"
-            >
-              {((formData.hadSalariedPeriods && currentStep === 7) || (!formData.hadSalariedPeriods && currentStep === 6)) 
-                ? 'Calculer ma retraite' 
-                : 'Suivant →'}
-            </button>
-          </div>
-        )}
+          {/* Navigation buttons */}
+          {!results && (
+            <div className="flex justify-between mt-8">
+              <button
+                onClick={prevStep}
+                className="btn-outline"
+                data-testid="freelance-back-btn"
+              >
+                ← Retour
+              </button>
+              
+              <button
+                onClick={nextStep}
+                className="btn-primary disabled:opacity-50"
+                disabled={
+                  (currentStep === 1 && !formData.freelanceStatus) ||
+                  (formData.retirementAges.length === 0 && 
+                    ((formData.hadSalariedPeriods && currentStep === 7) || (!formData.hadSalariedPeriods && currentStep === 6)))
+                }
+                data-testid="freelance-next-btn"
+              >
+                {((formData.hadSalariedPeriods && currentStep === 7) || (!formData.hadSalariedPeriods && currentStep === 6)) 
+                  ? 'Calculer ma retraite' 
+                  : 'Suivant →'}
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

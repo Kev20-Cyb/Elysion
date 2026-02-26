@@ -2218,7 +2218,7 @@ const FreelanceSimulator = () => {
                     Se connecter
                   </button>
                   <button 
-                    onClick={() => navigate('/auth?mode=register')}
+                    onClick={() => navigate('/onboarding')}
                     className="btn-outline"
                   >
                     Créer un compte
@@ -2293,7 +2293,7 @@ const FreelanceSimulator = () => {
                     Se connecter
                   </button>
                   <button
-                    onClick={() => { navigate('/auth?mode=register'); setMobileMenuOpen(false); }}
+                    onClick={() => { navigate('/onboarding'); setMobileMenuOpen(false); }}
                     className="btn-outline w-full"
                   >
                     Créer un compte

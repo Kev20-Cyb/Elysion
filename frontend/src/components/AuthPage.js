@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../App';
 import axios from 'axios';
 
@@ -7,33 +7,15 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 const API = `${BACKEND_URL}/api`;
 
 const AuthPage = () => {
-  const [searchParams] = useSearchParams();
-  const location = useLocation();
-  
-  // Default to login, but check URL params or state for mode
-  const getInitialMode = () => {
-    const modeParam = searchParams.get('mode');
-    if (modeParam === 'register') return false;
-    if (modeParam === 'login') return true;
-    
-    // Check if coming from onboarding or other flows that expect registration
-    if (location.state?.mode === 'register') return false;
-    
-    return true; // Default to login
-  };
-  
-  const [isLogin, setIsLogin] = useState(getInitialMode());
   const [formData, setFormData] = useState({
     email: '',
     password: '',
-    full_name: '',
-    user_type: 'employee'
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
-  const { login, register, isAuthenticated } = useAuth();
+  const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
   // Redirect if already authenticated
@@ -49,12 +31,7 @@ const AuthPage = () => {
     setError('');
 
     try {
-      let result;
-      if (isLogin) {
-        result = await login(formData.email, formData.password);
-      } else {
-        result = await register(formData);
-      }
+      const result = await login(formData.email, formData.password);
 
       if (result.success) {
         navigate('/dashboard');
@@ -75,12 +52,6 @@ const AuthPage = () => {
     });
   };
 
-  const userTypes = [
-    { value: 'employee', label: 'Salarié', icon: '👔' },
-    { value: 'freelancer', label: 'Freelance', icon: '💻' },
-    { value: 'business_owner', label: 'Chef d\'entreprise', icon: '🏢' }
-  ];
-
   return (
     <div className="min-h-screen bg-elysion-bg font-montserrat">
       {/* Navigation */}
@@ -98,14 +69,14 @@ const AuthPage = () => {
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-3">
               <button 
-                onClick={() => navigate('/auth?mode=login')}
-                className={isLogin ? 'btn-primary' : 'btn-outline'}
+                onClick={() => navigate('/auth')}
+                className="btn-primary"
               >
                 Se connecter
               </button>
               <button 
-                onClick={() => navigate('/auth?mode=register')}
-                className={!isLogin ? 'btn-primary' : 'btn-outline'}
+                onClick={() => navigate('/onboarding')}
+                className="btn-outline"
               >
                 Créer un compte
               </button>
@@ -147,14 +118,14 @@ const AuthPage = () => {
                 Simulateur
               </button>
               <button
-                onClick={() => { setIsLogin(true); setMobileMenuOpen(false); }}
-                className={`w-full ${isLogin ? 'btn-primary' : 'btn-outline'}`}
+                onClick={() => { navigate('/auth'); setMobileMenuOpen(false); }}
+                className="w-full btn-primary"
               >
                 Se connecter
               </button>
               <button
-                onClick={() => { setIsLogin(false); setMobileMenuOpen(false); }}
-                className={`w-full ${!isLogin ? 'btn-primary' : 'btn-outline'}`}
+                onClick={() => { navigate('/onboarding'); setMobileMenuOpen(false); }}
+                className="w-full btn-outline"
               >
                 Créer un compte
               </button>
@@ -172,13 +143,10 @@ const AuthPage = () => {
           <div className="card-elysion fade-in">
             <div className="text-center mb-8">
               <h2 className="text-3xl font-bold text-elysion-primary mb-2">
-                {isLogin ? 'Connexion' : 'Créer un compte'}
+                Connexion
               </h2>
               <p className="text-elysion-text-light">
-                {isLogin 
-                  ? 'Accédez à votre tableau de bord personnalisé' 
-                  : 'Commencez votre planification retraite dès aujourd\'hui'
-                }
+                Accédez à votre tableau de bord personnalisé
               </p>
             </div>
 
@@ -189,59 +157,6 @@ const AuthPage = () => {
             )}
 
             <form onSubmit={handleSubmit} className="space-y-6">
-              {!isLogin && (
-                <div className="space-y-4">
-                  {/* Full Name */}
-                  <div>
-                    <label htmlFor="full_name" className="block text-sm font-medium text-elysion-text-dark mb-2">
-                      Nom complet
-                    </label>
-                    <input
-                      type="text"
-                      id="full_name"
-                      name="full_name"
-                      value={formData.full_name}
-                      onChange={handleChange}
-                      className="input-elysion"
-                      placeholder="Votre nom complet"
-                      required={!isLogin}
-                      data-testid="auth-fullname-input"
-                    />
-                  </div>
-
-                  {/* User Type Selection */}
-                  <div>
-                    <label className="block text-sm font-medium text-elysion-text-dark mb-3">
-                      Votre profil professionnel
-                    </label>
-                    <div className="grid grid-cols-1 gap-3">
-                      {userTypes.map((type) => (
-                        <label key={type.value} className="cursor-pointer">
-                          <input
-                            type="radio"
-                            name="user_type"
-                            value={type.value}
-                            checked={formData.user_type === type.value}
-                            onChange={handleChange}
-                            className="sr-only"
-                            data-testid={`auth-usertype-${type.value}`}
-                          />
-                          <div className={`p-4 rounded-lg border-2 transition-all ${
-                            formData.user_type === type.value
-                              ? 'border-elysion-primary bg-elysion-primary/5'
-                              : 'border-gray-200 hover:border-elysion-secondary'
-                          }`}>
-                            <div className="flex items-center space-x-3">
-                              <span className="text-2xl">{type.icon}</span>
-                              <span className="font-medium text-elysion-text-dark">{type.label}</span>
-                            </div>
-                          </div>
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
 
               {/* Email */}
               <div>
@@ -267,15 +182,13 @@ const AuthPage = () => {
                   <label htmlFor="password" className="block text-sm font-medium text-elysion-text-dark">
                     Mot de passe
                   </label>
-                  {isLogin && (
-                    <button
+                  <button
                       type="button"
                       onClick={() => navigate('/forgot-password')}
                       className="text-sm text-elysion-primary hover:text-elysion-accent transition-colors"
                     >
                       Mot de passe oublié ?
                     </button>
-                  )}
                 </div>
                 <input
                   type="password"
@@ -303,26 +216,22 @@ const AuthPage = () => {
                     Chargement...
                   </div>
                 ) : (
-                  isLogin ? 'Se connecter' : 'Créer mon compte'
+                  'Se connecter'
                 )}
               </button>
             </form>
 
-            {/* Toggle Login/Register */}
+            {/* Lien vers onboarding */}
             <div className="mt-6 text-center">
               <p className="text-elysion-text-light">
-                {isLogin ? 'Pas encore de compte ?' : 'Déjà un compte ?'}
+                Pas encore de compte ?
                 <button
                   type="button"
-                  onClick={() => {
-                    setIsLogin(!isLogin);
-                    setError('');
-                    setFormData({ email: '', password: '', full_name: '', user_type: 'employee' });
-                  }}
+                  onClick={() => navigate('/onboarding')}
                   className="ml-2 text-elysion-primary font-semibold hover:text-elysion-accent transition-colors"
                   data-testid="auth-toggle-btn"
                 >
-                  {isLogin ? 'Créer un compte' : 'Se connecter'}
+                  Créer un compte
                 </button>
               </p>
             </div>

@@ -349,8 +349,7 @@ const LandingPage = () => {
                 <h3 className="text-lg font-semibold text-elysion-primary mb-2">
                   {user.title}
                 </h3>
-
-                <p className="text-sm text-elysion-text-light leading-relaxed">
+                <p className='text-elysion-text-light leading-relaxed'>
                   {user.description}
                 </p>
               </div>

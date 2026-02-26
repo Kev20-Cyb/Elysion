@@ -103,7 +103,7 @@ const Simulator = () => {
             <li>✓ Retraite complémentaire RCI</li>
             <li>✓ Scénarios d'âge de départ</li>
           </ul>
-          <div className="mt-4 text-elysion-primary font-semibold text-sm flex items-center">
+          <div className="mt-4 text-elysion-accent font-semibold text-sm flex items-center">
             Simulateur 6 étapes →
           </div>
         </button>
@@ -112,7 +112,7 @@ const Simulator = () => {
       <div className="text-center">
         <button 
           onClick={() => setCurrentStep('intro')}
-          className="btn-outline"
+          className="text-gray-500 hover:text-elysion-primary transition-colors"
         >
           ← Retour
         </button>
@@ -159,7 +159,7 @@ const Simulator = () => {
                     Se connecter
                   </button>
                   <button 
-                    onClick={() => navigate('/auth?mode=register')}
+                    onClick={() => navigate('/onboarding')}
                     className="btn-outline"
                   >
                     Créer un compte
@@ -234,7 +234,7 @@ const Simulator = () => {
                     Se connecter
                   </button>
                   <button
-                    onClick={() => { navigate('/auth?mode=register'); setMobileMenuOpen(false); }}
+                    onClick={() => { navigate('/onboarding'); setMobileMenuOpen(false); }}
                     className="btn-outline w-full"
                   >
                     Créer un compte

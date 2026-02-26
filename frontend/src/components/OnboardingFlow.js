@@ -14,8 +14,12 @@ const OnboardingFlow = () => {
   const location = useLocation();
   const { login } = useAuth();
   
+  // Check if user comes from simulator (has state) or from landing page (no state)
+  const comesFromSimulator = location.state?.professionalStatus !== undefined;
+  
   // Get data from simulator or defaults
-  const professionalStatus = location.state?.professionalStatus || 'employee';
+  const [selectedStatus, setSelectedStatus] = useState(location.state?.professionalStatus || '');
+  const professionalStatus = selectedStatus || 'employee';
   const simulationData = location.state?.simulationData || {};
   const simulationResults = location.state?.results || null;
 
@@ -84,21 +88,22 @@ const OnboardingFlow = () => {
         user_type: professionalStatus
       });
       
-      // Get token from registration response
-      const { access_token, user } = response.data;
+      // Get token from registration response (support both 'token' and 'access_token')
+      const token = response.data.token || response.data.access_token;
+      const user = response.data.user;
       
-      if (access_token) {
+      if (token) {
         // Store token in localStorage for persistence
-        localStorage.setItem('elysion_token', access_token);
+        localStorage.setItem('elysion_token', token);
         
         // Set axios default header for subsequent requests
-        axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         
         // Save profile data with the token
         try {
           await axios.post(`${API}/profile/complete`, {
             ...profileData,
-            user_id: user.id
+            user_id: user?.id
           });
         } catch (profileErr) {
           // Profile save failed but account created - continue to dashboard
@@ -183,38 +188,119 @@ const OnboardingFlow = () => {
     return types[professionalStatus] || types.employee;
   };
 
-  // Step 1: Welcome & Context
-  const renderStep1 = () => (
-    <div className="text-center">
-      <div className="text-5xl mb-6">📊</div>
-      <h2 className="text-3xl font-bold text-elysion-primary mb-4 font-montserrat">
-        Complétez votre profil pour une estimation retraite précise
-      </h2>
-      <p className="text-xl text-elysion-text-light mb-8 max-w-2xl mx-auto">
-        En fonction de votre situation — que vous soyez salarié, freelance ou dirigeant — Elysion adapte vos prévisions pour vous donner les résultats les plus précis.
-      </p>
-      
-      <div className="bg-elysion-bg p-6 rounded-xl mb-8 border-l-4 border-elysion-accent">
-        <div className="flex items-center justify-center mb-3">
-          <span className="text-3xl mr-3">{getUserTypeInfo().icon}</span>
-          <p className="text-lg text-elysion-text-dark">
-            Profil sélectionné: <strong>{getUserTypeInfo().label}</strong>
+  // Step 1: Welcome & Context (with status selection if coming from landing)
+  const renderStep1 = () => {
+    // If user comes directly from landing page, show status selection cards
+    if (!comesFromSimulator) {
+      return (
+        <div className="text-center">
+          <div className="text-5xl mb-6">📊</div>
+          <h2 className="text-3xl font-bold text-elysion-primary mb-4 font-montserrat">
+            Quel est votre statut professionnel ?
+          </h2>
+          <p className="text-lg text-elysion-text-light mb-8 max-w-2xl mx-auto">
+            Sélectionnez votre profil pour que nous adaptions les questions à votre situation.
+          </p>
+          
+          <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-8">
+            {/* Salarié Card */}
+            <button
+              onClick={() => setSelectedStatus('employee')}
+              className={`p-6 rounded-2xl border-2 transition-all text-left hover:shadow-lg ${
+                selectedStatus === 'employee'
+                  ? 'border-elysion-primary bg-elysion-primary-50 shadow-md'
+                  : 'border-gray-200 bg-white hover:border-elysion-primary'
+              }`}
+            >
+              <div className="text-4xl mb-4">💼</div>
+              <h3 className="text-xl font-bold text-elysion-primary mb-2">Salarié</h3>
+              <p className="text-gray-600 text-sm">
+                CDI, CDD, intérim, fonctionnaire...
+              </p>
+            </button>
+
+            {/* Freelance Card */}
+            <button
+              onClick={() => setSelectedStatus('freelancer')}
+              className={`p-6 rounded-2xl border-2 transition-all text-left hover:shadow-lg ${
+                selectedStatus === 'freelancer'
+                  ? 'border-elysion-accent bg-elysion-accent-50 shadow-md'
+                  : 'border-gray-200 bg-white hover:border-elysion-accent'
+              }`}
+            >
+              <div className="text-4xl mb-4">💻</div>
+              <h3 className="text-xl font-bold text-elysion-primary mb-2">Freelance</h3>
+              <p className="text-gray-600 text-sm">
+                Micro-entrepreneur, indépendant, profession libérale...
+              </p>
+            </button>
+
+            {/* Dirigeant Card */}
+            <button
+              onClick={() => setSelectedStatus('business_owner')}
+              className={`p-6 rounded-2xl border-2 transition-all text-left hover:shadow-lg ${
+                selectedStatus === 'business_owner'
+                  ? 'border-elysion-secondary bg-elysion-secondary-50 shadow-md'
+                  : 'border-gray-200 bg-white hover:border-elysion-secondary'
+              }`}
+            >
+              <div className="text-4xl mb-4">🏢</div>
+              <h3 className="text-xl font-bold text-elysion-primary mb-2">Dirigeant</h3>
+              <p className="text-gray-600 text-sm">
+                Chef d'entreprise, gérant, président...
+              </p>
+            </button>
+          </div>
+          
+          <button 
+            onClick={nextStep}
+            disabled={!selectedStatus}
+            className={`font-semibold px-8 py-4 rounded-xl text-lg transition-all ${
+              selectedStatus 
+                ? 'bg-elysion-accent hover:bg-elysion-accent/90 text-white hover:scale-105'
+                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+            }`}
+            data-testid="onboarding-continue-btn"
+          >
+            Continuer
+          </button>
+        </div>
+      );
+    }
+    
+    // If user comes from simulator, show the profile they selected
+    return (
+      <div className="text-center">
+        <div className="text-5xl mb-6">📊</div>
+        <h2 className="text-3xl font-bold text-elysion-primary mb-4 font-montserrat">
+          Complétez votre profil pour une estimation retraite précise
+        </h2>
+        <p className="text-xl text-elysion-text-light mb-8 max-w-2xl mx-auto">
+          En fonction de votre situation — que vous soyez salarié, freelance ou dirigeant — Elysion adapte vos prévisions pour vous donner les résultats les plus précis.
+        </p>
+        
+        <div className="bg-elysion-bg p-6 rounded-xl mb-8 border-l-4 border-elysion-accent">
+          <div className="flex items-center justify-center mb-3">
+            <span className="text-3xl mr-3">{getUserTypeInfo().icon}</span>
+            <p className="text-lg text-elysion-text-dark">
+              Profil sélectionné: <strong>{getUserTypeInfo().label}</strong>
+            </p>
+          </div>
+          <p className="text-elysion-text-light text-sm">
+            Nous adapterons les questions selon votre statut professionnel
           </p>
         </div>
-        <p className="text-elysion-text-light text-sm">
-          Nous adapterons les questions selon votre statut professionnel
-        </p>
+        
+        <button 
+          onClick={nextStep}
+          className="bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-8 py-4 rounded-xl text-lg transition-all hover:scale-105"
+          data-testid="onboarding-continue-btn"
+        >
+          Continuer
+        </button>
       </div>
-      
-      <button 
-        onClick={nextStep}
-        className="bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-8 py-4 rounded-xl text-lg transition-all hover:scale-105"
-        data-testid="onboarding-continue-btn"
-      >
-        Continuer
-      </button>
-    </div>
-  );
+    );
+  };
 
   // Step 2: Personal Information (Universal)
   const renderStep2 = () => (
@@ -886,32 +972,46 @@ const OnboardingFlow = () => {
 
       <div className="flex items-center justify-center py-12 px-4">
         <div className="max-w-2xl w-full">
-          {/* Progress Indicator */}
-          <div className="flex justify-center mb-8">
-            <div className="flex space-x-2">
-              {[1, 2, 3, 4, 5].map((step) => (
-                <div key={step} className="flex items-center">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm ${
-                    step === currentStep 
-                      ? 'bg-elysion-primary text-white' 
-                      : step < currentStep 
-                        ? 'bg-elysion-accent text-white'
-                        : 'bg-gray-200 text-gray-500'
-                  }`}>
-                    {step < currentStep ? '✓' : step}
-                  </div>
-                  {step < 5 && (
-                    <div className={`w-8 h-0.5 mx-1 ${
-                      step < currentStep ? 'bg-elysion-accent' : 'bg-gray-200'
-                    }`}></div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-
           {/* Main Card */}
-          <div className="card-elysion max-w-2xl mx-auto fade-in">
+          <div className="card-elysion max-w-2xl mx-auto fade-in p-8">
+            {/* Progress bar */}
+            <div className="mb-6 sm:mb-8">
+              <div className="flex items-center justify-center gap-0.5 sm:gap-1 py-4 px-4 sm:px-2">
+                {[1, 2, 3, 4, 5].map((step, index) => (
+                  <div key={step} className="flex items-center flex-shrink-0">
+                    <div className="relative flex flex-col items-center">
+                      <div
+                        className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
+                          step < currentStep
+                            ? 'bg-elysion-primary'
+                            : step === currentStep
+                            ? 'bg-elysion-accent'
+                            : 'bg-gray-300'
+                        }`}
+                      >
+                        {step < currentStep ? (
+                          <svg className="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                          </svg>
+                        ) : (
+                          <span className="text-white text-sm sm:text-base font-semibold">{step}</span>
+                        )}
+                      </div>
+                    </div>
+                    {index < 4 && (
+                      <div
+                        className={`w-3 sm:w-6 h-1 mx-0.5 sm:mx-1 transition-all duration-300 ${
+                          step < currentStep
+                            ? 'bg-elysion-primary'
+                            : 'bg-gray-300'
+                        }`}
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
             {renderCurrentStep()}
           </div>
         </div>

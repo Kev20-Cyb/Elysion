@@ -105,7 +105,7 @@ const AuthPage = () => {
               </button>
               <button 
                 onClick={() => navigate('/auth?mode=register')}
-                className={!isLogin ? 'btn-accent' : 'btn-outline'}
+                className={!isLogin ? 'btn-primary' : 'btn-outline'}
               >
                 Créer un compte
               </button>
@@ -154,7 +154,7 @@ const AuthPage = () => {
               </button>
               <button
                 onClick={() => { setIsLogin(false); setMobileMenuOpen(false); }}
-                className={`w-full ${!isLogin ? 'btn-accent' : 'btn-outline'}`}
+                className={`w-full ${!isLogin ? 'btn-primary' : 'btn-outline'}`}
               >
                 Créer un compte
               </button>

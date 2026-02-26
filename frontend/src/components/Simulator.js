@@ -4,7 +4,7 @@ import { useAuth } from '../App';
 
 const Simulator = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const [currentStep, setCurrentStep] = useState('intro'); // 'intro', 'choice'
   const [selectedStatus, setSelectedStatus] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -103,7 +103,7 @@ const Simulator = () => {
             <li>✓ Retraite complémentaire RCI</li>
             <li>✓ Scénarios d'âge de départ</li>
           </ul>
-          <div className="mt-4 text-elysion-accent font-semibold text-sm flex items-center">
+          <div className="mt-4 text-elysion-primary font-semibold text-sm flex items-center">
             Simulateur 6 étapes →
           </div>
         </button>
@@ -112,7 +112,7 @@ const Simulator = () => {
       <div className="text-center">
         <button 
           onClick={() => setCurrentStep('intro')}
-          className="text-gray-500 hover:text-elysion-primary transition-colors"
+          className="btn-outline"
         >
           ← Retour
         </button>
@@ -154,13 +154,13 @@ const Simulator = () => {
                 <>
                   <button 
                     onClick={() => navigate('/auth?mode=login')}
-                    className="btn-outline"
+                    className="btn-primary"
                   >
                     Se connecter
                   </button>
                   <button 
                     onClick={() => navigate('/auth?mode=register')}
-                    className="btn-accent"
+                    className="btn-outline"
                   >
                     Créer un compte
                   </button>
@@ -168,22 +168,29 @@ const Simulator = () => {
               )}
             </div>
 
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
-              data-testid="simulator-mobile-menu-btn"
-            >
-              {mobileMenuOpen ? (
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
+            {/* Mobile: User name + Menu Button */}
+            <div className="md:hidden flex items-center gap-2">
+              {user && (
+                <span className="text-sm font-medium text-elysion-primary">
+                  {user.first_name || user.full_name?.split(' ')[0]}
+                </span>
               )}
-            </button>
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                data-testid="simulator-mobile-menu-btn"
+              >
+                {mobileMenuOpen ? (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                ) : (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  </svg>
+                )}
+              </button>
+            </div>
           </div>
         </div>
 
@@ -211,18 +218,24 @@ const Simulator = () => {
                   >
                     Mon profil
                   </button>
+                  <button
+                    onClick={() => { logout(); setMobileMenuOpen(false); navigate('/'); }}
+                    className="w-full py-2 px-4 rounded-lg text-red-600 font-medium bg-red-50 hover:bg-red-100 transition-colors"
+                  >
+                    Déconnexion
+                  </button>
                 </>
               ) : (
                 <>
                   <button
                     onClick={() => { navigate('/auth?mode=login'); setMobileMenuOpen(false); }}
-                    className="btn-outline w-full"
+                    className="btn-primary w-full"
                   >
                     Se connecter
                   </button>
                   <button
                     onClick={() => { navigate('/auth?mode=register'); setMobileMenuOpen(false); }}
-                    className="btn-accent w-full"
+                    className="btn-outline w-full"
                   >
                     Créer un compte
                   </button>

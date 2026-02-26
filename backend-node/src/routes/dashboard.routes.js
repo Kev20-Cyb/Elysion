@@ -48,7 +48,8 @@ router.get("/", authRequired, async (req, res) => {
 // POST /api/simulation/save - Sauvegarder les résultats de simulation
 router.post("/simulation/save", authRequired, async (req, res) => {
   try {
-    const userId = req.user.userId;
+    const userId = req.user?.userId;
+    if (!userId) return res.status(401).json({ detail: "Unauthorized: missing userId in token" });
     const simulationData = req.body;
     
     // Vérifier si un profil existe déjà

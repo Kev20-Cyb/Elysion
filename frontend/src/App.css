@@ -1,8 +1,6 @@
 /* Import Montserrat Font */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap'); /* Titre */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap'); /* Titre - Texte */
 @import url('https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Onest:wght@100..900&family=Red+Hat+Display:ital@0;1&display=swap'); /* Bouton */
-@import url('https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Red+Hat+Display:ital@0;1&display=swap'); /* Texte */
-
 
 
 /* Elysion Brand Colors - Full Scale System */
@@ -286,7 +284,7 @@ code, pre {
 
 /* Form Elements Base Typography */
 input, textarea, select, button {
-  font-family: 'Red Hat Display', sans-serif;
+  font-family: 'Onest', sans-serif;
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
@@ -348,9 +346,6 @@ input, textarea, select, button {
 /* Utility Classes */
 .font-montserrat {
   font-family: 'Montserrat', sans-serif;
-}
-.font-redhatdisplay {
-  font-family: 'Red Hat Display', sans-serif;
 }
 .font-onest {
   font-family: 'onest', sans-serif;
@@ -545,7 +540,7 @@ input, textarea, select, button {
   padding: 12px 32px;
   border-radius: 50px;
   font-weight: 600;
-  font-family: 'Red Hat Display', sans-serif;
+  font-family: 'Onest', sans-serif;
   border: none;
   cursor: pointer;
   font-size: 16px;
@@ -791,7 +786,7 @@ textarea.input-elysion {
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 2px 4px rgba(10, 65, 142, 0.2);
-  font-family: 'Red Hat Display', sans-serif;
+  font-family: 'Onest', sans-serif;
 }
 
 .btn-primary:hover {
@@ -827,7 +822,7 @@ textarea.input-elysion {
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 2px 4px rgba(251, 176, 59, 0.25);
-  font-family: 'Red Hat Display', sans-serif;
+  font-family: 'Onest', sans-serif;
 }
 
 .btn-accent:hover {
@@ -935,7 +930,7 @@ textarea.input-elysion {
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 2px 4px rgba(168, 195, 231, 0.25);
-  font-family: 'Red Hat Display', sans-serif;
+  font-family: 'Onest', sans-serif;
 }
 
 .btn-secondary:hover {
@@ -973,7 +968,7 @@ textarea.input-elysion {
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 2px 4px rgba(239, 68, 68, 0.25);
-  font-family: 'Red Hat Display', sans-serif;
+  font-family: 'Onest', sans-serif;
 }
 
 .btn-danger:hover {

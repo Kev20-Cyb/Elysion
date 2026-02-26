@@ -7,7 +7,7 @@ const router = express.Router();
 // GET /api/dashboard
 router.get("/", authRequired, async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user.userId;
     
     // Récupérer la dernière simulation de l'utilisateur
     const simResult = await pool.query(
@@ -48,7 +48,7 @@ router.get("/", authRequired, async (req, res) => {
 // POST /api/simulation/save - Sauvegarder les résultats de simulation
 router.post("/simulation/save", authRequired, async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user.userId;
     const simulationData = req.body;
     
     // Vérifier si un profil existe déjà
@@ -84,7 +84,7 @@ router.post("/simulation/save", authRequired, async (req, res) => {
 // GET /api/simulation/latest - Récupérer la dernière simulation
 router.get("/simulation/latest", authRequired, async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user.userId;
     
     const result = await pool.query(
       "SELECT simulation_data, last_simulation_at FROM retirement_profiles WHERE user_id = $1",

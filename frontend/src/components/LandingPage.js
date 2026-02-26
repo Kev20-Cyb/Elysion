@@ -336,18 +336,21 @@ const LandingPage = () => {
           </div>
           <div className='grid md:grid-cols-3 gap-8'>
             {targetUsers.map((user, index) => (
-              <div
-                key={user.title}
-                className='bg-white rounded-2xl p-8 text-center shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border border-gray-100 slide-up group'
-                style={{ animationDelay: `${index * 0.2}s` }}
+              <div 
+                key={index}
+                className="flex flex-col items-center text-center p-6 rounded-2xl bg-white/60 backdrop-blur-sm border border-white/20"
               >
-                <div className='text-5xl mb-6 group-hover:scale-110 transition-transform'>
-                  {user.icon}
-                </div>
-                <h3 className='text-xl font-bold text-elysion-primary mb-4 font-montserrat'>
+                <img
+                  src={user.icon}
+                  alt={user.title}
+                  className="mb-4 object-contain"
+                />
+
+                <h3 className="text-lg font-semibold text-elysion-primary mb-2">
                   {user.title}
                 </h3>
-                <p className='text-elysion-text-light leading-relaxed'>
+
+                <p className="text-sm text-elysion-text-light leading-relaxed">
                   {user.description}
                 </p>
               </div>

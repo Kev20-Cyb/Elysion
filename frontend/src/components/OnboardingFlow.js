@@ -972,32 +972,46 @@ const OnboardingFlow = () => {
 
       <div className="flex items-center justify-center py-12 px-4">
         <div className="max-w-2xl w-full">
-          {/* Progress Indicator */}
-          <div className="flex justify-center mb-8">
-            <div className="flex space-x-2">
-              {[1, 2, 3, 4, 5].map((step) => (
-                <div key={step} className="flex items-center">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm ${
-                    step === currentStep 
-                      ? 'bg-elysion-primary text-white' 
-                      : step < currentStep 
-                        ? 'bg-elysion-accent text-white'
-                        : 'bg-gray-200 text-gray-500'
-                  }`}>
-                    {step < currentStep ? '✓' : step}
-                  </div>
-                  {step < 5 && (
-                    <div className={`w-8 h-0.5 mx-1 ${
-                      step < currentStep ? 'bg-elysion-accent' : 'bg-gray-200'
-                    }`}></div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-
           {/* Main Card */}
-          <div className="card-elysion max-w-2xl mx-auto fade-in">
+          <div className="card-elysion max-w-2xl mx-auto fade-in p-8">
+            {/* Progress bar */}
+            <div className="mb-6 sm:mb-8">
+              <div className="flex items-center justify-center gap-0.5 sm:gap-1 py-4 px-4 sm:px-2">
+                {[1, 2, 3, 4, 5].map((step, index) => (
+                  <div key={step} className="flex items-center flex-shrink-0">
+                    <div className="relative flex flex-col items-center">
+                      <div
+                        className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
+                          step < currentStep
+                            ? 'bg-elysion-primary'
+                            : step === currentStep
+                            ? 'bg-elysion-accent'
+                            : 'bg-gray-300'
+                        }`}
+                      >
+                        {step < currentStep ? (
+                          <svg className="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                          </svg>
+                        ) : (
+                          <span className="text-white text-sm sm:text-base font-semibold">{step}</span>
+                        )}
+                      </div>
+                    </div>
+                    {index < 4 && (
+                      <div
+                        className={`w-3 sm:w-6 h-1 mx-0.5 sm:mx-1 transition-all duration-300 ${
+                          step < currentStep
+                            ? 'bg-elysion-primary'
+                            : 'bg-gray-300'
+                        }`}
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
             {renderCurrentStep()}
           </div>
         </div>

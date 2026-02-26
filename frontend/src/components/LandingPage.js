@@ -299,14 +299,14 @@ const LandingPage = () => {
               <div className='flex flex-col sm:flex-row gap-4 fade-in'>
                 <button
                   onClick={handleOpenNewsletter}
-                  className='bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-8 py-4 rounded-xl text-lg transition-all hover:scale-105 hover:shadow-xl'
+                  className='bg-elysion-primary hover:bg-elysion-primary/90 text-white font-semibold px-8 py-4 rounded-xl text-lg transition-all hover:scale-105 hover:shadow-xl'
                   data-testid='hero-newsletter-btn'
                 >
                   Abonnez vous à notre newsletter
                 </button>
                 <button
                   onClick={handleTestSimulator}
-                  className='bg-elysion-accent hover:bg-elysion-accent/90 text-white font-semibold px-8 py-4 rounded-xl text-lg transition-all hover:scale-105 hover:shadow-xl'
+                  className='bg-elysion-outline hover:bg-elysion-outline/90 text-white font-semibold px-8 py-4 rounded-xl text-lg transition-all hover:scale-105 hover:shadow-xl'
                   data-testid='hero-test-simulator-btn'
                 >
                   Testez notre simulateur

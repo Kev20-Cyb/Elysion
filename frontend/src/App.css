@@ -822,6 +822,7 @@ textarea.input-elysion {
 
 .btn-accent:hover {
   background-color: var(--elysion-accent-600);
+  color: var(--elysion-gray-100);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(251, 176, 59, 0.4);
 }

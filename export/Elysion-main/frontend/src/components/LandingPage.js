@@ -130,7 +130,7 @@ const LandingPage = () => {
                 Se connecter
               </button>
               <button 
-                onClick={() => navigate('/auth?mode=register')}
+                onClick={() => navigate('/onboarding')}
                 className="btn-elysion-accent"
                 data-testid="nav-create-account-btn"
               >

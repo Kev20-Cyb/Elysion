@@ -314,11 +314,7 @@ const AuthPage = () => {
                 {isLogin ? 'Pas encore de compte ?' : 'Déjà un compte ?'}
                 <button
                   type="button"
-                  onClick={() => {
-                    setIsLogin(!isLogin);
-                    setError('');
-                    setFormData({ email: '', password: '', full_name: '', user_type: 'employee' });
-                  }}
+                  onClick={() => navigate('/onboarding')}
                   className="ml-2 text-elysion-primary font-semibold hover:text-elysion-accent transition-colors"
                   data-testid="auth-toggle-btn"
                 >

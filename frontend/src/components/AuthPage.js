@@ -104,7 +104,7 @@ const AuthPage = () => {
                 Se connecter
               </button>
               <button 
-                onClick={() => navigate('/auth?mode=register')}
+                onClick={() => navigate('/onboarding')}
                 className={!isLogin ? 'btn-primary' : 'btn-outline'}
               >
                 Créer un compte

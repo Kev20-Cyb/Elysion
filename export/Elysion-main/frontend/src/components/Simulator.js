@@ -137,7 +137,7 @@ const Simulator = () => {
                 Se connecter
               </button>
               <button 
-                onClick={() => navigate('/auth?mode=register')}
+                onClick={() => navigate('/onboarding')}
                 className="btn-elysion-accent"
               >
                 Créer un compte

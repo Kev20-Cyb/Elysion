@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../App';
+import DashboardLayout from './DashboardLayout';
 import axios from 'axios';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
@@ -2098,210 +2099,111 @@ const EmployeeSimulator = () => {
     );
   };
 
+  const simulatorContent = (
+    <div className="max-w-4xl mx-auto px-4 py-12">
+      <div className="bg-white rounded-2xl shadow-xl p-8">
+        {/* Progress bar */}
+        {currentStep <= 7 && (
+          <div className="mb-6 sm:mb-8">
+            <div className="flex items-center justify-center gap-0.5 sm:gap-1 py-4 px-4 sm:px-2">
+              {[1, 2, 3, 4, 5, 6, 7].map((step, index) => (
+                <div key={step} className="flex items-center flex-shrink-0">
+                  <div className="relative flex flex-col items-center">
+                    <div
+                      className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
+                        step < currentStep
+                          ? 'bg-elysion-primary'
+                          : step === currentStep
+                          ? 'bg-elysion-accent'
+                          : 'bg-gray-300'
+                      }`}
+                    >
+                      {step < currentStep ? (
+                        <svg className="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                        </svg>
+                      ) : (
+                        <span className="text-white text-sm sm:text-base font-semibold">{step}</span>
+                      )}
+                    </div>
+                  </div>
+                  {index < 6 && (
+                    <div
+                      className={`w-3 sm:w-6 h-1 mx-0.5 sm:mx-1 transition-all duration-300 ${
+                        step < currentStep ? 'bg-elysion-primary' : 'bg-gray-300'
+                      }`}
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {currentStep === 1 && renderStep1()}
+        {branch === 'private' && currentStep === 2 && renderPrivateStep2()}
+        {branch === 'private' && currentStep === 3 && renderPrivateStep3()}
+        {branch === 'private' && currentStep === 4 && renderPrivateStep4()}
+        {branch === 'private' && currentStep === 5 && renderPrivateStep5()}
+        {branch === 'private' && currentStep === 6 && renderPrivateStep6()}
+        {branch === 'private' && currentStep === 7 && renderPrivateStep7()}
+        
+        {currentStep === 8 && renderResults()}
+
+        {currentStep <= 7 && (
+          <div className="flex justify-between mt-8">
+            <button onClick={prevStep} className="btn-outline">
+              ← Retour
+            </button>
+            <button onClick={nextStep} className="btn-primary disabled:opacity-50">
+              {currentStep === 7 ? 'Calculer ma retraite' : 'Suivant →'}
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
+  if (user) {
+    return (
+      <DashboardLayout title="Simulateur Salarié">
+        {simulatorContent}
+      </DashboardLayout>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-elysion-bg font-montserrat">
-      {/* Navigation */}
       <nav className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <button 
-              onClick={() => navigate('/')}
-              className="text-xl sm:text-2xl font-bold text-elysion-primary hover:text-elysion-accent transition-colors"
-            >
+            <button onClick={() => navigate('/')} className="text-xl sm:text-2xl font-bold text-elysion-primary hover:text-elysion-accent transition-colors">
               Elysion
             </button>
-            
-            {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-3">
-              {user ? (
-                <>
-                  <button
-                    onClick={() => navigate('/dashboard')}
-                    className="btn-secondary"
-                  >
-                    Tableau de bord
-                  </button>
-                  <div className="flex items-center space-x-2 bg-elysion-primary/10 px-3 py-1.5 rounded-full">
-                    <span className="text-lg">👤</span>
-                    <span className="text-sm font-medium text-elysion-primary">
-                      {user.first_name || user.full_name?.split(' ')[0]}
-                    </span>
-                  </div>
-                </>
+              <button onClick={() => navigate('/auth?mode=login')} className="btn-primary">Se connecter</button>
+              <button onClick={() => navigate('/onboarding')} className="btn-outline">Créer un compte</button>
+            </div>
+            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors">
+              {mobileMenuOpen ? (
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
               ) : (
-                <>
-                  <button
-                    onClick={() => navigate('/auth?mode=login')}
-                    className="btn-primary"
-                  >
-                    Se connecter
-                  </button>
-                  <button
-                    onClick={() => navigate('/onboarding')}
-                    className="btn-outline"
-                  >
-                    Créer un compte
-                  </button>
-                </>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
               )}
-            </div>
-
-            {/* Mobile: User name + Menu Button */}
-            <div className="md:hidden flex items-center gap-2">
-              {user && (
-                <span className="text-sm font-medium text-elysion-primary">
-                  {user.first_name || user.full_name?.split(' ')[0]}
-                </span>
-              )}
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
-                data-testid="employee-sim-mobile-menu-btn"
-              >
-                {mobileMenuOpen ? (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                ) : (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                  </svg>
-                )}
-              </button>
-            </div>
+            </button>
           </div>
         </div>
-
-        {/* Mobile Dropdown Menu */}
         {mobileMenuOpen && (
           <div className="md:hidden bg-white border-t border-gray-100 shadow-lg">
             <div className="px-4 py-4 space-y-3">
-              <button
-                onClick={() => { navigate('/'); setMobileMenuOpen(false); }}
-                className="btn-ghost w-full text-left"
-              >
-                Accueil
-              </button>
-              {user ? (
-                <>
-                  <button
-                    onClick={() => { navigate('/dashboard'); setMobileMenuOpen(false); }}
-                    className="btn-secondary w-full"
-                  >
-                    Tableau de bord
-                  </button>
-                  <button
-                    onClick={() => { navigate('/profile'); setMobileMenuOpen(false); }}
-                    className="btn-outline w-full"
-                  >
-                    Mon profil
-                  </button>
-                  <button
-                    onClick={() => { logout(); setMobileMenuOpen(false); navigate('/'); }}
-                    className="w-full py-2 px-4 rounded-lg text-red-600 font-medium bg-red-50 hover:bg-red-100 transition-colors"
-                  >
-                    Déconnexion
-                  </button>
-                </>
-              ) : (
-                <>
-                  <button
-                    onClick={() => { navigate('/auth?mode=login'); setMobileMenuOpen(false); }}
-                    className="btn-primary w-full"
-                  >
-                    Se connecter
-                  </button>
-                  <button
-                    onClick={() => { navigate('/onboarding'); setMobileMenuOpen(false); }}
-                    className="btn-outline w-full"
-                  >
-                    Créer un compte
-                  </button>
-                </>
-              )}
+              <button onClick={() => { navigate('/'); setMobileMenuOpen(false); }} className="btn-ghost w-full text-left">Accueil</button>
+              <button onClick={() => { navigate('/auth?mode=login'); setMobileMenuOpen(false); }} className="btn-primary w-full">Se connecter</button>
+              <button onClick={() => { navigate('/onboarding'); setMobileMenuOpen(false); }} className="btn-outline w-full">Créer un compte</button>
             </div>
           </div>
         )}
       </nav>
-
-      {/* Content */}
-      <div className="max-w-4xl mx-auto px-4 py-12">
-        <div className="bg-white rounded-2xl shadow-xl p-8">
-          {/* Progress bar */}
-          {currentStep <= 7 && (
-            <div className="mb-6 sm:mb-8">
-              {/* Step Indicator - Circle Design - Responsive */}
-              <div className="flex items-center justify-center gap-0.5 sm:gap-1 py-4 px-4 sm:px-2">
-                {[1, 2, 3, 4, 5, 6, 7].map((step, index) => (
-                  <div key={step} className="flex items-center flex-shrink-0">
-                    {/* Circle Step */}
-                    <div className="relative flex flex-col items-center">
-                      <div
-                        className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
-                          step < currentStep
-                            ? 'bg-elysion-primary'
-                            : step === currentStep
-                            ? 'bg-elysion-accent'
-                            : 'bg-gray-300'
-                        }`}
-                      >
-                        {/* Checkmark for completed steps */}
-                        {step < currentStep ? (
-                          <svg className="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                          </svg>
-                        ) : (
-                          <span className="text-white text-sm sm:text-base font-semibold">{step}</span>
-                        )}
-                      </div>
-                    </div>
-                    
-                    {/* Connector line between steps */}
-                    {index < 6 && (
-                      <div
-                        className={`w-3 sm:w-6 h-1 mx-0.5 sm:mx-1 transition-all duration-300 ${
-                          step < currentStep
-                            ? 'bg-elysion-primary'
-                            : 'bg-gray-300'
-                        }`}
-                      />
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Steps */}
-          {currentStep === 1 && renderStep1()}
-          {branch === 'private' && currentStep === 2 && renderPrivateStep2()}
-          {branch === 'private' && currentStep === 3 && renderPrivateStep3()}
-          {branch === 'private' && currentStep === 4 && renderPrivateStep4()}
-          {branch === 'private' && currentStep === 5 && renderPrivateStep5()}
-          {branch === 'private' && currentStep === 6 && renderPrivateStep6()}
-          {branch === 'private' && currentStep === 7 && renderPrivateStep7()}
-          
-          {currentStep === 8 && renderResults()}
-
-          {/* Navigation buttons */}
-          {currentStep <= 7 && (
-            <div className="flex justify-between mt-8">
-              <button
-                onClick={prevStep}
-                className="btn-outline"
-              >
-                ← Retour
-              </button>
-              <button
-                onClick={nextStep}
-                className="btn-primary disabled:opacity-50"
-              >
-                {currentStep === 7 ? 'Calculer ma retraite' : 'Suivant →'}
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
+      {simulatorContent}
     </div>
   );
 };

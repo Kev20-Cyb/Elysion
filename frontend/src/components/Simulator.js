@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../App';
+import DashboardLayout from './DashboardLayout';
 
 const Simulator = () => {
   const navigate = useNavigate();
@@ -120,6 +121,36 @@ const Simulator = () => {
     </div>
   );
 
+  const simulatorContent = (
+    <div className="max-w-5xl mx-auto px-4 py-12">
+      {/* Intro Section */}
+      {currentStep === 'intro' && (
+        <div className="text-center mb-12">
+          {renderIntroSection()}
+        </div>
+      )}
+
+      {/* Choice Section */}
+      {currentStep === 'choice' && (
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-white rounded-2xl shadow-xl p-8">
+            {renderChoiceSection()}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+
+  // Si connecté, afficher avec la sidebar
+  if (user) {
+    return (
+      <DashboardLayout title="Simulateur">
+        {simulatorContent}
+      </DashboardLayout>
+    );
+  }
+
+  // Si non connecté, afficher avec la nav standalone
   return (
     <div className="min-h-screen bg-gradient-to-br from-elysion-bg to-white font-montserrat">
       {/* Navigation */}

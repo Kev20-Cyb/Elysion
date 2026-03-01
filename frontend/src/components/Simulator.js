@@ -159,9 +159,10 @@ const Simulator = () => {
           <div className="flex justify-between items-center h-16">
             <button 
               onClick={() => navigate('/')}
-              className="text-2xl font-bold text-elysion-primary font-montserrat hover:text-elysion-accent transition-colors"
+              className="hover:opacity-80 transition-opacity"
             >
               Elysion
+              <img src="/asset/Elysion - logo.png" alt="Elysion" className="h-8"/>
             </button>
             
             {/* Desktop Navigation */}

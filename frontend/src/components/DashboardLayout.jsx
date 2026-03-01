@@ -43,10 +43,10 @@ const DashboardLayout = ({ children, title }) => {
         {/* Logo */}
         <div className="h-16 flex items-center justify-between px-4 border-b border-gray-100">
           {!sidebarCollapsed && (
-            <img src="/asset/logo.png" alt="Elysion" className="h-8" />
+            <img src="/asset/Elysion - logo.png" alt="Elysion" className="h-8" />
           )}
           {sidebarCollapsed && (
-            <img src="/asset/favicon.png" alt="Elysion" className="h-8 w-8 mx-auto" />
+            <img src="/asset/Elysion - navicon.png" alt="Elysion" className="h-8 w-8 mx-auto" />
           )}
           <button
             onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
@@ -133,7 +133,7 @@ const DashboardLayout = ({ children, title }) => {
           <div className="px-4 sm:px-6">
             <div className="flex justify-between items-center h-16">
               {/* Logo */}
-              <img src="/asset/logo.png" alt="Elysion" className="h-8" />
+              <img src="/asset/Elysion - logo.png" alt="Elysion" className="h-8" />
 
               {/* Mobile Menu Button */}
               <div className="flex items-center space-x-2">

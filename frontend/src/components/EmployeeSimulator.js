@@ -2177,8 +2177,8 @@ const EmployeeSimulator = () => {
       <nav className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <button onClick={() => navigate('/')} className="text-xl sm:text-2xl font-bold text-elysion-primary hover:text-elysion-accent transition-colors">
-              Elysion
+            <button onClick={() => navigate('/')} className="hover:opacity-80 transition-opacity">
+              <img src="/asset/Elysion - logo.png" alt="Elysion" className="h-8" />
             </button>
             <div className="hidden md:flex items-center space-x-3">
               <button onClick={() => navigate('/auth?mode=login')} className="btn-primary">Se connecter</button>

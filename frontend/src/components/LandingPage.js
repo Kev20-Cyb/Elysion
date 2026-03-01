@@ -179,9 +179,7 @@ const LandingPage = () => {
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='flex justify-between items-center h-16'>
             <div className='flex items-center'>
-              <h1 className='text-xl sm:text-2xl font-bold text-elysion-primary font-montserrat'>
-                Elysion
-              </h1>
+              <img src='/asset/Elysion - logo.png' alt='Elysion' className='h-8' />
             </div>
             {/* Desktop Navigation */}
             <div className='hidden md:flex items-center space-x-3'>
@@ -445,7 +443,7 @@ const LandingPage = () => {
         <div className='max-w-7xl mx-auto px-4'>
           <div className='grid md:grid-cols-4 gap-8'>
             <div>
-              <h3 className='text-xl font-bold mb-4'>Elysion</h3>
+              <img src='/asset/Elysion - logo.png' alt='Elysion' className='h-8 brightness-0 invert' />
               <p className='text-gray-400'>
                 Votre partenaire pour une retraite sereine et bien planifiée.
               </p>

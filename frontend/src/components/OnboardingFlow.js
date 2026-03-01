@@ -953,12 +953,12 @@ const OnboardingFlow = () => {
               onClick={() => navigate('/')}
               className="text-2xl font-bold text-elysion-primary hover:text-elysion-accent transition-colors"
             >
-              Elysion
+              <img src="/asset/Elysion - logo.png" alt="Elysion" className="h-8" />
             </button>
             <div className="flex items-center space-x-4">
               <button 
                 onClick={() => navigate('/auth?mode=login')}
-                className="text-elysion-primary hover:text-elysion-accent font-medium transition-colors text-sm"
+                className="hover:opacity-80 transition-opacity"
               >
                 Déjà un compte ?
               </button>

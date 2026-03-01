@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../App';
+import DashboardLayout from './DashboardLayout';
 
 const Simulator = () => {
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
   const [currentStep, setCurrentStep] = useState('intro'); // 'intro', 'choice'
   const [selectedStatus, setSelectedStatus] = useState('');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Redirection vers le simulateur détaillé approprié
   const handleStartSimulation = (status) => {
@@ -117,6 +121,36 @@ const Simulator = () => {
     </div>
   );
 
+  const simulatorContent = (
+    <div className="max-w-5xl mx-auto px-4 py-12">
+      {/* Intro Section */}
+      {currentStep === 'intro' && (
+        <div className="text-center mb-12">
+          {renderIntroSection()}
+        </div>
+      )}
+
+      {/* Choice Section */}
+      {currentStep === 'choice' && (
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-white rounded-2xl shadow-xl p-8">
+            {renderChoiceSection()}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+
+  // Si connecté, afficher avec la sidebar
+  if (user) {
+    return (
+      <DashboardLayout title="Simulateur">
+        {simulatorContent}
+      </DashboardLayout>
+    );
+  }
+
+  // Si non connecté, afficher avec la nav standalone
   return (
     <div className="min-h-screen bg-gradient-to-br from-elysion-bg to-white font-montserrat">
       {/* Navigation */}
@@ -129,41 +163,70 @@ const Simulator = () => {
             >
               Elysion
             </button>
-            <div className="flex items-center space-x-4">
+            
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-3">
               <button 
                 onClick={() => navigate('/auth?mode=login')}
-                className="text-elysion-primary hover:text-elysion-accent font-medium transition-colors"
+                className="btn-primary"
               >
                 Se connecter
               </button>
               <button 
                 onClick={() => navigate('/onboarding')}
-                className="btn-elysion-accent"
+                className="btn-outline"
+              >
+                Créer un compte
+              </button>
+            </div>
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              data-testid="simulator-mobile-menu-btn"
+            >
+              {mobileMenuOpen ? (
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              )}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Dropdown Menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden bg-white border-t border-gray-100 shadow-lg">
+            <div className="px-4 py-4 space-y-3">
+              <button
+                onClick={() => { navigate('/'); setMobileMenuOpen(false); }}
+                className="btn-ghost w-full text-left"
+              >
+                Accueil
+              </button>
+              <button
+                onClick={() => { navigate('/auth?mode=login'); setMobileMenuOpen(false); }}
+                className="btn-primary w-full"
+              >
+                Se connecter
+              </button>
+              <button
+                onClick={() => { navigate('/onboarding'); setMobileMenuOpen(false); }}
+                className="btn-outline w-full"
               >
                 Créer un compte
               </button>
             </div>
           </div>
-        </div>
+        )}
       </nav>
 
-      <div className="max-w-5xl mx-auto px-4 py-12">
-        {/* Intro Section */}
-        {currentStep === 'intro' && (
-          <div className="text-center mb-12">
-            {renderIntroSection()}
-          </div>
-        )}
-
-        {/* Choice Section */}
-        {currentStep === 'choice' && (
-          <div className="max-w-4xl mx-auto">
-            <div className="bg-white rounded-2xl shadow-xl p-8">
-              {renderChoiceSection()}
-            </div>
-          </div>
-        )}
-      </div>
+      {simulatorContent}
     </div>
   );
 };

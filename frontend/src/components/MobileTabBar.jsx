@@ -77,7 +77,7 @@ export const PageHeader = ({ title, showBackButton = true }) => {
               </button>
             )}
             <div className="flex items-center space-x-2 sm:space-x-4">
-              <h1 className="text-xl sm:text-2xl font-bold text-elysion-primary">Elysion</h1>
+              <img src="/asset/logo.png" alt="Elysion" className="h-7 sm:h-8" />
               <span className="text-elysion-text-light hidden sm:inline">|</span>
               <span className="text-elysion-text-dark font-medium text-sm sm:text-base hidden sm:inline">{title}</span>
             </div>

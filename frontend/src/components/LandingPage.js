@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../App';
 import axios from 'axios';
+import { Icons } from './ui/icons';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 const API = BACKEND_URL.replace(/\/$/, '') + '/api';
@@ -204,37 +205,12 @@ const LandingPage = () => {
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 className='p-2 rounded-lg hover:bg-gray-100 transition-colors'
                 data-testid='landing-mobile-menu-toggle'
+                aria-label={mobileMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
               >
                 {mobileMenuOpen ? (
-                  <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    className='h-6 w-6 text-gray-600'
-                    fill='none'
-                    viewBox='0 0 24 24'
-                    stroke='currentColor'
-                  >
-                    <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      strokeWidth={2}
-                      d='M6 18L18 6M6 6l12 12'
-                    />
-                  </svg>
+                  <Icons.Close size={24} className="text-gray-600" aria-hidden="true" />
                 ) : (
-                  <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    className='h-6 w-6 text-gray-600'
-                    fill='none'
-                    viewBox='0 0 24 24'
-                    stroke='currentColor'
-                  >
-                    <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      strokeWidth={2}
-                      d='M4 6h16M4 12h16M4 18h16'
-                    />
-                  </svg>
+                  <Icons.Menu size={24} className="text-gray-600" aria-hidden="true" />
                 )}
               </button>
             </div>
@@ -333,25 +309,26 @@ const LandingPage = () => {
             </h2>
           </div>
           <div className='grid md:grid-cols-3 gap-8'>
-            {targetUsers.map((user, index) => (
-              <div 
-                key={index}
-                className="flex flex-col items-center text-center p-6 rounded-2xl bg-white/60 backdrop-blur-sm border border-white/20"
-              >
-                <img
-                  src={user.icon}
-                  alt={user.title}
-                  className="mb-4 object-contain"
-                />
-
-                <h3 className="text-lg font-semibold text-elysion-primary mb-2">
-                  {user.title}
-                </h3>
-                <p className='text-elysion-text-light leading-relaxed'>
-                  {user.description}
-                </p>
-              </div>
-            ))}
+            {targetUsers.map((user, index) => {
+              const IconComponent = user.icon;
+              return (
+                <div
+                  key={user.title}
+                  className='bg-white rounded-2xl p-8 text-center shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border border-gray-100 slide-up group'
+                  style={{ animationDelay: `${index * 0.2}s` }}
+                >
+                  <div className='w-16 h-16 mx-auto mb-6 bg-elysion-primary/10 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform'>
+                    <IconComponent size={32} className="text-elysion-primary" aria-hidden="true" />
+                  </div>
+                  <h3 className='text-xl font-bold text-elysion-primary mb-4 font-montserrat'>
+                    {user.title}
+                  </h3>
+                  <p className='text-elysion-text-light leading-relaxed'>
+                    {user.description}
+                  </p>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -423,7 +400,7 @@ const LandingPage = () => {
             <h2 className='text-4xl font-bold text-white mb-6 font-montserrat'>
               Prêt à prendre le contrôle de votre avenir ?
             </h2>
-            <p className='text-xl text-elysion-text-white max-w-2xl mx-auto py-5'>
+            <p className='text-xl text-elysion-text-light max-w-2xl mx-auto py-5'>
               Rejoignez des milliers d'utilisateurs qui font déjà confiance à
               Elysion !
             </p>
@@ -450,7 +427,7 @@ const LandingPage = () => {
             </div>
           </div>
           <div className='border-t border-gray-800 mt-12 pt-8 text-center text-gray-400'>
-            <p>&copy; 2024 Elysion. Tous droits réservés.</p>
+            <p>&copy; 2026 Elysion. Tous droits réservés.</p>
           </div>
         </div>
       </footer>

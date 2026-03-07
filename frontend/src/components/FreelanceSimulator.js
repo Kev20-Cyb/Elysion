@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../App';
+import DashboardLayout from './DashboardLayout';
 import axios from 'axios';
+import { Icons } from './ui/icons';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 const API = `${BACKEND_URL}/api`;
@@ -677,7 +679,44 @@ const FreelanceSimulator = () => {
   // Navigation
   const getTotalSteps = () => formData.hadSalariedPeriods ? 7 : 7;
   
+  const [validationErrors, setValidationErrors] = useState({});
+
+  const validateStep = (step) => {
+    const errors = {};
+    
+    if (step === 1) {
+      if (!formData.freelanceStatus) errors.freelanceStatus = 'Le statut est obligatoire';
+      if (!formData.birthDate) errors.birthDate = 'La date de naissance est obligatoire';
+      if (!formData.gender) errors.gender = 'Le genre est obligatoire';
+      if (!formData.annualRevenue) errors.annualRevenue = 'Le chiffre d\'affaires annuel est obligatoire';
+    }
+    
+    if (step === 2) {
+      if (!formData.freelanceStartYear) errors.freelanceStartYear = 'L\'année de début d\'activité est obligatoire';
+      if (!formData.activityType) errors.activityType = 'Le type d\'activité est obligatoire';
+    }
+    
+    if (formData.hadSalariedPeriods && step === 3) {
+      // Carrière salariée - au moins une période
+    }
+    
+    const savingsStep = formData.hadSalariedPeriods ? 5 : 4;
+    if (step === savingsStep) {
+      if (!formData.currentMonthlyIncome) errors.income = 'Le revenu mensuel actuel est obligatoire';
+    }
+    
+    const riskStep = formData.hadSalariedPeriods ? 6 : 5;
+    if (step === riskStep) {
+      if (!formData.riskProfile) errors.riskProfile = 'Le profil de risque est obligatoire';
+    }
+    
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const nextStep = () => {
+    if (!validateStep(currentStep)) return;
+    
     if (currentStep < 6) {
       setCurrentStep(currentStep + 1);
     } else if (currentStep === 6) {
@@ -707,42 +746,51 @@ const FreelanceSimulator = () => {
 
       <div className="grid md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
+          <label htmlFor="fl-birthDate" className="block text-sm font-semibold text-gray-700 mb-2">
             Date de naissance
           </label>
           <input
             type="date"
+            id="fl-birthDate"
             value={formData.birthDate}
-            onChange={(e) => handleInputChange('birthDate', e.target.value)}
-            className="input-elysion"
+            onChange={(e) => { handleInputChange('birthDate', e.target.value); setValidationErrors(prev => ({...prev, birthDate: undefined})); }}
+            className={`input-elysion ${validationErrors.birthDate ? 'border-red-500' : ''}`}
+            aria-invalid={validationErrors.birthDate ? 'true' : 'false'}
+            aria-describedby={validationErrors.birthDate ? 'fl-birthDate-error' : undefined}
             required
           />
+          {validationErrors.birthDate && <p id="fl-birthDate-error" className="text-red-500 text-xs mt-1" role="alert">{validationErrors.birthDate}</p>}
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
+          <label htmlFor="fl-gender" className="block text-sm font-semibold text-gray-700 mb-2">
             Genre
           </label>
           <select
+            id="fl-gender"
             value={formData.gender}
-            onChange={(e) => handleInputChange('gender', e.target.value)}
-            className="input-elysion"
+            onChange={(e) => { handleInputChange('gender', e.target.value); setValidationErrors(prev => ({...prev, gender: undefined})); }}
+            className={`input-elysion ${validationErrors.gender ? 'border-red-500' : ''}`}
+            aria-invalid={validationErrors.gender ? 'true' : 'false'}
+            aria-describedby={validationErrors.gender ? 'fl-gender-error' : undefined}
           >
             <option value="">Sélectionner</option>
             <option value="M">Homme</option>
             <option value="F">Femme</option>
             <option value="other">Autre</option>
           </select>
+          {validationErrors.gender && <p id="fl-gender-error" className="text-red-500 text-xs mt-1" role="alert">{validationErrors.gender}</p>}
         </div>
       </div>
 
       <div className="grid md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
+          <label htmlFor="fl-children" className="block text-sm font-semibold text-gray-700 mb-2">
             Nombre d'enfants
           </label>
           <input
             type="number" onFocus={(e) => e.target.select()}
+            id="fl-children"
             min="0"
             max="10"
             value={formData.children}
@@ -759,6 +807,7 @@ const FreelanceSimulator = () => {
                 checked={formData.isMother}
                 onChange={(e) => handleInputChange('isMother', e.target.checked)}
                 className="checkbox-elysion"
+                aria-label="Je suis la mère des enfants"
               />
               <span className="text-sm font-medium text-gray-700">
                 Je suis la mère
@@ -811,7 +860,9 @@ const FreelanceSimulator = () => {
                 : 'border-gray-200 bg-white hover:border-elysion-secondary'
             }`}
           >
-            <div className="text-2xl mb-2">⚖️</div>
+            <div className="w-10 h-10 mx-auto mb-2 bg-blue-100 rounded-full flex items-center justify-center">
+              <Icons.Balanced size={20} className="text-blue-600" aria-hidden="true" />
+            </div>
             <div className="font-semibold text-elysion-primary">Profession libérale</div>
             <p className="text-xs text-gray-600 mt-1">Cipav / Autre caisse</p>
           </button>
@@ -874,9 +925,10 @@ const FreelanceSimulator = () => {
             min="1980"
             max={new Date().getFullYear()}
             value={formData.freelanceStartYear}
-            onChange={(e) => handleInputChange('freelanceStartYear', e.target.value)}
-            className="input-elysion"
+            onChange={(e) => { handleInputChange('freelanceStartYear', e.target.value); setValidationErrors(prev => ({...prev, freelanceStartYear: undefined})); }}
+            className={`input-elysion ${validationErrors.freelanceStartYear ? 'border-red-500' : ''}`}
           />
+          {validationErrors.freelanceStartYear && <p className="text-red-500 text-xs mt-1">{validationErrors.freelanceStartYear}</p>}
         </div>
 
         <div>
@@ -940,7 +992,10 @@ const FreelanceSimulator = () => {
                 : 'border-gray-300 bg-white'
             }`}
           >
-            <div className="font-semibold">📊 Simplifié</div>
+            <div className="font-semibold flex items-center gap-2">
+              <Icons.Chart size={16} aria-hidden="true" />
+              Simplifié
+            </div>
             <p className="text-xs text-gray-600">Revenu moyen sur les dernières années</p>
           </button>
 
@@ -953,7 +1008,10 @@ const FreelanceSimulator = () => {
                 : 'border-gray-300 bg-white'
             }`}
           >
-            <div className="font-semibold">📋 Détaillé</div>
+            <div className="font-semibold flex items-center gap-2">
+              <Icons.Document size={16} aria-hidden="true" />
+              Détaillé
+            </div>
             <p className="text-xs text-gray-600">Année par année</p>
           </button>
         </div>
@@ -968,8 +1026,8 @@ const FreelanceSimulator = () => {
               </label>
               <select
                 value={formData.activityType}
-                onChange={(e) => handleInputChange('activityType', e.target.value)}
-                className="input-elysion"
+                onChange={(e) => { handleInputChange('activityType', e.target.value); setValidationErrors(prev => ({...prev, activityType: undefined})); }}
+                className={`input-elysion ${validationErrors.activityType ? 'border-red-500' : ''}`}
               >
                 <option value="vente">Vente de marchandises (71% abattement)</option>
                 <option value="service_bic">Prestations de services BIC (50% abattement)</option>
@@ -989,10 +1047,11 @@ const FreelanceSimulator = () => {
               type="number" onFocus={(e) => e.target.select()}
               min="0"
               value={formData.averageAnnualRevenue}
-              onChange={(e) => handleInputChange('averageAnnualRevenue', parseFloat(e.target.value) || 0)}
-              className="input-elysion"
+              onChange={(e) => { handleInputChange('averageAnnualRevenue', parseFloat(e.target.value) || 0); setValidationErrors(prev => ({...prev, annualRevenue: undefined})); }}
+              className={`input-elysion ${validationErrors.annualRevenue ? 'border-red-500' : ''}`}
               placeholder={formData.freelanceStatus === 'micro' ? "50000" : "35000"}
             />
+            {validationErrors.annualRevenue && <p className="text-red-500 text-xs mt-1">{validationErrors.annualRevenue}</p>}
             <p className="text-xs text-gray-500 mt-1">
               Moyenne sur les 3 à 5 dernières années
             </p>
@@ -1117,7 +1176,10 @@ const FreelanceSimulator = () => {
                   : 'border-gray-300 bg-white'
               }`}
             >
-              <div className="font-semibold">📊 Période par période</div>
+              <div className="font-semibold flex items-center gap-2">
+                <Icons.Chart size={16} aria-hidden="true" />
+                Période par période
+              </div>
               <p className="text-xs text-gray-600">Ex: 2000-2010, 2010-2015...</p>
             </button>
 
@@ -1561,9 +1623,10 @@ const FreelanceSimulator = () => {
           <p className="text-gray-600">Freelance - Étape {formData.hadSalariedPeriods ? '5' : '4'}/7</p>
         </div>
 
-        <div className="bg-orange-50 border border-orange-200 p-4 rounded-lg">
+        <div className="bg-orange-50 border border-orange-200 p-4 rounded-lg flex items-start gap-3">
+          <Icons.Warning size={20} className="text-orange-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
           <p className="text-sm text-orange-800">
-            <strong>⚠️ Important pour les indépendants :</strong> Les régimes TNS sont généralement moins généreux que ceux des salariés. Le taux de remplacement moyen est souvent de 30 à 50%. L'épargne complémentaire est donc essentielle.
+            <strong>Important pour les indépendants :</strong> Les régimes TNS sont généralement moins généreux que ceux des salariés. Le taux de remplacement moyen est souvent de 30 à 50%. L'épargne complémentaire est donc essentielle.
           </p>
         </div>
 
@@ -1809,7 +1872,7 @@ const FreelanceSimulator = () => {
                 <div className={`w-16 h-16 rounded-full flex items-center justify-center text-white text-2xl font-bold ${
                   profile === 'prudent' ? 'bg-green-500' : profile === 'equilibre' ? 'bg-blue-500' : 'bg-orange-500'
                 }`}>
-                  {profile === 'prudent' ? '🛡️' : profile === 'equilibre' ? '⚖️' : '🚀'}
+                  {profile === 'prudent' ? <Icons.Prudent size={28} /> : profile === 'equilibre' ? <Icons.Balanced size={28} /> : <Icons.Dynamic size={28} />}
                 </div>
                 <div>
                   <p className="text-xl font-bold text-elysion-primary">{profileData.name}</p>
@@ -1904,9 +1967,11 @@ const FreelanceSimulator = () => {
     const profileData = RISK_PROFILES[results.riskProfile];
 
     return (
-      <div className="space-y-6">
+      <div className="space-y-6" role="region" aria-label="Résultats de simulation" aria-live="polite">
         <div className="text-center mb-8">
-          <div className="text-4xl mb-4">🎉</div>
+          <div className="w-16 h-16 mx-auto mb-4 bg-elysion-accent/10 rounded-2xl flex items-center justify-center">
+            <Icons.Celebration size={32} className="text-elysion-accent" aria-hidden="true" />
+          </div>
           <h2 className="text-3xl font-bold text-elysion-primary mb-2">Votre estimation de retraite</h2>
           <p className="text-gray-600">Freelance - Synthèse complète</p>
         </div>
@@ -1914,7 +1979,10 @@ const FreelanceSimulator = () => {
         {/* Récap objectif */}
         {results.scenarios[0]?.targetIncome > 0 && (
           <div className="bg-gradient-to-r from-elysion-primary-50 to-elysion-secondary-50 p-6 rounded-xl border border-elysion-primary-200">
-            <h3 className="font-semibold text-gray-900 mb-4">🎯 Votre objectif</h3>
+            <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+              <Icons.Target size={20} className="text-elysion-primary" aria-hidden="true" />
+              Votre objectif
+            </h3>
             <div className="grid md:grid-cols-3 gap-4 text-center">
               <div>
                 <p className="text-sm text-gray-600">Revenu actuel</p>
@@ -1940,17 +2008,17 @@ const FreelanceSimulator = () => {
             <h3 className="text-white font-semibold text-lg">Scénarios par âge de départ</h3>
           </div>
           <div className="overflow-x-auto">
-            <table className="w-full">
+            <table className="w-full" role="table" aria-label="Tableau des scénarios de pension par âge de départ">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Âge</th>
-                  <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700">Base</th>
-                  <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700">RCI</th>
+                  <th scope="col" className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Âge</th>
+                  <th scope="col" className="px-4 py-3 text-right text-sm font-semibold text-gray-700">Base</th>
+                  <th scope="col" className="px-4 py-3 text-right text-sm font-semibold text-gray-700">RCI</th>
                   {results.hadSalariedPeriods && (
-                    <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700">Agirc-Arrco</th>
+                    <th scope="col" className="px-4 py-3 text-right text-sm font-semibold text-gray-700">Agirc-Arrco</th>
                   )}
-                  <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700">Total</th>
-                  <th className="px-4 py-3 text-right text-sm font-semibold text-gray-700">Taux</th>
+                  <th scope="col" className="px-4 py-3 text-right text-sm font-semibold text-gray-700">Total</th>
+                  <th scope="col" className="px-4 py-3 text-right text-sm font-semibold text-gray-700">Taux</th>
                 </tr>
               </thead>
               <tbody>
@@ -1982,7 +2050,10 @@ const FreelanceSimulator = () => {
         {/* Détails calcul */}
         <div className="grid md:grid-cols-2 gap-6">
           <div className="bg-white p-6 rounded-lg border border-gray-200">
-            <h3 className="font-semibold text-lg mb-4 text-elysion-primary">📊 Vos trimestres</h3>
+            <h3 className="font-semibold text-lg mb-4 text-elysion-primary flex items-center gap-2">
+              <Icons.Chart size={20} aria-hidden="true" />
+              Vos trimestres
+            </h3>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
                 <span>Trimestres freelance :</span>
@@ -2012,7 +2083,10 @@ const FreelanceSimulator = () => {
           </div>
 
           <div className="bg-white p-6 rounded-lg border border-gray-200">
-            <h3 className="font-semibold text-lg mb-4 text-elysion-primary">💰 Revenu Annuel Moyen</h3>
+            <h3 className="font-semibold text-lg mb-4 text-elysion-primary flex items-center gap-2">
+              <Icons.Money size={20} aria-hidden="true" />
+              Revenu Annuel Moyen
+            </h3>
             <div className="text-center">
               <p className="text-3xl font-bold text-elysion-primary">{Math.round(results.ram).toLocaleString()} €</p>
               <p className="text-sm text-gray-500 mt-2">Calculé sur les 25 meilleures années</p>
@@ -2023,8 +2097,9 @@ const FreelanceSimulator = () => {
         {/* Épargne nécessaire */}
         {formData.wantsEpargneCalculation && results.scenarios[0]?.savingsProjections && (
           <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-            <div className="bg-elysion-accent p-4">
-              <h3 className="text-white font-semibold text-lg">💰 Épargne complémentaire nécessaire</h3>
+            <div className="bg-elysion-accent p-4 flex items-center gap-2">
+              <Icons.Money size={20} className="text-white" aria-hidden="true" />
+              <h3 className="text-white font-semibold text-lg">Épargne complémentaire nécessaire</h3>
             </div>
             <div className="p-4">
               <div className="grid md:grid-cols-3 gap-4">
@@ -2042,7 +2117,7 @@ const FreelanceSimulator = () => {
                         <span className={`w-8 h-8 rounded-full flex items-center justify-center text-white text-sm ${
                           profile === 'prudent' ? 'bg-green-500' : profile === 'equilibre' ? 'bg-blue-500' : 'bg-orange-500'
                         }`}>
-                          {profile === 'prudent' ? '🛡️' : profile === 'equilibre' ? '⚖️' : '🚀'}
+                          {profile === 'prudent' ? <Icons.Prudent size={16} /> : profile === 'equilibre' ? <Icons.Balanced size={16} /> : <Icons.Dynamic size={16} />}
                         </span>
                         <span className="font-semibold text-sm">{profileInfo.name}</span>
                         {isSelected && <span className="text-xs bg-elysion-primary text-white px-2 py-0.5 rounded">Votre profil</span>}
@@ -2073,7 +2148,10 @@ const FreelanceSimulator = () => {
         {/* Recommandations */}
         {profileData && (
           <div className="bg-white rounded-xl border border-gray-200 p-6">
-            <h3 className="font-semibold text-gray-900 mb-4">📈 Recommandations pour votre profil {profileData.name}</h3>
+            <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+              <Icons.Investment size={20} className="text-elysion-primary" aria-hidden="true" />
+              Recommandations pour votre profil {profileData.name}
+            </h3>
             <div className="bg-gray-50 p-4 rounded-lg">
               <p className="text-sm font-semibold text-gray-700 mb-2">Supports d'épargne adaptés :</p>
               <p className="text-sm text-gray-600">{profileData.recommendation}</p>
@@ -2082,13 +2160,16 @@ const FreelanceSimulator = () => {
         )}
 
         {/* Info TNS */}
-        <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
-          <h4 className="font-semibold text-blue-900 mb-2">💡 Bon à savoir pour les indépendants</h4>
-          <ul className="text-sm text-blue-800 space-y-1">
-            <li>• Vos versements PER sont déductibles de votre revenu imposable</li>
-            <li>• Pensez à garder une épargne de précaution (6-12 mois de charges)</li>
-            <li>• Ces montants sont des estimations basées sur les barèmes 2026</li>
-          </ul>
+        <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg flex items-start gap-3">
+          <Icons.Info size={20} className="text-blue-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
+          <div>
+            <h4 className="font-semibold text-blue-900 mb-2">Bon à savoir pour les indépendants</h4>
+            <ul className="text-sm text-blue-800 space-y-1">
+              <li>• Vos versements PER sont déductibles de votre revenu imposable</li>
+              <li>• Pensez à garder une épargne de précaution (6-12 mois de charges)</li>
+              <li>• Ces montants sont des estimations basées sur les barèmes 2026</li>
+            </ul>
+          </div>
         </div>
 
         {/* Actions */}
@@ -2179,206 +2260,113 @@ const FreelanceSimulator = () => {
 
   const getTotalStepsDisplay = () => formData.hadSalariedPeriods ? 7 : 6;
 
+  const simulatorContent = (
+    <div className="max-w-4xl mx-auto px-4 py-12">
+      <div className="bg-white rounded-2xl shadow-xl p-8">
+        {!results && (
+          <div className="mb-6 sm:mb-8">
+            <div className="flex items-center justify-center gap-0.5 sm:gap-1 py-4 px-4 sm:px-2">
+              {Array.from({ length: getTotalStepsDisplay() }, (_, i) => i + 1).map((step, index) => (
+                <div key={step} className="flex items-center flex-shrink-0">
+                  <div className="relative flex flex-col items-center">
+                    <div
+                      className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
+                        step < currentStep
+                          ? 'bg-elysion-primary'
+                          : step === currentStep
+                          ? 'bg-elysion-accent'
+                          : 'bg-gray-300'
+                      }`}
+                    >
+                      {step < currentStep ? (
+                        <svg className="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                        </svg>
+                      ) : (
+                        <span className="text-white text-sm sm:text-base font-semibold">{step}</span>
+                      )}
+                    </div>
+                  </div>
+                  {index < getTotalStepsDisplay() - 1 && (
+                    <div
+                      className={`w-3 sm:w-6 h-1 mx-0.5 sm:mx-1 transition-all duration-300 ${
+                        step < currentStep ? 'bg-elysion-primary' : 'bg-gray-300'
+                      }`}
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {getCurrentStepContent()}
+
+        {!results && (
+          <div className="flex justify-between mt-8">
+            <button onClick={prevStep} className="btn-outline" data-testid="freelance-back-btn">
+              ← Retour
+            </button>
+            <button
+              onClick={nextStep}
+              className="btn-primary disabled:opacity-50"
+              disabled={
+                (currentStep === 1 && !formData.freelanceStatus) ||
+                (formData.retirementAges.length === 0 && 
+                  ((formData.hadSalariedPeriods && currentStep === 7) || (!formData.hadSalariedPeriods && currentStep === 6)))
+              }
+              data-testid="freelance-next-btn"
+            >
+              {((formData.hadSalariedPeriods && currentStep === 7) || (!formData.hadSalariedPeriods && currentStep === 6)) 
+                ? 'Calculer ma retraite' 
+                : 'Suivant →'}
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
+  if (user) {
+    return (
+      <DashboardLayout title="Simulateur Freelance">
+        {simulatorContent}
+      </DashboardLayout>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-elysion-bg to-white font-montserrat">
-      {/* Navigation */}
       <nav className="bg-white/95 backdrop-blur-md border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <button 
-              onClick={() => navigate('/')}
-              className="hover:opacity-80 transition-opacity"
-            >
-              <img src="/asset/Elysion - logo.png" alt="Elysion" className="h-8" />
+            <button onClick={() => navigate('/')} className="hover:opacity-80 transition-opacity">
+              <img src="/asset/logo.png" alt="Elysion" className="h-8" />
             </button>
-            
-            {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-3">
-              {user ? (
-                <>
-                  <button
-                    onClick={() => navigate('/dashboard')}
-                    className="btn-secondary"
-                  >
-                    Tableau de bord
-                  </button>
-                  <div className="flex items-center space-x-2 bg-elysion-primary/10 px-3 py-1.5 rounded-full">
-                    <span className="text-lg">👤</span>
-                    <span className="text-sm font-medium text-elysion-primary">
-                      {user.first_name || user.full_name?.split(' ')[0]}
-                    </span>
-                  </div>
-                </>
+              <button onClick={() => navigate('/auth?mode=login')} className="btn-primary">Se connecter</button>
+              <button onClick={() => navigate('/onboarding')} className="btn-outline">Créer un compte</button>
+            </div>
+            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors" data-testid="freelance-sim-mobile-menu-btn">
+              {mobileMenuOpen ? (
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
               ) : (
-                <>
-                  <button 
-                    onClick={() => navigate('/auth?mode=login')}
-                    className="btn-primary"
-                  >
-                    Se connecter
-                  </button>
-                  <button 
-                    onClick={() => navigate('/onboarding')}
-                    className="btn-outline"
-                  >
-                    Créer un compte
-                  </button>
-                </>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
               )}
-            </div>
-
-            {/* Mobile: User name + Menu Button */}
-            <div className="md:hidden flex items-center gap-2">
-              {user && (
-                <span className="text-sm font-medium text-elysion-primary">
-                  {user.first_name || user.full_name?.split(' ')[0]}
-                </span>
-              )}
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
-                data-testid="freelance-sim-mobile-menu-btn"
-              >
-                {mobileMenuOpen ? (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                ) : (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                  </svg>
-                )}
-              </button>
-            </div>
+            </button>
           </div>
         </div>
-
-        {/* Mobile Dropdown Menu */}
         {mobileMenuOpen && (
           <div className="md:hidden bg-white border-t border-gray-100 shadow-lg">
             <div className="px-4 py-4 space-y-3">
-              <button
-                onClick={() => { navigate('/'); setMobileMenuOpen(false); }}
-                className="btn-ghost w-full text-left"
-              >
-                Accueil
-              </button>
-              {user ? (
-                <>
-                  <button
-                    onClick={() => { navigate('/dashboard'); setMobileMenuOpen(false); }}
-                    className="btn-secondary w-full"
-                  >
-                    Tableau de bord
-                  </button>
-                  <button
-                    onClick={() => { navigate('/profile'); setMobileMenuOpen(false); }}
-                    className="btn-outline w-full"
-                  >
-                    Mon profil
-                  </button>
-                  <button
-                    onClick={() => { logout(); setMobileMenuOpen(false); navigate('/'); }}
-                    className="w-full py-2 px-4 rounded-lg text-red-600 font-medium bg-red-50 hover:bg-red-100 transition-colors"
-                  >
-                    Déconnexion
-                  </button>
-                </>
-              ) : (
-                <>
-                  <button
-                    onClick={() => { navigate('/auth?mode=login'); setMobileMenuOpen(false); }}
-                    className="btn-primary w-full"
-                  >
-                    Se connecter
-                  </button>
-                  <button
-                    onClick={() => { navigate('/onboarding'); setMobileMenuOpen(false); }}
-                    className="btn-outline w-full"
-                  >
-                    Créer un compte
-                  </button>
-                </>
-              )}
+              <button onClick={() => { navigate('/'); setMobileMenuOpen(false); }} className="btn-ghost w-full text-left">Accueil</button>
+              <button onClick={() => { navigate('/auth?mode=login'); setMobileMenuOpen(false); }} className="btn-primary w-full">Se connecter</button>
+              <button onClick={() => { navigate('/onboarding'); setMobileMenuOpen(false); }} className="btn-outline w-full">Créer un compte</button>
             </div>
           </div>
         )}
       </nav>
-
-      <div className="max-w-4xl mx-auto px-4 py-12">
-        <div className="bg-white rounded-2xl shadow-xl p-8">
-          {/* Progress bar */}
-          {!results && (
-            <div className="mb-6 sm:mb-8">
-              <div className="flex items-center justify-center gap-0.5 sm:gap-1 py-4 px-4 sm:px-2">
-                {Array.from({ length: getTotalStepsDisplay() }, (_, i) => i + 1).map((step, index) => (
-                  <div key={step} className="flex items-center flex-shrink-0">
-                    <div className="relative flex flex-col items-center">
-                      <div
-                        className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
-                          step < currentStep
-                            ? 'bg-elysion-primary'
-                            : step === currentStep
-                            ? 'bg-elysion-accent'
-                            : 'bg-gray-300'
-                        }`}
-                      >
-                        {step < currentStep ? (
-                          <svg className="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                          </svg>
-                        ) : (
-                          <span className="text-white text-sm sm:text-base font-semibold">{step}</span>
-                        )}
-                      </div>
-                    </div>
-                    {index < getTotalStepsDisplay() - 1 && (
-                      <div
-                        className={`w-3 sm:w-6 h-1 mx-0.5 sm:mx-1 transition-all duration-300 ${
-                          step < currentStep
-                            ? 'bg-elysion-primary'
-                            : 'bg-gray-300'
-                        }`}
-                      />
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Contenu */}
-          {getCurrentStepContent()}
-
-          {/* Navigation buttons */}
-          {!results && (
-            <div className="flex justify-between mt-8">
-              <button
-                onClick={prevStep}
-                className="btn-outline"
-                data-testid="freelance-back-btn"
-              >
-                ← Retour
-              </button>
-              
-              <button
-                onClick={nextStep}
-                className="btn-primary disabled:opacity-50"
-                disabled={
-                  (currentStep === 1 && !formData.freelanceStatus) ||
-                  (formData.retirementAges.length === 0 && 
-                    ((formData.hadSalariedPeriods && currentStep === 7) || (!formData.hadSalariedPeriods && currentStep === 6)))
-                }
-                data-testid="freelance-next-btn"
-              >
-                {((formData.hadSalariedPeriods && currentStep === 7) || (!formData.hadSalariedPeriods && currentStep === 6)) 
-                  ? 'Calculer ma retraite' 
-                  : 'Suivant →'}
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
+      {simulatorContent}
     </div>
   );
 };

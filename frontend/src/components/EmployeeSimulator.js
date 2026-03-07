@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../App';
 import DashboardLayout from './DashboardLayout';
 import axios from 'axios';
+import { Icons } from './ui/icons';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 const API = `${BACKEND_URL}/api`;
@@ -598,7 +599,47 @@ const EmployeeSimulator = () => {
     setCurrentStep(8); // Écran résultats
   };
 
+  const [validationErrors, setValidationErrors] = useState({});
+
+  const validateStep = (step) => {
+    const errors = {};
+    
+    if (step === 1) {
+      if (!formData.birthDate) errors.birthDate = 'La date de naissance est obligatoire';
+      if (!formData.gender) errors.gender = 'Le genre est obligatoire';
+      if (!formData.careerStartYear) errors.careerStartYear = 'L\'année de début de carrière est obligatoire';
+    }
+    
+    if (step === 2) {
+      if (formData.salaryMode === 'simple' && formData.salaryPeriods.length === 0) {
+        errors.salary = 'Ajoutez au moins une période de salaire';
+      }
+      if (formData.salaryMode === 'detailed' && formData.detailedSalaries.length === 0) {
+        errors.salary = 'Ajoutez au moins une année de salaire';
+      }
+    }
+    
+    if (step === 3) {
+      if (!formData.fullTimeYears && !formData.partTimeYears) {
+        errors.years = 'Indiquez vos années travaillées (temps plein ou partiel)';
+      }
+    }
+    
+    if (step === 5) {
+      if (!formData.currentMonthlyIncome) errors.income = 'Le revenu mensuel actuel est obligatoire';
+    }
+    
+    if (step === 6) {
+      if (!formData.riskProfile) errors.riskProfile = 'Le profil de risque est obligatoire';
+    }
+    
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const nextStep = () => {
+    if (!validateStep(currentStep)) return;
+    
     if (currentStep === 1) {
       // Automatiquement en mode Salarié du Privé
       setBranch('private');
@@ -629,42 +670,51 @@ const EmployeeSimulator = () => {
 
       <div className="grid md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
+          <label htmlFor="birthDate" className="block text-sm font-semibold text-gray-700 mb-2">
             Date de naissance
           </label>
           <input
             type="date"
+            id="birthDate"
             value={formData.birthDate}
-            onChange={(e) => handleInputChange('birthDate', e.target.value)}
-            className="input-elysion"
+            onChange={(e) => { handleInputChange('birthDate', e.target.value); setValidationErrors(prev => ({...prev, birthDate: undefined})); }}
+            className={`input-elysion ${validationErrors.birthDate ? 'border-red-500' : ''}`}
+            aria-invalid={validationErrors.birthDate ? 'true' : 'false'}
+            aria-describedby={validationErrors.birthDate ? 'birthDate-error' : undefined}
             required
           />
+          {validationErrors.birthDate && <p id="birthDate-error" className="text-red-500 text-xs mt-1" role="alert">{validationErrors.birthDate}</p>}
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
+          <label htmlFor="gender" className="block text-sm font-semibold text-gray-700 mb-2">
             Genre
           </label>
           <select
+            id="gender"
             value={formData.gender}
-            onChange={(e) => handleInputChange('gender', e.target.value)}
-            className="input-elysion"
+            onChange={(e) => { handleInputChange('gender', e.target.value); setValidationErrors(prev => ({...prev, gender: undefined})); }}
+            className={`input-elysion ${validationErrors.gender ? 'border-red-500' : ''}`}
+            aria-invalid={validationErrors.gender ? 'true' : 'false'}
+            aria-describedby={validationErrors.gender ? 'gender-error' : undefined}
           >
             <option value="">Sélectionner</option>
             <option value="M">Homme</option>
             <option value="F">Femme</option>
             <option value="other">Autre</option>
           </select>
+          {validationErrors.gender && <p id="gender-error" className="text-red-500 text-xs mt-1" role="alert">{validationErrors.gender}</p>}
         </div>
       </div>
 
       <div className="grid md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
+          <label htmlFor="children" className="block text-sm font-semibold text-gray-700 mb-2">
             Nombre d'enfants
           </label>
           <input
             type="number" onFocus={(e) => e.target.select()}
+            id="children"
             min="0"
             max="10"
             value={formData.children}
@@ -674,18 +724,22 @@ const EmployeeSimulator = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
+          <label htmlFor="careerStartYear" className="block text-sm font-semibold text-gray-700 mb-2">
             Début de carrière
           </label>
           <input
             type="number" onFocus={(e) => e.target.select()}
+            id="careerStartYear"
             placeholder="2005"
             min="1980"
             max={new Date().getFullYear()}
             value={formData.careerStartYear}
-            onChange={(e) => handleInputChange('careerStartYear', e.target.value)}
-            className="input-elysion"
+            onChange={(e) => { handleInputChange('careerStartYear', e.target.value); setValidationErrors(prev => ({...prev, careerStartYear: undefined})); }}
+            className={`input-elysion ${validationErrors.careerStartYear ? 'border-red-500' : ''}`}
+            aria-invalid={validationErrors.careerStartYear ? 'true' : 'false'}
+            aria-describedby={validationErrors.careerStartYear ? 'careerStartYear-error' : undefined}
           />
+          {validationErrors.careerStartYear && <p id="careerStartYear-error" className="text-red-500 text-xs mt-1" role="alert">{validationErrors.careerStartYear}</p>}
         </div>
       </div>
 
@@ -833,6 +887,12 @@ const EmployeeSimulator = () => {
         <p className="text-gray-600">Salarié - Étape 2/7</p>
       </div>
 
+      {validationErrors.salary && (
+        <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
+          {validationErrors.salary}
+        </div>
+      )}
+
       <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
         <label className="block text-sm font-semibold text-gray-900 mb-3">
           Mode de saisie
@@ -847,7 +907,10 @@ const EmployeeSimulator = () => {
                 : 'border-gray-300 bg-white'
             }`}
           >
-            <div className="font-semibold">📊 Simplifié</div>
+            <div className="font-semibold flex items-center gap-2">
+              <Icons.Chart size={16} aria-hidden="true" />
+              Simplifié
+            </div>
             <p className="text-xs text-gray-600">Salaire moyen par période</p>
           </button>
 
@@ -1004,6 +1067,12 @@ const EmployeeSimulator = () => {
         <h2 className="text-3xl font-bold text-elysion-primary mb-2">Vos trimestres</h2>
         <p className="text-gray-600">Salarié - Étape 3/7</p>
       </div>
+
+      {validationErrors.years && (
+        <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
+          {validationErrors.years}
+        </div>
+      )}
 
       <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
         <p className="text-sm text-blue-800">
@@ -1178,10 +1247,11 @@ const EmployeeSimulator = () => {
             type="number" onFocus={(e) => e.target.select()}
             min="0"
             value={formData.currentMonthlyIncome}
-            onChange={(e) => handleInputChange('currentMonthlyIncome', parseFloat(e.target.value) || 0)}
-            className="input-elysion"
+            onChange={(e) => { handleInputChange('currentMonthlyIncome', parseFloat(e.target.value) || 0); setValidationErrors(prev => ({...prev, income: undefined})); }}
+            className={`input-elysion ${validationErrors.income ? 'border-red-500' : ''}`}
             placeholder="2500"
           />
+          {validationErrors.income && <p className="text-red-500 text-xs mt-1">{validationErrors.income}</p>}
         </div>
 
         {/* Affichage du taux de remplacement estimé */}
@@ -1311,6 +1381,12 @@ const EmployeeSimulator = () => {
         <p className="text-gray-600">Salarié - Étape 6/7</p>
       </div>
 
+      {validationErrors.riskProfile && (
+        <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
+          {validationErrors.riskProfile}
+        </div>
+      )}
+
       <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
         <p className="text-sm text-blue-800">
           <strong>💡 Important :</strong> Ces questions permettent de déterminer votre profil d'investisseur et d'adapter les recommandations d'épargne.
@@ -1413,7 +1489,7 @@ const EmployeeSimulator = () => {
                 <div className={`w-16 h-16 rounded-full flex items-center justify-center text-white text-2xl font-bold ${
                   profile === 'prudent' ? 'bg-green-500' : profile === 'equilibre' ? 'bg-blue-500' : 'bg-orange-500'
                 }`}>
-                  {profile === 'prudent' ? '🛡️' : profile === 'equilibre' ? '⚖️' : '🚀'}
+                  {profile === 'prudent' ? <Icons.Prudent size={28} /> : profile === 'equilibre' ? <Icons.Balanced size={28} /> : <Icons.Dynamic size={28} />}
                 </div>
                 <div>
                   <p className="text-xl font-bold text-elysion-primary">{profileData.name}</p>
@@ -1732,9 +1808,11 @@ const EmployeeSimulator = () => {
     const profileData = RISK_PROFILES[results.riskProfile];
 
     return (
-      <div className="space-y-6">
+      <div className="space-y-6" role="region" aria-label="Résultats de simulation" aria-live="polite">
         <div className="text-center mb-8">
-          <div className="text-4xl mb-4">🎉</div>
+          <div className="w-16 h-16 mx-auto mb-4 bg-elysion-accent/10 rounded-2xl flex items-center justify-center">
+            <Icons.Celebration size={32} className="text-elysion-accent" aria-hidden="true" />
+          </div>
           <h2 className="text-3xl font-bold text-elysion-primary mb-2">
             Vos estimations de retraite
           </h2>
@@ -1746,7 +1824,10 @@ const EmployeeSimulator = () => {
         {/* Récapitulatif objectif */}
         {results.targetIncome > 0 && (
           <div className="bg-gradient-to-r from-elysion-primary-50 to-elysion-secondary-50 p-6 rounded-xl border border-elysion-primary-200">
-            <h3 className="font-semibold text-gray-900 mb-4">🎯 Votre objectif</h3>
+            <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+              <Icons.Target size={20} className="text-elysion-primary" aria-hidden="true" />
+              Votre objectif
+            </h3>
             <div className="grid md:grid-cols-3 gap-4 text-center">
               <div>
                 <p className="text-sm text-gray-600">Revenu actuel</p>
@@ -1769,15 +1850,18 @@ const EmployeeSimulator = () => {
         {/* Tableau comparatif des pensions */}
         <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
           <div className="bg-elysion-primary-50 p-4 border-b">
-            <h3 className="font-semibold text-elysion-primary">📊 Pensions obligatoires estimées</h3>
+            <h3 className="font-semibold text-elysion-primary flex items-center gap-2">
+              <Icons.Chart size={20} aria-hidden="true" />
+              Pensions obligatoires estimées
+            </h3>
           </div>
-          <table className="w-full">
+          <table className="w-full" role="table" aria-label="Tableau comparatif des pensions par âge de départ">
             <thead className="bg-gray-50">
               <tr>
-                <th className="p-4 text-left font-semibold">Âge de départ</th>
-                <th className="p-4 text-right font-semibold">Dans</th>
-                <th className="p-4 text-right font-semibold">Pension mensuelle</th>
-                <th className="p-4 text-right font-semibold">Taux de remplacement</th>
+                <th scope="col" className="p-4 text-left font-semibold">Âge de départ</th>
+                <th scope="col" className="p-4 text-right font-semibold">Dans</th>
+                <th scope="col" className="p-4 text-right font-semibold">Pension mensuelle</th>
+                <th scope="col" className="p-4 text-right font-semibold">Taux de remplacement</th>
               </tr>
             </thead>
             <tbody>
@@ -1809,7 +1893,10 @@ const EmployeeSimulator = () => {
         {formData.wantsEpargneCalculation && results.targetIncome > 0 && (
           <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
             <div className="bg-elysion-accent-50 p-4 border-b">
-              <h3 className="font-semibold text-elysion-accent-700">💰 Épargne complémentaire nécessaire</h3>
+              <h3 className="font-semibold text-elysion-accent-700 flex items-center gap-2">
+                <Icons.Money size={20} aria-hidden="true" />
+                Épargne complémentaire nécessaire
+              </h3>
               <p className="text-sm text-gray-600">Pour atteindre votre objectif de {results.targetIncome?.toLocaleString()} €/mois</p>
             </div>
             
@@ -1861,7 +1948,7 @@ const EmployeeSimulator = () => {
                                   <span className={`w-8 h-8 rounded-full flex items-center justify-center text-white text-sm ${
                                     profile === 'prudent' ? 'bg-green-500' : profile === 'equilibre' ? 'bg-blue-500' : 'bg-orange-500'
                                   }`}>
-                                    {profile === 'prudent' ? '🛡️' : profile === 'equilibre' ? '⚖️' : '🚀'}
+                                    {profile === 'prudent' ? <Icons.Prudent size={16} /> : profile === 'equilibre' ? <Icons.Balanced size={16} /> : <Icons.Dynamic size={16} />}
                                   </span>
                                   <span className="font-semibold text-sm">{profileInfo.name}</span>
                                   {isSelected && <span className="text-xs bg-elysion-primary text-white px-2 py-0.5 rounded">Votre profil</span>}
@@ -2007,7 +2094,10 @@ const EmployeeSimulator = () => {
         {/* Recommandations épargne */}
         {profileData && (
           <div className="bg-white rounded-xl border border-gray-200 p-6">
-            <h3 className="font-semibold text-gray-900 mb-4">📈 Recommandations pour votre profil {profileData.name}</h3>
+            <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+              <Icons.Investment size={20} className="text-elysion-primary" aria-hidden="true" />
+              Recommandations pour votre profil {profileData.name}
+            </h3>
             <p className="text-sm text-gray-600 mb-4">{profileData.description}</p>
             <div className="bg-gray-50 p-4 rounded-lg">
               <p className="text-sm font-semibold text-gray-700 mb-2">Supports d'épargne adaptés :</p>
@@ -2017,9 +2107,10 @@ const EmployeeSimulator = () => {
         )}
 
         {/* Avertissement */}
-        <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg">
+        <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg flex items-start gap-3">
+          <Icons.Warning size={20} className="text-yellow-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
           <p className="text-sm text-yellow-800">
-            <strong>⚠️ Avertissement :</strong> Ces estimations sont indicatives et basées sur des hypothèses de rendement non garanties. 
+            <strong>Avertissement :</strong> Ces estimations sont indicatives et basées sur des hypothèses de rendement non garanties. 
             Les performances passées ne préjugent pas des performances futures. Consultez un conseiller financier pour une stratégie personnalisée.
           </p>
         </div>

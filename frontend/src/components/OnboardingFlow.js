@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../App';
 import axios from 'axios';
+import { Icons } from './ui/icons';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 const API = `${BACKEND_URL}/api`;
@@ -179,11 +180,11 @@ const OnboardingFlow = () => {
 
   const getUserTypeInfo = () => {
     const types = {
-      employee: { label: 'Salarié', icon: '👔' },
-      freelancer: { label: 'Freelance', icon: '💻' }, 
-      self_employed: { label: 'Indépendant', icon: '💻' },
-      civil_servant: { label: 'Fonctionnaire', icon: '🏛️' },
-      business_owner: { label: 'Chef d\'entreprise', icon: '🏢' }
+      employee: { label: 'Salarié', icon: Icons.Employee },
+      freelancer: { label: 'Freelance', icon: Icons.Freelancer }, 
+      self_employed: { label: 'Indépendant', icon: Icons.Freelancer },
+      civil_servant: { label: 'Fonctionnaire', icon: Icons.Bank },
+      business_owner: { label: 'Chef d\'entreprise', icon: Icons.BusinessOwner }
     };
     return types[professionalStatus] || types.employee;
   };
@@ -194,7 +195,9 @@ const OnboardingFlow = () => {
     if (!comesFromSimulator) {
       return (
         <div className="text-center">
-          <div className="text-5xl mb-6">📊</div>
+          <div className="w-16 h-16 mx-auto mb-6 bg-elysion-primary/10 rounded-2xl flex items-center justify-center">
+            <Icons.Chart size={32} className="text-elysion-primary" aria-hidden="true" />
+          </div>
           <h2 className="text-3xl font-bold text-elysion-primary mb-4 font-montserrat">
             Quel est votre statut professionnel ?
           </h2>
@@ -212,7 +215,9 @@ const OnboardingFlow = () => {
                   : 'border-gray-200 bg-white hover:border-elysion-primary'
               }`}
             >
-              <div className="text-4xl mb-4">💼</div>
+              <div className="w-12 h-12 mb-4 bg-blue-100 rounded-xl flex items-center justify-center">
+                <Icons.Employee size={24} className="text-blue-600" aria-hidden="true" />
+              </div>
               <h3 className="text-xl font-bold text-elysion-primary mb-2">Salarié</h3>
               <p className="text-gray-600 text-sm">
                 CDI, CDD, intérim, fonctionnaire...
@@ -228,7 +233,9 @@ const OnboardingFlow = () => {
                   : 'border-gray-200 bg-white hover:border-elysion-accent'
               }`}
             >
-              <div className="text-4xl mb-4">💻</div>
+              <div className="w-12 h-12 mb-4 bg-orange-100 rounded-xl flex items-center justify-center">
+                <Icons.Freelancer size={24} className="text-orange-600" aria-hidden="true" />
+              </div>
               <h3 className="text-xl font-bold text-elysion-primary mb-2">Freelance</h3>
               <p className="text-gray-600 text-sm">
                 Micro-entrepreneur, indépendant, profession libérale...
@@ -244,7 +251,9 @@ const OnboardingFlow = () => {
                   : 'border-gray-200 bg-white hover:border-elysion-secondary'
               }`}
             >
-              <div className="text-4xl mb-4">🏢</div>
+              <div className="w-12 h-12 mb-4 bg-purple-100 rounded-xl flex items-center justify-center">
+                <Icons.BusinessOwner size={24} className="text-purple-600" aria-hidden="true" />
+              </div>
               <h3 className="text-xl font-bold text-elysion-primary mb-2">Dirigeant</h3>
               <p className="text-gray-600 text-sm">
                 Chef d'entreprise, gérant, président...
@@ -951,14 +960,14 @@ const OnboardingFlow = () => {
           <div className="flex justify-between items-center h-16">
             <button 
               onClick={() => navigate('/')}
-              className="text-2xl font-bold text-elysion-primary hover:text-elysion-accent transition-colors"
+              className="hover:opacity-80 transition-opacity"
             >
               <img src="/asset/Elysion - logo.png" alt="Elysion" className="h-8" />
             </button>
             <div className="flex items-center space-x-4">
               <button 
                 onClick={() => navigate('/auth?mode=login')}
-                className="hover:opacity-80 transition-opacity"
+                className="text-elysion-primary hover:text-elysion-accent font-medium transition-colors text-sm"
               >
                 Déjà un compte ?
               </button>

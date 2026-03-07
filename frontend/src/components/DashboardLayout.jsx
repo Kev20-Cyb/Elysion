@@ -2,6 +2,22 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../App';
 import MobileTabBar from './MobileTabBar';
+import { 
+  Home, 
+  Sparkles, 
+  FileText, 
+  TrendingUp, 
+  Settings, 
+  LogOut, 
+  Briefcase, 
+  Rocket, 
+  Building2, 
+  User,
+  ChevronLeft,
+  Menu,
+  X,
+  Plus
+} from 'lucide-react';
 
 const DashboardLayout = ({ children, title }) => {
   const navigate = useNavigate();
@@ -15,31 +31,37 @@ const DashboardLayout = ({ children, title }) => {
     navigate('/');
   };
 
-  // Get user type icon
+  // Get user type icon component
   const getUserTypeIcon = () => {
+    const iconProps = { size: 20, className: "text-elysion-primary" };
     switch (user?.user_type) {
-      case 'employee': return '💼';
-      case 'freelancer': return '🚀';
-      case 'business_owner': return '🏢';
-      default: return '👤';
+      case 'employee': return <Briefcase {...iconProps} />;
+      case 'freelancer': return <Rocket {...iconProps} />;
+      case 'business_owner': return <Building2 {...iconProps} />;
+      default: return <User {...iconProps} />;
     }
   };
 
-  // Navigation items
+  // Navigation items with Lucide icons
   const navItems = [
-    { path: '/dashboard', icon: '🏠', label: 'Tableau de bord' },
-    { path: '/simulator', icon: '🔮', label: 'Simulateur' },
-    { path: '/documents', icon: '📄', label: 'Documents' },
-    { path: '/investment-axes', icon: '📈', label: 'Axes d\'investissement' },
-    { path: '/profile', icon: '⚙️', label: 'Mon compte' },
+    { path: '/dashboard', icon: Home, label: 'Tableau de bord' },
+    { path: '/simulator', icon: Sparkles, label: 'Simulateur' },
+    { path: '/documents', icon: FileText, label: 'Documents' },
+    { path: '/investment-axes', icon: TrendingUp, label: 'Axes d\'investissement' },
+    { path: '/profile', icon: Settings, label: 'Mon compte' },
   ];
 
   return (
     <div className="min-h-screen bg-elysion-bg font-montserrat">
+      {/* Skip to main content - Accessibility */}
+      <a href="#main-content" className="skip-link">
+        Aller au contenu principal
+      </a>
+      
       {/* Sidebar - Desktop only */}
       <aside className={`fixed left-0 top-0 h-full bg-white border-r border-gray-200 z-40 transition-all duration-300 hidden lg:block ${
         sidebarCollapsed ? 'w-20' : 'w-64'
-      }`}>
+      }`} role="navigation" aria-label="Menu principal">
         {/* Logo */}
         <div className="h-16 flex items-center justify-between px-4 border-b border-gray-100">
           {!sidebarCollapsed && (
@@ -51,17 +73,14 @@ const DashboardLayout = ({ children, title }) => {
           <button
             onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
             className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
-            title={sidebarCollapsed ? 'Étendre' : 'Réduire'}
+            aria-label={sidebarCollapsed ? 'Étendre le menu' : 'Réduire le menu'}
+            aria-expanded={!sidebarCollapsed}
           >
-            <svg 
-              xmlns="http://www.w3.org/2000/svg" 
-              className={`h-5 w-5 text-gray-500 transition-transform ${sidebarCollapsed ? 'rotate-180' : ''}`} 
-              fill="none" 
-              viewBox="0 0 24 24" 
-              stroke="currentColor"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
-            </svg>
+            <ChevronLeft 
+              size={20} 
+              className={`text-gray-500 transition-transform ${sidebarCollapsed ? 'rotate-180' : ''}`}
+              aria-hidden="true"
+            />
           </button>
         </div>
 
@@ -85,10 +104,11 @@ const DashboardLayout = ({ children, title }) => {
         </div>
 
         {/* Navigation */}
-        <nav className="p-3 flex-1">
-          <ul className="space-y-1">
+        <nav className="p-3 flex-1" aria-label="Navigation principale">
+          <ul className="space-y-1" role="list">
             {navItems.map((item) => {
               const isActive = location.pathname === item.path;
+              const IconComponent = item.icon;
               return (
                 <li key={item.path}>
                   <button
@@ -98,9 +118,10 @@ const DashboardLayout = ({ children, title }) => {
                         ? 'bg-elysion-primary text-white'
                         : 'text-elysion-text-dark hover:bg-gray-100'
                     }`}
-                    title={sidebarCollapsed ? item.label : ''}
+                    aria-label={item.label}
+                    aria-current={isActive ? 'page' : undefined}
                   >
-                    <span className="text-xl">{item.icon}</span>
+                    <IconComponent size={20} aria-hidden="true" />
                     {!sidebarCollapsed && (
                       <span className="text-sm font-medium">{item.label}</span>
                     )}
@@ -116,9 +137,9 @@ const DashboardLayout = ({ children, title }) => {
           <button
             onClick={handleLogout}
             className={`w-full flex items-center ${sidebarCollapsed ? 'justify-center' : ''} gap-3 px-3 py-2.5 rounded-lg text-red-600 hover:bg-red-50 transition-colors`}
-            title={sidebarCollapsed ? 'Déconnexion' : ''}
+            aria-label="Se déconnecter"
           >
-            <span className="text-xl">🚪</span>
+            <LogOut size={20} aria-hidden="true" />
             {!sidebarCollapsed && (
               <span className="text-sm font-medium">Déconnexion</span>
             )}
@@ -143,59 +164,63 @@ const DashboardLayout = ({ children, title }) => {
                 <button
                   onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                   className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                  aria-label={mobileMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
+                  aria-expanded={mobileMenuOpen}
                 >
                   {mobileMenuOpen ? (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
+                    <X size={24} className="text-gray-600" aria-hidden="true" />
                   ) : (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
+                    <Menu size={24} className="text-gray-600" aria-hidden="true" />
                   )}
                 </button>
               </div>
             </div>
           </div>
 
-          {/* Mobile Dropdown Menu */}
+          {/* Mobile Dropdown Menu - Simplifié car la navigation est dans la TabBar */}
           {mobileMenuOpen && (
             <div className="bg-white border-t border-gray-100 shadow-lg">
-              <div className="px-4 py-3 space-y-1">
+              <div className="px-4 py-4">
                 {/* User info */}
-                <div className="px-4 py-3 border-b border-gray-100 mb-2">
+                <div className="px-3 py-3 bg-elysion-primary-50 rounded-xl mb-4">
                   <div className="flex items-center space-x-3">
-                    <span className="text-2xl">{getUserTypeIcon()}</span>
+                    <div className="w-10 h-10 bg-elysion-primary/10 rounded-full flex items-center justify-center">
+                      {getUserTypeIcon()}
+                    </div>
                     <div>
-                      <p className="font-medium text-elysion-text-dark">{user?.full_name}</p>
+                      <p className="font-semibold text-elysion-text-dark">{user?.full_name}</p>
                       <p className="text-sm text-elysion-text-light">{user?.email}</p>
                     </div>
                   </div>
                 </div>
                 
-                {/* Nav items */}
-                {navItems.map((item) => (
+                {/* Actions avec boutons stylisés */}
+                <div className="space-y-3">
                   <button
-                    key={item.path}
-                    onClick={() => { navigate(item.path); setMobileMenuOpen(false); }}
-                    className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-                      location.pathname === item.path
-                        ? 'bg-elysion-primary/10 text-elysion-primary'
-                        : 'hover:bg-gray-50'
-                    }`}
+                    onClick={() => { navigate('/simulator'); setMobileMenuOpen(false); }}
+                    className="btn-accent w-full flex items-center justify-center space-x-2"
+                    aria-label="Nouvelle simulation"
                   >
-                    <span className="text-xl">{item.icon}</span>
-                    <span className="font-medium">{item.label}</span>
+                    <Plus size={18} aria-hidden="true" />
+                    <span>Nouvelle simulation</span>
                   </button>
-                ))}
-                
-                <div className="border-t border-gray-100 mt-2 pt-2">
+                  
+                  <button
+                    onClick={() => { navigate('/profile'); setMobileMenuOpen(false); }}
+                    className="btn-outline w-full flex items-center justify-center space-x-2"
+                    aria-label="Mon compte"
+                  >
+                    <Settings size={18} aria-hidden="true" />
+                    <span>Mon compte</span>
+                  </button>
+                  
                   <button
                     onClick={handleLogout}
-                    className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-red-50 text-red-600 transition-colors"
+                    className="btn-danger w-full flex items-center justify-center space-x-2"
+                    aria-label="Se déconnecter"
                   >
-                    <span className="text-xl">🚪</span>
-                    <span className="font-medium">Déconnexion</span>
+                    <LogOut size={18} aria-hidden="true" />
+                    <span>Déconnexion</span>
                   </button>
                 </div>
               </div>
@@ -211,9 +236,10 @@ const DashboardLayout = ({ children, title }) => {
               <div className="flex items-center space-x-4">
                 <button
                   onClick={() => navigate('/simulator')}
-                  className="bg-elysion-accent hover:bg-elysion-accent/90 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+                  className="btn-accent flex items-center space-x-2"
                 >
-                  + Nouvelle simulation
+                  <Plus size={18} aria-hidden="true" />
+                  <span>Nouvelle simulation</span>
                 </button>
               </div>
             </div>
@@ -221,7 +247,7 @@ const DashboardLayout = ({ children, title }) => {
         </header>
 
         {/* Page content */}
-        <main className="pb-20 lg:pb-6">
+        <main id="main-content" className="pb-20 lg:pb-6" role="main" tabIndex="-1">
           {children}
         </main>
       </div>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../App';
 import DashboardLayout from './DashboardLayout';
+import { Icons } from './ui/icons';
 
 const Simulator = () => {
   const navigate = useNavigate();
@@ -22,7 +23,9 @@ const Simulator = () => {
   const renderIntroSection = () => (
     <div className="text-center">
       <div className="mb-8">
-        <div className="text-6xl mb-6">📊</div>
+        <div className="w-20 h-20 mx-auto mb-6 bg-elysion-primary/10 rounded-2xl flex items-center justify-center">
+          <Icons.Chart size={40} className="text-elysion-primary" aria-hidden="true" />
+        </div>
         <h1 className="text-4xl font-bold text-elysion-primary mb-6 font-montserrat">
           Estimez votre retraite en quelques clics
         </h1>
@@ -65,19 +68,21 @@ const Simulator = () => {
               : 'border-gray-200 bg-white hover:border-elysion-primary'
           }`}
         >
-          <div className="text-5xl mb-4">💼</div>
+          <div className="w-14 h-14 mb-4 bg-blue-100 rounded-xl flex items-center justify-center">
+            <Icons.Employee size={28} className="text-blue-600" aria-hidden="true" />
+          </div>
           <h3 className="text-xl font-bold text-elysion-primary mb-2">Salarié</h3>
           <p className="text-gray-600 text-sm mb-4">
             Régime général + Agirc-Arrco
           </p>
           <ul className="text-xs text-gray-500 space-y-1">
-            <li>✓ Calcul SAM (25 meilleures années)</li>
-            <li>✓ Trimestres cotisés et assimilés</li>
-            <li>✓ Retraite complémentaire Agirc-Arrco</li>
-            <li>✓ Scénarios d'âge de départ</li>
+            <li className="flex items-center gap-1"><Icons.Check size={12} className="text-green-500" /> Calcul SAM (25 meilleures années)</li>
+            <li className="flex items-center gap-1"><Icons.Check size={12} className="text-green-500" /> Trimestres cotisés et assimilés</li>
+            <li className="flex items-center gap-1"><Icons.Check size={12} className="text-green-500" /> Retraite complémentaire Agirc-Arrco</li>
+            <li className="flex items-center gap-1"><Icons.Check size={12} className="text-green-500" /> Scénarios d'âge de départ</li>
           </ul>
-          <div className="mt-4 text-elysion-primary font-semibold text-sm flex items-center">
-            Simulateur 6 étapes →
+          <div className="mt-4 text-elysion-primary font-semibold text-sm flex items-center gap-1">
+            Simulateur 6 étapes <Icons.ArrowRight size={14} />
           </div>
         </button>
 
@@ -93,19 +98,21 @@ const Simulator = () => {
               : 'border-gray-200 bg-white hover:border-elysion-accent'
           }`}
         >
-          <div className="text-5xl mb-4">💻</div>
+          <div className="w-14 h-14 mb-4 bg-orange-100 rounded-xl flex items-center justify-center">
+            <Icons.Freelancer size={28} className="text-orange-600" aria-hidden="true" />
+          </div>
           <h3 className="text-xl font-bold text-elysion-primary mb-2">Freelance / Indépendant</h3>
           <p className="text-gray-600 text-sm mb-4">
             Micro-entrepreneur, BIC, BNC
           </p>
           <ul className="text-xs text-gray-500 space-y-1">
-            <li>✓ Calcul selon statut (micro/classique)</li>
-            <li>✓ Trimestres SSI (seuils de validation)</li>
-            <li>✓ Retraite complémentaire RCI</li>
-            <li>✓ Scénarios d'âge de départ</li>
+            <li className="flex items-center gap-1"><Icons.Check size={12} className="text-green-500" /> Calcul selon statut (micro/classique)</li>
+            <li className="flex items-center gap-1"><Icons.Check size={12} className="text-green-500" /> Trimestres SSI (seuils de validation)</li>
+            <li className="flex items-center gap-1"><Icons.Check size={12} className="text-green-500" /> Retraite complémentaire RCI</li>
+            <li className="flex items-center gap-1"><Icons.Check size={12} className="text-green-500" /> Scénarios d'âge de départ</li>
           </ul>
-          <div className="mt-4 text-elysion-accent font-semibold text-sm flex items-center">
-            Simulateur 6 étapes →
+          <div className="mt-4 text-elysion-accent font-semibold text-sm flex items-center gap-1">
+            Simulateur 6 étapes <Icons.ArrowRight size={14} />
           </div>
         </button>
       </div>
@@ -161,67 +168,41 @@ const Simulator = () => {
               onClick={() => navigate('/')}
               className="hover:opacity-80 transition-opacity"
             >
-              <img src="/asset/Elysion - logo.png" alt="Elysion" className="h-8"/>
+              <img src="/asset/logo.png" alt="Elysion" className="h-8" />
             </button>
             
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-3">
-              {user ? (
-                <>
-                  <button
-                    onClick={() => navigate('/dashboard')}
-                    className="btn-secondary"
-                  >
-                    Tableau de bord
-                  </button>
-                  <div className="flex items-center space-x-2 bg-elysion-primary/10 px-3 py-1.5 rounded-full">
-                    <span className="text-lg">👤</span>
-                    <span className="text-sm font-medium text-elysion-primary">
-                      {user.first_name || user.full_name?.split(' ')[0]}
-                    </span>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <button 
-                    onClick={() => navigate('/auth?mode=login')}
-                    className="btn-primary"
-                  >
-                    Se connecter
-                  </button>
-                  <button 
-                    onClick={() => navigate('/onboarding')}
-                    className="btn-outline"
-                  >
-                    Créer un compte
-                  </button>
-                </>
-              )}
-            </div>
-
-            {/* Mobile: User name + Menu Button */}
-            <div className="md:hidden flex items-center gap-2">
-              {user && (
-                <span className="text-sm font-medium text-elysion-primary">
-                  {user.first_name || user.full_name?.split(' ')[0]}
-                </span>
-              )}
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
-                data-testid="simulator-mobile-menu-btn"
+              <button 
+                onClick={() => navigate('/auth?mode=login')}
+                className="btn-primary"
               >
-                {mobileMenuOpen ? (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                ) : (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                  </svg>
-                )}
+                Se connecter
+              </button>
+              <button 
+                onClick={() => navigate('/onboarding')}
+                className="btn-outline"
+              >
+                Créer un compte
               </button>
             </div>
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              data-testid="simulator-mobile-menu-btn"
+            >
+              {mobileMenuOpen ? (
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              )}
+            </button>
           </div>
         </div>
 
@@ -235,65 +216,24 @@ const Simulator = () => {
               >
                 Accueil
               </button>
-              {user ? (
-                <>
-                  <button
-                    onClick={() => { navigate('/dashboard'); setMobileMenuOpen(false); }}
-                    className="btn-secondary w-full"
-                  >
-                    Tableau de bord
-                  </button>
-                  <button
-                    onClick={() => { navigate('/profile'); setMobileMenuOpen(false); }}
-                    className="btn-outline w-full"
-                  >
-                    Mon profil
-                  </button>
-                  <button
-                    onClick={() => { logout(); setMobileMenuOpen(false); navigate('/'); }}
-                    className="w-full py-2 px-4 rounded-lg text-red-600 font-medium bg-red-50 hover:bg-red-100 transition-colors"
-                  >
-                    Déconnexion
-                  </button>
-                </>
-              ) : (
-                <>
-                  <button
-                    onClick={() => { navigate('/auth?mode=login'); setMobileMenuOpen(false); }}
-                    className="btn-primary w-full"
-                  >
-                    Se connecter
-                  </button>
-                  <button
-                    onClick={() => { navigate('/onboarding'); setMobileMenuOpen(false); }}
-                    className="btn-outline w-full"
-                  >
-                    Créer un compte
-                  </button>
-                </>
-              )}
+              <button
+                onClick={() => { navigate('/auth?mode=login'); setMobileMenuOpen(false); }}
+                className="btn-primary w-full"
+              >
+                Se connecter
+              </button>
+              <button
+                onClick={() => { navigate('/onboarding'); setMobileMenuOpen(false); }}
+                className="btn-outline w-full"
+              >
+                Créer un compte
+              </button>
             </div>
           </div>
         )}
       </nav>
 
-      <div className="max-w-5xl mx-auto px-4 py-12">
-        {/* Intro Section */}
-        {currentStep === 'intro' && (
-          <div className="text-center mb-12">
-            {renderIntroSection()}
-          </div>
-        )}
-
-        {/* Choice Section */}
-        {currentStep === 'choice' && (
-          <div className="max-w-4xl mx-auto">
-            <div className="bg-white rounded-2xl shadow-xl p-8">
-              {renderChoiceSection()}
-            </div>
-          </div>
-        )}
-      </div>
+      {simulatorContent}
     </div>
   );
 };

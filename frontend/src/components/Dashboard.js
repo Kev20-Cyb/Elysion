@@ -392,7 +392,7 @@ const Dashboard = () => {
                   <p className="text-sm font-semibold text-gray-700">Répartition suggérée :</p>
                   
                   <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg border border-green-100">
-                    <span className="text-xl">🛡️</span>
+                    <Icons.Shield size={20} className="text-blue-600" aria-hidden="true" />
                     <div className="flex-1">
                       <p className="font-medium text-gray-900 text-sm">Épargne sécurisée</p>
                       <p className="text-xs text-gray-500">Livrets, épargne logement</p>

@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../App';
 import DashboardLayout from './DashboardLayout';
+import { Icons } from './ui/icons';
 
 const InvestmentAxes = () => {
   const navigate = useNavigate();
@@ -58,7 +59,7 @@ const InvestmentAxes = () => {
   const investmentAxes = [
     {
       id: 'secure',
-      icon: '🛡️',
+      icon: Icons.Prudent,
       title: 'Épargne sécurisée / court terme',
       description: 'Livrets, comptes sur livret, épargne logement.',
       details: 'Capital garanti, rendement modéré. Idéal pour une épargne de précaution ou des projets à court terme.',
@@ -71,7 +72,7 @@ const InvestmentAxes = () => {
     },
     {
       id: 'retirement',
-      icon: '🎯',
+      icon: Icons.Target,
       title: 'Épargne longue & retraite dédiée',
       description: 'Assurance vie, PER individuel / d\'entreprise.',
       details: 'Horizon long, fiscalité spécifique à la retraite. Solutions dédiées à la constitution d\'un capital retraite.',
@@ -84,7 +85,7 @@ const InvestmentAxes = () => {
     },
     {
       id: 'markets',
-      icon: '📈',
+      icon: Icons.LineChart,
       title: 'Marchés financiers (via fonds)',
       description: 'Fonds actions, obligations, diversifiés, via assurance vie, PER ou PEA.',
       details: 'Potentiel de performance plus élevé, risque de perte en capital. Pour les investisseurs avec un horizon long terme.',
@@ -97,7 +98,7 @@ const InvestmentAxes = () => {
     },
     {
       id: 'realestate',
-      icon: '🏠',
+      icon: Icons.Office,
       title: 'Immobilier & épargne salariale',
       description: 'Immobilier locatif ou pierre-papier (SCPI, OPCI), PEE / PER d\'entreprise.',
       details: 'Source de revenus complémentaires à long terme, contraintes spécifiques. Diversification patrimoniale.',
@@ -215,13 +216,13 @@ const InvestmentAxes = () => {
             return (
               <div 
                 key={axis.id}
-                className={`${colorClasses.bg} ${colorClasses.border} border-2 rounded-xl p-6 hover:shadow-lg transition-shadow`}
+                className={`${colorClasses.bg} ${colorClasses.border} border-2 rounded-xl p-6`}
                 data-testid={`investment-axis-${axis.id}`}
               >
                 {/* Header avec montant */}
                 <div className="flex items-start gap-4 mb-4">
-                  <div className={`w-14 h-14 rounded-xl ${colorClasses.icon} flex items-center justify-center text-2xl`}>
-                    {axis.icon}
+                  <div className={`w-14 h-14 rounded-xl ${colorClasses.icon} flex items-center justify-center`}>
+                    <axis.icon size={28} />
                   </div>
                   <div className="flex-1">
                     <h3 className="text-lg font-bold text-gray-900 mb-1">{axis.title}</h3>
@@ -272,7 +273,7 @@ const InvestmentAxes = () => {
                       <p className="text-xs font-semibold text-green-600 mb-1">Avantages</p>
                       <ul className="text-xs text-gray-600 space-y-1">
                         {axis.pros.map((pro, idx) => (
-                          <li key={idx}>✓ {pro}</li>
+                          <li key={idx} className="flex items-center gap-1"><Icons.Check size={12} className="text-green-500" /> {pro}</li>
                         ))}
                       </ul>
                     </div>

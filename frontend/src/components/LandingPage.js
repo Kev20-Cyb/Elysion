@@ -256,7 +256,7 @@ const LandingPage = () => {
         <div className='max-w-7xl mx-auto'>
           <div className='grid lg:grid-cols-2 gap-12 items-center'>
             <div className='text-left'>
-              <h1 className='text-5xl md:text-6xl font-bold text-elysion-primary mb-6 slide-up font-montserrat'>
+              <h1 className='text-5xl md:text-6xl font-bold text-elysion-primary mb-6 font-montserrat'>
                 Planifier sa retraite
                 <br />
                 <span className='text-elysion-text-dark'>
@@ -344,8 +344,7 @@ const LandingPage = () => {
             {processSteps.map((step, index) => (
               <div
                 key={step.step}
-                className='text-center slide-up'
-                style={{ animationDelay: `${index * 0.2}s` }}
+                className='text-center'
               >
                 <div className='relative mb-8'>
                   <div className='w-20 h-20 bg-elysion-primary text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4'>
@@ -376,10 +375,9 @@ const LandingPage = () => {
             {keyStats.map((stat, index) => (
               <div
                 key={index}
-                className='text-center slide-up group'
-                style={{ animationDelay: `${index * 0.1}s` }}
+                className='text-center'
               >
-                <div className='text-5xl font-bold text-elysion-accent mb-3 group-hover:scale-110 transition-transform font-montserrat'>
+                <div className='text-5xl font-bold text-elysion-accent mb-3 font-montserrat'>
                   {stat.number}
                 </div>
                 <div className='text-elysion-text-light font-medium'>
@@ -411,7 +409,167 @@ const LandingPage = () => {
           </div>
         </div>
       </section>
-
+      {/* Newsletter Modal */}
+      {showNewsletterModal && (
+        <div className='fixed inset-0 z-50 flex items-center justify-center'>
+          {/* Backdrop */}
+          <div
+            className='absolute inset-0 bg-black/50 backdrop-blur-sm'
+            onClick={handleCloseNewsletter}
+          />
+          {/* Modal */}
+          <div className='relative bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 p-8 animate-in fade-in zoom-in duration-200'>
+            {/* Close button */}
+            <button
+              onClick={handleCloseNewsletter}
+              className='absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors'
+              aria-label='Fermer'
+            >
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                className='h-6 w-6'
+                fill='none'
+                viewBox='0 0 24 24'
+                stroke='currentColor'
+              >
+                <path
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  strokeWidth={2}
+                  d='M6 18L18 6M6 6l12 12'
+                />
+              </svg>
+            </button>
+            {!newsletterSuccess ? (
+              <>
+                {/* Header */}
+                <div className='text-center mb-6'>
+                  <div className='w-16 h-16 bg-elysion-primary/10 rounded-full flex items-center justify-center mx-auto mb-4'>
+                    <svg
+                      xmlns='http://www.w3.org/2000/svg'
+                      className='h-8 w-8 text-elysion-primary'
+                      fill='none'
+                      viewBox='0 0 24 24'
+                      stroke='currentColor'
+                    >
+                      <path
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                        strokeWidth={2}
+                        d='M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z'
+                      />
+                    </svg>
+                  </div>
+                  <h3 className='text-2xl font-bold text-gray-900 font-montserrat'>
+                    Restez informé
+                  </h3>
+                  <p className='text-gray-600 mt-2'>
+                    Recevez nos conseils retraite et nos actualités directement
+                    dans votre boîte mail.
+                  </p>
+                </div>
+                {/* Form */}
+                <form onSubmit={handleNewsletterSubmit} className='space-y-4'>
+                  <div>
+                    <label
+                      htmlFor='newsletter-email'
+                      className='block text-sm font-medium text-gray-700 mb-1'
+                    >
+                      Adresse email
+                    </label>
+                    <input
+                      id='newsletter-email'
+                      type='email'
+                      value={newsletterEmail}
+                      onChange={(e) => setNewsletterEmail(e.target.value)}
+                      placeholder='votre@email.com'
+                      className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-elysion-primary focus:border-elysion-primary transition-colors'
+                      required
+                      data-testid='newsletter-email-input'
+                    />
+                  </div>
+                  {newsletterError && (
+                    <div className='text-red-500 text-sm bg-red-50 p-3 rounded-lg'>
+                      {newsletterError}
+                    </div>
+                  )}
+                  <button
+                    type='submit'
+                    disabled={newsletterLoading}
+                    className='w-full bg-elysion-primary hover:bg-elysion-primary/90 text-white font-semibold py-3 px-6 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed'
+                    data-testid='newsletter-submit-btn'
+                  >
+                    {newsletterLoading ? (
+                      <span className='flex items-center justify-center gap-2'>
+                        <svg
+                          className='animate-spin h-5 w-5'
+                          xmlns='http://www.w3.org/2000/svg'
+                          fill='none'
+                          viewBox='0 0 24 24'
+                        >
+                          <circle
+                            className='opacity-25'
+                            cx='12'
+                            cy='12'
+                            r='10'
+                            stroke='currentColor'
+                            strokeWidth='4'
+                          ></circle>
+                          <path
+                            className='opacity-75'
+                            fill='currentColor'
+                            d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
+                          ></path>
+                        </svg>
+                        Inscription...
+                      </span>
+                    ) : (
+                      "S'abonner"
+                    )}
+                  </button>
+                </form>
+                {/* Footer */}
+                <p className='text-xs text-gray-500 text-center mt-4'>
+                  🔒 Pas de spam, désinscription possible à tout moment.
+                </p>
+              </>
+            ) : (
+              /* Success state */
+              <div className='text-center py-4'>
+                <div className='w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4'>
+                  <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    className='h-8 w-8 text-green-500'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    stroke='currentColor'
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      strokeWidth={2}
+                      d='M5 13l4 4L19 7'
+                    />
+                  </svg>
+                </div>
+                <h3 className='text-2xl font-bold text-gray-900 font-montserrat mb-2'>
+                  Merci !
+                </h3>
+                <p className='text-gray-600 mb-6'>
+                  Vous êtes maintenant inscrit à notre newsletter. Vous recevrez
+                  bientôt nos dernières actualités.
+                </p>
+                <button
+                  onClick={handleCloseNewsletter}
+                  className='bg-elysion-primary hover:bg-elysion-primary/90 text-white font-semibold py-2 px-6 rounded-lg transition-all'
+                >
+                  Fermer
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
       {/* Footer */}
       <footer className='bg-gray-900 text-white py-12'>
         <div className='max-w-7xl mx-auto px-4'>

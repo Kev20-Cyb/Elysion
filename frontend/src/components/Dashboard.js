@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useAuth } from '../App';
 import { useNavigate, useLocation } from 'react-router-dom';
 import DashboardLayout from './DashboardLayout';
+import { Icons, getUserTypeIcon, getDocumentCategoryIcon } from './ui/icons';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 const API = `${BACKEND_URL}/api`;
@@ -179,9 +180,9 @@ const Dashboard = () => {
 
   const getUserTypeInfo = (userType) => {
     const types = {
-      employee: { label: 'Salarié', icon: '👔', color: 'text-blue-600' },
-      freelancer: { label: 'Freelance', icon: '💻', color: 'text-green-600' },
-      business_owner: { label: 'Chef d\'entreprise', icon: '🏢', color: 'text-purple-600' }
+      employee: { label: 'Salarié', icon: Icons.Employee, color: 'text-blue-600' },
+      freelancer: { label: 'Freelance', icon: Icons.Freelancer, color: 'text-green-600' },
+      business_owner: { label: 'Chef d\'entreprise', icon: Icons.BusinessOwner, color: 'text-purple-600' }
     };
     return types[userType] || types.employee;
   };
@@ -231,7 +232,7 @@ const Dashboard = () => {
             Bonjour {user?.first_name || user?.full_name} !
           </h1>
           <p className="text-base sm:text-lg lg:text-xl text-elysion-text-light flex items-center">
-            <span className="mr-2">{userTypeInfo.icon}</span>
+            <span className="mr-2">{React.createElement(userTypeInfo.icon, { size: 20 })}</span>
             Tableau de bord {userTypeInfo.label}
           </p>
         </div>
@@ -242,7 +243,7 @@ const Dashboard = () => {
           <div className="card-elysion slide-up p-4 sm:p-6">
             <div className="flex items-center justify-between mb-2 sm:mb-4">
               <h3 className="text-base sm:text-lg font-semibold text-elysion-text-dark">Âge de retraite souhaité</h3>
-              <span className="text-xl sm:text-2xl">🎯</span>
+              <Icons.Target size={24} className="text-elysion-primary" aria-hidden="true" />
             </div>
             
             {/* Age Selector */}
@@ -294,7 +295,7 @@ const Dashboard = () => {
           <div className="card-elysion slide-up p-4 sm:p-6" style={{animationDelay: '0.1s'}}>
             <div className="flex items-center justify-between mb-2 sm:mb-4">
               <h3 className="text-base sm:text-lg font-semibold text-elysion-text-dark">Pension mensuelle estimée</h3>
-              <span className="text-xl sm:text-2xl">💰</span>
+              <Icons.Money size={24} className="text-elysion-accent" aria-hidden="true" />
             </div>
             <div className="text-2xl sm:text-3xl font-bold text-elysion-accent mb-1 sm:mb-2" data-testid="dashboard-monthly-pension">
               {investmentData.hasSimulation 
@@ -309,10 +310,10 @@ const Dashboard = () => {
           </div>
 
           {/* Savings Progress Card */}
-          <div className="card-elysion slide-up p-4 sm:p-6" style={{animationDelay: '0.2s'}}>
+          <div className="card-elysion p-4 sm:p-6">
             <div className="flex items-center justify-between mb-2 sm:mb-4">
               <h3 className="text-base sm:text-lg font-semibold text-elysion-text-dark">Épargne suggérée</h3>
-              <span className="text-xl sm:text-2xl">📈</span>
+              <Icons.Investment size={24} className="text-elysion-primary" aria-hidden="true" />
             </div>
             <div className="mb-3 sm:mb-4">
               <div className="flex justify-between items-center mb-2">
@@ -344,10 +345,10 @@ const Dashboard = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Objectif & Axes Section */}
-          <div className="card-elysion slide-up" data-testid="dashboard-recommendations-section">
+          <div className="card-elysion" data-testid="dashboard-recommendations-section">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl font-semibold text-elysion-text-dark">Votre objectif retraite</h3>
-              <span className="text-2xl">🎯</span>
+              <Icons.Target size={24} className="text-elysion-primary" aria-hidden="true" />
             </div>
             
             {investmentData.hasSimulation ? (
@@ -405,7 +406,7 @@ const Dashboard = () => {
                   </div>
                   
                   <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg border border-blue-100">
-                    <span className="text-xl">🎯</span>
+                    <Icons.Target size={20} className="text-blue-600" aria-hidden="true" />
                     <div className="flex-1">
                       <p className="font-medium text-gray-900 text-sm">Épargne retraite</p>
                       <p className="text-xs text-gray-500">PER, Assurance-vie</p>
@@ -419,7 +420,7 @@ const Dashboard = () => {
                   </div>
                   
                   <div className="flex items-center gap-3 p-3 bg-orange-50 rounded-lg border border-orange-100">
-                    <span className="text-xl">📈</span>
+                    <Icons.Investment size={20} className="text-orange-600" aria-hidden="true" />
                     <div className="flex-1">
                       <p className="font-medium text-gray-900 text-sm">Marchés financiers</p>
                       <p className="text-xs text-gray-500">PEA, Fonds diversifiés</p>
@@ -437,7 +438,7 @@ const Dashboard = () => {
               <>
                 {/* Pas de simulation */}
                 <div className="bg-gray-50 p-6 rounded-xl mb-6 text-center">
-                  <span className="text-4xl mb-4 block">🔮</span>
+                  <Icons.Simulator size={40} className="mx-auto mb-4 text-gray-400" aria-hidden="true" />
                   <p className="text-gray-600 mb-2">Aucune simulation effectuée</p>
                   <p className="text-sm text-gray-500">
                     Réalisez une simulation pour obtenir des recommandations personnalisées
@@ -479,7 +480,7 @@ const Dashboard = () => {
           <div className="card-elysion slide-up" style={{animationDelay: '0.1s'}} data-testid="dashboard-documents-section">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl font-semibold text-elysion-text-dark">Documents récents</h3>
-              <span className="text-2xl">📄</span>
+              <Icons.Documents size={24} className="text-elysion-primary" aria-hidden="true" />
             </div>
             <div className="space-y-3">
               {recentDocuments.length > 0 ? (
@@ -492,12 +493,7 @@ const Dashboard = () => {
                   >
                     <div className="flex items-center space-x-3">
                       <span className="text-lg">
-                        {doc.category === 'salary_slip' && '💵'}
-                        {doc.category === 'career_statement' && '📋'}
-                        {doc.category === 'tax_declaration' && '📊'}
-                        {doc.category === 'retirement_contract' && '🏦'}
-                        {doc.category === 'other' && '📄'}
-                        {!doc.category && '📄'}
+                        {getDocumentCategoryIcon(doc.category, { size: 20, className: "text-elysion-primary" })}
                       </span>
                       <div>
                         <p className="font-medium text-elysion-text-dark truncate max-w-[200px]">{doc.filename}</p>
@@ -506,12 +502,12 @@ const Dashboard = () => {
                         </p>
                       </div>
                     </div>
-                    <span className="text-elysion-primary">→</span>
+                    <Icons.ArrowRight size={16} className="text-elysion-primary" aria-hidden="true" />
                   </div>
                 ))
               ) : (
                 <div className="text-center py-6 text-elysion-text-light">
-                  <span className="text-3xl block mb-2">📁</span>
+                  <Icons.Folder size={32} className="mx-auto mb-2 text-gray-400" aria-hidden="true" />
                   <p>Aucun document téléchargé</p>
                   <p className="text-sm mt-1">Ajoutez vos documents pour les retrouver ici</p>
                 </div>
@@ -530,7 +526,7 @@ const Dashboard = () => {
         {/* Quick Actions - Hidden on mobile (replaced by tab bar) */}
         <div className="hidden lg:block mt-6 sm:mt-8 card-elysion slide-up" data-testid="dashboard-quick-actions-section">
           <h3 className="text-lg sm:text-xl font-semibold text-elysion-text-dark mb-4 sm:mb-6 flex items-center">
-            <span className="mr-2">⚡</span>
+            <Icons.Zap size={20} className="mr-2 text-elysion-accent" aria-hidden="true" />
             Actions rapides
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -539,7 +535,7 @@ const Dashboard = () => {
               className="p-4 sm:p-6 bg-elysion-bg rounded-lg border border-elysion-secondary hover:bg-elysion-secondary/20 transition-all text-left"
               data-testid="dashboard-start-simulation-btn"
             >
-              <div className="text-xl sm:text-2xl mb-2">🔮</div>
+              <Icons.Simulator size={28} className="mb-2 text-elysion-primary" aria-hidden="true" />
               <h4 className="font-semibold text-elysion-text-dark mb-1 text-sm sm:text-base">Nouvelle simulation</h4>
               <p className="text-xs sm:text-sm text-elysion-text-light">Testez différents scénarios de retraite</p>
             </button>
@@ -549,7 +545,7 @@ const Dashboard = () => {
               className="p-4 sm:p-6 bg-elysion-bg rounded-lg border border-elysion-secondary hover:bg-elysion-secondary/20 transition-all text-left"
               data-testid="dashboard-update-profile-btn"
             >
-              <div className="text-xl sm:text-2xl mb-2">⚙️</div>
+              <Icons.Profile size={28} className="mb-2 text-elysion-primary" aria-hidden="true" />
               <h4 className="font-semibold text-elysion-text-dark mb-1 text-sm sm:text-base">Mettre à jour profil</h4>
               <p className="text-xs sm:text-sm text-elysion-text-light">Gérez vos informations personnelles</p>
             </button>
@@ -559,7 +555,7 @@ const Dashboard = () => {
               className="p-4 sm:p-6 bg-elysion-bg rounded-lg border border-elysion-secondary hover:bg-elysion-secondary/20 transition-all text-left"
               data-testid="dashboard-export-data-btn"
             >
-              <div className="text-xl sm:text-2xl mb-2">📊</div>
+              <Icons.Chart size={28} className="mb-2 text-elysion-primary" aria-hidden="true" />
               <h4 className="font-semibold text-elysion-text-dark mb-1 text-sm sm:text-base">Mes documents</h4>
               <p className="text-xs sm:text-sm text-elysion-text-light">Gérez vos justificatifs et relevés</p>
             </button>

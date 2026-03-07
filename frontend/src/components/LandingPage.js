@@ -316,7 +316,7 @@ const LandingPage = () => {
                 style={{ animationDelay: `${index * 0.2}s` }}
               >
                 <div className='mx-auto mb-6 bg-elysion-primary/10 rounded-2xl flex items-center justify-center'>
-                  <img src={user.icon} alt={user.title} className="w-8 h-8" aria-hidden="true" />
+                  <img src={user.icon} alt={user.title} aria-hidden="true" />
                 </div>
                 <h3 className='text-xl font-bold text-elysion-primary mb-4 font-montserrat'>
                   {user.title}

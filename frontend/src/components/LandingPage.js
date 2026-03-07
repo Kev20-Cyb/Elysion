@@ -257,13 +257,7 @@ const LandingPage = () => {
           <div className='grid lg:grid-cols-2 gap-12 items-center'>
             <div className='text-left'>
               <h1 className='text-5xl md:text-6xl font-bold text-elysion-primary mb-6 font-montserrat'>
-                Planifier sa retraite
-                <br />
-                <span className='text-elysion-text-dark'>
-                  ne devrait pas être
-                </span>
-                <br />
-                <span className='text-elysion-accent'>compliqué.</span>
+                Planifier sa retraite ne devrait pas être compliqué.
               </h1>
               <p className='text-xl text-elysion-text-light mb-8 fade-in leading-relaxed'>
                 Elysion vous aide à comprendre vos perspectives de retraite,

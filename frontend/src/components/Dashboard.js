@@ -240,7 +240,7 @@ const Dashboard = () => {
         {/* Key Metrics Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8" data-testid="dashboard-metrics-section">
           {/* Retirement Age Card - Interactive */}
-          <div className="card-elysion slide-up p-4 sm:p-6">
+          <div className="card-elysion p-4 sm:p-6">
             <div className="flex items-center justify-between mb-2 sm:mb-4">
               <h3 className="text-base sm:text-lg font-semibold text-elysion-text-dark">Âge de retraite souhaité</h3>
               <Icons.Target size={24} className="text-elysion-primary" aria-hidden="true" />
@@ -292,7 +292,7 @@ const Dashboard = () => {
           </div>
 
           {/* Monthly Pension Card */}
-          <div className="card-elysion slide-up p-4 sm:p-6" style={{animationDelay: '0.1s'}}>
+          <div className="card-elysion p-4 sm:p-6" style={{animationDelay: '0.1s'}}>
             <div className="flex items-center justify-between mb-2 sm:mb-4">
               <h3 className="text-base sm:text-lg font-semibold text-elysion-text-dark">Pension mensuelle estimée</h3>
               <Icons.Money size={24} className="text-elysion-accent" aria-hidden="true" />
@@ -477,7 +477,7 @@ const Dashboard = () => {
           </div>
 
           {/* Recent Documents Section */}
-          <div className="card-elysion slide-up" style={{animationDelay: '0.1s'}} data-testid="dashboard-documents-section">
+          <div className="card-elysion" style={{animationDelay: '0.1s'}} data-testid="dashboard-documents-section">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl font-semibold text-elysion-text-dark">Documents récents</h3>
               <Icons.Documents size={24} className="text-elysion-primary" aria-hidden="true" />
@@ -524,7 +524,7 @@ const Dashboard = () => {
         </div>
 
         {/* Quick Actions - Hidden on mobile (replaced by tab bar) */}
-        <div className="hidden lg:block mt-6 sm:mt-8 card-elysion slide-up" data-testid="dashboard-quick-actions-section">
+        <div className="hidden lg:block mt-6 sm:mt-8 card-elysion" data-testid="dashboard-quick-actions-section">
           <h3 className="text-lg sm:text-xl font-semibold text-elysion-text-dark mb-4 sm:mb-6 flex items-center">
             <Icons.Zap size={20} className="mr-2 text-elysion-accent" aria-hidden="true" />
             Actions rapides

@@ -105,7 +105,7 @@ export const Icons = {
   Simulator: Sparkles,
   Documents: FileText,
   Investment: TrendingUp,
-  Profile: Settings,
+  Profile: User,
   Logout: LogOut,
   Menu: Menu,
   Close: X,
@@ -204,7 +204,9 @@ export const Icons = {
   Lock: Lock,
   Unlock: Unlock,
   
-  // UI
+  // UI & Settings
+  Settings: Settings,
+  Monitor: Monitor,
   MoreVertical: MoreVertical,
   MoreHorizontal: MoreHorizontal,
   SortAsc: SortAsc,

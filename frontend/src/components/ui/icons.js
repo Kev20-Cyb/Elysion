@@ -203,6 +203,7 @@ export const Icons = {
   // Security
   Lock: Lock,
   Unlock: Unlock,
+  Shield: Shield,
   
   // UI & Settings
   Settings: Settings,

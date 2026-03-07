@@ -312,7 +312,7 @@ const LandingPage = () => {
             {targetUsers.map((user, index) => (
               <div
                 key={user.title}
-                className='bg-white rounded-2xl p-8 text-center shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border border-gray-100 slide-up group'
+                className='bg-white rounded-2xl p-8 text-center shadow-lg'
                 style={{ animationDelay: `${index * 0.2}s` }}
               >
                 <div className='mx-auto mb-6 bg-elysion-primary/10 rounded-2xl flex items-center justify-center'>

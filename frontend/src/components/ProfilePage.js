@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../App';
 import axios from 'axios';
 import DashboardLayout from './DashboardLayout';
+import { Icons } from './ui/icons';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 const API = `${BACKEND_URL}/api`;
@@ -113,9 +114,9 @@ const ProfilePage = () => {
   };
 
   const tabs = [
-    { id: 'profile', label: 'Informations personnelles', icon: '👤' },
-    { id: 'security', label: 'Sécurité', icon: '🔒' },
-    { id: 'preferences', label: 'Préférences', icon: '⚙️' }
+    { id: 'profile', label: 'Informations personnelles', icon: Icons.Profile },
+    { id: 'security', label: 'Sécurité', icon: Icons.Lock },
+    { id: 'preferences', label: 'Préférences', icon: Icons.Settings }
   ];
 
   return (
@@ -129,10 +130,10 @@ const ProfilePage = () => {
 
         {/* Profile Card */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-6 sm:mb-8">
-          <div className="bg-gradient-to-r from-elysion-primary to-elysion-accent p-4 sm:p-6">
+          <div className="p-4 sm:p-6" style={{ background: 'linear-gradient(to right, var(--elysion-primary), var(--elysion-accent))' }}>
             <div className="flex items-center gap-3 sm:gap-4">
-              <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white rounded-full flex items-center justify-center text-2xl sm:text-3xl">
-                {user?.full_name?.charAt(0)?.toUpperCase() || '👤'}
+              <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white rounded-full flex items-center justify-center text-2xl sm:text-3xl text-elysion-primary">
+                {user?.full_name?.charAt(0)?.toUpperCase() || <Icons.Profile size={32} />}
               </div>
               <div className="text-white">
                 <h2 className="text-xl sm:text-2xl font-bold">{user?.full_name || 'Utilisateur'}</h2>
@@ -148,12 +149,12 @@ const ProfilePage = () => {
         {/* Messages */}
         {success && (
           <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg mb-6 flex items-center gap-2">
-            <span>✅</span> {success}
+            <Icons.Check size={18} className="text-green-600" /> {success}
           </div>
         )}
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6 flex items-center gap-2">
-            <span>❌</span> {error}
+            <Icons.Close size={18} className="text-red-600" /> {error}
           </div>
         )}
 
@@ -171,8 +172,8 @@ const ProfilePage = () => {
                 }`}
                 data-testid={`profile-tab-${tab.id}`}
               >
-                <span className="mr-2">{tab.icon}</span>
-                {tab.label}
+                <tab.icon size={16} className="inline mr-2" />
+                <span className="hidden sm:inline">{tab.label}</span>
               </button>
             ))}
           </div>
@@ -238,10 +239,11 @@ const ProfilePage = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Adresse
                   </label>
-                  <textarea
+                  <input
+                    type="text"
                     value={profileData.address}
                     onChange={(e) => handleProfileChange('address', e.target.value)}
-                    className="input-elysion min-h-[80px]"
+                    className="input-elysion"
                     placeholder="Votre adresse postale"
                     data-testid="profile-address-input"
                   />
@@ -326,7 +328,7 @@ const ProfilePage = () => {
                   <div className="bg-gray-50 rounded-lg p-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <span className="text-2xl">💻</span>
+                        <Icons.Monitor size={24} className="text-gray-600" />
                         <div>
                           <p className="font-medium text-gray-900">Session actuelle</p>
                           <p className="text-sm text-gray-500">Navigateur web • Connecté maintenant</p>

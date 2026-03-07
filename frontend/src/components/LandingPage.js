@@ -309,26 +309,23 @@ const LandingPage = () => {
             </h2>
           </div>
           <div className='grid md:grid-cols-3 gap-8'>
-            {targetUsers.map((user, index) => {
-              const IconComponent = user.icon;
-              return (
-                <div
-                  key={user.title}
-                  className='bg-white rounded-2xl p-8 text-center shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border border-gray-100 slide-up group'
-                  style={{ animationDelay: `${index * 0.2}s` }}
-                >
-                  <div className='w-16 h-16 mx-auto mb-6 bg-elysion-primary/10 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform'>
-                    <IconComponent size={32} className="text-elysion-primary" aria-hidden="true" />
-                  </div>
-                  <h3 className='text-xl font-bold text-elysion-primary mb-4 font-montserrat'>
-                    {user.title}
-                  </h3>
-                  <p className='text-elysion-text-light leading-relaxed'>
-                    {user.description}
-                  </p>
+            {targetUsers.map((user, index) => (
+              <div
+                key={user.title}
+                className='bg-white rounded-2xl p-8 text-center shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border border-gray-100 slide-up group'
+                style={{ animationDelay: `${index * 0.2}s` }}
+              >
+                <div className='w-16 h-16 mx-auto mb-6 bg-elysion-primary/10 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform'>
+                  <img src={user.icon} alt={user.title} className="w-8 h-8" aria-hidden="true" />
                 </div>
-              );
-            })}
+                <h3 className='text-xl font-bold text-elysion-primary mb-4 font-montserrat'>
+                  {user.title}
+                </h3>
+                <p className='text-elysion-text-light leading-relaxed'>
+                  {user.description}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </section>

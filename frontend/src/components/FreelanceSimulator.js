@@ -1708,8 +1708,13 @@ const FreelanceSimulator = () => {
                 value={formData.targetIncomePercentage}
                 onChange={(e) => handleInputChange('targetIncomePercentage', parseInt(e.target.value))}
                 className="flex-1"
+                aria-label="Pourcentage du revenu cible"
+                aria-valuenow={formData.targetIncomePercentage}
+                aria-valuemin={50}
+                aria-valuemax={100}
+                aria-valuetext={`${formData.targetIncomePercentage} pourcent`}
               />
-              <span className="font-bold text-elysion-primary w-16 text-right">{formData.targetIncomePercentage}%</span>
+              <span className="font-bold text-elysion-primary w-16 text-right" aria-hidden="true">{formData.targetIncomePercentage}%</span>
             </div>
           ) : (
             <input

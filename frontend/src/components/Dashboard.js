@@ -248,21 +248,31 @@ const Dashboard = () => {
             
             {/* Age Selector */}
             <div className="mb-3">
-              <div className="flex items-center justify-center gap-1 sm:gap-2 flex-wrap">
-                {retirementAgeOptions.map((age) => (
-                  <button
-                    key={age}
-                    onClick={() => setSelectedRetirementAge(age)}
-                    className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full font-bold text-sm sm:text-base transition-all ${
-                      (selectedRetirementAge || investmentData.retirementAge) === age
-                        ? 'bg-elysion-primary text-white shadow-lg scale-110'
-                        : 'bg-gray-100 text-gray-600 hover:bg-elysion-primary/20 hover:text-elysion-primary'
-                    }`}
-                    data-testid={`retirement-age-${age}`}
-                  >
-                    {age}
-                  </button>
-                ))}
+              <div 
+                className="flex items-center justify-center gap-1 sm:gap-2 flex-wrap"
+                role="radiogroup"
+                aria-label="Sélection de l'âge de départ à la retraite"
+              >
+                {retirementAgeOptions.map((age) => {
+                  const isSelected = (selectedRetirementAge || investmentData.retirementAge) === age;
+                  return (
+                    <button
+                      key={age}
+                      onClick={() => setSelectedRetirementAge(age)}
+                      role="radio"
+                      aria-checked={isSelected}
+                      aria-label={`${age} ans`}
+                      className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full font-bold text-sm sm:text-base transition-all ${
+                        isSelected
+                          ? 'bg-elysion-primary text-white shadow-lg scale-110'
+                          : 'bg-gray-100 text-gray-600 hover:bg-elysion-primary/20 hover:text-elysion-primary'
+                      }`}
+                      data-testid={`retirement-age-${age}`}
+                    >
+                      {age}
+                    </button>
+                  );
+                })}
               </div>
             </div>
             

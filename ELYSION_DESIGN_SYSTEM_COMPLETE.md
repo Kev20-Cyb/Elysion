@@ -409,12 +409,17 @@ Gray 800 on Gray 100         /* Headings on light bg */
 
 ## 3.1 Font Stack
 
-**Primary Font**: Montserrat (Google Fonts)  
+**Heading Font**: Montserrat (Google Fonts)  
+**Body Font**: Onest (Google Fonts)  
 **Fallback**: `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`
 
 ```html
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Onest:wght@100..900&display=swap');
 ```
+
+### Usage
+- **Montserrat** : Titres (h1-h6), logo, éléments de navigation principaux
+- **Onest** : Corps de texte, paragraphes, labels, boutons, inputs
 
 ## 3.2 Font Weights
 
@@ -3703,22 +3708,50 @@ import { getDocumentCategoryIcon } from './ui/icons';
 
 ## 9.1 WCAG 2.1 AA Compliance
 
-✅ **Color Contrast**
+### Tableau d'implémentation WCAG
+
+| Critère WCAG | Niveau | Priorité Elysion | Application | Statut |
+|--------------|--------|------------------|-------------|--------|
+| **1.1.1** — Texte alternatif | A | Critique | Icônes Lucide avec `aria-hidden="true"` sur icônes décoratives | ✅ Implémenté |
+| **1.3.1** — Information & relations | A | Critique | Tables avec `<table>`, `<th scope="col">` dans simulateurs | ✅ Implémenté |
+| **1.4.3** — Contraste minimum | AA | Critique | Ratio ≥ 4.5:1 texte, ≥ 3:1 texte large (≥18pt) | ✅ Implémenté |
+| **1.4.4** — Redimensionnement | AA | Haute | Interface fonctionnelle à 200% zoom | ✅ Implémenté |
+| **1.4.11** — Contraste composants | AA | Haute | Bordures inputs, slider : ratio ≥ 3:1 | ✅ Implémenté |
+| **2.1.1** — Clavier | A | Critique | Toutes interactions accessibles clavier | ✅ Implémenté |
+| **2.4.1** — Lien d'évitement | A | Haute | Skip to content dans DashboardLayout | ✅ Implémenté |
+| **2.4.3** — Ordre de focus | A | Critique | Sidebar → Top bar → Contenu principal | ✅ Implémenté |
+| **2.4.7** — Focus visible | AA | Critique | `outline: 3px solid var(--elysion-accent-400); outline-offset: 2px` | ✅ Implémenté |
+| **3.1.1** — Langue de la page | A | Basse | `<html lang="fr">` | ✅ Implémenté |
+| **3.3.1** — Identification erreurs | A | Haute | `aria-describedby` + `aria-invalid` sur formulaires | ✅ Implémenté |
+| **4.1.2** — Nom, rôle, valeur | A | Critique | Sélecteur âge : `role="radiogroup/radio"` + `aria-checked`. Sliders : `aria-valuenow/min/max/label` | ✅ Implémenté |
+| **4.1.3** — Messages de statut | AA | Haute | `aria-live="polite"` sur résultats simulation | ✅ Implémenté |
+
+### Détails d'implémentation
+
+#### Color Contrast
 - Text: Minimum 4.5:1
 - Large text (18px+): Minimum 3:1
 - Interactive elements: Minimum 3:1
 
-✅ **Keyboard Navigation**
+#### Keyboard Navigation
 - All interactive elements accessible via Tab
-- Visible focus indicators
+- Visible focus indicators (`outline: 3px solid var(--elysion-accent-400)`)
 - Logical tab order
+- Skip to main content link
 
-✅ **Screen Readers**
-- Semantic HTML
-- ARIA labels where needed
-- Alt text for images
+#### Screen Readers
+- Semantic HTML (`<table>`, `<th scope>`, `<main>`, `<nav>`)
+- ARIA labels on interactive elements
+- `aria-hidden="true"` on decorative icons
+- `aria-live="polite"` for dynamic content
+- `role="radiogroup"` / `role="radio"` for custom selectors
 
-✅ **Touch Targets**
+#### Form Accessibility
+- `aria-invalid` for error states
+- `aria-describedby` linking fields to error messages
+- `role="alert"` on error messages
+
+#### Touch Targets
 - Minimum 44x44px
 - Adequate spacing between targets
 

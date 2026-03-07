@@ -1,109 +1,130 @@
-# Elysion - Simulateur de Retraite
+# Elysion - Product Requirements Document
 
-## Description du projet
-Elysion est une application de planification de retraite permettant aux utilisateurs français de simuler leur pension de retraite selon leur statut professionnel (Salarié ou Freelance).
+## Original Problem Statement
+Build and enhance "Elysion," a comprehensive retirement planning and simulation tool for the French market. The application helps users understand their retirement prospects, simulate scenarios, and make informed decisions.
 
-## Stack Technique
-- **Frontend**: React + TailwindCSS + Shadcn UI
-- **Backend**: FastAPI (Python) / Option Node.js+Express disponible
-- **Base de données**: MongoDB
+## User Personas
+- **Salaries (Employees)**: Workers with CDI/CDD contracts who need to plan for retirement
+- **Freelances/Independants**: Self-employed professionals who need to manage their own retirement planning
+- **Chefs d'entreprise**: Business owners who need to optimize their retirement strategy
 
-## Fonctionnalités implémentées
+## Core Requirements
+1. Two simulation flows: Employee and Freelance
+2. User authentication and account management
+3. Dashboard with real-time data and dynamic retirement age selector
+4. Investment axes recommendations
+5. Profile management with tabs (personal info, security, preferences)
+6. Automatic saving of simulation results
+7. Document management system
+8. Newsletter subscription
 
-### Simulateurs de retraite
-- **Simulateur Salarié** (`/simulator/employee`): 7 étapes avec module épargne
-- **Simulateur Freelance** (`/simulator/freelance`): 6 étapes avec module épargne
-- **Routeur Simulateur** (`/simulator`): Page de choix entre Salarié et Freelance
+## Tech Stack
+- **Frontend**: React with Tailwind CSS, Shadcn/UI components
+- **Backend**: FastAPI (Python) for Emergent environment / Node.js (Express) for production
+- **Database**: MongoDB (dev) / PostgreSQL (production)
+- **Authentication**: JWT tokens
 
-### Tunnel Salarié (7 étapes)
-1. Profil & carrière
-2. Historique des salaires
-3. Trimestres & enfants
-4. Retraite complémentaire (Agirc-Arrco)
-5. **NOUVEAU** : Épargne & Besoin (objectif de revenu, capital existant)
-6. **NOUVEAU** : Profil de risque (3 questions, classification automatique)
-7. Scénarios de départ (choix des âges)
-→ Résultats avec projections d'épargne
-
-### Tunnel Freelance (6 étapes)
-1. Profil & statut
-2. Historique des revenus
-3. Trimestres assimilés
-4. Récapitulatif carrière
-5. **NOUVEAU** : Épargne & Besoin
-6. **NOUVEAU** : Profil de risque
-→ Résultats avec projections d'épargne
-
-### Calculs avancés
-- Valeur du point: `1,4386€`
-- +8 trimestres automatiques par enfant pour les femmes
-- Périodes d'inactivité en jours ou mois (chômage, congé parental, maladie)
-- Champ "Date de naissance" complet (jour/mois/année) au lieu de l'année seule
-- **NOUVEAU** : Calcul du taux de remplacement
-- **NOUVEAU** : Profils de risque (Prudent 1.5%, Équilibré 4%, Dynamique 7%)
-- **NOUVEAU** : Calcul de l'effort d'épargne mensuel par profil
-- Redirection finale vers `/onboarding`
-
-### Design System
-- Variables CSS complètes avec échelles de couleurs
-- Classes utilitaires: `bg-elysion-*`, `text-elysion-*`, `border-elysion-*`
-- Style d'input léger et moderne (`.input-elysion`)
-- Système de boutons complet avec états
-- Checkboxes stylisées en primary
-
-### Tableau de bord
-- Section "Votre objectif retraite" avec écart à combler
-- Aperçu des axes d'investissement
-- Bouton "Atteindre cet objectif" → page `/investment-axes`
-
-### Page Axes d'investissement (NOUVEAU)
-- 4 blocs d'axes : Épargne sécurisée, Épargne retraite, Marchés financiers, Immobilier
-- Présentation neutre sans CTA vers produits spécifiques
-- Détails avec avantages/contraintes
-- Conseils pratiques (horizon, diversification, accompagnement)
-- Mention de prudence obligatoire
-
-### Documentation
-- `CALCUL_RETRAITE_SALARIE.md` - Logique de calcul salarié
-- `CALCUL_RETRAITE_FREELANCE.md` - Logique de calcul freelance
-- `DATABASE_SCHEMA.md` - Schéma MongoDB
-- `DATABASE_SCHEMA.sql` - Schéma PostgreSQL hypothétique
-- `ELYSION_DESIGN_SYSTEM_COMPLETE.md` - Design system complet
-
-## Exports disponibles
-- `/app/export/elysion-nodejs-postgresql.zip` - Version Node.js/Express/PostgreSQL
-- `/app/export/Elysion-main-merged.zip` - Codebase fusionné avec toutes les modifications
-
-## Tâches complétées (Session actuelle - Janvier 2025)
-- [x] Fusion des fonctionnalités dans `/app/export/Elysion-main/`
-- [x] Mise à jour complète de `App.css` avec toutes les classes utilitaires
-- [x] Copie des fichiers de documentation
-- [x] Création de l'archive `Elysion-main-merged.zip`
-
-## Tâches en backlog
-
-### P1 - Priorité haute
-- [ ] Compléter le composant `Documents.js` (actuellement placeholder)
-  - Upload de fichiers
-  - Liste et gestion des documents
-  - Téléchargement et suppression
-
-### P2 - Priorité moyenne
-- [ ] Connecter le Dashboard aux vraies données backend (utilise données mockées)
-- [ ] Tests automatisés pour les simulateurs
-
-## Architecture des fichiers clés
+## Architecture
 ```
-/app/export/Elysion-main/
-├── frontend/src/
-│   ├── App.js (routes configurées)
-│   ├── App.css (classes utilitaires complètes)
-│   └── components/
-│       ├── Simulator.js (routeur)
-│       ├── EmployeeSimulator.js (6 étapes)
-│       ├── FreelanceSimulator.js (6 étapes)
-│       └── Documents.js (placeholder)
-├── CALCUL_RETRAITE_*.md
-├── DATABASE_SCHEMA.*
-└── ELYSION_DESIGN_SYSTEM_COMPLETE.md
+/app/
+├── backend/
+│   └── server.py           # FastAPI backend (Emergent environment)
+├── backend-node/           # Node.js backend (Production)
+│   ├── src/
+│   │   ├── routes/
+│   │   │   ├── auth.routes.js
+│   │   │   └── newsletter.routes.js
+│   │   └── server.js
+├── frontend/
+│   ├── src/
+│   │   ├── App.js          # Routes and auth context
+│   │   └── components/
+│   │       ├── DashboardLayout.jsx   # Sidebar layout component
+│   │       ├── MobileTabBar.jsx      # Mobile navigation
+│   │       ├── Dashboard.js
+│   │       ├── Documents.js
+│   │       ├── InvestmentAxes.js
+│   │       ├── ProfilePage.js
+│   │       ├── EmployeeSimulator.js
+│   │       ├── FreelanceSimulator.js
+│   │       ├── OnboardingFlow.js
+│   │       └── LandingPage.js
+├── DATABASE_SCHEMA.sql       # v3.1
+├── DATABASE_SCHEMA.md        # Documentation
+└── memory/
+    ├── PRD.md
+    └── CHANGELOG.md
 ```
+
+## What's Been Implemented
+
+### Completed Features (as of Feb 2026)
+- [x] Landing Page with hero, features, CTA, footer
+- [x] Authentication (JWT) - login/register
+- [x] Onboarding Flow (5 steps, conditional rendering)
+- [x] Employee Simulator (private/public sectors, 7 steps)
+- [x] Freelance Simulator (micro/EI/liberal, 7 steps) - REWRITTEN Feb 2026
+- [x] Dynamic Dashboard with retirement age selector
+- [x] Investment Axes page with personalized recommendations
+- [x] Document management system (upload, categorize, delete)
+- [x] Profile Page (3 tabs: info, security, preferences)
+- [x] Newsletter subscription modal
+- [x] Sidebar (DashboardLayout.jsx) - desktop
+- [x] Mobile navigation (MobileTabBar + hamburger)
+- [x] Automatic simulation saving
+- [x] Full responsive design
+- [x] Database Schema v3.1 (2026 parameters)
+- [x] CHANGELOG.md - Complete project history
+
+## Key API Endpoints
+- `POST /api/auth/register` - Register new user
+- `POST /api/auth/login` - User login
+- `GET /api/user/profile` - Get user profile
+- `PUT /api/user/profile` - Update user profile
+- `GET /api/dashboard` - Fetch dashboard data
+- `POST /api/simulation/save` - Save simulation results
+- `GET /api/simulation/latest` - Get most recent simulation
+- `POST /api/newsletter/subscribe` - Subscribe to newsletter
+- `GET /api/documents` - Get user documents
+- `POST /api/documents/upload` - Upload document
+
+## Database Schema (MongoDB - Dev)
+- **users**: User accounts and profiles
+- **simulation_results**: Comprehensive simulation data
+- **newsletter_subscribers**: Email subscriptions
+
+## Prioritized Backlog
+
+### P0 - Done
+- [x] Changelog completed
+- [x] Documents.js UI regression fixed - Restored tab-based navigation (underline style) for document categories (March 2026)
+
+### P1 - High Priority (Next)
+- [ ] Comprehensive Auth Flow Verification (token vs access_token)
+- [ ] Charts Integration (Recharts) in Dashboard, simulators, InvestmentAxes
+- [ ] PDF Export of simulation results
+
+### P2 - Medium Priority
+- [ ] Profile Card Gradient Bug in sidebar
+- [ ] Interactive Investment Comparator
+- [ ] Unsaved Changes Warning modal
+- [ ] Age validation (min/max) for date of birth
+- [ ] UI Consistency - Radio button primary color styling
+
+### P3 - Low Priority
+- [ ] Fix linter warnings for unescaped apostrophes in JSX
+
+## Known Issues
+- Authentication token handling: flexible `token || access_token` implemented but needs e2e verification
+- Profile card gradient in sidebar doesn't render completely
+
+## Test Credentials
+- Email: `test.mobile@elysion.fr`
+- Password: `TestPass123`
+
+## Notes
+- User language preference: French
+- All communication must be in French
+- Dual backend: FastAPI (dev Emergent) + Node.js (production)
+- Database: MongoDB (dev) / PostgreSQL (production)
+- 2026 official rates integrated in simulators

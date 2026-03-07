@@ -481,4 +481,3 @@ Le module Épargne & Risque est **identique** entre salarié et freelance, avec 
 - Entrées différentes (pension TNS vs pension salarié)
 - Wording adapté (arrêt d'activité vs retraite)
 - Seuils ajustés (taux de remplacement moyen plus bas)
-

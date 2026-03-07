@@ -558,4 +558,3 @@ Pour chaque scénario d'âge de départ :
 - Projections d'épargne par profil de risque
 - Recommandations de supports d'investissement
 - Points clés et conseils personnalisés
-

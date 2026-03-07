@@ -3194,40 +3194,165 @@ Composant pour l'upload de fichiers avec drag & drop.
 
 # 11. Iconography
 
-## 11.1 Icon Guidelines
+## 11.1 Icon Library - Lucide React
 
-- **Size**: 16px, 20px, 24px, 32px, 48px
-- **Stroke Width**: 2px (consistent)
-- **Style**: Outlined, rounded corners
-- **Color**: Inherits from parent or uses semantic colors
+Elysion utilise **Lucide React** comme bibliothèque d'icônes principale. Toutes les icônes sont centralisées dans `/src/components/ui/icons.js`.
 
-## 11.2 Icon Sizes
-
-```css
-.icon-xs { width: 16px; height: 16px; }
-.icon-sm { width: 20px; height: 20px; }
-.icon-md { width: 24px; height: 24px; }
-.icon-lg { width: 32px; height: 32px; }
-.icon-xl { width: 48px; height: 48px; }
+### Installation
+```bash
+yarn add lucide-react
 ```
 
-## 11.3 Common Icons
+### Import centralisé
+```jsx
+import { Icons, getUserTypeIcon, getDocumentCategoryIcon } from './ui/icons';
+```
 
-- 📊 Analytics / Dashboard
-- 👔 Employee / Professional
-- 💻 Freelancer / Digital
-- 🏢 Business Owner / Company
-- 📈 Growth / Progress
-- 💰 Money / Finance
-- 🎯 Goal / Target
-- ✅ Success / Completed
-- ⚠️ Warning / Alert
-- ❌ Error / Delete
-- 📄 Document
-- 📤 Upload
-- 📥 Download
-- 🔒 Lock / Secure
-- 👤 User / Profile
+## 11.2 Tailles d'icônes standardisées
+
+| Taille | Valeur | Usage |
+|--------|--------|-------|
+| `xs` | 14px | Indicateurs, badges |
+| `sm` | 16px | Texte inline, boutons compacts |
+| `md` | 20px | **Par défaut** - Navigation, formulaires |
+| `lg` | 24px | Cartes, headers |
+| `xl` | 32px | Sections principales |
+| `2xl` | 40px | États vides, héros |
+| `3xl` | 48px | Landing page, onboarding |
+
+```jsx
+<Icons.Dashboard size={20} />  // Par défaut
+<Icons.Target size={24} className="text-elysion-primary" />
+```
+
+## 11.3 Icônes de navigation
+
+| Usage | Icône Lucide | Composant |
+|-------|--------------|-----------|
+| Tableau de bord | `Home` | `<Icons.Dashboard />` |
+| Simulateur | `Sparkles` | `<Icons.Simulator />` |
+| Documents | `FileText` | `<Icons.Documents />` |
+| Investissements | `TrendingUp` | `<Icons.Investment />` |
+| Profil/Paramètres | `Settings` | `<Icons.Profile />` |
+| Déconnexion | `LogOut` | `<Icons.Logout />` |
+| Menu hamburger | `Menu` | `<Icons.Menu />` |
+| Fermer | `X` | `<Icons.Close />` |
+
+## 11.4 Icônes par type d'utilisateur
+
+| Type | Icône Lucide | Usage |
+|------|--------------|-------|
+| Salarié | `Briefcase` | `<Icons.Employee />` |
+| Freelance | `Rocket` | `<Icons.Freelancer />` |
+| Chef d'entreprise | `Building2` | `<Icons.BusinessOwner />` |
+| Utilisateur générique | `User` | `<Icons.User />` |
+
+```jsx
+// Helper function
+import { getUserTypeIcon } from './ui/icons';
+{getUserTypeIcon(user?.user_type, { size: 20, className: "text-elysion-primary" })}
+```
+
+## 11.5 Icônes de profil de risque
+
+| Profil | Icône Lucide | Usage |
+|--------|--------------|-------|
+| Prudent | `Shield` | `<Icons.Prudent />` |
+| Équilibré | `Scale` | `<Icons.Balanced />` |
+| Dynamique | `Rocket` | `<Icons.Dynamic />` |
+
+```jsx
+import { getRiskProfileIcon } from './ui/icons';
+{getRiskProfileIcon('prudent', { size: 20 })}
+```
+
+## 11.6 Icônes de documents
+
+| Catégorie | Icône Lucide | Usage |
+|-----------|--------------|-------|
+| Bulletin de salaire | `Receipt` | Documents paie |
+| Relevé de carrière | `FileBarChart` | Historique carrière |
+| Déclaration fiscale | `BarChart3` | Impôts |
+| Contrat retraite | `Landmark` | Banque/Assurance |
+| Autre | `FileText` | Par défaut |
+
+```jsx
+import { getDocumentCategoryIcon } from './ui/icons';
+{getDocumentCategoryIcon('salary_slip', { size: 20 })}
+```
+
+## 11.7 Icônes d'actions
+
+| Action | Icône Lucide | Composant |
+|--------|--------------|-----------|
+| Ajouter | `Plus` | `<Icons.Add />` |
+| Modifier | `Edit` | `<Icons.Edit />` |
+| Supprimer | `Trash2` | `<Icons.Delete />` |
+| Voir | `Eye` | `<Icons.View />` |
+| Télécharger | `Download` | `<Icons.Download />` |
+| Uploader | `Upload` | `<Icons.Upload />` |
+| Rechercher | `Search` | `<Icons.Search />` |
+| Filtrer | `Filter` | `<Icons.Filter />` |
+| Copier | `Copy` | `<Icons.Copy />` |
+| Partager | `Share2` | `<Icons.Share />` |
+| Rafraîchir | `RefreshCw` | `<Icons.Refresh />` |
+
+## 11.8 Icônes de statut
+
+| Statut | Icône Lucide | Couleur |
+|--------|--------------|---------|
+| Succès | `CheckCircle` | `text-green-600` |
+| Erreur | `AlertCircle` | `text-red-600` |
+| Avertissement | `AlertCircle` | `text-orange-500` |
+| Information | `Info` | `text-blue-600` |
+| Aide | `HelpCircle` | `text-gray-500` |
+| Chargement | `Loader2` | Animation rotate |
+
+## 11.9 Icônes financières
+
+| Usage | Icône Lucide | Composant |
+|-------|--------------|-----------|
+| Objectif | `Target` | `<Icons.Target />` |
+| Épargne | `PiggyBank` | `<Icons.Money />` |
+| Portefeuille | `Wallet` | `<Icons.Wallet />` |
+| Euro | `Euro` | `<Icons.Euro />` |
+| Pourcentage | `Percent` | `<Icons.Percent />` |
+| Carte bancaire | `CreditCard` | `<Icons.CreditCard />` |
+| Banque | `Landmark` | `<Icons.Bank />` |
+| Calculatrice | `Calculator` | `<Icons.Calculator />` |
+
+## 11.10 Bonnes pratiques
+
+### Accessibilité
+```jsx
+// Icône décorative (lecture d'écran ignorée)
+<Icons.Target size={20} aria-hidden="true" />
+
+// Icône avec signification (lecture d'écran)
+<Icons.Target size={20} aria-label="Objectif de retraite" />
+
+// Bouton avec icône seule
+<button aria-label="Fermer le menu">
+  <Icons.Close size={24} aria-hidden="true" />
+</button>
+```
+
+### Couleurs
+```jsx
+// Hériter de la couleur du texte parent
+<div className="text-elysion-primary">
+  <Icons.Target size={20} />
+</div>
+
+// Couleur explicite
+<Icons.Target size={20} className="text-elysion-accent" />
+```
+
+### Animations
+```jsx
+// Icône de chargement avec rotation
+<Icons.Loading size={20} className="animate-spin" />
+```
 
 ---
 
@@ -3978,3 +4103,453 @@ export default Button;
 **Total Components Documented**: 40+  
 **Total CSS Properties**: 500+  
 **Pages**: 100+
+
+---
+
+# 17. Mobile & Responsive Components (Janvier 2026)
+
+## 17.1 Mobile Tab Bar
+
+### Description
+Barre de navigation fixe en bas de l'écran sur mobile, visible uniquement sur les pages protégées (connecté).
+
+### Spécifications
+```
+Position: fixed bottom-0
+Hauteur: 64px (h-16)
+Background: white
+Border: border-t border-gray-200
+Z-index: 50
+Visible: < 768px (md:hidden)
+```
+
+### Structure
+```jsx
+<div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 md:hidden z-50 safe-area-bottom">
+  <div className="flex justify-around items-center h-16">
+    {tabs.map((tab) => (
+      <button className="flex flex-col items-center justify-center flex-1 h-full">
+        <span className="text-xl mb-1">{tab.icon}</span>
+        <span className="text-xs font-medium">{tab.label}</span>
+      </button>
+    ))}
+  </div>
+</div>
+```
+
+### Onglets
+| Icône | Label | Route |
+|-------|-------|-------|
+| 🏠 | Accueil | /dashboard |
+| 🔮 | Simuler | /simulator |
+| 📄 | Documents | /documents |
+| 📈 | Investir | /investment-axes |
+| ⚙️ | Profil | /profile |
+
+### États
+- **Actif**: `text-elysion-primary`
+- **Inactif**: `text-gray-500 hover:text-elysion-primary`
+
+### CSS Safe Area (iPhone)
+```css
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+```
+
+---
+
+## 17.2 Menu Burger (Hamburger Menu)
+
+### Description
+Menu déroulant mobile accessible via l'icône hamburger dans la navigation.
+
+### Icône Hamburger
+```jsx
+{/* Fermé */}
+<svg className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+</svg>
+
+{/* Ouvert */}
+<svg className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+</svg>
+```
+
+### Menu Dropdown - Landing Page
+```
+┌─────────────────────────────────┐
+│  🔮 Simulateur                  │
+│  🔑 Se connecter                │
+│  ✨ Créer un compte     (accent)│
+└─────────────────────────────────┘
+```
+
+### Menu Dropdown - Pages Connectées
+```
+┌─────────────────────────────────┐
+│  👤 Jean Dupont                 │
+│     jean@email.com              │
+├─────────────────────────────────┤
+│  🏠 Tableau de bord             │
+│  ⚙️ Mon profil                  │
+│  🔮 Nouvelle simulation         │
+├─────────────────────────────────┤
+│  🚪 Déconnexion          (rouge)│
+└─────────────────────────────────┘
+```
+
+### Spécifications CSS
+```css
+/* Container */
+.mobile-menu {
+  @apply md:hidden bg-white border-t border-gray-100 shadow-lg;
+}
+
+/* Item standard */
+.mobile-menu-item {
+  @apply w-full flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-gray-50 transition-colors;
+}
+
+/* Item déconnexion */
+.mobile-menu-item-danger {
+  @apply w-full flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-red-50 text-red-600 transition-colors;
+}
+
+/* Item accent (CTA) */
+.mobile-menu-item-accent {
+  @apply w-full flex items-center space-x-3 px-4 py-3 rounded-lg bg-elysion-accent text-white hover:bg-elysion-accent/90 transition-colors;
+}
+```
+
+---
+
+## 17.3 Page Header (Responsive)
+
+### Description
+En-tête unifié pour toutes les pages protégées avec bouton retour et menu burger.
+
+### Structure Desktop (≥ 768px)
+```
+┌─────────────────────────────────────────────────────────────┐
+│  ← Retour    Elysion | Titre    👤 Nom Utilisateur  Déco   │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Structure Mobile (< 768px)
+```
+┌─────────────────────────────────────────────────────────────┐
+│  ←    Elysion                              Prénom    ☰     │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Composant React
+```jsx
+import MobileTabBar, { PageHeader } from './MobileTabBar';
+
+// Usage
+<PageHeader title="Mes Documents" showBackButton={true} />
+```
+
+### Props
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| title | string | required | Titre de la page |
+| showBackButton | boolean | true | Afficher le bouton retour |
+
+---
+
+## 17.4 Indicateur d'Étapes (Step Indicator)
+
+### Description
+Indicateur de progression circulaire pour les simulateurs multi-étapes.
+
+### Design
+```
+  ✓ ─── ✓ ─── 3 ─── 4 ─── 5 ─── 6 ─── 7
+ bleu  bleu  orange gris  gris  gris  gris
+```
+
+### États des cercles
+| État | Couleur | Contenu |
+|------|---------|---------|
+| Complété | `bg-elysion-primary` | Coche ✓ |
+| Actuel | `bg-elysion-accent` | Numéro |
+| À venir | `bg-gray-300` | Numéro |
+
+### Spécifications Responsive
+| Propriété | Mobile | Desktop |
+|-----------|--------|---------|
+| Cercle | 32px (w-8 h-8) | 40px (w-10 h-10) |
+| Ligne | 12px (w-3) | 24px (w-6) |
+| Gap | gap-0.5 | gap-1 |
+| Padding | px-4 | px-2 |
+
+### Code JSX
+```jsx
+<div className="flex items-center justify-center gap-0.5 sm:gap-1 py-4 px-4 sm:px-2">
+  {[1, 2, 3, 4, 5, 6, 7].map((step, index) => (
+    <div key={step} className="flex items-center flex-shrink-0">
+      {/* Circle */}
+      <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center ${
+        step < currentStep ? 'bg-elysion-primary' :
+        step === currentStep ? 'bg-elysion-accent' : 'bg-gray-300'
+      }`}>
+        {step < currentStep ? (
+          <svg className="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+          </svg>
+        ) : (
+          <span className="text-white text-sm sm:text-base font-semibold">{step}</span>
+        )}
+      </div>
+      
+      {/* Connector */}
+      {index < 6 && (
+        <div className={`w-3 sm:w-6 h-1 mx-0.5 sm:mx-1 ${
+          step < currentStep ? 'bg-elysion-primary' : 'bg-gray-300'
+        }`} />
+      )}
+    </div>
+  ))}
+</div>
+```
+
+---
+
+## 17.5 Modal Newsletter
+
+### Description
+Modal popup pour l'inscription à la newsletter, accessible depuis la landing page.
+
+### Structure
+```
+┌─────────────────────────────────────────┐
+│                                    ✕    │
+│            ✉️ (icône)                   │
+│                                         │
+│         Restez informé                  │
+│   Recevez nos conseils retraite...      │
+│                                         │
+│   ┌─────────────────────────────────┐   │
+│   │ votre@email.com                 │   │
+│   └─────────────────────────────────┘   │
+│                                         │
+│   [        S'abonner        ]           │
+│                                         │
+│   🔒 Pas de spam, désinscription...     │
+└─────────────────────────────────────────┘
+```
+
+### État Succès
+```
+┌─────────────────────────────────────────┐
+│            ✓ (vert)                     │
+│                                         │
+│            Merci !                      │
+│   Vous êtes maintenant inscrit...       │
+│                                         │
+│   [        Fermer        ]              │
+└─────────────────────────────────────────┘
+```
+
+### Spécifications CSS
+```css
+/* Backdrop */
+.modal-backdrop {
+  @apply fixed inset-0 bg-black/50 backdrop-blur-sm z-50;
+}
+
+/* Modal Container */
+.modal-container {
+  @apply relative bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 p-8;
+}
+
+/* Close Button */
+.modal-close {
+  @apply absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors;
+}
+
+/* Icon Container */
+.modal-icon {
+  @apply w-16 h-16 bg-elysion-primary/10 rounded-full flex items-center justify-center mx-auto mb-4;
+}
+
+/* Success Icon */
+.modal-icon-success {
+  @apply w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4;
+}
+```
+
+### API Endpoint
+```
+POST /api/newsletter/subscribe
+Body: { email: "user@example.com" }
+Response: 201 Created | 409 Conflict (déjà inscrit)
+```
+
+---
+
+# 18. Typographie Complète
+
+## 18.1 Propriétés de Base
+
+### Règle principale
+Tous les éléments textuels doivent avoir ces 3 propriétés définies :
+1. `font-size`
+2. `font-weight`
+3. `line-height`
+
+### Police
+```css
+font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
+```
+
+## 18.2 Hiérarchie Typographique
+
+| Élément | font-size | font-weight | line-height |
+|---------|-----------|-------------|-------------|
+| h1 | 2.5rem (40px) | 700 | 1.2 |
+| h2 | 2rem (32px) | 700 | 1.25 |
+| h3 | 1.5rem (24px) | 600 | 1.3 |
+| h4 | 1.25rem (20px) | 600 | 1.35 |
+| h5 | 1.125rem (18px) | 600 | 1.4 |
+| h6 | 1rem (16px) | 600 | 1.5 |
+| p | 1rem (16px) | 400 | 1.6 |
+| small | 0.875rem (14px) | 400 | 1.5 |
+| label | 0.875rem (14px) | 500 | 1.5 |
+
+## 18.3 Classes Utilitaires
+
+### Font Weights
+```css
+.font-thin { font-weight: 100; }
+.font-extralight { font-weight: 200; }
+.font-light { font-weight: 300; }
+.font-normal { font-weight: 400; }
+.font-medium { font-weight: 500; }
+.font-semibold { font-weight: 600; }
+.font-bold { font-weight: 700; }
+.font-extrabold { font-weight: 800; }
+.font-black { font-weight: 900; }
+```
+
+### Font Sizes avec Line-Height
+```css
+.text-2xs { font-size: 0.625rem; line-height: 1.4; }
+.text-xs { font-size: 0.75rem; line-height: 1.4; }
+.text-sm { font-size: 0.875rem; line-height: 1.5; }
+.text-base { font-size: 1rem; line-height: 1.6; }
+.text-lg { font-size: 1.125rem; line-height: 1.6; }
+.text-xl { font-size: 1.25rem; line-height: 1.5; }
+.text-2xl { font-size: 1.5rem; line-height: 1.4; }
+.text-3xl { font-size: 1.875rem; line-height: 1.3; }
+.text-4xl { font-size: 2.25rem; line-height: 1.25; }
+.text-5xl { font-size: 3rem; line-height: 1.2; }
+.text-6xl { font-size: 3.75rem; line-height: 1.1; }
+```
+
+---
+
+# 19. Breakpoints Responsive
+
+## 19.1 Points de Rupture
+
+| Breakpoint | Min-width | Usage |
+|------------|-----------|-------|
+| (default) | 0px | Mobile first |
+| sm | 640px | Petits tablets |
+| md | 768px | Tablets |
+| lg | 1024px | Desktop |
+| xl | 1280px | Large desktop |
+| 2xl | 1536px | Extra large |
+
+## 19.2 Patterns Responsive Courants
+
+### Grilles
+```css
+/* 1 col mobile → 2 cols tablet → 3 cols desktop */
+.grid.grid-cols-1.sm:grid-cols-2.lg:grid-cols-3
+
+/* 1 col mobile → 3 cols desktop */
+.grid.grid-cols-1.md:grid-cols-3
+```
+
+### Padding
+```css
+/* Responsive padding */
+.px-4.sm:px-6.lg:px-8
+.py-6.sm:py-8
+```
+
+### Texte
+```css
+/* Titre responsive */
+.text-2xl.sm:text-3xl.lg:text-4xl
+
+/* Sous-titre responsive */
+.text-sm.sm:text-base
+```
+
+### Visibilité
+```css
+/* Mobile only */
+.md:hidden
+
+/* Desktop only */
+.hidden.md:block
+
+/* Mobile menu */
+.md:hidden
+```
+
+## 19.3 Layout Responsive
+
+### Container Principal
+```css
+.max-w-7xl.mx-auto.px-4.sm:px-6.lg:px-8
+```
+
+### Padding Bottom (avec Tab Bar)
+```css
+/* Pages avec Tab Bar mobile */
+.pb-20.md:pb-0
+```
+
+---
+
+# 20. Composants Fichiers
+
+## 20.1 Structure des Fichiers
+
+```
+frontend/src/components/
+├── MobileTabBar.jsx       # Tab Bar + PageHeader
+├── LandingPage.js         # Page d'accueil + Newsletter Modal
+├── Dashboard.js           # Tableau de bord responsive
+├── EmployeeSimulator.js   # Simulateur salarié + Step Indicator
+├── FreelanceSimulator.js  # Simulateur freelance + Step Indicator
+├── Documents.js           # Gestion documents responsive
+├── InvestmentAxes.js      # Axes investissement responsive
+├── ProfilePage.js         # Page profil responsive
+└── ui/                    # Composants shadcn/ui
+```
+
+## 20.2 Imports Standards
+
+```jsx
+// Navigation responsive
+import MobileTabBar, { PageHeader } from './MobileTabBar';
+
+// Auth context
+import { useAuth } from '../App';
+
+// Router
+import { useNavigate, useLocation } from 'react-router-dom';
+```
+
+---
+
+**Mise à jour**: Janvier 2026
+**Version**: 3.0

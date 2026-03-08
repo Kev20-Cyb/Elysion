@@ -4,7 +4,7 @@ import { useAuth } from '../App';
 import axios from 'axios';
 import { Icons } from './ui/icons';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
 const OnboardingFlow = () => {
@@ -290,7 +290,10 @@ const OnboardingFlow = () => {
         
         <div className="bg-elysion-bg p-6 rounded-xl mb-8 border-l-4 border-elysion-accent">
           <div className="flex items-center justify-center mb-3">
-            <span className="text-3xl mr-3">{getUserTypeInfo().icon}</span>
+            {(() => {
+              const IconComponent = getUserTypeInfo().icon;
+              return <IconComponent size={28} className="mr-3 text-elysion-primary" aria-hidden="true" />;
+            })()}
             <p className="text-lg text-elysion-text-dark">
               Profil sélectionné: <strong>{getUserTypeInfo().label}</strong>
             </p>
@@ -412,7 +415,10 @@ const OnboardingFlow = () => {
       <div>
         <h2 className="text-3xl font-bold text-elysion-primary mb-2 text-center font-montserrat">Informations professionnelles</h2>
         <p className="text-center text-elysion-text-light mb-6 flex items-center justify-center">
-          <span className="mr-2">{userTypeInfo.icon}</span>
+          {(() => {
+            const IconComponent = userTypeInfo.icon;
+            return <IconComponent size={20} className="mr-2" aria-hidden="true" />;
+          })()}
           Profil {userTypeInfo.label}
         </p>
 
@@ -962,7 +968,7 @@ const OnboardingFlow = () => {
               onClick={() => navigate('/')}
               className="hover:opacity-80 transition-opacity"
             >
-              <img src="/asset/Elysion - logo.png" alt="Elysion" className="h-8" />
+              <img src="/asset/logo.png" alt="Elysion" className="h-8" />
             </button>
             <div className="flex items-center space-x-4">
               <button 

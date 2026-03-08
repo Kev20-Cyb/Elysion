@@ -79,13 +79,23 @@ router.post("/upload", authRequired, (req, res) => {
 
       const docId = uuidv4();
 
+      if (!req.user || !req.user.userId) {
+        if (req.file && fs.existsSync(req.file.path)) {
+          fs.unlinkSync(req.file.path);
+        }
+
+        return res.status(401).json({
+          detail: "Utilisateur non authentifié"
+        });
+      }
+
       const result = await pool.query(
         `INSERT INTO documents (id, user_id, filename, original_filename, category, file_size, mime_type, file_path, uploaded_at, updated_at)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
-         RETURNING id, filename, original_filename AS original_filename, category, file_size, uploaded_at, updated_at`,
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+        RETURNING id, filename, original_filename AS original_filename, category, file_size, uploaded_at, updated_at`,
         [
           docId,
-          req.user.id,
+          req.user.userId,
           req.file.originalname,
           req.file.originalname,
           category,
@@ -98,7 +108,6 @@ router.post("/upload", authRequired, (req, res) => {
       return res.status(201).json(result.rows[0]);
     } catch (error) {
       console.error("Document upload error:", error);
-      // Nettoyer le fichier en cas d'erreur DB
       if (req.file && fs.existsSync(req.file.path)) {
         fs.unlinkSync(req.file.path);
       }
@@ -119,7 +128,7 @@ router.get("/", authRequired, async (req, res) => {
       FROM documents
       WHERE user_id = $1
     `;
-    const params = [req.user.id];
+    const params = [req.user.userId];
 
     if (category && VALID_CATEGORIES.includes(category)) {
       query += ` AND category = $2`;
@@ -146,7 +155,7 @@ router.get("/stats/summary", authRequired, async (req, res) => {
     const totals = await pool.query(
       `SELECT COUNT(*) AS total_documents, COALESCE(SUM(file_size), 0) AS total_size_bytes
        FROM documents WHERE user_id = $1`,
-      [req.user.id]
+      [req.user.userId]
     );
 
     // Count by category
@@ -154,7 +163,7 @@ router.get("/stats/summary", authRequired, async (req, res) => {
       `SELECT category, COUNT(*) AS count
        FROM documents WHERE user_id = $1
        GROUP BY category`,
-      [req.user.id]
+      [req.user.userId]
     );
 
     // Recent (last 7 days)
@@ -162,7 +171,7 @@ router.get("/stats/summary", authRequired, async (req, res) => {
       `SELECT COUNT(*) AS recent_count
        FROM documents
        WHERE user_id = $1 AND uploaded_at >= CURRENT_TIMESTAMP - INTERVAL '7 days'`,
-      [req.user.id]
+      [req.user.userId]
     );
 
     const byCategory = {};
@@ -194,7 +203,7 @@ router.get("/:id", authRequired, async (req, res) => {
     const result = await pool.query(
       `SELECT id, filename, original_filename AS original_filename, category, file_size, uploaded_at, updated_at
        FROM documents WHERE id = $1 AND user_id = $2`,
-      [req.params.id, req.user.id]
+      [req.params.id, req.user.userId]
     );
 
     if (result.rowCount === 0) {
@@ -216,7 +225,7 @@ router.get("/:id/download", authRequired, async (req, res) => {
   try {
     const result = await pool.query(
       `SELECT filename, file_path FROM documents WHERE id = $1 AND user_id = $2`,
-      [req.params.id, req.user.id]
+      [req.params.id, req.user.userId]
     );
 
     if (result.rowCount === 0) {
@@ -254,7 +263,7 @@ router.patch("/:id", authRequired, async (req, res) => {
     // Vérifier que le document existe et appartient à l'utilisateur
     const existing = await pool.query(
       `SELECT id FROM documents WHERE id = $1 AND user_id = $2`,
-      [req.params.id, req.user.id]
+      [req.params.id, req.user.userId]
     );
 
     if (existing.rowCount === 0) {
@@ -311,7 +320,7 @@ router.delete("/:id", authRequired, async (req, res) => {
     // Récupérer le chemin du fichier avant suppression
     const existing = await pool.query(
       `SELECT file_path FROM documents WHERE id = $1 AND user_id = $2`,
-      [req.params.id, req.user.id]
+      [req.params.id, req.user.userId]
     );
 
     if (existing.rowCount === 0) {

@@ -80,9 +80,9 @@ router.post("/upload", authRequired, (req, res) => {
       const docId = uuidv4();
 
       const result = await pool.query(
-        `INSERT INTO documents (id, user_id, filename, original_name, category, file_size, mime_type, file_path, uploaded_at, updated_at)
+        `INSERT INTO documents (id, user_id, filename, original_filename, category, file_size, mime_type, file_path, uploaded_at, updated_at)
          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
-         RETURNING id, filename, original_name AS original_filename, category, file_size, uploaded_at, updated_at`,
+         RETURNING id, filename, original_filename AS original_filename, category, file_size, uploaded_at, updated_at`,
         [
           docId,
           req.user.id,
@@ -115,7 +115,7 @@ router.get("/", authRequired, async (req, res) => {
   try {
     const { category } = req.query;
     let query = `
-      SELECT id, filename, original_name AS original_filename, category, file_size, uploaded_at, updated_at
+      SELECT id, filename, original_filename AS original_filename, category, file_size, uploaded_at, updated_at
       FROM documents
       WHERE user_id = $1
     `;
@@ -192,7 +192,7 @@ router.get("/stats/summary", authRequired, async (req, res) => {
 router.get("/:id", authRequired, async (req, res) => {
   try {
     const result = await pool.query(
-      `SELECT id, filename, original_name AS original_filename, category, file_size, uploaded_at, updated_at
+      `SELECT id, filename, original_filename AS original_filename, category, file_size, uploaded_at, updated_at
        FROM documents WHERE id = $1 AND user_id = $2`,
       [req.params.id, req.user.id]
     );
@@ -278,7 +278,7 @@ router.patch("/:id", authRequired, async (req, res) => {
     if (updates.length === 0) {
       // Rien à mettre à jour, retourner le document tel quel
       const doc = await pool.query(
-        `SELECT id, filename, original_name AS original_filename, category, file_size, uploaded_at, updated_at
+        `SELECT id, filename, original_filename AS original_filename, category, file_size, uploaded_at, updated_at
          FROM documents WHERE id = $1`,
         [req.params.id]
       );
@@ -291,7 +291,7 @@ router.patch("/:id", authRequired, async (req, res) => {
     const result = await pool.query(
       `UPDATE documents SET ${updates.join(", ")}
        WHERE id = $${paramIndex}
-       RETURNING id, filename, original_name AS original_filename, category, file_size, uploaded_at, updated_at`,
+       RETURNING id, filename, original_filename AS original_filename, category, file_size, uploaded_at, updated_at`,
       values
     );
 

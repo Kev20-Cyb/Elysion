@@ -85,7 +85,8 @@ router.post("/simulation/save", authRequired, async (req, res) => {
 // GET /api/simulation/latest - Récupérer la dernière simulation
 router.get("/simulation/latest", authRequired, async (req, res) => {
   try {
-    const userId = req.user.userId;
+    const userId = req.user?.userId;
+    if (!userId) return res.status(401).json({ detail: "Unauthorized: missing userId in token" });
     
     const result = await pool.query(
       "SELECT simulation_data, last_simulation_at FROM retirement_profiles WHERE user_id = $1",

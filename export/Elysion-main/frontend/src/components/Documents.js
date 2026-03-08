@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../App';
-import axios from 'axios';
+import api from '../services/api';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 const API = `${BACKEND_URL}/api`;
@@ -46,7 +46,11 @@ const Documents = () => {
     setLoading(true);
     setError('');
     try {
-      const response = await axios.get(`${API}/documents`);
+      const response = await api.get(`${API}/documents`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+      });
       setDocuments(response.data);
     } catch (err) {
       setError('Erreur lors du chargement des documents');
@@ -58,8 +62,11 @@ const Documents = () => {
 
   const fetchStats = async () => {
     try {
-      const response = await axios.get(`${API}/documents/stats/summary`);
-      setStats(response.data);
+      const response = await api.get(`${API}/documents`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      }
+    });
     } catch (err) {
       console.error('Error fetching stats:', err);
     }
@@ -103,8 +110,9 @@ const Documents = () => {
     formData.append('category', selectedCategory === 'all' ? 'other' : selectedCategory);
 
     try {
-      await axios.post(`${API}/documents/upload`, formData, {
+     await api.post(`${API}/documents/upload`, formData, {
         headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
           'Content-Type': 'multipart/form-data'
         }
       });
@@ -141,7 +149,7 @@ const Documents = () => {
 
   const handleDownload = async (docId, filename) => {
     try {
-      const response = await axios.get(`${API}/documents/${docId}/download`, {
+      const response = await api.get(`${API}/documents/${docId}/download`, {
         responseType: 'blob'
       });
       
@@ -163,7 +171,11 @@ const Documents = () => {
     }
 
     try {
-      await axios.delete(`${API}/documents/${docId}`);
+      await api.delete(`${API}/documents/${docId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+      });
       setSuccess('Document supprimé avec succès');
       fetchDocuments();
       fetchStats();
@@ -185,9 +197,17 @@ const Documents = () => {
     }
 
     try {
-      await axios.patch(`${API}/documents/${docId}`, {
-        filename: newFilename.trim() + '.pdf'
-      });
+      await api.patch(
+        `${API}/documents/${docId}`,
+        {
+          filename: newFilename.trim() + '.pdf'
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        }
+      );
       
       setSuccess('Document renommé avec succès');
       setEditingDoc(null);
@@ -201,9 +221,17 @@ const Documents = () => {
 
   const handleCategoryChange = async (docId, newCategory) => {
     try {
-      await axios.patch(`${API}/documents/${docId}`, {
-        category: newCategory
-      });
+      await api.patch(
+        `${API}/documents/${docId}`,
+        {
+          category: newCategory
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        }
+      );
       
       setSuccess('Catégorie mise à jour');
       fetchDocuments();
@@ -216,8 +244,11 @@ const Documents = () => {
 
   const openPreview = async (docId) => {
     try {
-      const response = await axios.get(`${API}/documents/${docId}/download`, {
-        responseType: 'blob'
+      const response = await api.get(`${API}/documents/${docId}/download`, {
+        responseType: 'blob',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
       });
       
       const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }));

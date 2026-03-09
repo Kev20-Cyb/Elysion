@@ -168,7 +168,7 @@ const Simulator = () => {
               onClick={() => navigate('/')}
               className="hover:opacity-80 transition-opacity"
             >
-              <img src="/asset/logo.png" alt="Elysion" className="h-8" />
+              <img src="/asset/Elysion - logo.png" alt="Elysion" className="h-8" />
             </button>
             
             {/* Desktop Navigation */}

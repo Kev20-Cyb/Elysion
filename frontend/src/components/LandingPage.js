@@ -70,17 +70,17 @@ const LandingPage = () => {
       title: 'Salariés',
       description:
         'Estimez votre future retraite en fonction de votre salaire et trimestres validés.',
-      icon: "./asset/salarie.svg",
+      icon: "./asset/Elysion_Salarie.svg",
     },
     {
       title: "Freelances",
       description: "Simulez votre pension à travers les régimes indépendants.",
-      icon: "./asset/freelance.svg"
+      icon: "./asset/Elysion_Freelance.svg"
     },
     {
       title: "Chefs d'entreprise",
       description: "Visualisez l'impact de votre rémunération et dividendes sur votre retraite.",
-      icon: "./asset/patron.svg"
+      icon: "./asset/Elysion_Dirigeant.svg"
     }
   ];
   // How it works steps
@@ -270,7 +270,7 @@ const LandingPage = () => {
                   className='btn-outline'
                   data-testid='hero-newsletter-btn'
                 >
-                  Abonnez vous à notre newsletter
+                  Souscrire à la newsletter
                 </button>
                 <button
                   onClick={handleTestSimulator}
@@ -282,10 +282,10 @@ const LandingPage = () => {
               </div>
             </div>
             {/* Hero Illustration */}
-            <div className="flex justify-center lg:justify-end">
+            <div className="flex justify-center lg:justify-end rounded-lg">
               <div className="relative">
                 <img
-                  src="./asset/IllustrationHome.png" 
+                  src="./asset/Elysion_Hero_section.webp" 
                   alt="Illustration tableau de bord"
                   className="mx-auto mb-3"
                 />
@@ -321,10 +321,20 @@ const LandingPage = () => {
               </div>
             ))}
           </div>
+          {/* CTA Button */}
+          <div className='text-center mt-12'>
+            <button
+              onClick={() => navigate('/onboarding')}
+              className='btn-accent px-8 py-4 rounded-xl text-lg font-semibold'
+              data-testid='target-users-cta'
+            >
+              Je m'inscris
+            </button>
+          </div>
         </div>
       </section>
       {/* How it Works Section */}
-      <section className='py-20 bg-elysion-bg'>
+      <section className='py-20 bg-elysion-bg' id='#how-it-works'>
         <div className='max-w-7xl mx-auto px-4'>
           <div className='text-center mb-16'>
             <h2 className='text-4xl font-bold text-elysion-primary mb-4 font-montserrat'>
@@ -389,7 +399,7 @@ const LandingPage = () => {
             <h2 className='text-4xl font-bold text-white mb-6 font-montserrat'>
               Prêt à prendre le contrôle de votre avenir ?
             </h2>
-            <p className='text-xl text-elysion-text-light max-w-2xl mx-auto py-5'>
+            <p className='text-xl text-elysion max-w-2xl mx-auto py-5'>
               Rejoignez des milliers d'utilisateurs qui font déjà confiance à
               Elysion !
             </p>
@@ -403,180 +413,68 @@ const LandingPage = () => {
           </div>
         </div>
       </section>
-      {/* Newsletter Modal */}
-      {showNewsletterModal && (
-        <div className='fixed inset-0 z-50 flex items-center justify-center'>
-          {/* Backdrop */}
-          <div
-            className='absolute inset-0 bg-black/50 backdrop-blur-sm'
-            onClick={handleCloseNewsletter}
-          />
-          {/* Modal */}
-          <div className='relative bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 p-8 animate-in fade-in zoom-in duration-200'>
-            {/* Close button */}
-            <button
-              onClick={handleCloseNewsletter}
-              className='absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors'
-              aria-label='Fermer'
-            >
-              <svg
-                xmlns='http://www.w3.org/2000/svg'
-                className='h-6 w-6'
-                fill='none'
-                viewBox='0 0 24 24'
-                stroke='currentColor'
-              >
-                <path
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  strokeWidth={2}
-                  d='M6 18L18 6M6 6l12 12'
-                />
-              </svg>
-            </button>
-            {!newsletterSuccess ? (
-              <>
-                {/* Header */}
-                <div className='text-center mb-6'>
-                  <div className='w-16 h-16 bg-elysion-primary/10 rounded-full flex items-center justify-center mx-auto mb-4'>
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      className='h-8 w-8 text-elysion-primary'
-                      fill='none'
-                      viewBox='0 0 24 24'
-                      stroke='currentColor'
-                    >
-                      <path
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        strokeWidth={2}
-                        d='M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z'
-                      />
-                    </svg>
-                  </div>
-                  <h3 className='text-2xl font-bold text-gray-900 font-montserrat'>
-                    Restez informé
-                  </h3>
-                  <p className='text-gray-600 mt-2'>
-                    Recevez nos conseils retraite et nos actualités directement
-                    dans votre boîte mail.
-                  </p>
-                </div>
-                {/* Form */}
-                <form onSubmit={handleNewsletterSubmit} className='space-y-4'>
-                  <div>
-                    <label
-                      htmlFor='newsletter-email'
-                      className='block text-sm font-medium text-gray-700 mb-1'
-                    >
-                      Adresse email
-                    </label>
-                    <input
-                      id='newsletter-email'
-                      type='email'
-                      value={newsletterEmail}
-                      onChange={(e) => setNewsletterEmail(e.target.value)}
-                      placeholder='votre@email.com'
-                      className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-elysion-primary focus:border-elysion-primary transition-colors'
-                      required
-                      data-testid='newsletter-email-input'
-                    />
-                  </div>
-                  {newsletterError && (
-                    <div className='text-red-500 text-sm bg-red-50 p-3 rounded-lg'>
-                      {newsletterError}
-                    </div>
-                  )}
-                  <button
-                    type='submit'
-                    disabled={newsletterLoading}
-                    className='w-full bg-elysion-primary hover:bg-elysion-primary/90 text-white font-semibold py-3 px-6 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed'
-                    data-testid='newsletter-submit-btn'
-                  >
-                    {newsletterLoading ? (
-                      <span className='flex items-center justify-center gap-2'>
-                        <svg
-                          className='animate-spin h-5 w-5'
-                          xmlns='http://www.w3.org/2000/svg'
-                          fill='none'
-                          viewBox='0 0 24 24'
-                        >
-                          <circle
-                            className='opacity-25'
-                            cx='12'
-                            cy='12'
-                            r='10'
-                            stroke='currentColor'
-                            strokeWidth='4'
-                          ></circle>
-                          <path
-                            className='opacity-75'
-                            fill='currentColor'
-                            d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
-                          ></path>
-                        </svg>
-                        Inscription...
-                      </span>
-                    ) : (
-                      "S'abonner"
-                    )}
-                  </button>
-                </form>
-                {/* Footer */}
-                <p className='text-xs text-gray-500 text-center mt-4'>
-                  🔒 Pas de spam, désinscription possible à tout moment.
-                </p>
-              </>
-            ) : (
-              /* Success state */
-              <div className='text-center py-4'>
-                <div className='w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4'>
-                  <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    className='h-8 w-8 text-green-500'
-                    fill='none'
-                    viewBox='0 0 24 24'
-                    stroke='currentColor'
-                  >
-                    <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      strokeWidth={2}
-                      d='M5 13l4 4L19 7'
-                    />
-                  </svg>
-                </div>
-                <h3 className='text-2xl font-bold text-gray-900 font-montserrat mb-2'>
-                  Merci !
-                </h3>
-                <p className='text-gray-600 mb-6'>
-                  Vous êtes maintenant inscrit à notre newsletter. Vous recevrez
-                  bientôt nos dernières actualités.
-                </p>
-                <button
-                  onClick={handleCloseNewsletter}
-                  className='bg-elysion-primary hover:bg-elysion-primary/90 text-white font-semibold py-2 px-6 rounded-lg transition-all'
-                >
-                  Fermer
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
       {/* Footer */}
-      <footer className='bg-gray-900 text-white py-12'>
+      <footer className='bg-gray-900 text-white pt-16 pb-8'>
         <div className='max-w-7xl mx-auto px-4'>
-          <div className='grid md:grid-cols-4 gap-8'>
-            <div>
-              <img src='/asset/Elysion - logo.png' alt='Elysion' className='h-8 brightness-0 invert' />
-              <p className='text-gray-400'>
-                Votre partenaire pour une retraite sereine et bien planifiée.
+          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12'>
+            {/* Brand */}
+            <div className='lg:col-span-1'>
+              <img src='/asset/Elysion - logo.png' alt='Elysion' className='h-10 brightness-0 invert mb-4' />
+              <p className='text-gray-400 text-sm leading-relaxed mb-6'>
+                Votre partenaire pour une retraite sereine et bien planifiée. Simulez, anticipez et optimisez votre avenir financier.
               </p>
+              <div className='flex gap-4'>
+                <a href='https://linkedin.com' target='_blank' rel='noopener noreferrer' className='w-10 h-10 bg-gray-800 hover:bg-elysion-primary rounded-lg flex items-center justify-center transition-colors' aria-label='LinkedIn'>
+                  <svg className='w-5 h-5' fill='currentColor' viewBox='0 0 24 24' aria-hidden='true'>
+                    <path d='M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z'/>
+                  </svg>
+                </a>
+                <a href='https://twitter.com' target='_blank' rel='noopener noreferrer' className='w-10 h-10 bg-gray-800 hover:bg-elysion-primary rounded-lg flex items-center justify-center transition-colors' aria-label='Twitter'>
+                  <svg className='w-5 h-5' fill='currentColor' viewBox='0 0 24 24' aria-hidden='true'>
+                    <path d='M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z'/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+
+            {/* Navigation */}
+            <div>
+              <h4 className='text-white font-semibold mb-4 font-montserrat'>Navigation</h4>
+              <ul className='space-y-3'>
+                <li><a href='#how-it-works' className='text-gray-400 hover:text-white transition-colors text-sm'>Comment ça marche</a></li>
+                <li><a href='/simulator' className='text-gray-400 hover:text-white transition-colors text-sm'>Simulateur</a></li>
+                <li><a href='/auth' className='text-gray-400 hover:text-white transition-colors text-sm'>Connexion</a></li>
+              </ul>
+            </div>
+
+            {/* Légal */}
+            <div>
+              <h4 className='text-white font-semibold mb-4 font-montserrat'>Informations légales</h4>
+              <ul className='space-y-3'>
+                <li><a href='/mentions-legales' className='text-gray-400 hover:text-white transition-colors text-sm'>Mentions légales</a></li>
+                <li><a href='/politique-confidentialite' className='text-gray-400 hover:text-white transition-colors text-sm'>Politique de confidentialité</a></li>
+                <li><a href='/cgu' className='text-gray-400 hover:text-white transition-colors text-sm'>CGU</a></li>
+                <li><a href='/cookies' className='text-gray-400 hover:text-white transition-colors text-sm'>Gestion des cookies</a></li>
+              </ul>
             </div>
           </div>
-          <div className='border-t border-gray-800 mt-12 pt-8 text-center text-gray-400'>
-            <p>&copy; 2026 Elysion. Tous droits réservés.</p>
+
+          {/* Disclaimer */}
+          <div className='border-t border-gray-800 pt-8 mb-8'>
+            <p className='text-gray-500 text-xs leading-relaxed'>
+              <strong className='text-gray-400'>Avertissement :</strong> Les simulations proposées par Elysion sont fournies à titre indicatif et ne constituent pas un conseil en investissement ou une garantie de résultats. Les projections sont basées sur les données actuelles et peuvent varier selon l'évolution de la législation et des marchés. Consultez un conseiller financier pour des recommandations personnalisées.
+            </p>
+          </div>
+
+          {/* Bottom bar */}
+          <div className='border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4'>
+            <p className='text-gray-500 text-sm'>
+              &copy; {new Date().getFullYear()} Elysion France. Tous droits réservés.
+            </p>
+            <div className='flex items-center gap-6'>
+              <span className='text-gray-500 text-xs'>Fait avec</span>
+              <span className='text-gray-500 text-xs'>en France</span>
+            </div>
           </div>
         </div>
       </footer>

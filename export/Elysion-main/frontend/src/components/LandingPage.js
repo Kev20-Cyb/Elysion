@@ -12,7 +12,7 @@ const LandingPage = () => {
   };
 
   const handleCreateAccount = () => {
-    navigate('/auth?mode=register');
+    navigate('/onboarding');
   };
 
   const handleLogin = () => {

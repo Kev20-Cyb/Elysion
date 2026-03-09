@@ -565,18 +565,80 @@ const LandingPage = () => {
         </div>
       )}
       {/* Footer */}
-      <footer className='bg-gray-900 text-white py-12'>
+      <footer className='bg-gray-900 text-white pt-16 pb-8'>
         <div className='max-w-7xl mx-auto px-4'>
-          <div className='grid md:grid-cols-4 gap-8'>
-            <div>
-              <img src='/asset/Elysion - logo.png' alt='Elysion' className='h-8 brightness-0 invert' />
-              <p className='text-gray-400'>
-                Votre partenaire pour une retraite sereine et bien planifiée.
+          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12'>
+            {/* Brand */}
+            <div className='lg:col-span-1'>
+              <img src='/asset/logo.png' alt='Elysion' className='h-10 brightness-0 invert mb-4' />
+              <p className='text-gray-400 text-sm leading-relaxed mb-6'>
+                Votre partenaire pour une retraite sereine et bien planifiée. Simulez, anticipez et optimisez votre avenir financier.
               </p>
+              <div className='flex gap-4'>
+                <a href='https://linkedin.com' target='_blank' rel='noopener noreferrer' className='w-10 h-10 bg-gray-800 hover:bg-elysion-primary rounded-lg flex items-center justify-center transition-colors' aria-label='LinkedIn'>
+                  <svg className='w-5 h-5' fill='currentColor' viewBox='0 0 24 24' aria-hidden='true'>
+                    <path d='M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z'/>
+                  </svg>
+                </a>
+                <a href='https://twitter.com' target='_blank' rel='noopener noreferrer' className='w-10 h-10 bg-gray-800 hover:bg-elysion-primary rounded-lg flex items-center justify-center transition-colors' aria-label='Twitter'>
+                  <svg className='w-5 h-5' fill='currentColor' viewBox='0 0 24 24' aria-hidden='true'>
+                    <path d='M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z'/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+
+            {/* Navigation */}
+            <div>
+              <h4 className='text-white font-semibold mb-4 font-montserrat'>Navigation</h4>
+              <ul className='space-y-3'>
+                <li><a href='#features' className='text-gray-400 hover:text-white transition-colors text-sm'>Fonctionnalités</a></li>
+                <li><a href='#how-it-works' className='text-gray-400 hover:text-white transition-colors text-sm'>Comment ça marche</a></li>
+                <li><a href='#simulator' className='text-gray-400 hover:text-white transition-colors text-sm'>Simulateur</a></li>
+                <li><a href='/auth' className='text-gray-400 hover:text-white transition-colors text-sm'>Connexion</a></li>
+              </ul>
+            </div>
+
+            {/* Ressources */}
+            <div>
+              <h4 className='text-white font-semibold mb-4 font-montserrat'>Ressources</h4>
+              <ul className='space-y-3'>
+                <li><a href='/faq' className='text-gray-400 hover:text-white transition-colors text-sm'>FAQ</a></li>
+                <li><a href='/guide-retraite' className='text-gray-400 hover:text-white transition-colors text-sm'>Guide retraite</a></li>
+                <li><a href='/blog' className='text-gray-400 hover:text-white transition-colors text-sm'>Blog</a></li>
+                <li><a href='/contact' className='text-gray-400 hover:text-white transition-colors text-sm'>Contact</a></li>
+              </ul>
+            </div>
+
+            {/* Légal */}
+            <div>
+              <h4 className='text-white font-semibold mb-4 font-montserrat'>Informations légales</h4>
+              <ul className='space-y-3'>
+                <li><a href='/mentions-legales' className='text-gray-400 hover:text-white transition-colors text-sm'>Mentions légales</a></li>
+                <li><a href='/politique-confidentialite' className='text-gray-400 hover:text-white transition-colors text-sm'>Politique de confidentialité</a></li>
+                <li><a href='/cgu' className='text-gray-400 hover:text-white transition-colors text-sm'>CGU</a></li>
+                <li><a href='/cookies' className='text-gray-400 hover:text-white transition-colors text-sm'>Gestion des cookies</a></li>
+              </ul>
             </div>
           </div>
-          <div className='border-t border-gray-800 mt-12 pt-8 text-center text-gray-400'>
-            <p>&copy; 2026 Elysion. Tous droits réservés.</p>
+
+          {/* Disclaimer */}
+          <div className='border-t border-gray-800 pt-8 mb-8'>
+            <p className='text-gray-500 text-xs leading-relaxed'>
+              <strong className='text-gray-400'>Avertissement :</strong> Les simulations proposées par Elysion sont fournies à titre indicatif et ne constituent pas un conseil en investissement ou une garantie de résultats. Les projections sont basées sur les données actuelles et peuvent varier selon l'évolution de la législation et des marchés. Consultez un conseiller financier pour des recommandations personnalisées.
+            </p>
+          </div>
+
+          {/* Bottom bar */}
+          <div className='border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4'>
+            <p className='text-gray-500 text-sm'>
+              &copy; {new Date().getFullYear()} Elysion. Tous droits réservés.
+            </p>
+            <div className='flex items-center gap-6'>
+              <span className='text-gray-500 text-xs'>Fait avec</span>
+              <span className='text-red-500'>❤️</span>
+              <span className='text-gray-500 text-xs'>en France</span>
+            </div>
           </div>
         </div>
       </footer>

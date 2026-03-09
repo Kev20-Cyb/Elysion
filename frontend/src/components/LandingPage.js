@@ -70,17 +70,17 @@ const LandingPage = () => {
       title: 'Salariés',
       description:
         'Estimez votre future retraite en fonction de votre salaire et trimestres validés.',
-      icon: "./asset/salarie.svg",
+      icon: "./asset/Salarie_Elysion.svg",
     },
     {
       title: "Freelances",
       description: "Simulez votre pension à travers les régimes indépendants.",
-      icon: "./asset/freelance.svg"
+      icon: "./asset/Freelance_Elysion.svg"
     },
     {
       title: "Chefs d'entreprise",
       description: "Visualisez l'impact de votre rémunération et dividendes sur votre retraite.",
-      icon: "./asset/patron.svg"
+      icon: "./asset/Dirigeant_Elysion.svg"
     }
   ];
   // How it works steps
@@ -389,7 +389,7 @@ const LandingPage = () => {
             <h2 className='text-4xl font-bold text-white mb-6 font-montserrat'>
               Prêt à prendre le contrôle de votre avenir ?
             </h2>
-            <p className='text-xl text-elysion-text-light max-w-2xl mx-auto py-5'>
+            <p className='text-xl text-elysion max-w-2xl mx-auto py-5'>
               Rejoignez des milliers d'utilisateurs qui font déjà confiance à
               Elysion !
             </p>
@@ -409,7 +409,7 @@ const LandingPage = () => {
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12'>
             {/* Brand */}
             <div className='lg:col-span-1'>
-              <img src='/asset/logo.png' alt='Elysion' className='h-10 brightness-0 invert mb-4' />
+              <img src='/asset/Elysion - logo.png' alt='Elysion' className='h-10 brightness-0 invert mb-4' />
               <p className='text-gray-400 text-sm leading-relaxed mb-6'>
                 Votre partenaire pour une retraite sereine et bien planifiée. Simulez, anticipez et optimisez votre avenir financier.
               </p>

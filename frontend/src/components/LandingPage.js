@@ -285,7 +285,7 @@ const LandingPage = () => {
             <div className="flex justify-center lg:justify-end">
               <div className="relative">
                 <img
-                  src="./asset/IllustrationHome.png" 
+                  src="./asset/Elysion_Hero_section.webp" 
                   alt="Illustration tableau de bord"
                   className="mx-auto mb-3"
                 />
@@ -320,6 +320,16 @@ const LandingPage = () => {
                 </p>
               </div>
             ))}
+          </div>
+          {/* CTA Button */}
+          <div className='text-center mt-12'>
+            <button
+              onClick={() => navigate('/onboarding')}
+              className='btn-accent px-8 py-4 rounded-xl text-lg font-semibold'
+              data-testid='target-users-cta'
+            >
+              Commencer ma simulation gratuite
+            </button>
           </div>
         </div>
       </section>

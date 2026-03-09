@@ -70,17 +70,17 @@ const LandingPage = () => {
       title: 'Salariés',
       description:
         'Estimez votre future retraite en fonction de votre salaire et trimestres validés.',
-      icon: "./asset/salarié_carré.svg",
+      icon: "./asset/Elysion_Salarie.svg",
     },
     {
       title: "Freelances",
       description: "Simulez votre pension à travers les régimes indépendants.",
-      icon: "./asset/freelance_carré02.svg"
+      icon: "./asset/Elysion_Freelance.svg"
     },
     {
       title: "Chefs d'entreprise",
       description: "Visualisez l'impact de votre rémunération et dividendes sur votre retraite.",
-      icon: "./asset/chef_carré.svg"
+      icon: "./asset/Elysion_Dirigeant.svg"
     }
   ];
   // How it works steps
@@ -270,7 +270,7 @@ const LandingPage = () => {
                   className='btn-outline'
                   data-testid='hero-newsletter-btn'
                 >
-                  Abonnez vous à notre newsletter
+                  Souscrire à la newsletter
                 </button>
                 <button
                   onClick={handleTestSimulator}
@@ -282,7 +282,7 @@ const LandingPage = () => {
               </div>
             </div>
             {/* Hero Illustration */}
-            <div className="flex justify-center lg:justify-end">
+            <div className="flex justify-center lg:justify-end rounded-lg">
               <div className="relative">
                 <img
                   src="./asset/Elysion_Hero_section.webp" 
@@ -328,7 +328,7 @@ const LandingPage = () => {
               className='btn-accent px-8 py-4 rounded-xl text-lg font-semibold'
               data-testid='target-users-cta'
             >
-              Commencer ma simulation gratuite
+              Je m'inscris
             </button>
           </div>
         </div>

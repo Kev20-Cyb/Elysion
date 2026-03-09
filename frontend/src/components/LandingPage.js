@@ -80,7 +80,7 @@ const LandingPage = () => {
     {
       title: "Chefs d'entreprise",
       description: "Visualisez l'impact de votre rémunération et dividendes sur votre retraite.",
-      //icon: "./asset/Dirigeant_Elysion.svg"
+      icon: "./asset/chef_carré.svg"
     }
   ];
   // How it works steps
@@ -309,7 +309,7 @@ const LandingPage = () => {
                 className='bg-white rounded-2xl p-8 text-center shadow-lg'
                 style={{ animationDelay: `${index * 0.2}s` }}
               >
-                <div className='w-16 h-16 mx-auto mb-6 bg-elysion-primary/10 rounded-2xl flex items-center justify-center'>
+                <div className='mx-auto mb-6 bg-elysion-primary/10 rounded-2xl flex items-center justify-center'>
                   <img src={user.icon} alt={user.title} aria-hidden="true" />
                 </div>
                 <h3 className='text-xl font-bold text-elysion-primary mb-4 font-montserrat'>

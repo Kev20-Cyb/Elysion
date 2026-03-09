@@ -70,17 +70,17 @@ const LandingPage = () => {
       title: 'Salariés',
       description:
         'Estimez votre future retraite en fonction de votre salaire et trimestres validés.',
-      icon: "./asset/Salarie_Elysion.svg",
+      //icon: "./asset/Salarie_Elysion.svg",
     },
     {
       title: "Freelances",
       description: "Simulez votre pension à travers les régimes indépendants.",
-      icon: "./asset/Freelance_Elysion.svg"
+      icon: "./asset/freelance_carré02.svg"
     },
     {
       title: "Chefs d'entreprise",
       description: "Visualisez l'impact de votre rémunération et dividendes sur votre retraite.",
-      icon: "./asset/Dirigeant_Elysion.svg"
+      //icon: "./asset/Dirigeant_Elysion.svg"
     }
   ];
   // How it works steps

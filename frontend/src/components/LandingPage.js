@@ -70,7 +70,7 @@ const LandingPage = () => {
       title: 'Salariés',
       description:
         'Estimez votre future retraite en fonction de votre salaire et trimestres validés.',
-      //icon: "./asset/Salarie_Elysion.svg",
+      icon: "./asset/salarié_carré.svg",
     },
     {
       title: "Freelances",

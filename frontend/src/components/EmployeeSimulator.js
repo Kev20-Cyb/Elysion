@@ -602,46 +602,15 @@ const EmployeeSimulator = () => {
   const [validationErrors, setValidationErrors] = useState({});
 
   const validateStep = (step) => {
-    const errors = {};
-    
-    if (step === 1) {
-      if (!formData.birthDate) errors.birthDate = 'La date de naissance est obligatoire';
-      if (!formData.gender) errors.gender = 'Le genre est obligatoire';
-      if (!formData.careerStartYear) errors.careerStartYear = 'L\'année de début de carrière est obligatoire';
-    }
-    
-    if (step === 2) {
-      if (formData.salaryMode === 'simple' && formData.salaryPeriods.length === 0) {
-        errors.salary = 'Ajoutez au moins une période de salaire';
-      }
-      if (formData.salaryMode === 'detailed' && formData.detailedSalaries.length === 0) {
-        errors.salary = 'Ajoutez au moins une année de salaire';
-      }
-    }
-    
-    if (step === 3) {
-      if (!formData.fullTimeYears && !formData.partTimeYears) {
-        errors.years = 'Indiquez vos années travaillées (temps plein ou partiel)';
-      }
-    }
-    
-    if (step === 5) {
-      if (!formData.currentMonthlyIncome) errors.income = 'Le revenu mensuel actuel est obligatoire';
-    }
-    
-    if (step === 6) {
-      if (!formData.riskProfile) errors.riskProfile = 'Le profil de risque est obligatoire';
-    }
-    
-    setValidationErrors(errors);
-    return Object.keys(errors).length === 0;
+    // Pas de validation stricte - l'utilisateur peut naviguer librement
+    setValidationErrors({});
+    return true;
   };
 
   const nextStep = () => {
     if (!validateStep(currentStep)) return;
     
     if (currentStep === 1) {
-      // Automatiquement en mode Salarié du Privé
       setBranch('private');
       setCurrentStep(2);
     } else if (currentStep < 7) {
@@ -923,7 +892,7 @@ const EmployeeSimulator = () => {
                 : 'border-gray-300 bg-white'
             }`}
           >
-            <div className="font-semibold">📋 Détaillé</div>
+            <div className="font-semibold flex items-center gap-2"><Icons.Stats size={16} aria-hidden="true" /> Détaillé</div>
             <p className="text-xs text-gray-600">Année par année (25 dernières)</p>
           </button>
         </div>
@@ -954,8 +923,9 @@ const EmployeeSimulator = () => {
                     handleInputChange('salaryPeriods', newPeriods);
                   }}
                   className="text-red-600"
+                  aria-label="Supprimer cette période"
                 >
-                  ✕
+                  <Icons.Close size={16} />
                 </button>
               </div>
 
@@ -1048,8 +1018,9 @@ const EmployeeSimulator = () => {
                       handleInputChange('detailedSalaries', newSalaries);
                     }}
                     className="text-red-600 text-sm"
+                    aria-label="Supprimer cette année"
                   >
-                    ✕
+                    <Icons.Close size={14} />
                   </button>
                 </div>
               </div>
@@ -1930,7 +1901,7 @@ const EmployeeSimulator = () => {
                             <p className={`font-semibold ${scenario.savingsProjections[results.riskProfile]?.monthlyGap > 0 ? 'text-red-500' : 'text-green-600'}`}>
                               {scenario.savingsProjections[results.riskProfile]?.monthlyGap > 0 
                                 ? `${scenario.savingsProjections[results.riskProfile]?.monthlyGap?.toLocaleString()} €`
-                                : '✓ Couvert'}
+                                : <span className="flex items-center gap-1"><Icons.Check size={14} /> Couvert</span>}
                             </p>
                           </div>
                         </div>
@@ -1985,7 +1956,7 @@ const EmployeeSimulator = () => {
 
                       {scenario.savingsProjections[results.riskProfile]?.monthlyGap <= 0 && (
                         <div className="bg-green-50 border border-green-200 p-4 rounded-lg text-center">
-                          <p className="text-green-800 font-semibold">✓ Votre pension couvre déjà votre objectif pour ce scénario</p>
+                          <p className="text-green-800 font-semibold flex items-center justify-center gap-2"><Icons.Check size={16} /> Votre pension couvre déjà votre objectif pour ce scénario</p>
                         </div>
                       )}
                     </>
@@ -2000,8 +1971,8 @@ const EmployeeSimulator = () => {
         <div className="space-y-4">
           {results.scenarios.map((scenario, index) => (
             <details key={index} className="bg-white rounded-lg border border-gray-200">
-              <summary className="p-4 cursor-pointer font-semibold hover:bg-gray-50">
-                📋 Détails pour un départ à {scenario.age} ans
+              <summary className="p-4 cursor-pointer font-semibold hover:bg-gray-50 flex items-center gap-2">
+                <Icons.Stats size={16} aria-hidden="true" /> Détails pour un départ à {scenario.age} ans
               </summary>
               <div className="p-4 border-t border-gray-200">
                 {branch === 'private' ? (

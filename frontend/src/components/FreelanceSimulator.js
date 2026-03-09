@@ -682,44 +682,19 @@ const FreelanceSimulator = () => {
   const [validationErrors, setValidationErrors] = useState({});
 
   const validateStep = (step) => {
-    const errors = {};
-    
-    if (step === 1) {
-      if (!formData.freelanceStatus) errors.freelanceStatus = 'Le statut est obligatoire';
-      if (!formData.birthDate) errors.birthDate = 'La date de naissance est obligatoire';
-      if (!formData.gender) errors.gender = 'Le genre est obligatoire';
-      if (!formData.annualRevenue) errors.annualRevenue = 'Le chiffre d\'affaires annuel est obligatoire';
-    }
-    
-    if (step === 2) {
-      if (!formData.freelanceStartYear) errors.freelanceStartYear = 'L\'année de début d\'activité est obligatoire';
-      if (!formData.activityType) errors.activityType = 'Le type d\'activité est obligatoire';
-    }
-    
-    if (formData.hadSalariedPeriods && step === 3) {
-      // Carrière salariée - au moins une période
-    }
-    
-    const savingsStep = formData.hadSalariedPeriods ? 5 : 4;
-    if (step === savingsStep) {
-      if (!formData.currentMonthlyIncome) errors.income = 'Le revenu mensuel actuel est obligatoire';
-    }
-    
-    const riskStep = formData.hadSalariedPeriods ? 6 : 5;
-    if (step === riskStep) {
-      if (!formData.riskProfile) errors.riskProfile = 'Le profil de risque est obligatoire';
-    }
-    
-    setValidationErrors(errors);
-    return Object.keys(errors).length === 0;
+    // Pas de validation stricte - l'utilisateur peut naviguer librement
+    setValidationErrors({});
+    return true;
   };
 
   const nextStep = () => {
     if (!validateStep(currentStep)) return;
     
-    if (currentStep < 6) {
+    const maxSteps = formData.hadSalariedPeriods ? 7 : 6;
+    
+    if (currentStep < maxSteps) {
       setCurrentStep(currentStep + 1);
-    } else if (currentStep === 6) {
+    } else if ((formData.hadSalariedPeriods && currentStep === 7) || (!formData.hadSalariedPeriods && currentStep === 6)) {
       handleCalculate();
     }
   };
@@ -832,7 +807,9 @@ const FreelanceSimulator = () => {
                 : 'border-gray-200 bg-white hover:border-elysion-primary'
             }`}
           >
-            <div className="text-2xl mb-2">📱</div>
+            <div className="w-10 h-10 mx-auto mb-2 bg-blue-100 rounded-full flex items-center justify-center">
+              <Icons.Mobile size={20} className="text-blue-600" aria-hidden="true" />
+            </div>
             <div className="font-semibold text-elysion-primary">Micro-entrepreneur</div>
             <p className="text-xs text-gray-600 mt-1">Auto-entrepreneur</p>
           </button>
@@ -846,7 +823,9 @@ const FreelanceSimulator = () => {
                 : 'border-gray-200 bg-white hover:border-elysion-accent'
             }`}
           >
-            <div className="text-2xl mb-2">💼</div>
+            <div className="w-10 h-10 mx-auto mb-2 bg-orange-100 rounded-full flex items-center justify-center">
+              <Icons.Work size={20} className="text-orange-600" aria-hidden="true" />
+            </div>
             <div className="font-semibold text-elysion-primary">Entrepreneur individuel</div>
             <p className="text-xs text-gray-600 mt-1">BIC / BNC (TNS SSI)</p>
           </button>
@@ -1092,8 +1071,9 @@ const FreelanceSimulator = () => {
                 <button
                   onClick={() => handleArrayRemove('revenueHistory', index)}
                   className="text-red-600 hover:text-red-800"
+                  aria-label="Supprimer cette année"
                 >
-                  ✕
+                  <Icons.Close size={16} />
                 </button>
               </div>
 
@@ -1192,7 +1172,7 @@ const FreelanceSimulator = () => {
                   : 'border-gray-300 bg-white'
               }`}
             >
-              <div className="font-semibold">📋 Année par année</div>
+              <div className="font-semibold flex items-center gap-2"><Icons.Stats size={16} aria-hidden="true" /> Année par année</div>
               <p className="text-xs text-gray-600">Chaque année individuellement</p>
             </button>
           </div>
@@ -1220,8 +1200,9 @@ const FreelanceSimulator = () => {
                   <button
                     onClick={() => handleArrayRemove('salariedPeriods', index)}
                     className="text-red-600"
+                    aria-label="Supprimer cette période"
                   >
-                    ✕
+                    <Icons.Close size={16} />
                   </button>
                 </div>
 
@@ -1326,8 +1307,9 @@ const FreelanceSimulator = () => {
                     <button
                       onClick={() => handleArrayRemove('detailedSalaries', index)}
                       className="text-red-600 text-sm hover:text-red-800"
+                      aria-label="Supprimer cette année"
                     >
-                      ✕
+                      <Icons.Close size={14} />
                     </button>
                   </div>
                 </div>
@@ -2316,7 +2298,6 @@ const FreelanceSimulator = () => {
               onClick={nextStep}
               className="btn-primary disabled:opacity-50"
               disabled={
-                (currentStep === 1 && !formData.freelanceStatus) ||
                 (formData.retirementAges.length === 0 && 
                   ((formData.hadSalariedPeriods && currentStep === 7) || (!formData.hadSalariedPeriods && currentStep === 6)))
               }
@@ -2346,7 +2327,7 @@ const FreelanceSimulator = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <button onClick={() => navigate('/')} className="hover:opacity-80 transition-opacity">
-              <img src="/asset/logo.png" alt="Elysion" className="h-8" />
+              <img src="/asset/Elysion - logo.png" alt="Elysion" className="h-8" />
             </button>
             <div className="hidden md:flex items-center space-x-3">
               <button onClick={() => navigate('/auth?mode=login')} className="btn-primary">Se connecter</button>

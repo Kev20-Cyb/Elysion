@@ -16,8 +16,6 @@ function signToken(user) {
   );
 }
 
-});
-
 // POST /api/auth/register
 router.post("/register", async (req, res) => {
   try {

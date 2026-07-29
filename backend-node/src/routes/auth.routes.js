@@ -16,17 +16,6 @@ function signToken(user) {
   );
 }
 
-// DEBUG TEMPORAIRE (migration Vercel) : a supprimer une fois le probleme de
-// connexion DB resolu. N'expose aucune valeur sensible.
-router.get("/debug-env", (req, res) => {
-  res.json({
-    DB_SSL: process.env.DB_SSL,
-    hasDatabaseUrl: !!process.env.DATABASE_URL,
-    hasPostgresUrl: !!process.env.POSTGRES_URL,
-    postgresUrlPrefix: process.env.POSTGRES_URL
-      ? process.env.POSTGRES_URL.slice(0, 20)
-      : null,
-  });
 });
 
 // POST /api/auth/register
@@ -65,8 +54,7 @@ router.post("/register", async (req, res) => {
     });
   } catch (err) {
     console.error("Register error:", err);
-    // DEBUG TEMPORAIRE : expose err.message pour diagnostiquer la migration.
-    return res.status(500).json({ detail: "Internal server error", debugMessage: err.message });
+    return res.status(500).json({ detail: "Internal server error" });
   }
 });
 

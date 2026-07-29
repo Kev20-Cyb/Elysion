@@ -6,7 +6,7 @@ dotenv.config();
 
 // Ex : postgres://postgres:motdepasse@localhost:5432/elysion
 const rawConnectionString =
-    process.env.DATABASE_URL || process.env.POSTGRES_URL;
+    process.env.DATABASE_URL || process.env.POSTGRES_URL_NON_POOLING || process.env.POSTGRES_URL;
 
 if (!rawConnectionString) {
     console.error("[DB] Missing DATABASE_URL environment variable");

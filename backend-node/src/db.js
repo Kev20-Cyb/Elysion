@@ -13,11 +13,17 @@ if (!connectionString) {
     throw new Error("DATABASE_URL is not defined");
 }
 
-// SSL : utile pour la prod (hebergeurs qui imposent TLS)
+// SSL : Supabase (et la plupart des hebergeurs geres) impose TLS avec un
+// certificat non reconnu par la chaine de confiance par defaut de Node.
+// On active donc TLS mais sans verifier le certificat (equivalent a
+// sslmode=no-verify), ce qui est la configuration standard recommandee
+// par Supabase pour les clients node-postgres.
+// MIGRATION VERCEL (2026-07) : force actif independamment de DB_SSL pour
+// eviter toute mauvaise config manquante en production.
 const ssl =
-    process.env.DB_SSL === "true"
-    ? { rejectUnauthorized: false }
-      : false;
+    process.env.DB_SSL === "false"
+    ? false
+      : { rejectUnauthorized: false };
 
 // MIGRATION VERCEL (2026-07) : pool limite pour environnement serverless.
 // Utiliser de preference l'URL du connection pooler Supabase (mode Transaction,

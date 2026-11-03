@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import axios from 'axios';
+import { Analytics } from '@vercel/analytics/react';
 import './App.css';
 
 // Import components
@@ -234,6 +235,7 @@ function App() {
           {/* Le chatbot est disponible partout quand connecté */}
           <ChatWhenAuthed />
         </BrowserRouter>
+        <Analytics />
       </div>
     </AuthProvider>
   );
